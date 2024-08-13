@@ -5,13 +5,18 @@ const usernameInput = document.getElementById('usernameInput');
 const passwordInput = document.getElementById('passwordInput');
 const btnLogin = document.getElementById('btnLogin')
 
+history.pushState(null, null, location.href);
+window.onpopstate = function () {
+  history.go(1);
+};
+
+
 function areFieldsNotEmpty() {
   const username = usernameInput.value.trim();
   const password = passwordInput.value.trim();
 
   return username !== '' && password !== '';
 }
-
 
 btnLogin.addEventListener('click', (e) => {
   e.preventDefault();

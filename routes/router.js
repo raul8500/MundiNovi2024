@@ -16,12 +16,26 @@ const verifySesion = require('../middlewares/VerifySesion') //Si el token expiro
 //funciones por usuario
 const userFunctions = require('../controllers/functions/userFunctions')
 
+//funciones franquicia
+const franquicia = require('../controllers/franquicia/franquiciaController')
+
+//funciones sucursal
+const sucursal = require('../controllers/sucursal/sucursalController')
+
+
 router.get('/login', (req, res) => {    
-    res.render('login', { user: req.user });
+    res.render('login');
 });
 
-router.get('/main', (req, res) => {    
-    res.render('main', { user: req.user });
+router.get('/main', authenticated.isAuthenticated, (req, res) => {    
+    res.render('main');
+});
+
+router.get('/usuarios', adminValidate.isAdmin, authenticated.isAuthenticated, (req, res) => {    
+    res.render('Users/usuarios');
+});
+router.get('/franquicias', adminValidate.isAdmin, authenticated.isAuthenticated, (req, res) => {    
+    res.render('Franquicias/franquicias');
 });
 
 
@@ -40,6 +54,22 @@ router.get('/api/verifySesion', verifySesion.verifyToken)
 //funciones por usuario
 router.post('/api/auth/functions/add', userFunctions.addFunction)
 router.get('/api/auth/functions/:nameRol', userFunctions.getFunctionsByRole)
+router.get('/api/functions', userFunctions.getAllFunctions)
 
+
+//Funciones Franquicia
+router.post('/api/franquicia/add', franquicia.addFranquicia)
+router.get('/api/franquicia', franquicia.getFranquicias)
+router.get('/api/franquicia/:id', franquicia.getIndividualFranquicia);
+router.delete('/api/franquicia/:id', franquicia.deleteFranquicia);
+router.put('/api/franquicia/:id', franquicia.editFranquicia);
+
+
+
+//funciones sucursal
+router.post('/api/sucursal/add', sucursal.addSucursal)
+router.get('/api/sucursal/:clave', sucursal.getSucursalByClave)
+router.get('/api/sucursal', sucursal.getAllSucursales)
+router.get('/api/sucursal/franquicia/:idFranquicia', sucursal.getSucursalesByFranquicia)
 
 module.exports = router
