@@ -1,0 +1,96 @@
+body {
+    background-color: #fbfbfb;
+}
+
+@media (min-width:991.98px) {
+    main {
+        padding-left: 240px;
+    }
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    padding: 58px 0 0;
+    /* Height of navbar */
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+    width: 240px;
+    z-index: 600;
+}
+
+@media (max-width: 991.98px) {
+    .sidebar {
+        width: 100%;
+    }
+}
+
+.sidebar .active {
+    border-radius: 5px;
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: 0.5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Scrollable contents if viewport is shorter than content. */
+}
+
+.ayudabody {
+    font-family: "Barlow", sans-serif;
+    color: black;
+}
+
+
+.centrar {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    margin-top: 10%;
+    text-align: center;
+}
+
+.centrarTexto {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    text-align: center;
+}
+
+.textFecha {
+    color: #3C3C3C;
+    font-family: Arial, Helvetica, sans-serif;
+    border-color: transparent;
+    background-color: transparent;
+    font-size: 15pt;
+    text-align: center;
+}
+
+.textReloj {
+    border-color: transparent;
+    background-color: transparent;
+    color: #3C3C3C;
+    font-family: Verdana, Arial, Helvetica;
+    font-size: 40pt;
+    text-align: center;
+}
+
+
+.wrong .fa-check {
+    display: none;
+}
+
+.good .fa-times {
+    display: none;
+}
+
+.valid-feedback,
+.invalid-feedback {
+    margin-left: calc(2em + 0.25rem + 1.5rem);
+}
