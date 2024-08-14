@@ -9,8 +9,7 @@ exports.verifyToken = (req, res, next) => {
     } catch (err) {
       if (err.name === 'TokenExpiredError') {
         // Token expirado
-        res.redirect('/');
-        console.log('Token expired');
+        res.redirect('/login');
       } else {
         // Otro tipo de error
         console.error(err);

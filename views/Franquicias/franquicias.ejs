@@ -87,22 +87,38 @@
                             Añadir <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
                         </button>
                     </div>
-                    <div class="table-responsive pt-3 text-center">
-                        <table class="table align-middle mb-0 bg-white>
+                    <div class="table-responsive pt-3">
+                        <table class="table align-middle mb-0 bg-white">
                             <thead class="bg-light">
-                              <tr>
-                                <th>Nombre</th>
-                                <th>Encargado</th>
-                                <th>Estado</th>
-                                <th>Actions</th>
-                              </tr>
+                              <tr class="text-center">
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Encargado</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
                             </thead>
-
-                            <tbody id="franquiciasData">
-                              
+                            <tbody id="franquiciasData" class="table-group-divider">
+                                <!-- Aquí se cargarán las franquicias -->
                             </tbody>
-                          </table>
+                        </table>
+                        <div class="d-flex justify-content-center pt-3">
+                            <ul class="pagination" id="paginationFranquicias">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" onclick="cambiarPaginaFranquicias(currentPageFranquicias - 1)" aria-label="Previous" id="anteriorFranquicias">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <!-- Los números de página se generarán dinámicamente aquí -->
+                                <li class="page-item">
+                                    <a class="page-link" href="#" onclick="cambiarPaginaFranquicias(currentPageFranquicias + 1)" aria-label="Next" id="siguienteFranquicias">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
+                    
+                    
 
 
 

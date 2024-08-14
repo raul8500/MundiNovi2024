@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
-const ModelUser = require('../schemas/usersSchema');
+const ModelUser = require('../schemas/usersSchema/usersSchema');
 
 
 exports.isAdmin = async (req, res, next) => {

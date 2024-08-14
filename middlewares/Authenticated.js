@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
+const ModelUser = require('../schemas/usersSchema/usersSchema'); // Asegúrate de que este sea el modelo correcto
 
 exports.isAuthenticated = async (req, res, next) => {
     if (req.cookies.jwt) {

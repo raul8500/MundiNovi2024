@@ -6,13 +6,6 @@ const nameRol = document.getElementById('name')
 const rol = document.getElementById('rol')
 const options = document.getElementById('options')
 
-
-history.pushState(null, null, location.href);
-window.onpopstate = function () {
-  history.go(1);
-};
-
-
 verificarTokenYMostrar()
 
 function verificarTokenYMostrar() {

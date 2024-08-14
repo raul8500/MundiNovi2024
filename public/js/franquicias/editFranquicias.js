@@ -1,11 +1,9 @@
-
 const urlPutFranquicia = base + '/api/franquicia/add';
-const modalfranquiciaEdit = new mdb.Modal(document.getElementById('ModalEditFranquicia'))
-let idFranquicia = '' 
-
+const modalfranquiciaEdit = new mdb.Modal(document.getElementById('ModalEditFranquicia'));
+let idFranquicia = '';
 
 on(document, 'click', '.btnEdit', async e => {
-    const button = e.target.closest('.btnEdit'); // Obtiene el botón que fue clicado
+    const button = e.target.closest('.btnEdit');
     idFranquicia = button.id;
 
     fetchFranquicia(idFranquicia);
@@ -16,7 +14,6 @@ btnGuardarFranquiciaEdit.addEventListener('click', async () => {
         await postData(idFranquicia);
     }
 });
-
 
 async function fetchFranquicia(id) {
     try {
@@ -33,7 +30,7 @@ async function fetchFranquicia(id) {
         document.getElementById('razonSocialEdit').value = data.razonSocial;
         document.getElementById('tickteMensajeEdit').value = data.mensajeTicket;
         document.getElementById('ventaBoleanEdit').value = data.permitirVenta ? 'opcion1' : 'opcion2';
-        
+
         // Rellenar porcentajes
         for (let i = 1; i <= 10; i++) {
             document.getElementById(`porcentaje${i}Edit`).value = data[`porcentajePrecio${i}`] || '';
@@ -50,7 +47,7 @@ async function fetchFranquicia(id) {
         document.getElementById('telefonoFiscalEdit').value = data.datosFiscales.telefonos[0] || '';
         document.getElementById('correoFacturacionEdit').value = data.datosFiscales.correoFacturacion;
 
-        modalfranquiciaEdit.show()
+        modalfranquiciaEdit.show();
     } catch (error) {
         console.error('Error:', error);
         Swal.fire({
@@ -63,6 +60,16 @@ async function fetchFranquicia(id) {
 }
 
 async function postData(id) {
+    if (!validarCamposNumericosEdit()) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Uno o más porcentajes no son números válidos. Por favor, corrígelos.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+        return;
+    }
+
     const nombre = document.getElementById('fullnameEdit').value;
     const telefono = document.getElementById('telefonoEdit').value;
     const sitioWeb = document.getElementById('sitioWebEdit').value;
@@ -117,7 +124,7 @@ async function postData(id) {
             correoFacturacion
         }
     };
-    console.log(data)
+    console.log(data);
 
     try {
         const response = await fetch(`/api/franquicia/${id}`, {
@@ -154,6 +161,25 @@ async function postData(id) {
             confirmButtonText: 'Aceptar'
         });
     }
+}
+
+function validarCamposNumericosEdit() {
+    let todosValidos = true;
+
+    for (let i = 1; i <= 10; i++) {
+        const campoPorcentaje = document.getElementById(`porcentaje${i}Edit`);
+        const valorPorcentaje = parseFloat(campoPorcentaje.value);
+
+        if (isNaN(valorPorcentaje)) {
+            campoPorcentaje.classList.add('is-invalid');
+            todosValidos = false;
+        } else {
+            campoPorcentaje.classList.remove('is-invalid');
+            campoPorcentaje.classList.add('is-valid');
+        }
+    }
+
+    return todosValidos;
 }
 
 function validarCamposNoVacios() {

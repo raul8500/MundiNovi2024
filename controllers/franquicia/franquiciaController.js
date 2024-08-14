@@ -42,7 +42,6 @@ exports.getIndividualFranquicia = async (req, res) => {
     }
 };
 
-
 // Eliminar una franquicia
 exports.deleteFranquicia = async (req, res) => {
     try {

@@ -1,4 +1,4 @@
-const mongoose  = require('mongoose')
+const mongoose = require('mongoose');
 
 const userModel = new mongoose.Schema(
     {
@@ -16,14 +16,20 @@ const userModel = new mongoose.Schema(
         },
         password: {
             type: String
+        },
+        img: {
+            type: Number
+        },
+        sucursalId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'sucursal',
         }
     },
     {
-        timestamps:true,
+        timestamps: true,
         versionKey: false,
     }
+);
 
-)
-
-const ModelUser = mongoose.model("users", userModel)
-module.exports = ModelUser
+const ModelUser = mongoose.model("users", userModel);
+module.exports = ModelUser;

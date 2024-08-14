@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const ModelUser = require('../schemas/usersSchema'); // Asegúrate de que este sea el modelo correcto
+const ModelUser = require('../schemas/usersSchema/usersSchema'); // Asegúrate de que este sea el modelo correcto
 
 exports.verifyToken = async (req, res) => {
     // Obtener el token desde la cookie llamada 'jwt'

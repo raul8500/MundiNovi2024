@@ -23,19 +23,25 @@ const franquicia = require('../controllers/franquicia/franquiciaController')
 const sucursal = require('../controllers/sucursal/sucursalController')
 
 
+
+//Vistas
 router.get('/login', (req, res) => {    
     res.render('login');
 });
 
-router.get('/main', authenticated.isAuthenticated, (req, res) => {    
+router.get('/main', authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
     res.render('main');
 });
 
-router.get('/usuarios', adminValidate.isAdmin, authenticated.isAuthenticated, (req, res) => {    
+router.get('/usuarios', authenticated.isAuthenticated, verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
     res.render('Users/usuarios');
 });
-router.get('/franquicias', adminValidate.isAdmin, authenticated.isAuthenticated, (req, res) => {    
+router.get('/franquicias', authenticated.isAuthenticated, verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
     res.render('Franquicias/franquicias');
+});
+
+router.get('/tiendas', authenticated.isAuthenticated,  verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
+    res.render('Sucursales/sucursales');
 });
 
 
@@ -43,6 +49,9 @@ router.get('/franquicias', adminValidate.isAdmin, authenticated.isAuthenticated,
 //Auth
 router.post('/api/auth/register', auth.registerUser)
 router.post('/api/auth/login', auth.login)
+router.get('/api/auth/users', auth.getAllUsers)
+router.get('/api/auth/users/:id', auth.getUserById)
+
 
 router.get('/logout', logout.logout)
 router.get('/api/isAdmin', adminVerify.isAdminVerify)
@@ -50,12 +59,10 @@ router.get('/api/isAdmin', adminVerify.isAdminVerify)
 //MiddleWare
 router.get('/api/verifySesion', verifySesion.verifyToken)
 
-
 //funciones por usuario
 router.post('/api/auth/functions/add', userFunctions.addFunction)
 router.get('/api/auth/functions/:nameRol', userFunctions.getFunctionsByRole)
 router.get('/api/functions', userFunctions.getAllFunctions)
-
 
 //Funciones Franquicia
 router.post('/api/franquicia/add', franquicia.addFranquicia)
@@ -71,5 +78,8 @@ router.post('/api/sucursal/add', sucursal.addSucursal)
 router.get('/api/sucursal/:clave', sucursal.getSucursalByClave)
 router.get('/api/sucursal', sucursal.getAllSucursales)
 router.get('/api/sucursal/franquicia/:idFranquicia', sucursal.getSucursalesByFranquicia)
+router.get('/api/sucursal/id/:id', sucursal.getSucursalById)
+router.put('/api/sucursal/id/:id', sucursal.updateSucursalById)
+router.delete('/api/sucursal/id/:id', sucursal.deleteSucursalById)
 
 module.exports = router

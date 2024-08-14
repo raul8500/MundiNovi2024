@@ -1,12 +1,116 @@
-const urlGetSucursales = base + '/api/sucursal';
-const urlGetFunctions = base + '/api/functions';
+//API URL'S
 const urlGetFranquicias = base + '/api/franquicia';
 const urlPostFranquicia = base + '/api/franquicia/add';
 
+//Variables
+const modalSucursal = new mdb.Modal(document.getElementById('ModalAddFranquicia'))
+const contenedorFranquicias = document.getElementById('franquiciasData');
+let currentPageFranquicias = 1;
+const itemsPerPageFranquicias = 5; // Puedes ajustar este número según tus necesidades
+const maxPageLinksFranquicias = 5;
+let franquicias = [];
 
-const modalUser = new mdb.Modal(document.getElementById('ModalAddFranquicia'))
+//Funciones para mostrar datos
+const mostrarFranquicias = (franquicias, currentPage, itemsPerPage) => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    let resultadosFranquicias = '';
+
+    franquicias.slice(startIndex, endIndex).forEach(item => {
+        resultadosFranquicias += `
+            <tr>
+                <td class="text-center">${item.nombre}</td>
+                <td class="text-center">${item.encargado}</td>
+                <td class="text-center">
+                    <span class="badge ${item.permitirVenta ? 'badge-success' : 'badge-danger'} rounded-pill d-inline">
+                        ${item.permitirVenta ? 'Activo' : 'Inactivo'}
+                    </span>
+                </td>
+                <td class="text-center">
+                    <button id="${item._id}" type="button" class="btn btn-primary btn-rounded btnEdit">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button id="${item._id}" type="button" class="btn btn-danger btn-rounded btnDelete">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>`;
+    });
+
+    contenedorFranquicias.innerHTML = resultadosFranquicias;
+};
+
+function actualizarControlesPaginacionFranquicias() {
+    const botonAnterior = document.querySelector('#anteriorFranquicias');
+    const botonSiguiente = document.querySelector('#siguienteFranquicias');
+
+    if (botonAnterior && botonSiguiente) {
+        botonAnterior.disabled = currentPageFranquicias === 1;
+        botonSiguiente.disabled = currentPageFranquicias === Math.ceil(franquicias.length / itemsPerPageFranquicias);
+    }
+}
+
+function generarNumerosDePaginaFranquicias() {
+    const paginacionContainer = document.getElementById('paginationFranquicias');
+
+    if (paginacionContainer) {
+        const numeroTotalPaginas = Math.ceil(franquicias.length / itemsPerPageFranquicias);
+
+        let paginacionHTML = '';
+
+        let startPage = Math.max(1, currentPageFranquicias - Math.floor(maxPageLinksFranquicias / 2));
+        let endPage = Math.min(numeroTotalPaginas, startPage + maxPageLinksFranquicias - 1);
+
+        if (startPage > 1) {
+            paginacionHTML += '<li class="page-item"><a class="page-link" href="#" onclick="cambiarPaginaFranquicias(1)">1</a></li>';
+            if (startPage > 2) {
+                paginacionHTML += '<li class="page-item disabled"><span class="page-link">...</span></li>';
+            }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            paginacionHTML += `<li class="page-item ${i === currentPageFranquicias ? 'active' : ''}"><a class="page-link" href="#" onclick="cambiarPaginaFranquicias(${i})">${i}</a></li>`;
+        }
+
+        if (endPage < numeroTotalPaginas) {
+            if (endPage < numeroTotalPaginas - 1) {
+                paginacionHTML += '<li class="page-item disabled"><span class="page-link">...</span></li>';
+            }
+            paginacionHTML += `<li class="page-item"><a class="page-link" href="#" onclick="cambiarPaginaFranquicias(${numeroTotalPaginas})">${numeroTotalPaginas}</a></li>`;
+        }
+
+        paginacionContainer.innerHTML = paginacionHTML;
+    }
+}
+
+function cargarFranquicias() {
+    fetch(urlGetFranquicias)
+        .then(response => response.json())
+        .then(data => {
+            franquicias = data;
+            mostrarFranquicias(franquicias, currentPageFranquicias, itemsPerPageFranquicias);
+            actualizarControlesPaginacionFranquicias();
+            generarNumerosDePaginaFranquicias();
+        })
+        .catch(error => console.log(error));
+}
+
+function cambiarPaginaFranquicias(page) {
+    if (page > 0 && page <= Math.ceil(franquicias.length / itemsPerPageFranquicias)) {
+        currentPageFranquicias = page;
+        mostrarFranquicias(franquicias, currentPageFranquicias, itemsPerPageFranquicias);
+        actualizarControlesPaginacionFranquicias();
+        generarNumerosDePaginaFranquicias();
+    }
+}
+
+cargarFranquicias();
 
 
+
+
+
+//Agregar franquicia logica
 btnAddFranquicia.addEventListener('click', () => {
     // Restablecer todos los campos del formulario
     document.getElementById('fullname').value = ''
@@ -45,52 +149,10 @@ btnAddFranquicia.addEventListener('click', () => {
     content2.classList.remove('show', 'active');
 
     // Mostrar el modal
-    modalUser.show();
+    modalSucursal.show();
 });
 
-
-getFranquicias()
-
-function getFranquicias(){
-    fetch(urlGetFranquicias)
-    .then(response => response.json())
-    .then(data => {
-        cargarFranquicias(data);
-    })
-    .catch(error => console.log(error));
-}
-function cargarFranquicias(data) {
-    let franquicia = ''
-    data.forEach((item, index) => {
-        franquicia += `
-            <tr>
-            <td>
-                <p class="fw-normal mb-1">${item.nombre}</p>
-            </td>
-            <td>
-                <p class="fw-normal mb-1">${item.encargado}</p>
-            </td>
-            <td>
-                <span class="badge ${item.permitirVenta ? 'badge-success' : 'badge-danger'} rounded-pill d-inline">
-                    ${item.permitirVenta ? 'Activo' : 'Inactivo'}
-                </span>
-            </td>
-            <td>
-                <button id="${item._id}" type="button" class="btn btn-primary btn-rounded btnEdit">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-
-                <button id="${item._id}" type="button" class="btn btn-danger btn-rounded btnDelete">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </td>
-            </tr>
-        `;
-    });
-    document.getElementById('franquiciasData').innerHTML = franquicia;
-}
-
-function validarCamposNoVacios() {
+function validarCamposNoVaciosPost() {
     const elementos = [
         document.getElementById('fullname'),
         document.getElementById('telefono'),
@@ -135,9 +197,8 @@ function validarCamposNoVacios() {
     return todosLlenos;
 }
 
-// Función para enviar los datos al servidor
 async function postData() {
-    if (!validarCamposNoVacios()) {
+    if (!validarCamposNoVaciosPost()) {
         Swal.fire({
             title: 'Error',
             text: 'Por favor, completa todos los campos.',
@@ -159,10 +220,32 @@ async function postData() {
     const permitirVentaSeleccionado = document.getElementById('ventaBolean').value;
     const permitirVenta = permitirVentaSeleccionado === 'opcion1'; // True si "opcion1", False si cualquier otra
 
-    // Recoger los porcentajes
+    // Recoger los porcentajes con validación de números y marcar visualmente los errores
     const porcentajes = [];
+    let todosValidos = true;
+
     for (let i = 1; i <= 10; i++) {
-        porcentajes.push(parseFloat(document.getElementById(`porcentaje${i}`).value) || 0);
+        const campoPorcentaje = document.getElementById(`porcentaje${i}`);
+        const valorPorcentaje = parseFloat(campoPorcentaje.value);
+        
+        if (isNaN(valorPorcentaje)) {
+            campoPorcentaje.classList.add('is-invalid');
+            todosValidos = false;
+        } else {
+            campoPorcentaje.classList.remove('is-invalid');
+            campoPorcentaje.classList.add('is-valid');
+            porcentajes.push(valorPorcentaje);
+        }
+    }
+
+    if (!todosValidos) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Uno o más porcentajes no son números válidos. Por favor, corrígelos.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+        return;
     }
 
     // Obtener los valores fiscales
@@ -249,7 +332,6 @@ async function postData() {
     }
 }
 
-// Asignar el event listener al botón
 document.getElementById('btnGuardarFranquicia').addEventListener('click', postData);
 
 

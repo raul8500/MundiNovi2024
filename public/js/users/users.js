@@ -22,7 +22,8 @@ function cargarSucursales(data) {
     let sucursales = '<option selected>Seleccione una opción</option>';
     data.forEach((item, index) => {
         sucursales += `
-            <option value="${index + 1}">${item.clave}: ${item.nombre}</option>
+            <option value="${item.clave}"><b>${item.nombre}</b> de: ${item.idFranquicia.nombre}</option>
+
         `;
     });
     document.getElementById('sucursales').innerHTML = sucursales;
