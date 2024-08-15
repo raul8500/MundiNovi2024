@@ -39,17 +39,19 @@ exports.login = async (req, res) => {
         const { username, password } = req.body;
 
         // Buscar el usuario por su nombre de usuario en la base de datos
-        const userData = await ModelUser.findOne({ username: username });
+        const userData = await ModelUser.findOne({ username });
 
         // Verificar si se encontró un usuario
         if (!userData) {
             return res.status(401).json({ error: 'Nombre de usuario o contraseña incorrectos' });
         }
 
-        const hashedPassword = userData.password;
+        // Verificar si el usuario está activo o tiene un rango importante
+        if (userData.status === 2) {
+            return res.status(403).json({ error: 'Tu cuenta está inactiva. Contacta al administrador.' });
+        }
 
-        // Comparar la contraseña ingresada con la contraseña almacenada en la base de datos
-        const passwordMatch = await bcryptjs.compare(password, hashedPassword);
+        const passwordMatch = await bcryptjs.compare(password, userData.password);
 
         if (!passwordMatch) {
             return res.status(401).json({ error: 'Nombre de usuario o contraseña incorrectos' });
@@ -69,17 +71,25 @@ exports.login = async (req, res) => {
             expires: expiresDate,
             httpOnly: true
         };
-        
 
         res.cookie('jwt', token, cookiesOptions);
 
-        console.log({message: 'Inicio de sesión exitoso', token , name: userData.name, user: userData.username, date: Date() } )
+        console.log({
+            message: 'Inicio de sesión exitoso',
+            token,
+            name: userData.name,
+            user: userData.username,
+            date: Date()
+        });
+
         res.status(200).json({ message: 'Inicio de sesión exitoso', token });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
+
+
 
 // Obtener todos los usuarios
 exports.getAllUsers = async (req, res) => {
@@ -103,6 +113,96 @@ exports.getUserById = async (req, res) => {
         }
 
         res.send(user);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
+// Función para actualizar la contraseña del usuario
+exports.updatePassword = async (req, res) => {
+    try {
+        const { newPassword } = req.body; // Obtener solo newPassword desde el cuerpo de la solicitud
+        const { id } = req.params; // Obtener el ID del usuario desde los parámetros de la URL
+
+        const hashedPassword = await bcryptjs.hash(newPassword, 10); // Hashear la nueva contraseña
+
+        // Actualizar la contraseña del usuario
+        const user = await ModelUser.findByIdAndUpdate(id, { password: hashedPassword }, { new: true });
+
+        if (!user) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        res.send('Contraseña actualizada correctamente');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
+// Actualizar un usuario por _id
+exports.updateUserById = async (req, res) => {
+    try {
+        const { id, name, username, rol, img, sucursalId } = req.body;
+
+        // Verificar si el nombre de usuario ya está en uso por otro usuario
+        const existingUser = await ModelUser.findOne({ username });
+        if (existingUser && existingUser._id.toString() !== id) {
+            return res.status(409).json({ message: 'El nombre de usuario ya está en uso.' });
+        }
+
+        // Actualizar el usuario
+        const updatedUser = await ModelUser.findByIdAndUpdate(id, {
+            name,
+            username,
+            rol,
+            img,
+            sucursalId
+        }, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        res.send(updatedUser);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
+// Función para eliminar un usuario por _id
+exports.deleteUserById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await ModelUser.findByIdAndDelete(id);
+
+        if (!user) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        res.send('Usuario eliminado correctamente');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
+
+exports.updateUserStatus = async (req, res) => {
+    try {
+        const { status } = req.body; // Obtener el estado (1 o 2) desde el cuerpo de la solicitud
+        const { id } = req.params; // Obtener el ID del usuario desde los parámetros de la URL
+
+        // Actualizar el estado del usuario
+        const user = await ModelUser.findByIdAndUpdate(id, { status: status }, { new: true });
+
+        if (!user) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        res.send('Estado del usuario actualizado correctamente');
     } catch (error) {
         console.log(error);
         res.status(500).send('Error interno del servidor');

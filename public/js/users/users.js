@@ -24,6 +24,7 @@ function cargarSucursales(data) {
         `;
   });
   document.getElementById('sucursales').innerHTML = sucursales;
+  document.getElementById('sucursalesEdit').innerHTML = sucursales;
 }
 
 getFunctions();
@@ -46,6 +47,7 @@ function cargarRoles(data) {
         `;
   });
   document.getElementById('roles').innerHTML = roles;
+  document.getElementById('rolesEdit').innerHTML = roles;
 }
 
 //get usuarios
@@ -105,16 +107,32 @@ const mostrarUsuarios = (usuarios, currentPage, itemsPerPage) => {
                 <td class="text-center">${item.sucursalId.nombre}</td>
                 <td class="text-center">${formatearFecha(item.createdAt)}</td>
                 <td class="text-center">
+                
                     <button id="${
                       item._id
-                    }" type="button" class="btn btn-primary btn-rounded btnEditSucursal">
+                    }" type="button" class="btn btn-primary btn-rounded btnEditUsers">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
+
                     <button id="${
                       item._id
-                    }" type="button" class="btn btn-danger btn-rounded btnDeleteSucursal">
+                    }" type="button" class="btn btn-secondary btn-rounded btnChangePassword">
+                        <i class="fa-solid fa-key"></i>
+                    </button>
+
+                    <button id="${item._id}" 
+                            type="button" 
+                            class="btn ${item.status === 1 ? 'btn-success' : 'btn-danger'} btn-rounded btnChangeStatus"
+                            data-status="${item.status}">
+                      <i class="fa-regular fa-circle"></i>
+                    </button>
+
+                    <button id="${
+                      item._id
+                    }" type="button" class="btn btn-danger btn-rounded btnDeleteUsers">
                         <i class="fa-solid fa-trash"></i>
                     </button>
+
                 </td>
             </tr>`;
   });
@@ -216,14 +234,25 @@ document.querySelectorAll('.imgDrop').forEach((item) => {
         const numberMatch = imgSrc.match(/profile(\d+)\.png/);
         selectedImageNumber = numberMatch ? numberMatch[1] : '';
 
-        // Mostrar el número en la consola
-        console.log(`Imagen seleccionada: ${selectedImageNumber}`);
-
         // Actualizar el contenedor de la imagen seleccionada
         document.getElementById('selectedImageContainer').innerHTML = `
             <img src="${imgSrc}" class="rounded-circle" height="35" alt="Selected Image" />
             <span>Imagen ${selectedImageNumber}</span>
         `;
+
+        // Marcar la opción correspondiente en el menú desplegable
+        const items = document.querySelectorAll('dropMenuAdd .imgDrop');
+        items.forEach(item => {
+            if (item.getAttribute('data-img-src') === imgSrc) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+
+        // Actualizar el texto del botón del menú desplegable
+        document.getElementById('dropdownMenuButton').innerText = `Imagen ${selectedImageNumber}`;
+        
     });
 });
 
@@ -241,8 +270,6 @@ function setupImageDropdown() {
             const numberMatch = imgSrc.match(/profile(\d+)\.png/);
             img = numberMatch ? numberMatch[1] : '';
 
-            // Mostrar el número en la consola
-            console.log(`Número de imagen seleccionada: ${img}`);
 
             // Actualizar el contenedor de la imagen seleccionada
             document.getElementById('selectedImageContainer').innerHTML = `

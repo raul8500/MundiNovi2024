@@ -51,6 +51,11 @@ router.post('/api/auth/register', auth.registerUser)
 router.post('/api/auth/login', auth.login)
 router.get('/api/auth/users', auth.getAllUsers)
 router.get('/api/auth/users/:id', auth.getUserById)
+router.get('/api/auth/users/:id', auth.getUserById)
+router.put('/api/auth/users/:id', auth.updateUserById)
+router.put('/api/auth/users/password/:id', auth.updatePassword)
+router.delete('/api/auth/users/:id', auth.deleteUserById);
+router.put('/api/auth/users/status/:id', auth.updateUserStatus)
 
 
 router.get('/logout', logout.logout)

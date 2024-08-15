@@ -17,6 +17,9 @@ const userModel = new mongoose.Schema(
         img: {
             type: Number
         },
+        status: {
+            type: Number
+        },
         sucursalId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'sucursal',

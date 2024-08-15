@@ -211,9 +211,6 @@ function validarCamposNoVaciosSucursal() {
     return todosLlenos;
 }
 
-
-
-
 function seleccionarFranquicia(selectedId){
     let selectElement = document.getElementById('franquiciaEdit');
     let options = selectElement.children;
@@ -225,6 +222,8 @@ function seleccionarFranquicia(selectedId){
         }
     }
 }
+
+
 
 getFranquiciasEdit()
 
