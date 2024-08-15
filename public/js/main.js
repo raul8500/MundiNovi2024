@@ -5,7 +5,7 @@ const obtenerFunciones = base + '/api/auth/functions/';
 const nameRol = document.getElementById('name')
 const rol = document.getElementById('rol')
 const options = document.getElementById('options')
-
+const profilePicture = document.getElementById('profilePicture')
 verificarTokenYMostrar()
 
 function verificarTokenYMostrar() {
@@ -26,6 +26,7 @@ function mostrarRolUsuario(data){
     data.name = capitalizeWords(data.name);
     nameRol.textContent = data.name
     rol.textContent = obtenerNombreRol(data.rol);
+    profilePicture.setAttribute("src",  `img/profile${data.img}.png`)
 
 }
 
@@ -50,7 +51,7 @@ function obtenerNombreRol(rol) {
         case 1:
             return "GerenteGeneral";
         case 2:
-            return "Moderador";
+            return "Cajero";
         case 3:
             return "Editor";
         case 4:

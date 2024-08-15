@@ -8,9 +8,6 @@ const userModel = new mongoose.Schema(
         username: {
             type: String
         },
-        email: {
-            type: String
-        },
         rol: {
             type: Number
         },
