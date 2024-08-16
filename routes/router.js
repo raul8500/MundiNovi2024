@@ -1,8 +1,13 @@
 const express = require('express')
 const router = express.Router()
 
+
 //authControler
 const auth = require('../controllers/auth/auth')
+
+//chat
+const mesaje = require('../controllers/chat/chatController')
+router.delete('/chat', mesaje.chatDelete);
 
 //Middlewares
 const adminValidate = require('../middlewares/AdminValidate')
@@ -42,6 +47,11 @@ router.get('/franquicias', authenticated.isAuthenticated, verifyToken.verifyToke
 
 router.get('/tiendas', authenticated.isAuthenticated,  verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
     res.render('Sucursales/sucursales');
+});
+
+
+router.get('/puntoDeVenta', authenticated.isAuthenticated,  verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
+    res.render('PuntoDeVenta/puntoDeVenta');
 });
 
 

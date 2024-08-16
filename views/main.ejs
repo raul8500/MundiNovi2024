@@ -54,7 +54,7 @@
                     <div class="dropdown">
                         <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
                             id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
-                            <img id="profilePicture" src="img/profile.jpg" class="rounded-circle" height="35"
+                            <img id="profilePicture" src="" class="rounded-circle" height="35"
                                 alt="Black and White Portrait of a Man" loading="lazy" />
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
@@ -78,12 +78,42 @@
     </header>
 
 
+    <!-- Chat Widget -->
+<div id="chatWidget" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1000;">
+    <button id="chatToggle" class="btn btn-primary btn-rounded position-relative">
+        Chat
+        <span id="notificationBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
+            <i class="fa-regular fa-bell fs-5"></i> <!-- Ícono de campana más pequeño -->
+            <span class="visually-hidden">Notificación</span>
+        </span>
+    </button>
+    <div id="chatBox" class="d-none position-relative mt-2" style="width: 300px; height: 400px;">
+        <div id="chatHeader" class="bg-primary text-white text-center p-2 rounded-top">
+            Chat en Tiempo Real
+        </div>
+        <ul id="chatMessages" class="list-unstyled p-2 overflow-auto" style="height: 300px;"></ul>
+        <form id="chatForm" class="d-flex p-2 position-absolute bottom-0 start-0 w-100 bg-light rounded-bottom">
+            <input id="chatInput" type="text" class="form-control me-2" placeholder="Escribe un mensaje..." />
+            <button id="sendMessage" class="btn btn-primary">
+                Enviar
+            </button>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
         <!-- MDB -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+    <!-- Incluir el script de Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/main.js"></script>
     <script src="js/utils/historyBack.js"></script>
 
