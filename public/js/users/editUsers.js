@@ -4,9 +4,6 @@ let idUser = '';
 
 
 
-
-
-
 // Manejador de clic para editar sucursales
 on(document, 'click', '.btnEditUsers', async e => {
     const button = e.target.closest('.btnEditUsers');
@@ -57,8 +54,10 @@ function seleccionarSucursal(selectedId){
 }
 
 function seleccionarRol(rol){
+    console.log(rol)
     let selectElement = document.getElementById('rolesEdit');
     let options = selectElement.children;
+    console.log(options)
 
     for (let i = 0; i < options.length; i++) {
         if (parseInt(options[i].value) === rol) {

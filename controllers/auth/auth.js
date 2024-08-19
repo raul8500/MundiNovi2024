@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 exports.registerUser = async (req, res) => {
     try {
         const { name, username, email, rol, password, img, sucursalId } = req.body;
+        let status = 1;
 
         // Verificar si ya existe un usuario con el mismo nombre
         const existingUser = await ModelUser.findOne({ username });
@@ -24,6 +25,7 @@ exports.registerUser = async (req, res) => {
             rol,
             password: passHash,
             img,
+            status,
             sucursalId
         });
 
@@ -144,10 +146,13 @@ exports.updatePassword = async (req, res) => {
 // Actualizar un usuario por _id
 exports.updateUserById = async (req, res) => {
     try {
-        const { id, name, username, rol, img, sucursalId } = req.body;
+        const { id } = req.params; // Extraer el ID directamente
+        const { name, username, rol, img, sucursalId } = req.body;
 
         // Verificar si el nombre de usuario ya está en uso por otro usuario
         const existingUser = await ModelUser.findOne({ username });
+
+        // Verificar si el usuario existe y si no es el mismo que se está actualizando
         if (existingUser && existingUser._id.toString() !== id) {
             return res.status(409).json({ message: 'El nombre de usuario ya está en uso.' });
         }
@@ -171,6 +176,7 @@ exports.updateUserById = async (req, res) => {
         res.status(500).send('Error interno del servidor');
     }
 };
+
 
 // Función para eliminar un usuario por _id
 exports.deleteUserById = async (req, res) => {

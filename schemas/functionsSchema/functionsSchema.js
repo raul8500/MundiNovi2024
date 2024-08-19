@@ -5,10 +5,6 @@ const subFunctionSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    type: {
-        type: Number,
-        required: true,
-    },
     path: {
         type: String, // Ruta asociada a la subfunción
         required: true,
@@ -20,6 +16,10 @@ const subFunctionSchema = new mongoose.Schema({
 const functionsUserSchema = new mongoose.Schema({
     nameRol: {
         type: String,
+        required: true,
+    },
+    type: {
+        type: Number,
         required: true,
     },
     functions: {

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose'); // Corregido el nombre del módulo
 
 const dbconnect = () => {
-    mongoose.connect('mongodb://mongo:LdcINAnjIrPpdKbprhRbPGEYbRkaXuhg@monorail.proxy.rlwy.net:57404', {
+    mongoose.connect('mongodb://mongo:qahOeWeMgGRYeYAjpAYOrQXDQseDHhbj@junction.proxy.rlwy.net:36379', {
     })
     .then(() => {
         console.log('Conexión correcta');
