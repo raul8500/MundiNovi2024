@@ -91,8 +91,6 @@ exports.login = async (req, res) => {
     }
 };
 
-
-
 // Obtener todos los usuarios
 exports.getAllUsers = async (req, res) => {
     try {

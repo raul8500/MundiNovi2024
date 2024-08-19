@@ -12,6 +12,7 @@ exports.addFunction = async (req, res) => {
     }
 };
 
+
 exports.getFunctionsByRole = async (req, res) => {
     try {
         const { nameRol } = req.params;
@@ -37,6 +38,27 @@ exports.getAllFunctions = async (req, res) => {
         }
 
         res.send(funciones);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
+
+// Actualizar una función por _id
+exports.updateFunctionById = async (req, res) => {
+    try {
+        const { id } = req.params; // Obtener el ID de los parámetros de la solicitud
+        const body = req.body; // Datos que se quieren actualizar
+
+        // Actualizar la función correspondiente
+        const updatedFunction = await ModelFunctionsUser.findByIdAndUpdate(id, body, { new: true });
+
+        if (!updatedFunction) {
+            return res.status(404).send('Función no encontrada');
+        }
+
+        res.send(updatedFunction);
     } catch (error) {
         console.log(error);
         res.status(500).send('Error interno del servidor');
