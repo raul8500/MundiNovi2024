@@ -21,6 +21,7 @@ const franquicia = require('../controllers/franquicia/franquiciaController')
 //funciones sucursal
 const sucursal = require('../controllers/sucursal/sucursalController')
 //Productos
+    const productos = require('../controllers/productos/productosController')
     const complementos  = require('../controllers/productos/complementosController')
     //Categorias
     const categorias = require('../controllers/productos/complementos/categoriaController')
@@ -124,8 +125,11 @@ router.delete('/api/sucursal/id/:id', sucursal.deleteSucursalById)
 
 
 //productos
-
-
+router.get('/api/productos', productos.getAll)
+router.get('/api/productos/:id', productos.getById)
+router.post('/api/productos', productos.create)
+router.put('/api/productos/:id', productos.update)
+router.delete('/api/productos/:id', productos.deleteById)
 
     //Complementos
     router.get('/api/complementos', complementos.getAllRecords)

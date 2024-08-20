@@ -7,11 +7,12 @@ const Linea = require('../../schemas/productosSchema/complementosSchema/lineaSch
 const Marca = require('../../schemas/productosSchema/complementosSchema/marcaSchema');
 const Proveedor = require('../../schemas/productosSchema/complementosSchema/proveedorSchema');
 const Unidad = require('../../schemas/productosSchema/complementosSchema/unidadSchema');
+const Tipo = require('../../schemas/productosSchema/complementosSchema/tipoProductoSchema');
 
 // GET: Obtener todos los registros de los esquemas en un solo JSON
 exports.getAllRecords = async (req, res) => {
     try {
-        const [categorias, departamentos, grupos, impuestos, lineas, marcas, proveedores, unidades] = await Promise.all([
+        const [categorias, departamentos, grupos, impuestos, lineas, marcas, proveedores, unidades, tipos] = await Promise.all([
             Categoria.find(),
             Departamento.find(),
             Grupo.find(),
@@ -19,7 +20,9 @@ exports.getAllRecords = async (req, res) => {
             Linea.find(),
             Marca.find(),
             Proveedor.find(),
-            Unidad.find()
+            Unidad.find(),
+            Tipo.find()
+
         ]);
 
         res.status(200).json({
@@ -30,7 +33,8 @@ exports.getAllRecords = async (req, res) => {
             lineas,
             marcas,
             proveedores,
-            unidades
+            unidades,
+            tipos
         });
     } catch (err) {
         res.status(500).json({ message: err.message });
