@@ -3,7 +3,7 @@ const urlGetProductos = base + '/api/productos';
 //get usuarios
 const contenedorProductos = document.getElementById('productosData');
 let currentPageProductos = 1;
-const itemsPerPageProductos = 2; // Puedes ajustar este número según tus necesidades
+const itemsPerPageProductos = 5; // Puedes ajustar este número según tus necesidades
 const maxPageLinksProductos = 5;
 let productos = [];
 let productosFiltrados = []; // Nueva variable para almacenar productos filtrados
@@ -29,26 +29,20 @@ const mostrarProductos = (productos, currentPage, itemsPerPage) => {
                 
                     <button id="${
                       item._id
-                    }" type="button" class="btn btn-primary btn-rounded btnEditUsers">
+                    }" type="button" class="btn btn-primary btn-rounded ">
                         <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-
-                    <button id="${
-                      item._id
-                    }" type="button" class="btn btn-secondary btn-rounded btnChangePassword">
-                        <i class="fa-solid fa-key"></i>
                     </button>
 
                     <button id="${item._id}" 
                             type="button" 
-                            class="btn ${item.status === 1 ? 'btn-success' : 'btn-danger'} btn-rounded btnChangeStatus"
+                            class="btn ${item.status === 1 ? 'btn-success' : 'btn-danger'} btn-rounded "
                             data-status="${item.status}">
                       <i class="fa-regular fa-circle"></i>
                     </button>
 
                     <button id="${
                       item._id
-                    }" type="button" class="btn btn-danger btn-rounded btnDeleteUsers">
+                    }" type="button" class="btn btn-danger btn-rounded btnDeleteProductos">
                         <i class="fa-solid fa-trash"></i>
                     </button>
 
