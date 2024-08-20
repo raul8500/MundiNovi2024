@@ -25,13 +25,19 @@ exports.getGrupoById = async (req, res) => {
 exports.createGrupo = async (req, res) => {
     const { clave, nombre, descripcion } = req.body;
 
-    const grupo = new Grupo({
-        clave,
-        nombre,
-        descripcion
-    });
-
     try {
+        // Verificar si la clave ya existe
+        const claveExistente = await Grupo.findOne({ clave });
+        if (claveExistente) {
+            return res.status(400).json({ message: 'La clave ya está en uso' });
+        }
+
+        const grupo = new Grupo({
+            clave,
+            nombre,
+            descripcion
+        });
+
         const nuevoGrupo = await grupo.save();
         res.status(201).json(nuevoGrupo);
     } catch (err) {
@@ -41,13 +47,24 @@ exports.createGrupo = async (req, res) => {
 
 // PUT: Actualizar un grupo existente
 exports.updateGrupo = async (req, res) => {
+    const { clave, nombre, descripcion } = req.body;
+
     try {
         const grupo = await Grupo.findById(req.params.id);
         if (!grupo) return res.status(404).json({ message: 'Grupo no encontrado' });
 
-        grupo.clave = req.body.clave || grupo.clave;
-        grupo.nombre = req.body.nombre || grupo.nombre;
-        grupo.descripcion = req.body.descripcion || grupo.descripcion;
+        // Verificar si la nueva clave ya está en uso por otro grupo
+        if (clave && clave !== grupo.clave) {
+            const claveExistente = await Grupo.findOne({ clave });
+            if (claveExistente) {
+                return res.status(400).json({ message: 'La clave ya está en uso' });
+            }
+        }
+
+        // Actualizar los campos del grupo
+        grupo.clave = clave || grupo.clave;
+        grupo.nombre = nombre || grupo.nombre;
+        grupo.descripcion = descripcion || grupo.descripcion;
 
         const grupoActualizado = await grupo.save();
         res.status(200).json(grupoActualizado);

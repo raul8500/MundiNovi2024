@@ -21,6 +21,7 @@ const franquicia = require('../controllers/franquicia/franquiciaController')
 //funciones sucursal
 const sucursal = require('../controllers/sucursal/sucursalController')
 //Productos
+    const complementos  = require('../controllers/productos/complementosController')
     //Categorias
     const categorias = require('../controllers/productos/complementos/categoriaController')
     const grupos = require('../controllers/productos/complementos/grupoController')
@@ -31,6 +32,13 @@ const sucursal = require('../controllers/sucursal/sucursalController')
     const unidad = require('../controllers/productos/complementos/unidadController')
     const impuesto = require('../controllers/productos/complementos/impuestoController')
     const proveedor = require('../controllers/productos/complementos/proveedorController')
+
+
+
+
+
+
+
 //Vistas
 router.get('/login', (req, res) => {    
     res.render('login');
@@ -59,6 +67,16 @@ router.get('/puntoDeVenta', authenticated.isAuthenticated,  verifyToken.verifyTo
 router.get('/productos', authenticated.isAuthenticated,  verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
     res.render('Productos/productos');
 });
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -107,7 +125,11 @@ router.delete('/api/sucursal/id/:id', sucursal.deleteSucursalById)
 
 //productos
 
+
+
     //Complementos
+    router.get('/api/complementos', complementos.getAllRecords)
+
         //Categorias
         router.get('/api/categorias', categorias.getCategorias)
         router.get('/api/categorias/:id', categorias.getCategoriaById)
@@ -155,7 +177,12 @@ router.delete('/api/sucursal/id/:id', sucursal.deleteSucursalById)
         router.get('/api/proveedor/:id', proveedor.getProveedorById)
         router.post('/api/proveedor', proveedor.createProveedor)
         router.put('/api/proveedor/:id', proveedor.updateProveedor)
-        router.delete('/api/proveedor/:id', proveedor.deleteProveedor)
+        
+        //Tipo Producto
+        router.get('/api/tipoProducto', tipoProducto.getTipoProductos)
+        router.get('/api/tipoProducto/:id', tipoProducto.getTipoProductoById)
+        router.post('/api/tipoProducto', tipoProducto.createTipoProducto)
+        router.put('/api/tipoProducto/:id', tipoProducto.updateTipoProducto)
     
 
 module.exports = router

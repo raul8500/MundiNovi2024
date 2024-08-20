@@ -25,13 +25,19 @@ exports.getMarcaById = async (req, res) => {
 exports.createMarca = async (req, res) => {
     const { clave, nombre, descripcion } = req.body;
 
-    const marca = new Marca({
-        clave,
-        nombre,
-        descripcion
-    });
-
     try {
+        // Verificar si la clave ya existe
+        const claveExistente = await Marca.findOne({ clave });
+        if (claveExistente) {
+            return res.status(400).json({ message: 'La clave ya está en uso' });
+        }
+
+        const marca = new Marca({
+            clave,
+            nombre,
+            descripcion
+        });
+
         const nuevaMarca = await marca.save();
         res.status(201).json(nuevaMarca);
     } catch (err) {
@@ -41,13 +47,24 @@ exports.createMarca = async (req, res) => {
 
 // PUT: Actualizar una marca existente
 exports.updateMarca = async (req, res) => {
+    const { clave, nombre, descripcion } = req.body;
+
     try {
         const marca = await Marca.findById(req.params.id);
         if (!marca) return res.status(404).json({ message: 'Marca no encontrada' });
 
-        marca.clave = req.body.clave || marca.clave;
-        marca.nombre = req.body.nombre || marca.nombre;
-        marca.descripcion = req.body.descripcion || marca.descripcion;
+        // Verificar si la nueva clave ya está en uso por otra marca
+        if (clave && clave !== marca.clave) {
+            const claveExistente = await Marca.findOne({ clave });
+            if (claveExistente) {
+                return res.status(400).json({ message: 'La clave ya está en uso' });
+            }
+        }
+
+        // Actualizar los campos de la marca
+        marca.clave = clave || marca.clave;
+        marca.nombre = nombre || marca.nombre;
+        marca.descripcion = descripcion || marca.descripcion;
 
         const marcaActualizada = await marca.save();
         res.status(200).json(marcaActualizada);

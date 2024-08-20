@@ -25,13 +25,19 @@ exports.getLineaById = async (req, res) => {
 exports.createLinea = async (req, res) => {
     const { clave, nombre, descripcion } = req.body;
 
-    const linea = new Linea({
-        clave,
-        nombre,
-        descripcion
-    });
-
     try {
+        // Verificar si la clave ya existe
+        const claveExistente = await Linea.findOne({ clave });
+        if (claveExistente) {
+            return res.status(400).json({ message: 'La clave ya está en uso' });
+        }
+
+        const linea = new Linea({
+            clave,
+            nombre,
+            descripcion
+        });
+
         const nuevaLinea = await linea.save();
         res.status(201).json(nuevaLinea);
     } catch (err) {
@@ -41,13 +47,24 @@ exports.createLinea = async (req, res) => {
 
 // PUT: Actualizar una línea existente
 exports.updateLinea = async (req, res) => {
+    const { clave, nombre, descripcion } = req.body;
+
     try {
         const linea = await Linea.findById(req.params.id);
         if (!linea) return res.status(404).json({ message: 'Línea no encontrada' });
 
-        linea.clave = req.body.clave || linea.clave;
-        linea.nombre = req.body.nombre || linea.nombre;
-        linea.descripcion = req.body.descripcion || linea.descripcion;
+        // Verificar si la nueva clave ya está en uso por otra línea
+        if (clave && clave !== linea.clave) {
+            const claveExistente = await Linea.findOne({ clave });
+            if (claveExistente) {
+                return res.status(400).json({ message: 'La clave ya está en uso' });
+            }
+        }
+
+        // Actualizar los campos de la línea
+        linea.clave = clave || linea.clave;
+        linea.nombre = nombre || linea.nombre;
+        linea.descripcion = descripcion || linea.descripcion;
 
         const lineaActualizada = await linea.save();
         res.status(200).json(lineaActualizada);

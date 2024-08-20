@@ -25,13 +25,19 @@ exports.getDepartamentoById = async (req, res) => {
 exports.createDepartamento = async (req, res) => {
     const { clave, nombre, descripcion } = req.body;
 
-    const departamento = new Departamento({
-        clave,
-        nombre,
-        descripcion
-    });
-
     try {
+        // Verificar si la clave ya existe
+        const claveExistente = await Departamento.findOne({ clave });
+        if (claveExistente) {
+            return res.status(400).json({ message: 'La clave ya está en uso' });
+        }
+
+        const departamento = new Departamento({
+            clave,
+            nombre,
+            descripcion
+        });
+
         const nuevoDepartamento = await departamento.save();
         res.status(201).json(nuevoDepartamento);
     } catch (err) {
@@ -41,13 +47,24 @@ exports.createDepartamento = async (req, res) => {
 
 // PUT: Actualizar un departamento existente
 exports.updateDepartamento = async (req, res) => {
+    const { clave, nombre, descripcion } = req.body;
+
     try {
         const departamento = await Departamento.findById(req.params.id);
         if (!departamento) return res.status(404).json({ message: 'Departamento no encontrado' });
 
-        departamento.clave = req.body.clave || departamento.clave;
-        departamento.nombre = req.body.nombre || departamento.nombre;
-        departamento.descripcion = req.body.descripcion || departamento.descripcion;
+        // Verificar si la nueva clave ya está en uso por otro departamento
+        if (clave && clave !== departamento.clave) {
+            const claveExistente = await Departamento.findOne({ clave });
+            if (claveExistente) {
+                return res.status(400).json({ message: 'La clave ya está en uso' });
+            }
+        }
+
+        // Actualizar los campos del departamento
+        departamento.clave = clave || departamento.clave;
+        departamento.nombre = nombre || departamento.nombre;
+        departamento.descripcion = descripcion || departamento.descripcion;
 
         const departamentoActualizado = await departamento.save();
         res.status(200).json(departamentoActualizado);

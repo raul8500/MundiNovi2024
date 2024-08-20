@@ -25,13 +25,19 @@ exports.getCategoriaById = async (req, res) => {
 exports.createCategoria = async (req, res) => {
     const { clave, nombre, descripcion } = req.body;
 
-    const categoria = new Categoria({
-        clave,
-        nombre,
-        descripcion
-    });
-
     try {
+        // Verificar si la clave ya existe
+        const claveExistente = await Categoria.findOne({ clave });
+        if (claveExistente) {
+            return res.status(400).json({ message: 'La clave ya está en uso' });
+        }
+
+        const categoria = new Categoria({
+            clave,
+            nombre,
+            descripcion
+        });
+
         const nuevaCategoria = await categoria.save();
         res.status(201).json(nuevaCategoria);
     } catch (err) {
@@ -41,13 +47,24 @@ exports.createCategoria = async (req, res) => {
 
 // PUT: Actualizar una categoría existente
 exports.updateCategoria = async (req, res) => {
+    const { clave, nombre, descripcion } = req.body;
+
     try {
         const categoria = await Categoria.findById(req.params.id);
         if (!categoria) return res.status(404).json({ message: 'Categoría no encontrada' });
 
-        categoria.clave = req.body.clave || categoria.clave;
-        categoria.nombre = req.body.nombre || categoria.nombre;
-        categoria.descripcion = req.body.descripcion || categoria.descripcion;
+        // Verificar si la nueva clave ya está en uso por otra categoría
+        if (clave && clave !== categoria.clave) {
+            const claveExistente = await Categoria.findOne({ clave });
+            if (claveExistente) {
+                return res.status(400).json({ message: 'La clave ya está en uso' });
+            }
+        }
+
+        // Actualizar los campos de la categoría
+        categoria.clave = clave || categoria.clave;
+        categoria.nombre = nombre || categoria.nombre;
+        categoria.descripcion = descripcion || categoria.descripcion;
 
         const categoriaActualizada = await categoria.save();
         res.status(200).json(categoriaActualizada);

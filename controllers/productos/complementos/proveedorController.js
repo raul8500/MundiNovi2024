@@ -25,13 +25,19 @@ exports.getProveedorById = async (req, res) => {
 exports.createProveedor = async (req, res) => {
     const { clave, nombre, descripcion } = req.body;
 
-    const proveedor = new Proveedor({
-        clave,
-        nombre,
-        descripcion
-    });
-
     try {
+        // Verificar si la clave ya existe
+        const claveExistente = await Proveedor.findOne({ clave });
+        if (claveExistente) {
+            return res.status(400).json({ message: 'La clave ya está en uso' });
+        }
+
+        const proveedor = new Proveedor({
+            clave,
+            nombre,
+            descripcion
+        });
+
         const nuevoProveedor = await proveedor.save();
         res.status(201).json(nuevoProveedor);
     } catch (err) {
@@ -41,13 +47,24 @@ exports.createProveedor = async (req, res) => {
 
 // PUT: Actualizar un proveedor existente
 exports.updateProveedor = async (req, res) => {
+    const { clave, nombre, descripcion } = req.body;
+
     try {
         const proveedor = await Proveedor.findById(req.params.id);
         if (!proveedor) return res.status(404).json({ message: 'Proveedor no encontrado' });
 
-        proveedor.clave = req.body.clave || proveedor.clave;
-        proveedor.nombre = req.body.nombre || proveedor.nombre;
-        proveedor.descripcion = req.body.descripcion || proveedor.descripcion;
+        // Verificar si la nueva clave ya está en uso por otro proveedor
+        if (clave && clave !== proveedor.clave) {
+            const claveExistente = await Proveedor.findOne({ clave });
+            if (claveExistente) {
+                return res.status(400).json({ message: 'La clave ya está en uso' });
+            }
+        }
+
+        // Actualizar los campos del proveedor
+        proveedor.clave = clave || proveedor.clave;
+        proveedor.nombre = nombre || proveedor.nombre;
+        proveedor.descripcion = descripcion || proveedor.descripcion;
 
         const proveedorActualizado = await proveedor.save();
         res.status(200).json(proveedorActualizado);

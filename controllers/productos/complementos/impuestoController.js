@@ -25,13 +25,19 @@ exports.getImpuestoById = async (req, res) => {
 exports.createImpuesto = async (req, res) => {
     const { clave, nombre, descripcion } = req.body;
 
-    const impuesto = new Impuesto({
-        clave,
-        nombre,
-        descripcion
-    });
-
     try {
+        // Verificar si la clave ya existe
+        const claveExistente = await Impuesto.findOne({ clave });
+        if (claveExistente) {
+            return res.status(400).json({ message: 'La clave ya está en uso' });
+        }
+
+        const impuesto = new Impuesto({
+            clave,
+            nombre,
+            descripcion
+        });
+
         const nuevoImpuesto = await impuesto.save();
         res.status(201).json(nuevoImpuesto);
     } catch (err) {
@@ -41,13 +47,24 @@ exports.createImpuesto = async (req, res) => {
 
 // PUT: Actualizar un impuesto existente
 exports.updateImpuesto = async (req, res) => {
+    const { clave, nombre, descripcion } = req.body;
+
     try {
         const impuesto = await Impuesto.findById(req.params.id);
         if (!impuesto) return res.status(404).json({ message: 'Impuesto no encontrado' });
 
-        impuesto.clave = req.body.clave || impuesto.clave;
-        impuesto.nombre = req.body.nombre || impuesto.nombre;
-        impuesto.descripcion = req.body.descripcion || impuesto.descripcion;
+        // Verificar si la nueva clave ya está en uso por otro impuesto
+        if (clave && clave !== impuesto.clave) {
+            const claveExistente = await Impuesto.findOne({ clave });
+            if (claveExistente) {
+                return res.status(400).json({ message: 'La clave ya está en uso' });
+            }
+        }
+
+        // Actualizar los campos del impuesto
+        impuesto.clave = clave || impuesto.clave;
+        impuesto.nombre = nombre || impuesto.nombre;
+        impuesto.descripcion = descripcion || impuesto.descripcion;
 
         const impuestoActualizado = await impuesto.save();
         res.status(200).json(impuestoActualizado);
