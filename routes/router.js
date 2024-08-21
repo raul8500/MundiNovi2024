@@ -1,7 +1,10 @@
 const express = require('express')
 const router = express.Router()
+const multer = require('multer');
+const path = require('path');
 
 
+const productosController = require('../controllers/cobroController/cobroController');
 //authControler
 const auth = require('../controllers/auth/auth')
 //chat
@@ -36,8 +39,9 @@ const sucursal = require('../controllers/sucursal/sucursalController')
 
 
 
-
-
+    router.post('/api/productos/load-from-file', productosController.loadProductosFromFile);
+    router.get('/api/productos/cobros/load', productosController.getAllProductos);
+    router.post('/api/productos/cobros/venta', productosController.saveVenta);
 
 
 //Vistas
@@ -67,6 +71,10 @@ router.get('/puntoDeVenta', authenticated.isAuthenticated,  verifyToken.verifyTo
 
 router.get('/productos', authenticated.isAuthenticated,  verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
     res.render('Productos/productos');
+});
+
+router.get('/cobros', (req, res) => {    
+    res.render('cobros/cobros');
 });
 
 

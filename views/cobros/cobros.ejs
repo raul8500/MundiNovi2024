@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mundi Novi 2024</title>
+    <link rel="icon" href="img/logoColor.png" type="image/png">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+                <!-- Toggle button -->
+                <button data-mdb-collapse-init class="navbar-toggler" type="button" data-mdb-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+        
+                <!-- Collapsible wrapper -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Navbar brand -->
+                    <a class="navbar-brand mt-2 mt-lg-0" href="/main">
+                        <img src="img/logoColor.png" height="45" alt="MDB Logo"
+                            loading="lazy" />
+                    </a>
+                    <!-- Left links -->
+                    <ul id="options" class="navbar-nav me-auto mb-2 mb-lg-0">
+                        
+                    </ul>
+                    <!-- Left links -->
+                </div>
+                <!-- Collapsible wrapper -->
+        
+                <!-- Right elements -->
+                <div class="d-flex align-items-center">
+                    
+                </div>
+                <!-- Right elements -->
+            </div>
+            <!-- Container wrapper -->
+        </nav>
+        <!-- Navbar -->
+    </header>
+    
+    <main style="margin-top: 58px">
+        <div class="container mt-5">
+            <!-- Selección de sucursal -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="sucursalSelect">Seleccionar sucursal:</label>
+                        <select id="sucursalSelect" class="form-select">
+                            <!-- Ejemplo de sucursal -->
+                            <option value="" disabled selected>Selecciona una sucursal</option>
+                            <option value="Central B: Central de abastos naveB29">Central B: Central de abastos naveB29</option>
+                            <option value="Central C: Central de abastos C">Central C: Central de abastos C</option>
+                            <option value="Chedraui. Antonio Chedraiu Caram86, Sebastian Lerdo de Tejada, 91180 Xalapa, Ver.">Chedraui. Antonio Chedraiu Caram86, Sebastian Lerdo de Tejada, 91180 Xalapa, Ver.</option>
+                            <option value="Villa. Av. Villahermosa 128, Progreso Macuiltepetl, 91130 Xalapa, Ver.">Villa. Av. Villahermosa 128, Progreso Macuiltepetl, 91130 Xalapa, Ver.</option>
+                            <option value="Americas. Av.Americas 412, Los Laureles 91037 Xalapa, Ver.">Americas. Av.Americas 412, Los Laureles 91037 Xalapa, Ver.</option>
+                            <option value="Lucio. Dr.Rafael Lucio 96, Zona Centro, Centro 91000 Xalapa, Ver.">Lucio. Dr.Rafael Lucio 96, Zona Centro, Centro 91000 Xalapa, Ver.</option>
+                            <option value="Ruiz. Av.Adolfo Ruiz Cortines 1116, Represa del CArmen 91050 Xalapa, Ver.">Ruiz. Av.Adolfo Ruiz Cortines 1116, Represa del CArmen 91050 Xalapa, Ver.</option>
+                            <option value="20denov. Oriente y Priv. de Promedio, Av. 20 de Noviembre 371, Centro 91000 Xalapa, Ver.">20denov. Oriente y Priv. de Promedio, Av. 20 de Noviembre 371, Centro 91000 Xalapa, Ver.</option>
+                            <option value="Araucarias. Av.Araucarias 14, Sahop, 91190 Xalapa, Ver.">Araucarias. Av.Araucarias 14, Sahop, 91190 Xalapa, Ver.</option>
+                            <option value="Praderas. Av.Cordillera, Lomas de la Pradera, 91673, Xalapa, Ver.">Praderas. Av.Cordillera, Lomas de la Pradera, 91673, Xalapa, Ver.</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <!-- Columna de búsqueda y cantidad -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="busquedaProductosMain">Buscar producto:</label>
+                        <div class="d-flex align-items-center">
+                            <input type="number" class="form-control ms-2" id="cantidadInput" value="1" min="1" placeholder="Cantidad" style="width: 80px;">
+                            <input type="text" class="form-control ms-2" id="busquedaProductosMain" placeholder="Nombre o código del producto">
+                        </div>
+                        
+                        <!-- Dropdown para resultados -->
+                        <select id="resultadosDropdown" class="form-select mt-2" size="5" aria-label="Resultados de búsqueda" style="display: none;"></select>
+                    </div>
+                </div>
+                <!-- Columna de productos seleccionados y totales -->
+                <div class="col-md-6">
+                    <h4>Productos Seleccionados</h4>
+                    <ul id="productosSeleccionadosList" class="list-group mb-3"></ul>
+                    <h5 id="importeTotal">Total: $0.00</h5>
+                    <button class="btn btn-primary" id="completarVenta">Completar Venta</button>
+                </div>
+            </div>
+            <!-- Contenedor para impresión -->
+            <div id="impresion" class="d-none"></div>
+        </div>
+    </main>
+    
+    
+    
+
+
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="js/cobros/cobros.js"></script>
+</body>
+
+</html>
