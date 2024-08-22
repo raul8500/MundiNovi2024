@@ -1,6 +1,6 @@
 //API URL'S
-const urlGetFranquicias = base + '/api/franquicia';
-const urlPostFranquicia = base + '/api/franquicia/add';
+const urlGetFranquicias ='/api/franquicia';
+const urlPostFranquicia = '/api/franquicia/add';
 
 //Variables
 const modalSucursal = new mdb.Modal(document.getElementById('ModalAddFranquicia'))

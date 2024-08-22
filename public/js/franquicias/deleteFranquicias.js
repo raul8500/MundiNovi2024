@@ -1,4 +1,4 @@
-const urlDeleteFranquicia = base + '/api/franquicia/'; // Define la URL base para eliminar
+const urlDeleteFranquicia ='/api/franquicia/'; // Define la URL base para eliminar
 
 // Capturar el id de la franquicia al hacer clic en el botón eliminar
 on(document, 'click', '.btnDelete', async e => {

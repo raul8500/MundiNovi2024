@@ -1,7 +1,7 @@
-const urlGetSucursales = base + '/api/sucursal';
-const urlGetFunctions = base + '/api/functions';
-const urlGetUsuarios = base + '/api/auth/users';
-const urlPostUser = base + '/api/auth/register'
+const urlGetSucursales = '/api/sucursal';
+const urlGetFunctions = '/api/functions';
+const urlGetUsuarios =  '/api/auth/users';
+const urlPostUser = '/api/auth/register'
 
 const modalUser = new mdb.Modal(document.getElementById('ModalAddUser'));
 

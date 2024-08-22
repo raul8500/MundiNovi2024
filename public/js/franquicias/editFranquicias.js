@@ -1,4 +1,4 @@
-const urlPutFranquicia = base + '/api/franquicia/add';
+const urlPutFranquicia ='/api/franquicia/add';
 const modalfranquiciaEdit = new mdb.Modal(document.getElementById('ModalEditFranquicia'));
 let idFranquicia = '';
 

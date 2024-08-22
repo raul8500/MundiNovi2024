@@ -5,6 +5,7 @@ const path = require('path');
 
 
 const productosController = require('../controllers/cobroController/cobroController');
+const venta = require('../controllers/venta/ventaController');
 //authControler
 const auth = require('../controllers/auth/auth')
 //chat
@@ -41,7 +42,7 @@ const sucursal = require('../controllers/sucursal/sucursalController')
 
     router.post('/api/productos/load-from-file', productosController.loadProductosFromFile);
     router.get('/api/productos/cobros/load', productosController.getAllProductos);
-    router.post('/api/productos/cobros/venta', productosController.saveVenta);
+    router.post('/api/ventas/crear', venta.createVenta);
 
 
 //Vistas
@@ -65,7 +66,7 @@ router.get('/tiendas', authenticated.isAuthenticated,  verifyToken.verifyToken, 
     res.render('Sucursales/sucursales');
 });
 
-router.get('/puntoDeVenta', authenticated.isAuthenticated,  verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
+router.get('/puntoDeVenta', authenticated.isAuthenticated,  verifyToken.verifyToken, (req, res) => {    
     res.render('PuntoDeVenta/puntoDeVenta');
 });
 
@@ -73,9 +74,6 @@ router.get('/productos', authenticated.isAuthenticated,  verifyToken.verifyToken
     res.render('Productos/productos');
 });
 
-router.get('/cobros', (req, res) => {    
-    res.render('cobros/cobros');
-});
 
 
 

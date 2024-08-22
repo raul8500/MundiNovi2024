@@ -1,5 +1,5 @@
 // URL base para actualizar el estado del usuario
-const urlUpdateUserStatus = base + '/api/auth/users/status/';
+const urlUpdateUserStatus = '/api/auth/users/status/';
 
 let idUserStatus = '';
 let newStatus = 0;

@@ -1,4 +1,4 @@
-const urlDeleteSucursal = base + '/api/sucursal/id/'; // Define la URL base para eliminar
+const urlDeleteSucursal ='/api/sucursal/id/'; // Define la URL base para eliminar
 
 // Capturar el id de la sucursal al hacer clic en el botón eliminar
 on(document, 'click', '.btnDeleteSucursal', async e => {

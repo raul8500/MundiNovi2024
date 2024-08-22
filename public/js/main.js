@@ -1,18 +1,20 @@
 // Configuración base y verificación de token
 const base = 'http://localhost:3000';
-const verifyToken = base + '/api/verifySesion';
-const obtenerFunciones = base + '/api/auth/functions/';
+const verifyToken = '/api/verifySesion';
+const obtenerFunciones = '/api/auth/functions/';
 
 const nameRol = document.getElementById('name');
 const rol = document.getElementById('rol');
 const options = document.getElementById('options');
 const profilePicture = document.getElementById('profilePicture');
+let infoUser = ''
 verificarTokenYMostrar();
 
 function verificarTokenYMostrar() {
     fetch(verifyToken)
         .then(response => response.json())
         .then(data => {
+            infoUser = data
             mostrarRolUsuario(data); // Primero, muestra el rol del usuario
             return data; // Devuelve 'data' para poder usarlo en la siguiente promesa
         })

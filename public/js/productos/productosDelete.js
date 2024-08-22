@@ -1,4 +1,4 @@
-const urlDeleteProductos = base + '/api/productos/'; // Define la URL base para eliminar
+const urlDeleteProductos = '/api/productos/'; // Define la URL base para eliminar
 
 // Capturar el id del usuario al hacer clic en el botón eliminar
 document.addEventListener('click', function(e) {

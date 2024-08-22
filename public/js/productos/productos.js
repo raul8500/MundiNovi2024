@@ -1,4 +1,4 @@
-const urlGetComplementos = base + '/api/complementos';
+const urlGetComplementos ='/api/complementos';
 
 
 const modalProductos = new mdb.Modal(document.getElementById('ModalAddProducto'));

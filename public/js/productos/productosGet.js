@@ -1,4 +1,4 @@
-const urlGetProductos = base + '/api/productos';
+const urlGetProductos ='/api/productos';
 
 //get usuarios
 const contenedorProductos = document.getElementById('productosData');

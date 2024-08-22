@@ -1,4 +1,4 @@
-const urlPutUsers = base + '/api/auth/users/';
+const urlPutUsers ='/api/auth/users/';
 const modalUsersEdit = new mdb.Modal(document.getElementById('ModalEditUser'));
 let idUser = '';
 

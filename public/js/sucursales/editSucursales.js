@@ -1,4 +1,4 @@
-const urlPutSucursal = base + '/api/sucursal/id/';
+const urlPutSucursal ='/api/sucursal/id/';
 const modalSucursalEdit = new mdb.Modal(document.getElementById('ModalEditSucursal'));
 let idSucursal = '';
 

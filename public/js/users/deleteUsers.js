@@ -1,4 +1,4 @@
-const urlDeleteUser = base + '/api/auth/users/'; // Define la URL base para eliminar
+const urlDeleteUser ='/api/auth/users/'; // Define la URL base para eliminar
 
 // Capturar el id del usuario al hacer clic en el botón eliminar
 document.addEventListener('click', function(e) {

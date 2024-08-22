@@ -1,7 +1,7 @@
 //API URL'S
-const urlGetSucursales = base + '/api/sucursal';
-const urlGetFranquicias = base + '/api/franquicia';
-const urlPostSucursal = base + '/api/sucursal/add'
+const urlGetSucursales = '/api/sucursal';
+const urlGetFranquicias = '/api/franquicia';
+const urlPostSucursal = '/api/sucursal/add'
 
 const modalSucursal = new mdb.Modal(document.getElementById('ModalAddSucursal'));
 
