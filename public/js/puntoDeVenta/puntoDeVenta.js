@@ -280,7 +280,7 @@ function imprimirTicket(venta) {
             <ul style="list-style: none; padding: 0; margin: 0;">
                 ${productos.map(p => `
                     <li style="word-break: break-word; padding-bottom: 5px;">
-                        ${p.nombre || 'Nombre no disponible'} - Cantidad: ${p.cantidad} - Importe: $${p.total.toFixed(2)}
+                        ${p.nombre || 'Nombre no disponible'} - Cantidad: ${p.cantidad} - Precio: ${p.precio} - Importe: $${p.total.toFixed(2)}
                     </li>
                 `).join('')}
             </ul>
