@@ -1,6 +1,8 @@
 let productos = []; // Variable global para almacenar los productos
 let sucursalInfo = ''; // Variable global para almacenar la información de la sucursal
+let indexSugerencia = -1; // Índice de la sugerencia actualmente seleccionada
 
+// Cargar la información de la sucursal
 function cargarSucursal() {
     fetch('/api/sucursal/id/' + infoUser.sucursalId)
         .then(response => response.json())
@@ -10,6 +12,7 @@ function cargarSucursal() {
         .catch(error => console.error('Error al cargar sucursal:', error));
 }
 
+// Cargar los productos
 function cargarProductos() {
     fetch('/api/productos/cobros/load')
         .then(response => response.json())
@@ -20,11 +23,14 @@ function cargarProductos() {
         .catch(error => console.error('Error al cargar productos:', error));
 }
 
+// Inicializar carga de productos
 cargarProductos();
 
+// Manejo del input de búsqueda de productos
 document.getElementById('producto').addEventListener('input', function () {
     const valorInput = this.value.toLowerCase();
     const contenedorSugerencias = document.getElementById('sugerencias');
+    indexSugerencia = -1; // Restablecer el índice de la sugerencia
 
     if (valorInput === '') {
         contenedorSugerencias.innerHTML = ''; // Limpiar sugerencias si el input está vacío
@@ -37,18 +43,64 @@ document.getElementById('producto').addEventListener('input', function () {
 
     contenedorSugerencias.innerHTML = '';
 
-    listaFiltrada.forEach(producto => {
+    listaFiltrada.forEach((producto, index) => {
         const elementoSugerencia = document.createElement('div');
         elementoSugerencia.classList.add('sugerencia');
         elementoSugerencia.textContent = producto.nombre;
+        elementoSugerencia.dataset.index = index;
         elementoSugerencia.addEventListener('click', function () {
-            document.getElementById('producto').value = producto.nombre;
-            contenedorSugerencias.innerHTML = ''; // Limpiar sugerencias después de seleccionar
+            seleccionarProducto(producto);
         });
         contenedorSugerencias.appendChild(elementoSugerencia);
     });
 });
 
+// Seleccionar un producto de la lista de sugerencias
+function seleccionarProducto(producto) {
+    document.getElementById('producto').value = producto.nombre;
+    document.getElementById('sugerencias').innerHTML = ''; // Limpiar sugerencias después de seleccionar
+    document.getElementById('producto').focus(); // Regresar al input de búsqueda
+}
+
+// Manejo de teclas en el input de búsqueda
+document.getElementById('producto').addEventListener('keydown', function (event) {
+    const sugerencias = document.querySelectorAll('#sugerencias .sugerencia');
+    if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        if (indexSugerencia < sugerencias.length - 1) {
+            indexSugerencia++;
+            actualizarSugerencias();
+        }
+    } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (indexSugerencia > 0) {
+            indexSugerencia--;
+            actualizarSugerencias();
+        }
+    } else if (event.key === 'Enter') {
+        event.preventDefault();
+        if (indexSugerencia >= 0 && indexSugerencia < sugerencias.length) {
+            const productoSeleccionado = productos.find(p => p.nombre === sugerencias[indexSugerencia].textContent);
+            if (productoSeleccionado) {
+                seleccionarProducto(productoSeleccionado);
+            }
+        }
+    }
+});
+
+// Actualizar las sugerencias con la selección actual
+function actualizarSugerencias() {
+    const sugerencias = document.querySelectorAll('#sugerencias .sugerencia');
+    sugerencias.forEach((sugerencia, index) => {
+        if (index === indexSugerencia) {
+            sugerencia.classList.add('seleccionado');
+        } else {
+            sugerencia.classList.remove('seleccionado');
+        }
+    });
+}
+
+// Agregar un producto a la tabla
 function agregarProducto() {
     const inputProducto = document.getElementById('producto');
     const inputCantidad = document.getElementById('cantidad');
@@ -66,11 +118,12 @@ function agregarProducto() {
     }
 
     // Seleccionar el precio basado en la cantidad
-    let precio = productoSeleccionado.precio1; // Default price for 1 item
-    if (cantidad >= 10) {
-        precio = productoSeleccionado.precio10;
-    } else {
-        precio = productoSeleccionado[`precio${cantidad}`] || productoSeleccionado.precio1; // Use default price if not available
+    let precio = parseFloat(productoSeleccionado.precio1); // Precio predeterminado para 1 artículo
+    for (let i = 10; i >= 1; i--) {
+        if (cantidad >= i) {
+            precio = parseFloat(productoSeleccionado[`precio${i}`]) || precio;
+            break;
+        }
     }
 
     const total = cantidad * precio;
@@ -92,12 +145,15 @@ function agregarProducto() {
     // Limpiar el input de búsqueda y la cantidad
     inputProducto.value = '';
     inputCantidad.value = '1';
+    inputProducto.focus(); // Regresar al input de búsqueda
 }
 
+// Manejo del clic en el botón de agregar producto
 document.getElementById('agregarProducto').addEventListener('click', () => {
     agregarProducto();
 });
 
+// Manejo de teclas globales
 document.addEventListener('keydown', (event) => {
     if (event.key === 'F4') {
         event.preventDefault(); // Evita el comportamiento por defecto de F4
@@ -111,10 +167,12 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
+// Manejo del clic en el botón de completar venta
 document.getElementById('completarVenta').addEventListener('click', () => {
     completarVenta();
 });
 
+// Actualizar el resumen de la venta
 function actualizarResumenVenta() {
     const filas = document.querySelectorAll('#productos tr');
     let totalProductos = 0;
@@ -131,6 +189,7 @@ function actualizarResumenVenta() {
     document.getElementById('totalVenta').textContent = totalVenta.toFixed(2);
 }
 
+// Manejo de cambios en precios y cantidades
 document.getElementById('productos').addEventListener('input', (event) => {
     if (event.target.classList.contains('cantidad') || event.target.classList.contains('precio')) {
         const fila = event.target.closest('tr');
@@ -154,10 +213,10 @@ document.getElementById('productos').addEventListener('input', (event) => {
     }
 });
 
-document.getElementById('productos').addEventListener('click', (event) => {
+// Manejo del clic en el botón de eliminar producto
+document.getElementById('productos').addEventListener('click', event => {
     if (event.target.classList.contains('eliminarProducto')) {
-        const fila = event.target.closest('tr');
-        fila.remove();
+        event.target.closest('tr').remove();
         actualizarResumenVenta();
     }
 });
@@ -166,17 +225,21 @@ document.getElementById('cancelarVenta').addEventListener('click', () => {
     confirmarCancelarVenta();
 });
 
+// Confirmar cancelar venta
 function confirmarCancelarVenta() {
     Swal.fire({
-        title: '¿Estás seguro?',
-        text: '¿Quieres cancelar la venta y borrar todos los datos?',
+        title: 'Cancelar Venta',
+        text: '¿Deseas cancelar la venta?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Sí, cancelar',
-        cancelButtonText: 'No, mantener'
-    }).then((result) => {
+        cancelButtonText: 'No, continuar'
+    }).then(result => {
         if (result.isConfirmed) {
-            cancelarVenta();
+            // Limpiar la tabla y el resumen
+            document.getElementById('productos').innerHTML = '';
+            document.getElementById('totalProductos').textContent = '0';
+            document.getElementById('totalVenta').textContent = '0.00';
         }
     });
 }

@@ -212,7 +212,7 @@ function cargarUsuarios() {
 function cambiarPaginaUsuarios(page) {
   if (page > 0 && page <= Math.ceil(usuarios.length / itemsPerPageUsuarios)) {
     currentPageUsuarios = page;
-    mostrarUsuarios(sucursales, currentPageUsuarios, itemsPerPageUsuarios);
+    mostrarUsuarios(usuarios, currentPageUsuarios, itemsPerPageUsuarios);
     actualizarControlesPaginacionUsuarios();
     generarNumerosDePaginaUsuarios();
   }
