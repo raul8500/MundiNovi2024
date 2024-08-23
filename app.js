@@ -116,5 +116,5 @@ setInterval(() => {
 
 // Iniciar el servidor
 server.listen(3000, () => {
-    console.log('SERVER UP running in http://localhost:3000');
+    console.log('Servidor corriendo');
 });

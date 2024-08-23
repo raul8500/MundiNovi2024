@@ -40,11 +40,6 @@ const sucursal = require('../controllers/sucursal/sucursalController')
 
 
 
-    router.post('/api/productos/load-from-file', productosController.loadProductosFromFile);
-    router.get('/api/productos/cobros/load', productosController.getAllProductos);
-    router.post('/api/ventas/crear', venta.createVenta);
-
-
 //Vistas
 router.get('/login', (req, res) => {    
     res.render('login');
@@ -73,6 +68,13 @@ router.get('/puntoDeVenta', authenticated.isAuthenticated,  verifyToken.verifyTo
 router.get('/productos', authenticated.isAuthenticated,  verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
     res.render('Productos/productos');
 });
+
+
+router.get('/ventasGenerales', authenticated.isAuthenticated,  verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
+    res.render('Reportes/ventasGenerales');
+});
+
+
 
 
 
@@ -194,5 +196,10 @@ router.delete('/api/productos/:id', productos.deleteById)
         router.post('/api/tipoProducto', tipoProducto.createTipoProducto)
         router.put('/api/tipoProducto/:id', tipoProducto.updateTipoProducto)
     
+
+//Punto de venta
+router.post('/api/productos/load-from-file', productosController.loadProductosFromFile);
+router.get('/api/productos/cobros/load', productosController.getAllProductos);
+router.post('/api/ventas/crear', venta.createVenta);
 
 module.exports = router

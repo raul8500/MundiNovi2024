@@ -149,7 +149,7 @@
                               </li>
                           </ul>
                       </div>
-                  </div>
+                    </div>
 
             
         <!--Modales-->  
@@ -761,11 +761,74 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Contenido del modal para Categoria -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="form12-1" class="form-control" />
+                                    <label class="form-label" for="form12-1">Clave</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="form12-2" class="form-control" />
+                                    <label class="form-label" for="form12-2">Nombre</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="form12-3" class="form-control" />
+                                    <label class="form-label" for="form12-3">Descripción</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-3">
+                            <div class="col-md-12 d-flex justify-content-end">
+                                <button id="btnAdd" type="button" class="btn btn-primary btn-rounded" data-mdb-ripple-color="dark">
+                                    Agregar <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        
+
+                        <div class="table-responsive pt-3">
+                            <table class="table align-middle mb-0 bg-white">
+                                <thead class="bg-light">
+                                  <tr class="text-center">
+                                        <th scope="col">Clave</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="categoriaData" class="table-group-divider">
+                                    <!-- Aquí se cargarán los productos -->
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center pt-3">
+                                <ul class="pagination" id="paginationCategorias">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaCategorias(currentPageCategorias - 1)" aria-label="Previous" id="anteriorCategorias">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaCategorias(currentPageCategorias + 1)" aria-label="Next" id="siguienteCategorias">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                          </div>
+
+
+
+
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary">Guardar cambios</button>
                     </div>
                 </div>
             </div>
@@ -780,11 +843,67 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Contenido del modal para Grupo -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="claveGrupo" class="form-control" />
+                                    <label class="form-label" for="claveGrupo">Clave</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="nombreGrupo" class="form-control" />
+                                    <label class="form-label" for="nombreGrupo">Nombre</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="descripcionGrupo" class="form-control" />
+                                    <label class="form-label" for="descripcionGrupo">Descripción</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12 d-flex justify-content-end">
+                                <button id="btnAddGrupo" type="button" class="btn btn-primary btn-rounded" data-mdb-ripple-color="dark">
+                                    Agregar <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive pt-3">
+                            <table class="table align-middle mb-0 bg-white">
+                                <thead class="bg-light">
+                                    <tr class="text-center">
+                                        <th scope="col">Clave</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="grupoData" class="table-group-divider">
+                                    <!-- Aquí se cargarán los grupos -->
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center pt-3">
+                                <ul class="pagination" id="paginationGrupos">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaGrupos(currentPageGrupos - 1)" aria-label="Previous" id="anteriorGrupos">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaGrupos(currentPageGrupos + 1)" aria-label="Next" id="siguienteGrupos">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary">Guardar cambios</button>
                     </div>
                 </div>
             </div>
@@ -799,49 +918,217 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Contenido del modal para Marca -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="claveMarca" class="form-control" />
+                                    <label class="form-label" for="claveMarca">Clave</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="nombreMarca" class="form-control" />
+                                    <label class="form-label" for="nombreMarca">Nombre</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="descripcionMarca" class="form-control" />
+                                    <label class="form-label" for="descripcionMarca">Descripción</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12 d-flex justify-content-end">
+                                <button id="btnAddMarca" type="button" class="btn btn-primary btn-rounded" data-mdb-ripple-color="dark">
+                                    Agregar <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive pt-3">
+                            <table class="table align-middle mb-0 bg-white">
+                                <thead class="bg-light">
+                                    <tr class="text-center">
+                                        <th scope="col">Clave</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="marcaData" class="table-group-divider">
+                                    <!-- Aquí se cargarán las marcas -->
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center pt-3">
+                                <ul class="pagination" id="paginationMarcas">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaMarcas(currentPageMarcas - 1)" aria-label="Previous" id="anteriorMarcas">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaMarcas(currentPageMarcas + 1)" aria-label="Next" id="siguienteMarcas">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary">Guardar cambios</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modal Tipo de producto -->
+        <!-- Modal TipoProducto -->
         <div class="modal fade" id="modalTipoProducto" tabindex="-1" aria-labelledby="modalTipoProductoLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalTipoProductoLabel">Tipo de producto</h5>
+                        <h5 class="modal-title" id="modalTipoProductoLabel">Tipo de Producto</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Contenido del modal para Tipo de producto -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formTipoProductoClave" class="form-control" />
+                                    <label class="form-label" for="formTipoProductoClave">Clave</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formTipoProductoNombre" class="form-control" />
+                                    <label class="form-label" for="formTipoProductoNombre">Nombre</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formTipoProductoDescripcion" class="form-control" />
+                                    <label class="form-label" for="formTipoProductoDescripcion">Descripción</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12 d-flex justify-content-end">
+                                <button id="btnAddTipoProducto" type="button" class="btn btn-primary btn-rounded" data-mdb-ripple-color="dark">
+                                    Agregar <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive pt-3">
+                            <table class="table align-middle mb-0 bg-white">
+                                <thead class="bg-light">
+                                    <tr class="text-center">
+                                        <th scope="col">Clave</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tipoProductoData" class="table-group-divider">
+                                    <!-- Aquí se cargarán los tipos de productos -->
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center pt-3">
+                                <ul class="pagination" id="paginationTipoProductos">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaTipoProductos(currentPageTipoProductos - 1)" aria-label="Previous" id="anteriorTipoProductos">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaTipoProductos(currentPageTipoProductos + 1)" aria-label="Next" id="siguienteTipoProductos">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary">Guardar cambios</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modal Linea -->
+        <!-- Modal Línea -->
         <div class="modal fade" id="modalLinea" tabindex="-1" aria-labelledby="modalLineaLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalLineaLabel">Linea</h5>
+                        <h5 class="modal-title" id="modalLineaLabel">Línea</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Contenido del modal para Linea -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formLineaClave" class="form-control" />
+                                    <label class="form-label" for="formLineaClave">Clave</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formLineaNombre" class="form-control" />
+                                    <label class="form-label" for="formLineaNombre">Nombre</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formLineaDescripcion" class="form-control" />
+                                    <label class="form-label" for="formLineaDescripcion">Descripción</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12 d-flex justify-content-end">
+                                <button id="btnAddLinea" type="button" class="btn btn-primary btn-rounded" data-mdb-ripple-color="dark">
+                                    Agregar <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive pt-3">
+                            <table class="table align-middle mb-0 bg-white">
+                                <thead class="bg-light">
+                                    <tr class="text-center">
+                                        <th scope="col">Clave</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lineaData" class="table-group-divider">
+                                    <!-- Aquí se cargarán las líneas -->
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center pt-3">
+                                <ul class="pagination" id="paginationLineas">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaLineas(currentPageLineas - 1)" aria-label="Previous" id="anteriorLineas">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaLineas(currentPageLineas + 1)" aria-label="Next" id="siguienteLineas">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary">Guardar cambios</button>
                     </div>
                 </div>
             </div>
@@ -856,11 +1143,67 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Contenido del modal para Departamento -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formDepartamentoClave" class="form-control" />
+                                    <label class="form-label" for="formDepartamentoClave">Clave</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formDepartamentoNombre" class="form-control" />
+                                    <label class="form-label" for="formDepartamentoNombre">Nombre</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formDepartamentoDescripcion" class="form-control" />
+                                    <label class="form-label" for="formDepartamentoDescripcion">Descripción</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12 d-flex justify-content-end">
+                                <button id="btnAddDepartamento" type="button" class="btn btn-primary btn-rounded" data-mdb-ripple-color="dark">
+                                    Agregar <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive pt-3">
+                            <table class="table align-middle mb-0 bg-white">
+                                <thead class="bg-light">
+                                    <tr class="text-center">
+                                        <th scope="col">Clave</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="departamentoData" class="table-group-divider">
+                                    <!-- Aquí se cargarán los departamentos -->
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center pt-3">
+                                <ul class="pagination" id="paginationDepartamentos">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaDepartamentos(currentPageDepartamentos - 1)" aria-label="Previous" id="anteriorDepartamentos">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaDepartamentos(currentPageDepartamentos + 1)" aria-label="Next" id="siguienteDepartamentos">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary">Guardar cambios</button>
                     </div>
                 </div>
             </div>
@@ -875,11 +1218,67 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Contenido del modal para Unidad -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formUnidadClave" class="form-control" />
+                                    <label class="form-label" for="formUnidadClave">Clave</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formUnidadNombre" class="form-control" />
+                                    <label class="form-label" for="formUnidadNombre">Nombre</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formUnidadDescripcion" class="form-control" />
+                                    <label class="form-label" for="formUnidadDescripcion">Descripción</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12 d-flex justify-content-end">
+                                <button id="btnAddUnidad" type="button" class="btn btn-primary btn-rounded" data-mdb-ripple-color="dark">
+                                    Agregar <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive pt-3">
+                            <table class="table align-middle mb-0 bg-white">
+                                <thead class="bg-light">
+                                    <tr class="text-center">
+                                        <th scope="col">Clave</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="unidadData" class="table-group-divider">
+                                    <!-- Aquí se cargarán las unidades -->
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center pt-3">
+                                <ul class="pagination" id="paginationUnidades">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaUnidades(currentPageUnidades - 1)" aria-label="Previous" id="anteriorUnidades">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaUnidades(currentPageUnidades + 1)" aria-label="Next" id="siguienteUnidades">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary">Guardar cambios</button>
                     </div>
                 </div>
             </div>
@@ -894,15 +1293,75 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Contenido del modal para Impuesto -->
+                        <input type="hidden" id="formImpuestoId" /> <!-- Campo oculto para el ID del impuesto -->
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formImpuestoClave" class="form-control" />
+                                    <label class="form-label" for="formImpuestoClave">Clave</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formImpuestoNombre" class="form-control" />
+                                    <label class="form-label" for="formImpuestoNombre">Nombre</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formImpuestoDescripcion" class="form-control" />
+                                    <label class="form-label" for="formImpuestoDescripcion">Descripción</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12 d-flex justify-content-end">
+                                <button id="btnSaveImpuesto" type="button" class="btn btn-primary btn-rounded" data-mdb-ripple-color="dark">
+                                    Guardar <i class="fa-solid fa-save" style="color: #ffffff;"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive pt-3">
+                            <table class="table align-middle mb-0 bg-white">
+                                <thead class="bg-light">
+                                    <tr class="text-center">
+                                        <th scope="col">Clave</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="impuestoData" class="table-group-divider">
+                                    <!-- Aquí se cargarán los impuestos -->
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center pt-3">
+                                <ul class="pagination" id="paginationImpuestos">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaImpuestos(currentPageImpuestos - 1)" aria-label="Previous" id="anteriorImpuestos">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaImpuestos(currentPageImpuestos + 1)" aria-label="Next" id="siguienteImpuestos">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary">Guardar cambios</button>
                     </div>
                 </div>
             </div>
         </div>
+
+
 
 
         </div>
@@ -922,6 +1381,14 @@
     <script src="js/productos/productosGet.js"></script>
     <script src="js/productos/productosDelete.js"></script>
 
+    <script src="js/productos/complementos/categorias.js"></script>
+    <script src="js/productos/complementos/grupos.js"></script>
+    <script src="js/productos/complementos/marcas.js"></script>
+    <script src="js/productos/complementos/tipoProductos.js"></script>
+    <script src="js/productos/complementos/lineas.js"></script>
+    <script src="js/productos/complementos/departamentos.js"></script>
+    <script src="js/productos/complementos/unidades.js"></script>
+    <script src="js/productos/complementos/impuestos.js"></script>
 </body>
 
 </html>
