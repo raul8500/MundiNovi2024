@@ -39,6 +39,15 @@ const sucursal = require('../controllers/sucursal/sucursalController')
     const proveedor = require('../controllers/productos/complementos/proveedorController')
 
 
+//Clientes
+const clientes = require('../controllers/clientes/clientesController')
+
+    //Zonas clientes
+    const zonaClientes = require('../controllers/clientes/complementos/zonasClienteController')
+
+
+
+
 
 //Vistas
 router.get('/login', (req, res) => {    
@@ -69,11 +78,13 @@ router.get('/productos', authenticated.isAuthenticated,  verifyToken.verifyToken
     res.render('Productos/productos');
 });
 
-
 router.get('/ventasGenerales', authenticated.isAuthenticated,  verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
     res.render('Reportes/ventasGenerales');
 });
 
+router.get('/clientes', (req, res) => {    
+    res.render('Clientes/clientes');
+});
 
 
 
@@ -201,5 +212,19 @@ router.delete('/api/productos/:id', productos.deleteById)
 router.post('/api/productos/load-from-file', productosController.loadProductosFromFile);
 router.get('/api/productos/cobros/load', productosController.getAllProductos);
 router.post('/api/ventas/crear', venta.createVenta);
+
+
+
+//Clientes 
+router.get('/api/clientes', clientes.getContacts)
+
+    //Zonas clientes
+    router.get('/api/zonasClientes', zonaClientes.getZonasClientes)
+    router.get('/api/zonasClientes/:id', zonaClientes.getZonaClienteById)
+    router.post('/api/zonasClientes', zonaClientes.createZonaCliente)
+    router.put('/api/zonasClientes/:id', zonaClientes.updateZonaCliente)
+    router.delete('/api/zonasClientes/:id', zonaClientes.deleteZonaCliente)
+
+
 
 module.exports = router

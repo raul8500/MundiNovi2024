@@ -103,9 +103,23 @@
     <main>
         <div class="container my-5">
             <h1 class="text-center mb-2" style="margin-bottom: 5px;">Mundi Novi</h1>
-            <h2 class="text-center mb-2" style="margin-top: 0;">Punto de Venta Respaldo</h2>
+            <h2 class="text-center mb-2" style="margin-top: 0;">Punto de Venta 2024</h2>
             <br>
+
+            <!--Botones de opciones-->
+            <div class="d-flex justify-content-center">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button id="btnFacturar" type="button" class="btn btn-primary" data-mdb-ripple-init>Facturar (F3) <i class="fa-solid fa-newspaper"></i></button>
+                    <button type="button" class="btn btn-primary" data-mdb-ripple-init>(F4) Cliente <i class="fa-solid fa-user"></i></button>
+                    <button type="button" class="btn btn-primary" data-mdb-ripple-init>Buscar (F6) <i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button type="button" class="btn btn-primary" data-mdb-ripple-init>Descuento (F7) <i class="fa-solid fa-tags"></i></button>
+                    <button type="button" class="btn btn-primary" data-mdb-ripple-init>Guardar (F8) <i class="fa-solid fa-floppy-disk"></i></button>
+                    <button type="button" class="btn btn-primary" data-mdb-ripple-init>Precios (F10) <i class="fa-solid fa-barcode"></i></button>
+                </div>
+            </div>        
+
             <div class="row mb-4">
+
                 <!-- Sección de Productos -->
                 <div class="col-md-8">
                     <div class="card">
@@ -154,22 +168,24 @@
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Resumen de Venta</h5>
+                            <h4 class="card-title">Resumen de Venta</h4>
+                            <h5>Cliente: <span>Venta General</span></h5>
+                            <h5>Factura: <span id="facturaResumenVenta" style="color: black;">N/A</span></h5>
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <button id="cancelarVenta" class="btn btn-danger w-100">Cancelar [F12]</button>
+                                    <button id="cancelarVenta" class="btn btn-danger w-100">Cancelar (CTRL + Supr)</button>
                                 </div>                                
                                 <div class="col-md-6">
-                                    <button id="completarVenta" class="btn btn-success w-100">Completar Venta [F1]</button>
+                                    <button id="completarVenta" class="btn btn-success w-100">Completar Venta (F9)</button>
                                 </div>
                             </div>
     
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h6>Total Productos: <span id="totalProductos">0</span></h6>
+                                    <h6>Total Productos: <span style="font-weight: 800; font-size: 16pt;" id="totalProductos">0</span></h6>
                                 </div>
                                 <div class="col-md-6">
-                                    <h6>Total Venta: $<span id="totalVenta">0.00</span></h6>
+                                    <h6>Total Venta: $<span  style="font-weight: 800; font-size: 16pt;" id="totalVenta">0.00</span></h6>
                                 </div>
                             </div>
                         </div>

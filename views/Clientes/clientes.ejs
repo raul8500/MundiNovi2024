@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mundi Novi 2024</title>
+    <link rel="icon" href="img/logoColor.png" type="image/png">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+                <!-- Toggle button -->
+                <button data-mdb-collapse-init class="navbar-toggler" type="button" data-mdb-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+        
+                <!-- Collapsible wrapper -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Navbar brand -->
+                    <a class="navbar-brand mt-2 mt-lg-0" href="/main">
+                        <img src="img/logoColor.png" height="45" alt="MDB Logo"
+                            loading="lazy" />
+                    </a>
+                    <!-- Left links -->
+                    <ul id="options" class="navbar-nav me-auto mb-2 mb-lg-0">
+                        
+                    </ul>
+                    <!-- Left links -->
+                </div>
+                <!-- Collapsible wrapper -->
+        
+                <!-- Right elements -->
+                <div class="d-flex align-items-center">
+                    <!-- Avatar -->
+                    
+                    <div class="info" style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 10px;">
+                        <span id="name" class="name" style="margin-bottom: -5px; font-weight: 600;">Jesus Aguirre</span>
+                        <span id="rol" class="job" style="margin-top: 0px;">GGeneral</span>
+                    </div>
+                    
+                    <div class="dropdown">
+                        <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
+                            id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
+                            <img id="profilePicture" src="" class="rounded-circle" height="35"
+                                alt="Black and White Portrait of a Man" loading="lazy" />
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                            <li>
+                                <a class="dropdown-item" href="#">Perfil</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Configuraciones</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/logout">Cerrar sesión</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Right elements -->
+            </div>
+            <!-- Container wrapper -->
+        </nav>
+        <!-- Navbar -->
+    </header>
+    
+    <main style="margin-top: 58px">
+        <div class="container pt-4">
+            <h3 class="text-center"><i class="fa-solid fa-users"></i> Clientes</h3>
+            
+            <div class="tab-content" id="pills-tabContent2">
+                <div class="d-flex justify-content-between align-items-center" style="margin-top: 50px;">
+                    <div class="d-flex flex-grow-1 pe-2" style="max-width: 400px;">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="busquedaProductosMain" placeholder= "Nombre del cliente">
+                        </div>
+                    </div>
+                
+                    <div class="d-flex align-items-center">
+                        <button id="btnAddProducto" type="button" class="btn btn-primary btn-rounded me-2" data-mdb-ripple-color="dark"
+                            data-mdb-toggle="modal" data-mdb-target="#ModalAddProducto" data-mdb-whatever="@mdo">
+                            Añadir <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                        </button>
+                        
+                        <div class="dropdown">
+                            <button data-mdb-dropdown-init class="btn btn-secondary btn-rounded" href="#"
+                                id="dropDownOptions" role="button" aria-expanded="false">
+                                <i class="fa-solid fa-gear"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropDownOptions">
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalZonaCliente">Zona de cliente</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                    <div class="table-responsive pt-3">
+                      <table class="table align-middle mb-0 bg-white">
+                          <thead class="bg-light">
+                            <tr class="text-center">
+                                  <th scope="col">Clave</th>
+                                  <th scope="col">Nombre</th>
+                                  <th scope="col">Email personal</th>
+                                  <th scope="col">Email contacto</th>
+                                  <th scope="col">Telefono celular</th>
+                                  <th scope="col">Telefono personal</th>
+                                  <th scope="col">Factura</th>
+                                  <th scope="col">Fecha Ult. Act.</th>
+                                  <th scope="col">Acciones</th>
+                              </tr>
+                          </thead>
+                          <tbody id="productosData" class="table-group-divider">
+                              <!-- Aquí se cargarán los productos -->
+                          </tbody>
+                      </table>
+                      <div class="d-flex justify-content-center pt-3">
+                          <ul class="pagination" id="paginationProductos">
+                              <li class="page-item">
+                                  <a class="page-link" href="#" onclick="cambiarPaginaProductos(currentPageProductos - 1)" aria-label="Previous" id="anteriorProductos">
+                                      <span aria-hidden="true">&laquo;</span>
+                                  </a>
+                              </li>
+                              <!-- Los números de página se generarán dinámicamente aquí -->
+                              <li class="page-item">
+                                  <a class="page-link" href="#" onclick="cambiarPaginaProductos(currentPageProductos + 1)" aria-label="Next" id="siguienteProductos">
+                                      <span aria-hidden="true">&raquo;</span>
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                    </div>
+
+            
+        <!--Modales-->  
+            
+        <div class="modal fade" id="ModalAddCliente" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            <i class="fa-regular fa-address-card" style="color: #000000;"></i>
+                            Registrar nuevo cliente
+                        </h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <div class="modal-body">
+                                <!-- Pills navs -->
+                                <ul class="nav nav-pills mb-3" id="ex1" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a data-mdb-pill-init class="nav-link active" id="ex1-tab-1" href="#ex1-pills-1" role="tab"
+                                            aria-controls="ex1-pills-1" aria-selected="true">Datos generales</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a data-mdb-pill-init class="nav-link" id="ex1-tab-2" href="#ex1-pills-2" role="tab"
+                                            aria-controls="ex1-pills-2" aria-selected="false">Datos de ubicación</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a data-mdb-pill-init class="nav-link" id="ex1-tab-3" href="#ex1-pills-3" role="tab"
+                                            aria-controls="ex1-pills-3" aria-selected="false">Datos financieros</a>
+                                    </li>
+                                    
+                                </ul>
+                                <!-- Pills navs -->
+                            
+                                <!-- Pills content -->
+                                <div class="tab-content" id="ex1-content">
+
+                                    <!--Datos generales-->
+                                    <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
+                                        <div class="row">
+                                            
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="nombreCliente" class="col-form-label">Nombre:</label>
+                                                <input type="text" class="form-control" id="nombreCliente" />
+                                            </div>
+                            
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="telefonoPersonalCliente" class="col-form-label">Telefono personal:</label>
+                                                <input type="text" class="form-control" id="telefonoPersonalCliente" />
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="telefonoCelularCliente" class="col-form-label">Telefono celular:</label>
+                                                <input type="text" class="form-control" id="telefonoCelularCliente" />
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="correoElectronicoPersonalCliente" class="col-form-label">Correo electronico personal:</label>
+                                                <input type="text" class="form-control" id="correoElectronicoPersonalCliente" />
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" class="form-label" for="estatusCliente">Estatus:</label>
+                                                <select id="estatusCliente" class="form-select" aria-label="Combo box example">
+                                                </select>
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" class="form-label" for="personalidadCliente">Personalidad:</label>
+                                                <select id="personalidadCliente" class="form-select" aria-label="Combo box example">
+                                                </select>
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" class="form-label" for="clasificacionCliente">Clasificacion de cliente</label>
+                                                <select id="clasificacionCliente" class="form-select" aria-label="Combo box example">
+                                                </select>
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" class="form-label" for="zonaCliente">Zona de cliente:</label>
+                                                <select id="zonaCliente" class="form-select" aria-label="Combo box example">
+                                                </select>
+                                            </div>
+                                    
+                                        </div>
+                                    </div>
+                                    
+                                    <!--Datos ubicación-->
+                                    <div class="tab-pane fade" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="rfcCliente" class="col-form-label">RFC</label>
+                                                <input type="text" class="form-control" id="rfcCliente" min="0">
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="razonSocialCliente" class="col-form-label">Razón social</label>
+                                                <input type="text" class="form-control" id="razonSocialCliente" />
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="correoElectronicoContactoCliente" class="col-form-label">Correo electronico de contacto</label>
+                                                <input type="text" class="form-control" id="correoElectronicoContactoCliente" min="0">
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="calleCliente" class="col-form-label">Calle</label>
+                                                <input type="text" class="form-control" id="calleCliente" min="0">
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="numeroExteriorCliente" class="col-form-label">Numero exterior</label>
+                                                <input type="text" class="form-control" id="numeroExteriorCliente" min="0">
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="numeroInteriorCliente" class="col-form-label">Numero interior</label>
+                                                <input type="text" class="form-control" id="numeroInteriorCliente" min="0">
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="coloniaCliente" class="col-form-label">Colonia</label>
+                                                <input type="text" class="form-control" id="coloniaCliente" min="0">
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="localidadCliente" class="col-form-label">Localidad</label>
+                                                <input type="text" class="form-control" id="localidadCliente" min="0">
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="municipioCliente" class="col-form-label">Municipio</label>
+                                                <input type="text" class="form-control" id="municipioCliente" min="0">
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="estadoCliente" class="col-form-label">Estado</label>
+                                                <input type="text" class="form-control" id="estadoCliente" min="0">
+                                            </div>
+                                    
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="paisCliente" class="col-form-label">Pais</label>
+                                                <input type="text" class="form-control" id="paisCliente" />
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="codigoPostalCliente" class="col-form-label">Codigo postal</label>
+                                                <input type="text" class="form-control" id="codigoPostalCliente" />
+                                            </div>
+                                    
+                                            <hr class="my-4">
+                                    
+                                        </div>
+                                    </div>
+
+                                    <!--Datos financieros-->
+                                    
+                                    <div class="tab-pane fade" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="diasCreditoCliente" class="col-form-label">Dias de credito</label>
+                                                <input type="number" class="form-control" id="diasCreditoCliente" min="0">
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="limiteCreditoCliente" class="col-form-label">Limite de credito</label>
+                                                <input type="text" class="form-control" id="limiteCreditoCliente" min="0">
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="saldoCliente" class="col-form-label">Saldo</label>
+                                                <input type="text" class="form-control" id="saldoCliente"  min="0">
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="diasRevisionCliente" class="col-form-label">Dia de revision</label>
+                                                <input type="text" class="form-control" id="diasRevisionCliente"  min="0">
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="diaPagoCliente" class="col-form-label">Dia de pago</label>
+                                                <input type="text" class="form-control" id="diaPagoCliente"  min="0">
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="descuentoCliente" class="col-form-label">Descuento</label>
+                                                <input type="text" class="form-control" id="descuentoCliente" min="0">
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="fechaUltPagoCliente" class="col-form-label">Fecha de ultimo pago</label>
+                                                <input type="text" class="form-control" id="fechaUltPagoCliente" min="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="montoUltPagoCliente" class="col-form-label">Monto de ultimo pago</label>
+                                                <input type="text" class="form-control" id="montoUltPagoCliente" min="0">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    
+                                </div>
+                                <!-- Pills content -->
+                            
+                                <div class="modal-footer d-flex justify-content-between align-items-center">
+                                    <h5 class="text-start mb-0"></h5>
+                                    <div>
+                                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
+                                        <button type="submit" id="btnGuardarProducto" class="btn btn-primary">Guardar</button>
+                                    </div>
+                                </div>
+                                
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Zona Cliente -->
+        <div class="modal fade" id="modalZonaCliente" tabindex="-1" aria-labelledby="modalZonaClienteLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalZonaClienteLabel">Zona Cliente</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="zonaNombre" class="form-control" />
+                                    <label class="form-label" for="zonaNombre">Nombre</label>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="zonaDescripcion" class="form-control" />
+                                    <label class="form-label" for="zonaDescripcion">Descripción</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-3">
+                            <div class="col-md-12 d-flex justify-content-end">
+                                <button id="btnAddZonaCliente" type="button" class="btn btn-primary btn-rounded" data-mdb-ripple-color="dark">
+                                    Agregar <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive pt-3">
+                            <table class="table align-middle mb-0 bg-white">
+                                <thead class="bg-light">
+                                <tr class="text-center">
+                                        <th scope="col">Clave</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="zonaClienteData" class="table-group-divider">
+                                    <!-- Aquí se cargarán las zonas de cliente -->
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center pt-3">
+                                <ul class="pagination" id="paginationZonaClientes">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaZonaClientes(currentPageZonaClientes - 1)" aria-label="Previous" id="anteriorZonaClientes">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onclick="cambiarPaginaZonaClientes(currentPageZonaClientes + 1)" aria-label="Next" id="siguienteZonaClientes">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        </div>
+    </main>
+
+
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/main.js"></script>
+
+    <script src="js/clientes/clientes.js"></script>
+
+
+    <script src="js/clientes/complementos/zonasClientes.js" ></script>
+</body>
+
+</html>

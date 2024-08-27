@@ -3,7 +3,7 @@ const mongoose = require('mongoose'); // Corregido el nombre del módulo
 const dbconnect = () => {
     mongoose.connect('mongodb://mongo:qahOeWeMgGRYeYAjpAYOrQXDQseDHhbj@junction.proxy.rlwy.net:36379', {
     })
-    .then(() => {
+    .then(() => {mongodb://mongo:qahOeWeMgGRYeYAjpAYOrQXDQseDHhbj@junction.proxy.rlwy.net:36379
         console.log('Conexión correcta');
     })
     .catch(err => {

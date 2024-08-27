@@ -164,6 +164,9 @@ document.addEventListener('keydown', (event) => {
     } else if (event.key === 'F12') {
         event.preventDefault(); // Evita el comportamiento por defecto de F12
         confirmarCancelarVenta();
+    }else if (event.key === 'F3') {
+        event.preventDefault(); // Evita el comportamiento por defecto de F12
+        facturarVenta()
     }
 });
 
@@ -384,7 +387,33 @@ function imprimirTicket(venta) {
     printWindow.print();
     printWindow.close();
 }
+function facturarVenta() {
+    var btnFacturar = document.getElementById('btnFacturar');
 
+    // Verifica si el botón tiene la clase 'btn-success'
+    if (btnFacturar.classList.contains('btn-success')) {
+        // Si tiene 'btn-success', la cambia a 'btn-primary'
+        btnFacturar.classList.remove('btn-success');
+        btnFacturar.classList.add('btn-primary');
+        var facturaResumenVenta = document.getElementById('facturaResumenVenta')
+        facturaResumenVenta.textContent = 'N/A'
+        facturaResumenVenta.style.color = 'black'
+    } else {
+        // Si no tiene 'btn-success', la cambia a 'btn-success'
+        btnFacturar.classList.remove('btn-primary');
+        btnFacturar.classList.add('btn-success');
+        var facturaResumenVenta = document.getElementById('facturaResumenVenta')
+        facturaResumenVenta.textContent = 'Con Factura'
+        facturaResumenVenta.style.color = 'green'
+    }
+
+}
+
+
+// Manejo del clic en el botón de facturar
+document.getElementById('btnFacturar').addEventListener('click', () => {
+    facturarVenta();
+});
 
 
 
