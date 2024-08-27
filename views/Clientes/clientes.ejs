@@ -368,30 +368,36 @@
             </div>
         </div>
 
-        <!-- Modal Zona Cliente -->
+        <!-- Modal Zonas de Clientes -->
         <div class="modal fade" id="modalZonaCliente" tabindex="-1" aria-labelledby="modalZonaClienteLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalZonaClienteLabel">Zona Cliente</h5>
+                        <h5 class="modal-title" id="modalZonaClienteLabel">Zonas de Clientes</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-outline" data-mdb-input-init>
-                                    <input type="text" id="zonaNombre" class="form-control" />
-                                    <label class="form-label" for="zonaNombre">Nombre</label>
+                                    <input type="text" id="formZonaClave" class="form-control" />
+                                    <label class="form-label" for="formZonaClave">Clave</label>
                                 </div>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-4">
                                 <div class="form-outline" data-mdb-input-init>
-                                    <input type="text" id="zonaDescripcion" class="form-control" />
-                                    <label class="form-label" for="zonaDescripcion">Descripción</label>
+                                    <input type="text" id="formZonaNombre" class="form-control" />
+                                    <label class="form-label" for="formZonaNombre">Nombre</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-outline" data-mdb-input-init>
+                                    <input type="text" id="formZonaDescripcion" class="form-control" />
+                                    <label class="form-label" for="formZonaDescripcion">Descripción</label>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row mt-3">
                             <div class="col-md-12 d-flex justify-content-end">
                                 <button id="btnAddZonaCliente" type="button" class="btn btn-primary btn-rounded" data-mdb-ripple-color="dark">
@@ -399,11 +405,11 @@
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="table-responsive pt-3">
                             <table class="table align-middle mb-0 bg-white">
                                 <thead class="bg-light">
-                                <tr class="text-center">
+                                    <tr class="text-center">
                                         <th scope="col">Clave</th>
                                         <th scope="col">Nombre</th>
                                         <th scope="col">Descripción</th>
@@ -411,7 +417,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="zonaClienteData" class="table-group-divider">
-                                    <!-- Aquí se cargarán las zonas de cliente -->
+                                    <!-- Aquí se cargarán las zonas de clientes -->
                                 </tbody>
                             </table>
                             <div class="d-flex justify-content-center pt-3">
@@ -436,6 +442,9 @@
                 </div>
             </div>
         </div>
+
+
+        
 
 
 

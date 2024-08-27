@@ -1,71 +1,71 @@
-const urlGetCategorias = '/api/categorias';
+const urlGetZonasClientes = '/api/zonasClientes';
 
-// Obtener referencia al contenedor de categorías
-const contenedorCategorias = document.getElementById('categoriaData');
-let currentPageCategorias = 1;
-const itemsPerPageCategorias = 5; // Ajusta este número según tus necesidades
-const maxPageLinksCategorias = 5;
-let categorias = [];
+// Obtener referencia al contenedor de zonas de clientes
+const contenedorZonasClientes = document.getElementById('zonaClienteData');
+let currentPageZonasClientes = 1;
+const itemsPerPageZonasClientes = 5; // Ajusta este número según tus necesidades
+const maxPageLinksZonasClientes = 5;
+let zonasClientes = [];
 
-// Función para mostrar las categorías
-const mostrarCategorias = (categorias, currentPage, itemsPerPage) => {
+// Función para mostrar las zonas de clientes
+const mostrarZonasClientes = (zonasClientes, currentPage, itemsPerPage) => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  let resultadosCategorias = '';
+  let resultadosZonasClientes = '';
 
-  categorias.slice(startIndex, endIndex).forEach((item) => {
-    resultadosCategorias += `
+  zonasClientes.slice(startIndex, endIndex).forEach((item) => {
+    resultadosZonasClientes += `
       <tr>
         <td class="text-center">${item.clave}</td>
         <td class="text-center">${item.nombre}</td>
         <td class="text-center">${item.descripcion}</td>
         <td class="text-center">
-          <button id="${item._id}" type="button" class="btn btn-danger btn-rounded btnDeleteCategorias">
+          <button id="${item._id}" type="button" class="btn btn-danger btn-rounded btnDeleteZonasClientes">
             <i class="fa-solid fa-trash"></i>
           </button>
-          <button id="${item._id}" type="button" class="btn btn-secondary btn-rounded btnEditCategorias">
+          <button id="${item._id}" type="button" class="btn btn-secondary btn-rounded btnEditZonasClientes">
             <i class="fa-solid fa-gear"></i>
           </button>
         </td>
       </tr>`;
   });
 
-  contenedorCategorias.innerHTML = resultadosCategorias;
+  contenedorZonasClientes.innerHTML = resultadosZonasClientes;
 };
 
 // Función para actualizar los controles de paginación
-function actualizarControlesPaginacionCategorias() {
-  const botonAnterior = document.querySelector('#anteriorCategorias');
-  const botonSiguiente = document.querySelector('#siguienteCategorias');
+function actualizarControlesPaginacionZonasClientes() {
+  const botonAnterior = document.querySelector('#anteriorZonasClientes');
+  const botonSiguiente = document.querySelector('#siguienteZonasClientes');
 
   if (botonAnterior && botonSiguiente) {
-    botonAnterior.disabled = currentPageCategorias === 1;
+    botonAnterior.disabled = currentPageZonasClientes === 1;
     botonSiguiente.disabled =
-      currentPageCategorias === Math.ceil(categorias.length / itemsPerPageCategorias);
+      currentPageZonasClientes === Math.ceil(zonasClientes.length / itemsPerPageZonasClientes);
   }
 }
 
 // Función para generar los números de página
-function generarNumerosDePaginaCategorias() {
-  const paginacionContainer = document.getElementById('paginationCategorias');
+function generarNumerosDePaginaZonasClientes() {
+  const paginacionContainer = document.getElementById('paginationZonasClientes');
 
   if (paginacionContainer) {
-    const numeroTotalPaginas = Math.ceil(categorias.length / itemsPerPageCategorias);
+    const numeroTotalPaginas = Math.ceil(zonasClientes.length / itemsPerPageZonasClientes);
 
     let paginacionHTML = '';
 
     let startPage = Math.max(
       1,
-      currentPageCategorias - Math.floor(maxPageLinksCategorias / 2),
+      currentPageZonasClientes - Math.floor(maxPageLinksZonasClientes / 2),
     );
     let endPage = Math.min(
       numeroTotalPaginas,
-      startPage + maxPageLinksCategorias - 1,
+      startPage + maxPageLinksZonasClientes - 1,
     );
 
     if (startPage > 1) {
       paginacionHTML +=
-        '<li class="page-item"><a class="page-link" href="#" onclick="cambiarPaginaCategorias(1)">1</a></li>';
+        '<li class="page-item"><a class="page-link" href="#" onclick="cambiarPaginaZonasClientes(1)">1</a></li>';
       if (startPage > 2) {
         paginacionHTML +=
           '<li class="page-item disabled"><span class="page-link">...</span></li>';
@@ -74,8 +74,8 @@ function generarNumerosDePaginaCategorias() {
 
     for (let i = startPage; i <= endPage; i++) {
       paginacionHTML += `<li class="page-item ${
-        i === currentPageCategorias ? 'active' : ''
-      }"><a class="page-link" href="#" onclick="cambiarPaginaCategorias(${i})">${i}</a></li>`;
+        i === currentPageZonasClientes ? 'active' : ''
+      }"><a class="page-link" href="#" onclick="cambiarPaginaZonasClientes(${i})">${i}</a></li>`;
     }
 
     if (endPage < numeroTotalPaginas) {
@@ -83,36 +83,35 @@ function generarNumerosDePaginaCategorias() {
         paginacionHTML +=
           '<li class="page-item disabled"><span class="page-link">...</span></li>';
       }
-      paginacionHTML += `<li class="page-item"><a class="page-link" href="#" onclick="cambiarPaginaCategorias(${numeroTotalPaginas})">${numeroTotalPaginas}</a></li>`;
+      paginacionHTML += `<li class="page-item"><a class="page-link" href="#" onclick="cambiarPaginaZonasClientes(${numeroTotalPaginas})">${numeroTotalPaginas}</a></li>`;
     }
 
     paginacionContainer.innerHTML = paginacionHTML;
   }
 }
 
-// Función para cargar las categorías
-function cargarCategorias() {
-  fetch(urlGetCategorias)
+// Función para cargar las zonas de clientes
+function cargarZonasClientes() {
+  fetch(urlGetZonasClientes)
     .then((response) => response.json())
     .then((data) => {
-      categorias = data;
-      console.log(categorias)
-      mostrarCategorias(categorias, currentPageCategorias, itemsPerPageCategorias);
-      actualizarControlesPaginacionCategorias();
-      generarNumerosDePaginaCategorias();
+      zonasClientes = data;
+      mostrarZonasClientes(zonasClientes, currentPageZonasClientes, itemsPerPageZonasClientes);
+      actualizarControlesPaginacionZonasClientes();
+      generarNumerosDePaginaZonasClientes();
     })
     .catch((error) => console.log(error));
 }
 
 // Función para cambiar la página actual
-function cambiarPaginaCategorias(page) {
-  if (page > 0 && page <= Math.ceil(categorias.length / itemsPerPageCategorias)) {
-    currentPageCategorias = page;
-    mostrarCategorias(categorias, currentPageCategorias, itemsPerPageCategorias);
-    actualizarControlesPaginacionCategorias();
-    generarNumerosDePaginaCategorias();
+function cambiarPaginaZonasClientes(page) {
+  if (page > 0 && page <= Math.ceil(zonasClientes.length / itemsPerPageZonasClientes)) {
+    currentPageZonasClientes = page;
+    mostrarZonasClientes(zonasClientes, currentPageZonasClientes, itemsPerPageZonasClientes);
+    actualizarControlesPaginacionZonasClientes();
+    generarNumerosDePaginaZonasClientes();
   }
 }
 
-// Cargar las categorías al iniciar
-cargarCategorias();
+// Cargar las zonas de clientes al iniciar
+cargarZonasClientes();
