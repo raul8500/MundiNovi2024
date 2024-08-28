@@ -168,14 +168,6 @@
                                         <a data-mdb-pill-init class="nav-link active" id="ex1-tab-1" href="#ex1-pills-1" role="tab"
                                             aria-controls="ex1-pills-1" aria-selected="true">Datos generales</a>
                                     </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a data-mdb-pill-init class="nav-link" id="ex1-tab-2" href="#ex1-pills-2" role="tab"
-                                            aria-controls="ex1-pills-2" aria-selected="false">Datos de ubicación</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a data-mdb-pill-init class="nav-link" id="ex1-tab-3" href="#ex1-pills-3" role="tab"
-                                            aria-controls="ex1-pills-3" aria-selected="false">Datos financieros</a>
-                                    </li>
                                     
                                 </ul>
                                 <!-- Pills navs -->
@@ -186,167 +178,107 @@
                                     <!--Datos generales-->
                                     <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
                                         <div class="row">
-                                            
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="nombreCliente" class="col-form-label">Nombre:</label>
-                                                <input type="text" class="form-control" id="nombreCliente" />
+                                          <h4>Datos generales</h4>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="factura" class="col-form-label">¿Factura?</label>
+                                            <div>
+                                              <input type="radio" name="factura" id="factura_si" value="si" /> Sí
+                                              <input type="radio" name="factura" id="factura_no" value="no" checked /> No
                                             </div>
-                            
-                                    
+                                          </div>
+                                      
                                             <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="telefonoPersonalCliente" class="col-form-label">Telefono personal:</label>
-                                                <input type="text" class="form-control" id="telefonoPersonalCliente" />
+                                                <label style="font-weight: 600;" for="nombreCliente" class="col-form-label">
+                                                    Nombre: <span style="color: red; font-weight: bold;">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="nombreCliente" required />
                                             </div>
-
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="telefonoCelularCliente" class="col-form-label">Telefono celular:</label>
-                                                <input type="text" class="form-control" id="telefonoCelularCliente" />
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="correoElectronicoPersonalCliente" class="col-form-label">Correo electronico personal:</label>
-                                                <input type="text" class="form-control" id="correoElectronicoPersonalCliente" />
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" class="form-label" for="estatusCliente">Estatus:</label>
-                                                <select id="estatusCliente" class="form-select" aria-label="Combo box example">
-                                                </select>
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" class="form-label" for="personalidadCliente">Personalidad:</label>
-                                                <select id="personalidadCliente" class="form-select" aria-label="Combo box example">
-                                                </select>
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" class="form-label" for="clasificacionCliente">Clasificacion de cliente</label>
-                                                <select id="clasificacionCliente" class="form-select" aria-label="Combo box example">
-                                                </select>
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" class="form-label" for="zonaCliente">Zona de cliente:</label>
-                                                <select id="zonaCliente" class="form-select" aria-label="Combo box example">
-                                                </select>
-                                            </div>
-                                    
+                                        
+                                          
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="rfc" class="col-form-label">Identificación (RFC):</label>
+                                            <input type="text" class="form-control" id="rfc" />
+                                          </div>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" class="form-label" for="regimen">Régimen:
+                                                <span style="color: red; font-weight: bold;">*</span>
+                                            </label>
+                                            <select id="regimen" class="form-select" aria-label="Combo box example">
+                                            </select>
+                                          </div>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="telefonoPrincipal" class="col-form-label">Teléfono principal:</label>
+                                            <input type="text" class="form-control" id="telefonoPrincipal" />
+                                          </div>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="telefonoContacto" class="col-form-label">Teléfono de contacto:</label>
+                                            <input type="text" class="form-control" id="telefonoContacto" />
+                                          </div>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="correoElectronicoPersonal" class="col-form-label">Correo electrónico personal:</label>
+                                            <input type="text" class="form-control" id="correoElectronicoPersonal" />
+                                          </div>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="correoElectronicoContacto" class="col-form-label">Correo electrónico de contacto:</label>
+                                            <input type="text" class="form-control" id="correoElectronicoContacto" />
+                                          </div>
+                                      
+                                          <hr style="margin-top: 10px;">
+                                      
+                                          <h4>Dirección</h4>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="calle" class="col-form-label">Calle:</label>
+                                            <input type="text" class="form-control" id="calle" />
+                                          </div>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="numeroExterior" class="col-form-label">Número Exterior:</label>
+                                            <input type="text" class="form-control" id="numeroExterior" />
+                                          </div>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="numeroInterior" class="col-form-label">Número Interior:</label>
+                                            <input type="text" class="form-control" id="numeroInterior" />
+                                          </div>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="colonia" class="col-form-label">Colonia:</label>
+                                            <input type="text" class="form-control" id="colonia" />
+                                          </div>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="localidad" class="col-form-label">Localidad:</label>
+                                            <input type="text" class="form-control" id="localidad" />
+                                          </div>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="municipioDelegacion" class="col-form-label">Municipio/Delegación:</label>
+                                            <input type="text" class="form-control" id="municipioDelegacion" />
+                                          </div>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="estado" class="col-form-label">Estado:</label>
+                                            <input type="text" class="form-control" id="estado" />
+                                          </div>
+                                      
+                                          <div class="col-md-3">
+                                            <label style="font-weight: 600;" for="codigoPostal" class="col-form-label">Código postal:
+                                                <span style="color: red; font-weight: bold;">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" id="codigoPostal" />
+                                          </div>
+                                      
+                                          <hr style="margin-top: 10px;">
                                         </div>
-                                    </div>
-                                    
-                                    <!--Datos ubicación-->
-                                    <div class="tab-pane fade" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="rfcCliente" class="col-form-label">RFC</label>
-                                                <input type="text" class="form-control" id="rfcCliente" min="0">
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="razonSocialCliente" class="col-form-label">Razón social</label>
-                                                <input type="text" class="form-control" id="razonSocialCliente" />
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="correoElectronicoContactoCliente" class="col-form-label">Correo electronico de contacto</label>
-                                                <input type="text" class="form-control" id="correoElectronicoContactoCliente" min="0">
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="calleCliente" class="col-form-label">Calle</label>
-                                                <input type="text" class="form-control" id="calleCliente" min="0">
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="numeroExteriorCliente" class="col-form-label">Numero exterior</label>
-                                                <input type="text" class="form-control" id="numeroExteriorCliente" min="0">
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="numeroInteriorCliente" class="col-form-label">Numero interior</label>
-                                                <input type="text" class="form-control" id="numeroInteriorCliente" min="0">
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="coloniaCliente" class="col-form-label">Colonia</label>
-                                                <input type="text" class="form-control" id="coloniaCliente" min="0">
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="localidadCliente" class="col-form-label">Localidad</label>
-                                                <input type="text" class="form-control" id="localidadCliente" min="0">
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="municipioCliente" class="col-form-label">Municipio</label>
-                                                <input type="text" class="form-control" id="municipioCliente" min="0">
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="estadoCliente" class="col-form-label">Estado</label>
-                                                <input type="text" class="form-control" id="estadoCliente" min="0">
-                                            </div>
-                                    
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="paisCliente" class="col-form-label">Pais</label>
-                                                <input type="text" class="form-control" id="paisCliente" />
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="codigoPostalCliente" class="col-form-label">Codigo postal</label>
-                                                <input type="text" class="form-control" id="codigoPostalCliente" />
-                                            </div>
-                                    
-                                            <hr class="my-4">
-                                    
-                                        </div>
-                                    </div>
-
-                                    <!--Datos financieros-->
-                                    
-                                    <div class="tab-pane fade" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="diasCreditoCliente" class="col-form-label">Dias de credito</label>
-                                                <input type="number" class="form-control" id="diasCreditoCliente" min="0">
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="limiteCreditoCliente" class="col-form-label">Limite de credito</label>
-                                                <input type="text" class="form-control" id="limiteCreditoCliente" min="0">
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="saldoCliente" class="col-form-label">Saldo</label>
-                                                <input type="text" class="form-control" id="saldoCliente"  min="0">
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="diasRevisionCliente" class="col-form-label">Dia de revision</label>
-                                                <input type="text" class="form-control" id="diasRevisionCliente"  min="0">
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="diaPagoCliente" class="col-form-label">Dia de pago</label>
-                                                <input type="text" class="form-control" id="diaPagoCliente"  min="0">
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="descuentoCliente" class="col-form-label">Descuento</label>
-                                                <input type="text" class="form-control" id="descuentoCliente" min="0">
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="fechaUltPagoCliente" class="col-form-label">Fecha de ultimo pago</label>
-                                                <input type="text" class="form-control" id="fechaUltPagoCliente" min="0">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="montoUltPagoCliente" class="col-form-label">Monto de ultimo pago</label>
-                                                <input type="text" class="form-control" id="montoUltPagoCliente" min="0">
-                                            </div>
-                                        </div>
-                                    </div>
+                                      </div>
+                                      
 
                                     
                                 </div>
@@ -356,7 +288,7 @@
                                     <h5 class="text-start mb-0"></h5>
                                     <div>
                                         <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
-                                        <button type="submit" id="btnGuardarProducto" class="btn btn-primary">Guardar</button>
+                                        <button type="submit" id="btnGuardarCliente" class="btn btn-primary">Guardar</button>
                                     </div>
                                 </div>
                                 
@@ -465,7 +397,7 @@
     <script src="js/main.js"></script>
 
     <script src="js/clientes/clientes.js"></script>
-
+    <script src="js/clientes/complementosVisuales.js"></script>
 
     <script src="js/clientes/complementos/zonasClientes.js" ></script>
 </body>

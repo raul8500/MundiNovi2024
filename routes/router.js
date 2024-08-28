@@ -217,6 +217,11 @@ router.post('/api/ventas/crear', venta.createVenta);
 
 //Clientes 
 router.get('/api/clientes', clientes.getContacts)
+router.get('/api/clientesBD', clientes.getAllContactsBD)
+router.post('/api/clientessavealegra', clientes.getContactsAndSave)
+router.post('/api/createClient', clientes.createContact)
+router.post('/api/createClientNoBilling', clientes.createContactNoBilling)
+
 
     //Zonas clientes
     router.get('/api/zonasClientes', zonaClientes.getZonasClientes)
