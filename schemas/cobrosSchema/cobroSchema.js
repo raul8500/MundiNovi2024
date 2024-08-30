@@ -61,13 +61,18 @@ const ProductoSchemaCobro = new mongoose.Schema({
   observaciones: String,
   linea: { type: mongoose.Schema.Types.ObjectId, ref: 'Linea' },
   departamento: { type: mongoose.Schema.Types.ObjectId, ref: 'Departamento' },
-  grupo: { type: mongoose.Schema.Types.ObjectId, ref: 'Grupo' },
   marca: { type: mongoose.Schema.Types.ObjectId, ref: 'Marca' },
   impuesto: { type: mongoose.Schema.Types.ObjectId, ref: 'Impuesto' },
-  esKit: Boolean,
-  esGrupo: Boolean,
+  esKit: { type: Boolean, default: false }, // Mantiene booleano para indicar si es kit
+  esGrupo: { type: Boolean, default: false }, // Mantiene booleano para indicar si es grupo
+  grupoProductos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProductoCobro', default: null }], // Array de productos si es un grupo
+  kitProductos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProductoCobro', default: null }], // Array de productos si es un kit
   esVisible: Boolean,
   presentacionProducto: String,
+  esActivo: { type: Boolean, default: true },
+  alegra: { type: Boolean, default: true },
+  productKey: { type: String, default: true },
+  id: { type: String, default: true }
 });
 
 module.exports = mongoose.model('ProductoCobro', ProductoSchemaCobro);

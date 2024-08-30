@@ -19,7 +19,7 @@ const logout = require('../middlewares/Logout') //cerrar sesion
 const verifyToken = require('../middlewares/VerifyToken') //Si el token expiro
 const verifySesion = require('../middlewares/VerifySesion') //Si el token expiro
 //funciones por usuario
-const userFunctions = require('../controllers/functions/userFunctions')
+const userFunctions = require('../controllers/functionsUsers/userFunctions')
 //funciones franquicia
 const franquicia = require('../controllers/franquicia/franquiciaController')
 //funciones sucursal
@@ -212,7 +212,8 @@ router.delete('/api/productos/:id', productos.deleteById)
 router.post('/api/productos/load-from-file', productosController.loadProductosFromFile);
 router.get('/api/productos/cobros/load', productosController.getAllProductos);
 router.post('/api/ventas/crear', venta.createVenta);
-
+router.post('/api/productos/put', productosController.actualizarProductosConProductKey);
+router.post('/api/productos/id', productosController.actualizarProductosConExcel);
 
 
 //Clientes 

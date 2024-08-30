@@ -2,7 +2,9 @@ const Producto = require('../../schemas/cobrosSchema/cobroSchema'); // Ajusta la
 const path = require('path');
 const fs = require('fs');
 const XLSX = require('xlsx');
+
 const Venta = require('../../schemas/venta/ventaSchema');
+const request = require('request');
 
 exports.loadProductosFromFile = async (req, res) => {
     try {
@@ -52,6 +54,7 @@ exports.loadProductosFromFile = async (req, res) => {
             impuesto: null
         }));
 
+
         // Cargar datos en MongoDB
         await Producto.insertMany(productosTransformados);
 
@@ -93,6 +96,107 @@ exports.saveVenta = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al guardar la venta' });
+    }
+};
+
+exports.actualizarProductosConProductKey = async (req, res) => {
+    try {
+        // Paso 2: Recuperar todos los productos de la colección 'productosCobro'
+        const productos = await Producto.find({});
+
+        // Crear una función que maneje la solicitud a Alegra y la actualización del producto
+        const actualizarProducto = (producto) => {
+            return new Promise((resolve, reject) => {
+                const options = {
+                    method: 'GET',
+                    url: `https://api.alegra.com/api/v1/items?name=${encodeURIComponent(producto.nombre)}`,
+                    headers: {
+                        accept: 'application/json',
+                        authorization: 'Basic ZmFjdHVyYWxpbXBpb3NAaG90bWFpbC5jb206YWI0MTQ2YzQyZjhkMzY3ZjA1MmQ='
+                    }
+                };
+
+                // Realizar la solicitud a la API de Alegra
+                request(options, async (error, response, body) => {
+                    if (error) {
+                        console.error(`Error al buscar el producto ${producto.nombre} en Alegra:`, error);
+                        return reject(error);
+                    }
+
+                    const alegraResponse = JSON.parse(body);
+
+                    if (alegraResponse.length > 0) {
+                        // Actualizar el producto en MongoDB con el `productKey`
+                        const productKey = alegraResponse[0].productKey; // Suponiendo que 'productKey' es correcto
+                        producto.productKey = productKey;
+
+                        await producto.save(); // Guardar los cambios en la base de datos
+                        console.log(`Producto ${producto.nombre} actualizado con productKey ${productKey}`);
+                        resolve();
+                    } else {
+                        console.log(`No se encontró el producto ${producto.nombre} en Alegra`);
+                        resolve();
+                    }
+                });
+            });
+        };
+
+        // Paso 4: Esperar a que todas las promesas de actualización se completen
+        await Promise.all(productos.map(actualizarProducto));
+
+        res.status(200).send("Productos actualizados exitosamente.");
+    } catch (error) {
+        console.error("Error al actualizar productos:", error);
+        res.status(500).send("Error al actualizar productos.");
+    }
+};
+
+exports.actualizarProductosConExcel = async (req, res) => {
+    try {
+        // Ruta del archivo Excel
+        const filePath = path.join(__dirname, '../../archivos', '20243.csv');
+        
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ error: 'Archivo no encontrado' });
+        }
+        // Leer el archivo Excel
+        const workbook = XLSX.readFile(filePath);
+        const sheetName = workbook.SheetNames[0]; // Usar la primera hoja
+        const worksheet = workbook.Sheets[sheetName];
+        const excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }); // Leer todas las filas
+        
+        // Crear un objeto para mapear nombres a productKeys
+        const productMap = {};
+        excelData.forEach(row => {
+            const id = row[0];      // ID del producto (columna 0)
+            const nombre = row[1];  // Nombre del producto (columna 1)
+            if (id && nombre) {
+                productMap[nombre.trim()] = id;
+            }
+        });
+
+        // Recuperar todos los productos de la colección 'productosCobro'
+        const productos = await Producto.find({});
+
+        // Función para actualizar un producto si se encuentra en el Excel
+        const actualizarProducto = async (producto) => {
+            const productKey = productMap[producto.nombre.trim()];
+            if (productKey) {
+                producto.productKey = id;
+                await producto.save(); // Guardar los cambios en la base de datos
+                console.log(`Producto ${producto.nombre} actualizado con productKey ${producto.id}`);
+            } else {
+                console.log(`No se encontró el producto ${producto.nombre} en el Excel`);
+            }
+        };
+
+        // Iterar sobre los productos y actualizar
+        await Promise.all(productos.map(actualizarProducto));
+
+        res.status(200).send("Productos actualizados exitosamente.");
+    } catch (error) {
+        console.error("Error al actualizar productos:", error);
+        res.status(500).send("Error al actualizar productos.");
     }
 };
 
