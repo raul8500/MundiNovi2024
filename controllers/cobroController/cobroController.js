@@ -7,7 +7,7 @@ const Venta = require('../../schemas/venta/ventaSchema');
 exports.loadProductosFromFile = async (req, res) => {
     try {
         // Ruta del archivo específico
-        const filePath = path.join(__dirname, '../../archivos', '2024.xlsx');
+        const filePath = path.join(__dirname, '../../archivos', '20242.xlsx');
         
         // Verificar si el archivo existe
         if (!fs.existsSync(filePath)) {
@@ -16,14 +16,44 @@ exports.loadProductosFromFile = async (req, res) => {
 
         // Leer el archivo Excel
         const workbook = XLSX.readFile(filePath);
-        console.log(workbook)
         const sheet_name_list = workbook.SheetNames;
         const productosData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]], {
-            header: ['clave', 'nombre', 'precio1', 'precio2', 'precio3', 'precio4', 'precio5', 'precio6', 'precio7', 'precio8', 'precio9', 'precio10']
+            header: [
+                'clave', 'claveProveedor', 'codigoBarra', 'nombre', 'descripcion', 
+                'tiempoSurtido', 'controlAlmacen', 'volumen', 'peso', 'costo', 
+                'ultimoCosto', 'costoPromedio', 'unidadEntrada', 'unidadSalida', 
+                'factorEntreUnidades', 'unidadEmpaque', 'lote', 'precio1', 
+                'porcentajePrecio1', 'rangoInicial1', 'rangoFinal1', 'precio2', 
+                'porcentajePrecio2', 'rangoInicial2', 'rangoFinal2', 'precio3', 
+                'porcentajePrecio3', 'rangoInicial3', 'rangoFinal3', 'precio4', 
+                'porcentajePrecio4', 'rangoInicial4', 'rangoFinal4', 'precio5', 
+                'porcentajePrecio5', 'rangoInicial5', 'rangoFinal5', 'precio6', 
+                'porcentajePrecio6', 'rangoInicial6', 'rangoFinal6', 'precio7', 
+                'porcentajePrecio7', 'rangoInicial7', 'rangoFinal7', 'precio8', 
+                'porcentajePrecio8', 'rangoInicial8', 'rangoFinal8', 'precio9', 
+                'porcentajePrecio9', 'rangoInicial9', 'rangoFinal9', 'precio10', 
+                'porcentajePrecio10', 'rangoInicial10', 'rangoFinal10', 'observaciones', 
+                'linea', 'departamento', 'grupo', 'marca', 'impuesto', 'esKit', 
+                'esGrupo', 'esVisible', 'presentacionProducto'
+            ]
         });
 
+        // Transformar los datos si es necesario
+        const productosTransformados = productosData.map(producto => ({
+            ...producto,
+            controlAlmacen: producto.controlAlmacen === 1,  // Convertir a booleano
+            esKit: producto.esKit === 'True',
+            esGrupo: producto.esGrupo === 'True',
+            esVisible: producto.esVisible === 'True',
+            linea: null,  // Deberás mapear estos campos a ObjectId si tienes datos de referencia
+            departamento: null,
+            grupo: null,
+            marca: null,
+            impuesto: null
+        }));
+
         // Cargar datos en MongoDB
-        await Producto.insertMany(productosData);
+        await Producto.insertMany(productosTransformados);
 
         res.status(200).json({ message: 'Datos cargados correctamente' });
     } catch (error) {

@@ -1,6 +1,3 @@
-const base = 'http://localhost:3000';
-const urlAuthLogin = base + '/api/auth/login';
-
 const usernameInput = document.getElementById('usernameInput');
 const passwordInput = document.getElementById('passwordInput');
 const btnLogin = document.getElementById('btnLogin')

@@ -115,41 +115,39 @@
                 </div>
                 
                 
-                    <div class="table-responsive pt-3">
-                      <table class="table align-middle mb-0 bg-white">
-                          <thead class="bg-light">
-                            <tr class="text-center">
-                                  <th scope="col">Clave</th>
-                                  <th scope="col">Estado</th>
-                                  <th scope="col">Código de barras</th>
-                                  <th scope="col">Clave alterna</th>
-                                  <th scope="col">Nombre</th>
-                                  <th scope="col">Costo</th>
-                                  <th scope="col">Precio</th>
-                                  <th scope="col">Alegra</th>
-                                  <th scope="col">Acciones</th>
-                              </tr>
-                          </thead>
-                          <tbody id="productosData" class="table-group-divider">
-                              <!-- Aquí se cargarán los productos -->
-                          </tbody>
-                      </table>
-                      <div class="d-flex justify-content-center pt-3">
-                          <ul class="pagination" id="paginationProductos">
-                              <li class="page-item">
-                                  <a class="page-link" href="#" onclick="cambiarPaginaProductos(currentPageProductos - 1)" aria-label="Previous" id="anteriorProductos">
-                                      <span aria-hidden="true">&laquo;</span>
-                                  </a>
-                              </li>
-                              <!-- Los números de página se generarán dinámicamente aquí -->
-                              <li class="page-item">
-                                  <a class="page-link" href="#" onclick="cambiarPaginaProductos(currentPageProductos + 1)" aria-label="Next" id="siguienteProductos">
-                                      <span aria-hidden="true">&raquo;</span>
-                                  </a>
-                              </li>
-                          </ul>
-                      </div>
+                <div class="table-responsive pt-3">
+                    <table class="table align-middle mb-0 bg-white">
+                        <thead class="bg-light">
+                        <tr class="text-center">
+                                <th scope="col">Clave</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Costo</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Alegra</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productosData" class="table-group-divider">
+                            <!-- Aquí se cargarán los productos -->
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-center pt-3">
+                        <ul class="pagination" id="paginationProductos">
+                            <li class="page-item">
+                                <a class="page-link" href="#" onclick="cambiarPaginaProductos(currentPageProductos - 1)" aria-label="Previous" id="anteriorProductos">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <!-- Los números de página se generarán dinámicamente aquí -->
+                            <li class="page-item">
+                                <a class="page-link" href="#" onclick="cambiarPaginaProductos(currentPageProductos + 1)" aria-label="Next" id="siguienteProductos">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
+                </div>
 
             
         <!--Modales-->  
@@ -1381,14 +1379,7 @@
     <script src="js/productos/productosGet.js"></script>
     <script src="js/productos/productosDelete.js"></script>
 
-    <script src="js/productos/complementos/categorias.js"></script>
-    <script src="js/productos/complementos/grupos.js"></script>
-    <script src="js/productos/complementos/marcas.js"></script>
-    <script src="js/productos/complementos/tipoProductos.js"></script>
-    <script src="js/productos/complementos/lineas.js"></script>
-    <script src="js/productos/complementos/departamentos.js"></script>
-    <script src="js/productos/complementos/unidades.js"></script>
-    <script src="js/productos/complementos/impuestos.js"></script>
+
 </body>
 
 </html>

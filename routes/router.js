@@ -222,6 +222,10 @@ router.post('/api/clientessavealegra', clientes.getContactsAndSave)
 router.post('/api/createClient', clientes.createContact)
 router.post('/api/createClientNoBilling', clientes.createContactNoBilling)
 
+router.delete('/api/clientesDelete/:id', clientes.deleteContactById)
+router.delete('/api/clientesDeleteID/:id', clientes.deleteContactByUserId)
+
+
 
     //Zonas clientes
     router.get('/api/zonasClientes', zonaClientes.getZonasClientes)

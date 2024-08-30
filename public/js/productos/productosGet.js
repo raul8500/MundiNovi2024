@@ -1,9 +1,9 @@
-const urlGetProductos ='/api/productos';
+const urlGetProductos ='/api/productos/cobros/load';
 
 //get usuarios
 const contenedorProductos = document.getElementById('productosData');
 let currentPageProductos = 1;
-const itemsPerPageProductos = 5; // Puedes ajustar este número según tus necesidades
+const itemsPerPageProductos = 30; // Puedes ajustar este número según tus necesidades
 const maxPageLinksProductos = 5;
 let productos = [];
 let productosFiltrados = []; // Nueva variable para almacenar productos filtrados
@@ -19,21 +19,19 @@ const mostrarProductos = (productos, currentPage, itemsPerPage) => {
             <tr>
                 <td class="text-center">${item.clave}</td>
                 <td class="text-center">${item.estado ? '<span class="badge badge-success rounded-pill d-inline">Activado</span>' : '<span class="badge badge-danger rounded-pill d-inline">Desactivado</span>'}</td>
-                <td class="text-center">${item.codigoBarras}</td>
-                <td class="text-center">${item.claveAlterna}</td>
                 <td class="text-center">${item.nombre}</td>
-                <td class="text-center">${item.datosFinancieros.costo}</td>
-                <td class="text-center">${item.datosFinancieros.precio1}</td>
+                <td class="text-center">${item.costo}</td>
+                <td class="text-center">${item.precio1}</td>
                 <td class="text-center">${'-'}</td>
                 <td class="text-center">
                 
                     <button id="${
-                      item._id
+                      item.clave
                     }" type="button" class="btn btn-primary btn-rounded ">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
 
-                    <button id="${item._id}" 
+                    <button id="${item.clave}" 
                             type="button" 
                             class="btn ${item.status === 1 ? 'btn-success' : 'btn-danger'} btn-rounded "
                             data-status="${item.status}">
@@ -133,16 +131,23 @@ function cambiarPaginaProductos(page) {
 
 // Nueva funcionalidad para búsqueda rápida
 document.getElementById('busquedaProductosMain').addEventListener('input', function () {
-    const searchText = this.value.toLowerCase();
-    productosFiltrados = productos.filter((producto) =>
-      producto.nombre.toLowerCase().includes(searchText) ||
-      producto.codigoBarras.includes(searchText) ||
-      producto.clave.toLowerCase().includes(searchText) // Incluye búsqueda por clave
-    );
-    currentPageProductos = 1; // Reinicia a la primera página
-    mostrarProductos(productosFiltrados, currentPageProductos, itemsPerPageProductos);
-    actualizarControlesPaginacionProductos();
-    generarNumerosDePaginaProductos();
+  const searchText = this.value.toLowerCase();
+
+  productosFiltrados = productos.filter((producto) => {
+      const nombre = producto.nombre ? producto.nombre.toLowerCase() : '';
+      const codigoBarras = producto.codigoBarras ? producto.codigoBarras : '';
+      const clave = producto.clave ? producto.clave.toLowerCase() : '';
+
+      return nombre.includes(searchText) || 
+             codigoBarras.includes(searchText) || 
+             clave.includes(searchText);
   });
+
+  currentPageProductos = 1; // Reinicia a la primera página
+  mostrarProductos(productosFiltrados, currentPageProductos, itemsPerPageProductos);
+  actualizarControlesPaginacionProductos();
+  generarNumerosDePaginaProductos();
+});
+
 
 cargarProductos();

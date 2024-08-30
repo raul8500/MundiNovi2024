@@ -26,6 +26,15 @@ function cargarProductos() {
 // Inicializar carga de productos
 cargarProductos();
 
+
+// Seleccionar un producto de la lista de sugerencias
+function seleccionarProducto(producto) {
+    document.getElementById('producto').value = producto.nombre;
+    document.getElementById('sugerencias').innerHTML = ''; // Limpiar sugerencias después de seleccionar
+    document.getElementById('producto').focus(); // Regresar al input de búsqueda
+    indexSugerencia = -1; // Reiniciar el índice de sugerencia
+}
+
 // Manejo del input de búsqueda de productos
 document.getElementById('producto').addEventListener('input', function () {
     const valorInput = this.value.toLowerCase();
@@ -37,16 +46,27 @@ document.getElementById('producto').addEventListener('input', function () {
         return; // Salir si el campo de búsqueda está vacío
     }
 
-    const listaFiltrada = productos.filter(producto =>
-        producto.nombre.toLowerCase().includes(valorInput)
-    );
+    // Asegúrate de que `productos` esté definido y sea un array
+    if (!Array.isArray(productos)) {
+        console.error('La variable "productos" no está definida o no es un array.');
+        return;
+    }
+
+    const listaFiltrada = productos.filter(producto => {
+        // Verifica y convierte `producto.nombre` y `producto.clave` a minúsculas si son cadenas
+        const nombre = typeof producto.nombre === 'string' ? producto.nombre.toLowerCase() : '';
+        const clave = typeof producto.clave === 'string' ? producto.clave.toLowerCase() : '';
+
+        return nombre.includes(valorInput) || clave.includes(valorInput);
+    });
 
     contenedorSugerencias.innerHTML = '';
 
     listaFiltrada.forEach((producto, index) => {
         const elementoSugerencia = document.createElement('div');
         elementoSugerencia.classList.add('sugerencia');
-        elementoSugerencia.textContent = producto.nombre;
+        // Mostrar tanto el nombre como la clave del producto
+        elementoSugerencia.textContent = `${producto.nombre} (${producto.clave})`;
         elementoSugerencia.dataset.index = index;
         elementoSugerencia.addEventListener('click', function () {
             seleccionarProducto(producto);
@@ -54,13 +74,6 @@ document.getElementById('producto').addEventListener('input', function () {
         contenedorSugerencias.appendChild(elementoSugerencia);
     });
 });
-
-// Seleccionar un producto de la lista de sugerencias
-function seleccionarProducto(producto) {
-    document.getElementById('producto').value = producto.nombre;
-    document.getElementById('sugerencias').innerHTML = ''; // Limpiar sugerencias después de seleccionar
-    document.getElementById('producto').focus(); // Regresar al input de búsqueda
-}
 
 // Manejo de teclas en el input de búsqueda
 document.getElementById('producto').addEventListener('keydown', function (event) {
@@ -80,24 +93,38 @@ document.getElementById('producto').addEventListener('keydown', function (event)
     } else if (event.key === 'Enter') {
         event.preventDefault();
         if (indexSugerencia >= 0 && indexSugerencia < sugerencias.length) {
-            const productoSeleccionado = productos.find(p => p.nombre === sugerencias[indexSugerencia].textContent);
+            const productoSeleccionado = productos.find(p => p.nombre === sugerencias[indexSugerencia].textContent.split(' (')[0]);
             if (productoSeleccionado) {
                 seleccionarProducto(productoSeleccionado);
+                agregarProducto(); // Asegúrate de que se llame a la función de agregar producto
             }
         }
     }
 });
 
-// Actualizar las sugerencias con la selección actual
+// Función para actualizar las sugerencias y el scroll
 function actualizarSugerencias() {
     const sugerencias = document.querySelectorAll('#sugerencias .sugerencia');
+
     sugerencias.forEach((sugerencia, index) => {
-        if (index === indexSugerencia) {
-            sugerencia.classList.add('seleccionado');
-        } else {
-            sugerencia.classList.remove('seleccionado');
-        }
+        sugerencia.classList.toggle('seleccionado', index === indexSugerencia);
     });
+
+    // Asegurarse de que la sugerencia seleccionada sea visible
+    if (indexSugerencia >= 0 && indexSugerencia < sugerencias.length) {
+        const contenedorSugerencias = document.getElementById('sugerencias');
+        const elementoSeleccionado = sugerencias[indexSugerencia];
+        
+        // Ajustar el scroll para que el elemento seleccionado sea visible
+        contenedorSugerencias.scrollTop = elementoSeleccionado.offsetTop - contenedorSugerencias.clientHeight / 2 + elementoSeleccionado.clientHeight / 2;
+    }
+}
+
+// Seleccionar un producto de la lista de sugerencias
+function seleccionarProducto(producto) {
+    document.getElementById('producto').value = producto.nombre;
+    document.getElementById('sugerencias').innerHTML = ''; // Limpiar sugerencias después de seleccionar
+    document.getElementById('producto').focus(); // Regresar al input de búsqueda
 }
 
 // Agregar un producto a la tabla
@@ -145,8 +172,12 @@ function agregarProducto() {
     // Limpiar el input de búsqueda y la cantidad
     inputProducto.value = '';
     inputCantidad.value = '1';
-    inputProducto.focus(); // Regresar al input de búsqueda
+    inputCantidad.focus(); // Regresar al input de búsqueda
 }
+
+
+
+
 
 // Manejo del clic en el botón de agregar producto
 document.getElementById('agregarProducto').addEventListener('click', () => {
@@ -414,7 +445,6 @@ function facturarVenta() {
 document.getElementById('btnFacturar').addEventListener('click', () => {
     facturarVenta();
 });
-
 
 
 
