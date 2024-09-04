@@ -1,4 +1,4 @@
-const urlGetProductos ='/api/productos/cobros/load';
+const urlGetProductos ='/api/productos';
 
 //get usuarios
 const contenedorProductos = document.getElementById('productosData');
@@ -17,24 +17,24 @@ const mostrarProductos = (productos, currentPage, itemsPerPage) => {
   productos.slice(startIndex, endIndex).forEach((item) => {
     resultadosProductos += `
             <tr>
-                <td class="text-center">${item.clave}</td>
-                <td class="text-center">${item.estado ? '<span class="badge badge-success rounded-pill d-inline">Activado</span>' : '<span class="badge badge-danger rounded-pill d-inline">Desactivado</span>'}</td>
-                <td class="text-center">${item.nombre}</td>
-                <td class="text-center">${item.costo}</td>
-                <td class="text-center">${item.precio1}</td>
-                <td class="text-center">${'-'}</td>
+                <td class="text-center">${item.reference}</td>
+                <td class="text-center">${item.esActivo ? '<span class="badge badge-success rounded-pill d-inline">Activado</span>' : '<span class="badge badge-danger rounded-pill d-inline">Desactivado</span>'}</td>
+                <td class="text-center">${item.name}</td>
+                <td class="text-center">${item.datosFinancieros.costo}</td>
+                <td class="text-center">${item.datosFinancieros.precio1}</td>
+                <td class="text-center">${item.idAlegra}</td>
                 <td class="text-center">
                 
                     <button id="${
-                      item.clave
+                      item._id
                     }" type="button" class="btn btn-primary btn-rounded ">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
 
-                    <button id="${item.clave}" 
+                    <button id="${item._id}" 
                             type="button" 
-                            class="btn ${item.status === 1 ? 'btn-success' : 'btn-danger'} btn-rounded "
-                            data-status="${item.status}">
+                            class="btn ${item.esActivo === true ? 'btn-success' : 'btn-danger'} btn-rounded "
+                            data-status="${item.esActivo}">
                       <i class="fa-regular fa-circle"></i>
                     </button>
 
@@ -112,7 +112,7 @@ function cargarProductos() {
   fetch(urlGetProductos)
     .then((response) => response.json())
     .then((data) => {
-      productos = data;
+      productos = data.products;
       mostrarProductos(productos, currentPageProductos, itemsPerPageProductos);
       actualizarControlesPaginacionProductos();
       generarNumerosDePaginaProductos();
@@ -134,13 +134,13 @@ document.getElementById('busquedaProductosMain').addEventListener('input', funct
   const searchText = this.value.toLowerCase();
 
   productosFiltrados = productos.filter((producto) => {
-      const nombre = producto.nombre ? producto.nombre.toLowerCase() : '';
+      const name = producto.name ? producto.name.toLowerCase() : '';
       const codigoBarras = producto.codigoBarras ? producto.codigoBarras : '';
-      const clave = producto.clave ? producto.clave.toLowerCase() : '';
+      const reference = producto.reference ? producto.reference.toLowerCase() : '';
 
-      return nombre.includes(searchText) || 
+      return name.includes(searchText) || 
              codigoBarras.includes(searchText) || 
-             clave.includes(searchText);
+             reference.includes(searchText);
   });
 
   currentPageProductos = 1; // Reinicia a la primera página
