@@ -1,7 +1,9 @@
 const request = require('request');
 const Client = require('../../schemas/clientesSchema/complementosSchema/clientesAlegraSchema'); // Asegúrate de ajustar la ruta al modelo Client según tu estructura
 const rp = require('request-promise');
-
+const path = require('path');
+const fs = require('fs');
+const XLSX = require('xlsx');
 
 
 // Exporta la función para obtener contactos de Alegra
@@ -396,3 +398,91 @@ exports.createContact = async (req, res) => {
   }
 };
 
+exports.exportContactsToFile = async (req, res) => {
+  try {
+      // Obtener todos los contactos de la base de datos
+      const contacts = await Client.find({});
+      const processedContacts = [];
+      const errorLog = [];
+
+      // Transformar los datos y manejar errores
+      contacts.forEach((contact, index) => {
+          try {
+              const processedContact = {
+                  id: contact.id || null,
+                  name: contact.name || null,
+                  identification: contact.identification || null,
+                  email: contact.email || null,
+                  phonePrimary: contact.phonePrimary || null,
+                  phoneSecondary: contact.phoneSecondary || null,
+                  fax: contact.fax || null,
+                  mobile: contact.mobile || null,
+                  observations: contact.observations || null,
+                  status: contact.status || null,
+                  cfdiUse: contact.cfdiUse || null,
+                  paymentType: contact.paymentType || null,
+                  paymentMethod: contact.paymentMethod || null,
+                  operationType: contact.operationType || null,
+                  thirdType: contact.thirdType || null,
+                  fiscalId: contact.fiscalId || null,
+                  regime: contact.regime || null,
+                  regimeObject: contact.regimeObject ? contact.regimeObject.join(', ') : null,
+                  addressStreet: contact.address?.street || null,
+                  addressExteriorNumber: contact.address?.exteriorNumber || null,
+                  addressInteriorNumber: contact.address?.interiorNumber || null,
+                  addressColony: contact.address?.colony || null,
+                  addressLocality: contact.address?.locality || null,
+                  addressMunicipality: contact.address?.municipality || null,
+                  addressZipCode: contact.address?.zipCode || null,
+                  addressState: contact.address?.state || null,
+                  addressCountry: contact.address?.country || null,
+                  addressReference: contact.address?.reference || null,
+                  type: contact.type ? contact.type.join(', ') : null,
+                  seller: contact.seller || null,
+                  termId: contact.term?.id || null,
+                  termName: contact.term?.name || null,
+                  termDays: contact.term?.days || null,
+                  priceListId: contact.priceList?.id || null,
+                  priceListName: contact.priceList?.name || null,
+                  internalContacts: JSON.stringify(contact.internalContacts) || null,
+                  statementAttached: contact.statementAttached || null,
+                  accounting: JSON.stringify(contact.accounting) || null
+              };
+              processedContacts.push(processedContact);
+
+              console.log(`Contacto procesado: ${contact.name || 'Sin nombre'} (ID: ${contact.id})`);
+          } catch (error) {
+              console.error(`Error al procesar el contacto en la fila ${index + 1}: ${error.message}`);
+              errorLog.push({
+                  contact: contact.name || `ID: ${contact.id}`,
+                  row: index + 1,
+                  error: error.message
+              });
+          }
+      });
+
+      // Crear un nuevo libro de trabajo
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(processedContacts);
+
+      // Añadir la hoja al libro de trabajo
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Contacts');
+
+      // Añadir una hoja para el registro de errores si los hay
+      if (errorLog.length > 0) {
+          const errorSheet = XLSX.utils.json_to_sheet(errorLog);
+          XLSX.utils.book_append_sheet(workbook, errorSheet, 'Error Log');
+      }
+
+      // Definir la ruta de guardado del archivo
+      const filePath = path.join(__dirname, '../../archivos', 'Contacts.xlsx');
+
+      // Escribir el archivo en disco
+      XLSX.writeFile(workbook, filePath);
+
+      res.status(200).json({ message: 'Datos exportados correctamente', filePath });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error al exportar los datos' });
+  }
+};

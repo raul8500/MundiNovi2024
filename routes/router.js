@@ -3,47 +3,34 @@ const router = express.Router()
 const multer = require('multer');
 const path = require('path');
 
-
+//Imports
 const productosController = require('../controllers/cobroController/cobroController');
 const venta = require('../controllers/venta/ventaController');
-//authControler
 const auth = require('../controllers/auth/auth')
-//chat
 const mesaje = require('../controllers/chat/chatController')
-router.delete('/chat', mesaje.chatDelete);
-//Middlewares
 const adminValidate = require('../middlewares/AdminValidate')
 const adminVerify = require('../middlewares/AdminVerify') 
-const authenticated = require('../middlewares/Authenticated') //si estas autenticado
-const logout = require('../middlewares/Logout') //cerrar sesion
-const verifyToken = require('../middlewares/VerifyToken') //Si el token expiro
-const verifySesion = require('../middlewares/VerifySesion') //Si el token expiro
-//funciones por usuario
+const authenticated = require('../middlewares/Authenticated')
+const logout = require('../middlewares/Logout') 
+const verifyToken = require('../middlewares/VerifyToken')
+const verifySesion = require('../middlewares/VerifySesion') 
 const userFunctions = require('../controllers/functionsUsers/userFunctions')
-//funciones franquicia
 const franquicia = require('../controllers/franquicia/franquiciaController')
-//funciones sucursal
 const sucursal = require('../controllers/sucursal/sucursalController')
-//Productos
-    const productos = require('../controllers/productos/productosController')
-    const complementos  = require('../controllers/productos/complementosController')
-    //Categorias
-    const categorias = require('../controllers/productos/complementos/categoriaController')
-    const grupos = require('../controllers/productos/complementos/grupoController')
-    const marca = require('../controllers/productos/complementos/marcaController')
-    const tipoProducto = require('../controllers/productos/complementos/tipoProductoController')
-    const linea = require('../controllers/productos/complementos/lineaController')
-    const departamento = require('../controllers/productos/complementos/departamentoController')
-    const unidad = require('../controllers/productos/complementos/unidadController')
-    const impuesto = require('../controllers/productos/complementos/impuestoController')
-    const proveedor = require('../controllers/productos/complementos/proveedorController')
-
-
-//Clientes
+const productos = require('../controllers/productos/productosController')
+const complementos  = require('../controllers/productos/complementosController')
+const categorias = require('../controllers/productos/complementos/categoriaController')
+const grupos = require('../controllers/productos/complementos/grupoController')
+const marca = require('../controllers/productos/complementos/marcaController')
+const tipoProducto = require('../controllers/productos/complementos/tipoProductoController')
+const linea = require('../controllers/productos/complementos/lineaController')
+const departamento = require('../controllers/productos/complementos/departamentoController')
+const unidad = require('../controllers/productos/complementos/unidadController')
+const impuesto = require('../controllers/productos/complementos/impuestoController')
+const proveedor = require('../controllers/productos/complementos/proveedorController')
+const authToken = require('../controllers/pruebas/auth')
 const clientes = require('../controllers/clientes/clientesController')
-
-    //Zonas clientes
-    const zonaClientes = require('../controllers/clientes/complementos/zonasClienteController')
+const zonaClientes = require('../controllers/clientes/complementos/zonasClienteController')
 
 
 
@@ -87,18 +74,7 @@ router.get('/clientes', (req, res) => {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+//Funciones al API
 
 //Auth
 router.post('/api/auth/register', auth.registerUser)
@@ -110,27 +86,24 @@ router.put('/api/auth/users/:id', auth.updateUserById)
 router.put('/api/auth/users/password/:id', auth.updatePassword)
 router.delete('/api/auth/users/:id', auth.deleteUserById);
 router.put('/api/auth/users/status/:id', auth.updateUserStatus)
-
-
 router.get('/logout', logout.logout)
-router.get('/api/isAdmin', adminVerify.isAdminVerify)
 
 //MiddleWare
 router.get('/api/verifySesion', verifySesion.verifyToken)
+router.get('/api/isAdmin', adminVerify.isAdminVerify)
 
-//funciones por usuario
+//Usuarios
 router.post('/api/auth/functions/add', userFunctions.addFunction)
 router.get('/api/auth/functions/:nameRol', userFunctions.getFunctionsByRole)
 router.get('/api/functions', userFunctions.getAllFunctions)
 router.put('/api/auth/functions/:id', userFunctions.updateFunctionById)
-//Funciones Franquicia
+
+//Franquicia
 router.post('/api/franquicia/add', franquicia.addFranquicia)
 router.get('/api/franquicia', franquicia.getFranquicias)
 router.get('/api/franquicia/:id', franquicia.getIndividualFranquicia);
 router.delete('/api/franquicia/:id', franquicia.deleteFranquicia);
 router.put('/api/franquicia/:id', franquicia.editFranquicia);
-
-
 
 //funciones sucursal
 router.post('/api/sucursal/add', sucursal.addSucursal)
@@ -141,18 +114,16 @@ router.get('/api/sucursal/id/:id', sucursal.getSucursalById)
 router.put('/api/sucursal/id/:id', sucursal.updateSucursalById)
 router.delete('/api/sucursal/id/:id', sucursal.deleteSucursalById)
 
-
-
-//productos
-router.get('/api/productos', productos.getAll)
-router.get('/api/productos/:id', productos.getById)
-router.post('/api/productos', productos.create)
-router.put('/api/productos/:id', productos.update)
-router.delete('/api/productos/:id', productos.deleteById)
+//Productos
+//router.post('/api/productos', productos.createProduct)
+router.post('/api/loadProductosFromExcelToBDtoAlegra', productos.createProductFromExcel)
+router.get('/api/productos', productos.getAllProducts)
+router.get('/api/productos/:id', productos.getProductById)
+router.delete('/api/productos/:id', productos.deleteProductById)
+router.put('/api/productos/:id', productos.updateProduct)
 
     //Complementos
     router.get('/api/complementos', complementos.getAllRecords)
-
         //Categorias
         router.get('/api/categorias', categorias.getCategorias)
         router.get('/api/categorias/:id', categorias.getCategoriaById)
@@ -215,18 +186,14 @@ router.post('/api/ventas/crear', venta.createVenta);
 router.post('/api/productos/put', productosController.actualizarProductosConProductKey);
 router.post('/api/productos/id', productosController.actualizarProductosConExcel);
 
-
 //Clientes 
 router.get('/api/clientes', clientes.getContacts)
 router.get('/api/clientesBD', clientes.getAllContactsBD)
 router.post('/api/clientessavealegra', clientes.getContactsAndSave)
 router.post('/api/createClient', clientes.createContact)
 router.post('/api/createClientNoBilling', clientes.createContactNoBilling)
-
 router.delete('/api/clientesDelete/:id', clientes.deleteContactById)
 router.delete('/api/clientesDeleteID/:id', clientes.deleteContactByUserId)
-
-
 
     //Zonas clientes
     router.get('/api/zonasClientes', zonaClientes.getZonasClientes)
@@ -234,6 +201,10 @@ router.delete('/api/clientesDeleteID/:id', clientes.deleteContactByUserId)
     router.post('/api/zonasClientes', zonaClientes.createZonaCliente)
     router.put('/api/zonasClientes/:id', zonaClientes.updateZonaCliente)
     router.delete('/api/zonasClientes/:id', zonaClientes.deleteZonaCliente)
+
+//chat
+router.delete('/chat', mesaje.chatDelete);
+
 
 
 

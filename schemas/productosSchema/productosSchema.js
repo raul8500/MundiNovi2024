@@ -1,89 +1,186 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
 
-const productoSchema = new Schema({
-  clave: { type: String, required: true },
-  claveAlterna: { type: String },
-  codigoBarras: { type: String },
-  nombre: { type: String, required: true },
-  descripcion: { type: String },
-  fechaAlta: { type: Date, default: Date.now },
-  claveProductosSAT: { type: String },
-  estado: { type: Boolean, default: true },
-  esKit: { type: Boolean, default: false },
-  esGrupoDeProductos: { type: Boolean, default: false },
-  categoria: { type: Schema.Types.ObjectId, ref: 'Categoria' },
-  grupo: { type: Schema.Types.ObjectId, ref: 'Grupo' },
-  marca: { type: Schema.Types.ObjectId, ref: 'Marca' },
-  tipoDeProducto: { type: Schema.Types.ObjectId, ref: 'TipoDeProducto' },
-  linea: { type: Schema.Types.ObjectId, ref: 'Linea' },
-  departamento: { type: Schema.Types.ObjectId, ref: 'Departamento' },
-  unidad: { type: Schema.Types.ObjectId, ref: 'Unidad' },
-  impuesto: { type: Schema.Types.ObjectId, ref: 'Impuesto' },
-  observaciones: { type: String },
-
-  datosFinancieros: {
-    tiempoDeSurtido: { type: Number },
-    controlDeAlmacen: { type: Boolean },
-    volumen: { type: Number },
-    peso: { type: Number },
-    stockMinimo: { type: Number },
-    stockMaximo: { type: Number },
-    costo: { type: Number },
-    ultimoCosto: { type: Number },
-    costoPromedio: { type: Number },
-    numeroPrecioMinimo: { type: Number },
-    numeroPrecioMaximo: { type: Number },
-    presentacion: { type: String },
-    porcentajePrecio1: { type: Number },
-    porcentajePrecio2: { type: Number },
-    porcentajePrecio3: { type: Number },
-    porcentajePrecio4: { type: Number },
-    porcentajePrecio5: { type: Number },
-    porcentajePrecio6: { type: Number },
-    porcentajePrecio7: { type: Number },
-    porcentajePrecio8: { type: Number },
-    porcentajePrecio9: { type: Number },
-    porcentajePrecio10: { type: Number },
-    precio1: { type: Number },
-    precio2: { type: Number },
-    precio3: { type: Number },
-    precio4: { type: Number },
-    precio5: { type: Number },
-    precio6: { type: Number },
-    precio7: { type: Number },
-    precio8: { type: Number },
-    precio9: { type: Number },
-    precio10: { type: Number },
-    rangoInicial1: { type: Number },
-    rangoInicial2: { type: Number },
-    rangoInicial3: { type: Number },
-    rangoInicial4: { type: Number },
-    rangoInicial5: { type: Number },
-    rangoInicial6: { type: Number },
-    rangoInicial7: { type: Number },
-    rangoInicial8: { type: Number },
-    rangoInicial9: { type: Number },
-    rangoInicial10: { type: Number },
-    rangoFinal1: { type: Number },
-    rangoFinal2: { type: Number },
-    rangoFinal3: { type: Number },
-    rangoFinal4: { type: Number },
-    rangoFinal5: { type: Number },
-    rangoFinal6: { type: Number },
-    rangoFinal7: { type: Number },
-    rangoFinal8: { type: Number },
-    rangoFinal9: { type: Number },
-    rangoFinal10: { type: Number }
+const productSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['product', 'service'],
+    required: false, // Ahora es opcional
   },
-
-  proveedores: [{ type: Schema.Types.ObjectId, ref: 'Proveedor' }],
-  
-  productosAdicionales: [{ type: Schema.Types.ObjectId, ref: 'Producto' }],
-
-  productosComplementarios: [{ nombre: { type: String } }]
+  reference: {
+    type: String,
+    required: false, // Ahora es opcional
+  },
+  esActivo: {
+    type: Boolean,
+    required: false, // Ahora es opcional
+  },
+  codigoBarra: {
+    type: String,
+    required: false, // Ahora es opcional
+  },
+  name: {
+    type: String,
+    required: false, // Ahora es opcional
+  },
+  productKey: {
+    type: String,
+    required: false, // Ahora es opcional
+  },
+  description: {
+    type: String,
+    required: false, // Ahora es opcional
+  },
+  inventory: {
+    unit: {
+      type: String,
+      required: false, // Ahora es opcional
+    },
+  },
+  tiempoSurtido: {
+    type: Number,
+    required: false, // Ahora es opcional
+  },
+  controlAlmacen: {
+    type: Number,
+    required: false, // Ahora es opcional
+  },
+  volumen: {
+    type: Number,
+    required: false, // Ahora es opcional
+  },
+  peso: {
+    type: Number,
+    required: false, // Ahora es opcional
+  },
+  datosFinancieros: {
+    costo: { type: Number, required: false }, // Ahora es opcional
+    ultimoCosto: { type: Number, required: false }, // Ahora es opcional
+    costoPromedio: { type: Number, required: false }, // Ahora es opcional
+    unidadEmpaque: { type: Number, required: false }, // Ahora es opcional
+    precio1: { type: Number, required: false }, // Ahora es opcional
+    precio2: { type: Number, required: false }, // Ahora es opcional
+    precio3: { type: Number, required: false }, // Ahora es opcional
+    precio4: { type: Number, required: false }, // Ahora es opcional
+    precio5: { type: Number, required: false }, // Ahora es opcional
+    precio6: { type: Number, required: false }, // Ahora es opcional
+    precio7: { type: Number, required: false }, // Ahora es opcional
+    precio8: { type: Number, required: false }, // Ahora es opcional
+    precio9: { type: Number, required: false }, // Ahora es opcional
+    precio10: { type: Number, required: false }, // Ahora es opcional
+    porcentajePrecio1: { type: Number, required: false }, // Ahora es opcional
+    porcentajePrecio2: { type: Number, required: false }, // Ahora es opcional
+    porcentajePrecio3: { type: Number, required: false }, // Ahora es opcional
+    porcentajePrecio4: { type: Number, required: false }, // Ahora es opcional
+    porcentajePrecio5: { type: Number, required: false }, // Ahora es opcional
+    porcentajePrecio6: { type: Number, required: false }, // Ahora es opcional
+    porcentajePrecio7: { type: Number, required: false }, // Ahora es opcional
+    porcentajePrecio8: { type: Number, required: false }, // Ahora es opcional
+    porcentajePrecio9: { type: Number, required: false }, // Ahora es opcional
+    porcentajePrecio10: { type: Number, required: false }, // Ahora es opcional
+    rangoInicial1: { type: Number, required: false }, // Ahora es opcional
+    rangoInicial2: { type: Number, required: false }, // Ahora es opcional
+    rangoInicial3: { type: Number, required: false }, // Ahora es opcional
+    rangoInicial4: { type: Number, required: false }, // Ahora es opcional
+    rangoInicial5: { type: Number, required: false }, // Ahora es opcional
+    rangoInicial6: { type: Number, required: false }, // Ahora es opcional
+    rangoInicial7: { type: Number, required: false }, // Ahora es opcional
+    rangoInicial8: { type: Number, required: false }, // Ahora es opcional
+    rangoInicial9: { type: Number, required: false }, // Ahora es opcional
+    rangoInicial10: { type: Number, required: false }, // Ahora es opcional
+    rangoFinal1: { type: Number, required: false }, // Ahora es opcional
+    rangoFinal2: { type: Number, required: false }, // Ahora es opcional
+    rangoFinal3: { type: Number, required: false }, // Ahora es opcional
+    rangoFinal4: { type: Number, required: false }, // Ahora es opcional
+    rangoFinal5: { type: Number, required: false }, // Ahora es opcional
+    rangoFinal6: { type: Number, required: false }, // Ahora es opcional
+    rangoFinal7: { type: Number, required: false }, // Ahora es opcional
+    rangoFinal8: { type: Number, required: false }, // Ahora es opcional
+    rangoFinal9: { type: Number, required: false }, // Ahora es opcional
+    rangoFinal10: { type: Number, required: false }, // Ahora es opcional
+  },
+  price: [
+    {
+      idPriceList: {
+        type: Number,
+        required: false, // Ahora es opcional
+      },
+      price: {
+        type: Number,
+        required: false, // Ahora es opcional
+      },
+    },
+  ],
+  linea: { type: mongoose.Schema.Types.ObjectId, ref: 'Linea', required: false }, // Ahora es opcional
+  departamento: { type: mongoose.Schema.Types.ObjectId, ref: 'Departamento', required: false }, // Ahora es opcional
+  marca: { type: mongoose.Schema.Types.ObjectId, ref: 'Marca', required: false }, // Ahora es opcional
+  grupo: { type: mongoose.Schema.Types.ObjectId, ref: 'Grupo', required: false }, // Ahora es opcional
+  tax: [
+    {
+      id: {
+        type: String,
+        required: false, // Ahora es opcional
+      },
+      name: {
+        type: String,
+        required: false, // Ahora es opcional
+      },
+      percentage: {
+        type: String,
+        required: false, // Ahora es opcional
+      },
+      status: {
+        type: String,
+        enum: ['active', 'inactive'],
+        required: false, // Ahora es opcional
+      },
+      type: {
+        type: String,
+        required: false, // Ahora es opcional
+      },
+    },
+  ],
+  esKit: {
+    type: Boolean,
+    required: false, // Ahora es opcional
+  },
+  esGrupoProductos: {
+    type: Boolean,
+    required: false, // Ahora es opcional
+  },
+  esVisible: {
+    type: Boolean,
+    required: false, // Ahora es opcional
+  },
+  kitProducto: [
+    {
+      producto: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Product', 
+        required: false, // Ahora es opcional
+      },
+      cantidad: { 
+        type: Number, 
+        required: false, // Ahora es opcional
+      }
+    }
+  ],
+  GrupoProducto: [
+    {
+      producto: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Product', 
+        required: false, // Ahora es opcional
+      },
+      cantidad: { 
+        type: Number, 
+        required: false, // Ahora es opcional
+      }
+    }
+  ],
+  idAlegra: {
+    type: String,
+    required: false, // Ahora es opcional
+  }
 });
 
-const Producto = mongoose.model('Producto', productoSchema);
-
-module.exports = Producto;
+module.exports = mongoose.model('Product', productSchema);
