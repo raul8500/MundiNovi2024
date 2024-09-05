@@ -136,7 +136,7 @@ function validaciones() {
         price: [
             {
                 idPriceList: 1,
-                price: 120.00
+                price: precio1
             }
         ],
         linea,
@@ -156,12 +156,64 @@ function validaciones() {
         esGrupo,
         esVisible: true,
         kitProducto : productosKitTotales,
-        GrupoProducto : null
+        GrupoProducto : []
     };
 
     // Convertir el objeto a JSON
-    const jsonData = JSON.stringify(datosProducto, null, 2); // La opción `null, 2` es para dar formato a la salida JSON
+    const jsonData = JSON.stringify(datosProducto, null, 2);
 
-    // Imprimir el JSON en la consola
-    console.log(jsonData);
+
+
+
+}
+
+async function postUserData() {
+
+    try {
+        const response = await fetch('/api/productos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)
+        });
+
+        if (response.ok) {
+            // Mostrar mensaje de éxito
+            Swal.fire({
+                title: 'Éxito',
+                text: 'Datos enviados correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                // Recargar la página
+                window.location.reload();
+            });
+
+        } else if (response.status === 409) {
+            // Mostrar mensaje de error para usuario ya existente
+            Swal.fire({
+                title: 'Error',
+                text: 'El nombre de usuario ya existe. Por favor, elige un nombre de usuario diferente.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        } else {
+            // Mostrar mensaje de error genérico
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al enviar los datos.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'Error',
+            text: 'Error en la conexión con el servidor.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+    }
 }
