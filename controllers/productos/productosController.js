@@ -726,3 +726,34 @@ exports.updateProduct = async (req, res) => {
         res.status(500).json({ error: 'Error al actualizar el producto' });
     }
 };
+
+exports.updateProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { esActivo } = req.body;
+
+        // Verifica si se ha proporcionado `esActivo`
+        if (esActivo === undefined) {
+            return res.status(400).json({ error: 'El campo esActivo es requerido' });
+        }
+
+        // Actualiza el campo `esActivo` en MongoDB
+        const updatedProduct = await Producto.findByIdAndUpdate(
+            id,
+            { esActivo },
+            { new: true }
+        );
+
+        if (!updatedProduct) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+
+        res.status(200).json({
+            message: 'Producto actualizado exitosamente',
+            updatedProduct
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al actualizar el producto' });
+    }
+};
+

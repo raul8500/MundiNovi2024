@@ -79,7 +79,7 @@ exports.deleteDepartamento = async (req, res) => {
         const departamento = await Departamento.findById(req.params.id);
         if (!departamento) return res.status(404).json({ message: 'Departamento no encontrado' });
 
-        await departamento.remove();
+        await Departamento.findByIdAndDelete(req.params.id);
         res.status(200).json({ message: 'Departamento eliminado correctamente' });
     } catch (err) {
         res.status(500).json({ message: err.message });

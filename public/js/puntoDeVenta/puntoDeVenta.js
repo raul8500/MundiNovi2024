@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     inputCantidad.focus();
 });
 
-
 // Cargar la información de la sucursal
 function cargarSucursal() {
     fetch('/api/sucursal/id/' + infoUser.sucursalId)
@@ -241,7 +240,6 @@ document.getElementById('productos').addEventListener('input', (event) => {
         actualizarResumenVenta();
     }
 });
-
 
 
 // Manejo del clic en el botón de agregar producto

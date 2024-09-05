@@ -79,8 +79,8 @@ exports.deleteLinea = async (req, res) => {
         const linea = await Linea.findById(req.params.id);
         if (!linea) return res.status(404).json({ message: 'Línea no encontrada' });
 
-        await linea.remove();
-        res.status(200).json({ message: 'Línea eliminada correctamente' });
+        await Linea.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'linea eliminado correctamente' });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

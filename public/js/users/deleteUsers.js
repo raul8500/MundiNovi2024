@@ -1,9 +1,8 @@
 const urlDeleteUser ='/api/auth/users/'; // Define la URL base para eliminar
 
-// Capturar el id del usuario al hacer clic en el botón eliminar
 document.addEventListener('click', function(e) {
     if (e.target && e.target.matches('.btnDeleteUsers')) {
-        const button = e.target.closest('.btnDeleteUsers'); // Obtiene el botón que fue clicado
+        const button = e.target.closest('.btnDeleteUsers');
         const idUser = button.id;
 
         Swal.fire({

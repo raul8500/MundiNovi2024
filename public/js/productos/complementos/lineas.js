@@ -6,6 +6,8 @@ let currentPageLineas = 1;
 const itemsPerPageLineas = 5; // Ajusta este número según tus necesidades
 const maxPageLinksLineas = 5;
 let lineas = [];
+let editarLinea = ''
+let opcionLinea = 'crear';
 
 // Función para mostrar las líneas
 const mostrarLineas = (lineas, currentPage, itemsPerPage) => {
@@ -115,3 +117,171 @@ function cambiarPaginaLineas(page) {
 
 // Cargar las líneas al iniciar
 cargarLineas();
+
+
+//create - Editar
+document.getElementById('btnAddLinea').addEventListener('click', () => {
+
+    const clave = document.getElementById('claveLinea').value.trim();
+    const nombre = document.getElementById('nombreLinea').value.trim();
+    const descripcion = document.getElementById('descripcionLinea').value.trim();
+  
+    if (validarCampos(clave, nombre, descripcion)) {
+      if(opcion == 'crear'){
+        fetch('/api/linea', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              clave,
+              nombre,
+              descripcion,
+          }),
+        })
+        .then((response) => response.json())
+        .then(() => {
+          Swal.fire(
+              'Guardado!',
+              'La linea ha sido guardada.',
+              'success'
+          );
+          const modal = bootstrap.Modal.getInstance(document.getElementById('modalLinea'));
+          document.getElementById('claveLinea').value = ''
+          document.getElementById('nombreLinea').value = ''
+          document.getElementById('descripcionLinea').value = ''
+          document.getElementById('btnAddLinea').textContent = 'Agregar'
+          cargarLineas();
+        })
+        .catch((error) => console.log(error));
+      }else{
+        fetch(`/api/linea/${editarLinea}`, {
+          method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              clave,
+              nombre,
+              descripcion,
+          }),
+        })
+        .then((response) => response.json())
+        .then(() => {
+          Swal.fire(
+              'Guardado!',
+              'El grupo ha sido actualizado.',
+              'success'
+          );
+          const modal = bootstrap.Modal.getInstance(document.getElementById('modalLinea'));
+          document.getElementById('claveLinea').value = ''
+          document.getElementById('nombreLinea').value = ''
+          document.getElementById('descripcionLinea').value = ''
+          document.getElementById('btnAddLinea').textContent = 'Agregar'
+          cargarLineas();
+        })
+        .catch((error) => console.log(error));
+      }
+    }
+  
+  });
+  
+  document.getElementById('btnAgregarLineaModal').addEventListener('click', () => {
+    document.getElementById('claveLinea').value = ''
+    document.getElementById('nombreLinea').value = ''
+    document.getElementById('descripcionLinea').value = ''
+      document.getElementById('btnAddLinea').textContent = 'Agregar'
+  });
+  
+  //delete 
+  
+  const urlDeleteLinea ='/api/linea/'; // Define la URL base para eliminar
+  
+  document.addEventListener('click', function(e) {
+    // Busca el elemento más cercano que tenga la clase 'btnDeleteGrupos'
+    const button = e.target.closest('.btnDeleteLineas');
+    
+    if (button) {
+        const idLinea = button.id;
+  
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esto.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await deleteLinea(idLinea);
+            }
+        });
+    }
+  });
+  
+  async function deleteLinea(id) {
+      try {
+          const response = await fetch(`${urlDeleteLinea}${id}`, {
+              method: 'DELETE',
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
+  
+          if (response.ok) {
+              Swal.fire({
+                  title: 'Eliminado',
+                  text: 'La linea ha sido eliminado.',
+                  icon: 'success',
+                  confirmButtonText: 'Aceptar'
+              }).then(() => {
+                  cargarLineas()
+              });
+          } else {
+              Swal.fire({
+                  title: 'Error',
+                  text: 'Hubo un problema al eliminar la linea.',
+                  icon: 'error',
+                  confirmButtonText: 'Aceptar'
+              });
+          }
+      } catch (error) {
+          console.error('Error:', error);
+          Swal.fire({
+              title: 'Error',
+              text: 'Error en la conexión con el servidor.',
+              icon: 'error',
+              confirmButtonText: 'Aceptar'
+          });
+      }
+  }
+  
+  //Editar
+  on(document, 'click', '.btnEditLineas', async e => {
+    const button = e.target.closest('.btnEditLineas');
+    editarLinea = button.id
+
+    const row = button.closest('tr');
+    const rowData = Array.from(row.querySelectorAll('td')).map(cell => cell.textContent.trim());
+  
+    // Asigna los valores a los inputs
+    document.getElementById('claveLinea').value = rowData[0];
+    document.getElementById('nombreLinea').value = rowData[1];
+    document.getElementById('descripcionLinea').value = rowData[2];
+    document.getElementById('btnAddLinea').textContent = 'Editar'
+  
+    // Revalida los inputs para que la animación de MDB se aplique correctamente
+    document.getElementById('claveLinea').focus();
+    document.getElementById('claveLinea').blur();
+    
+    document.getElementById('nombreLinea').focus();
+    document.getElementById('nombreLinea').blur();
+    
+    document.getElementById('descripcionLinea').focus();
+    document.getElementById('descripcionLinea').blur();
+  
+    opcion = 'editar'
+  
+  });
+  
+  

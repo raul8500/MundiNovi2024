@@ -79,9 +79,10 @@ exports.deleteMarca = async (req, res) => {
         const marca = await Marca.findById(req.params.id);
         if (!marca) return res.status(404).json({ message: 'Marca no encontrada' });
 
-        await marca.remove();
-        res.status(200).json({ message: 'Marca eliminada correctamente' });
+        await Marca.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: 'Marca eliminado correctamente' });
     } catch (err) {
+        console.log(err)
         res.status(500).json({ message: err.message });
     }
 };

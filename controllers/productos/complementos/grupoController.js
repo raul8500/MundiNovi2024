@@ -77,11 +77,15 @@ exports.updateGrupo = async (req, res) => {
 exports.deleteGrupo = async (req, res) => {
     try {
         const grupo = await Grupo.findById(req.params.id);
-        if (!grupo) return res.status(404).json({ message: 'Grupo no encontrado' });
+        if (!grupo) {
+            return res.status(404).json({ message: 'Grupo no encontrado' });
+        }
 
-        await grupo.remove();
+        await Grupo.findByIdAndDelete(req.params.id);
         res.status(200).json({ message: 'Grupo eliminado correctamente' });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ message: err.message });
     }
 };
+

@@ -1,11 +1,15 @@
 const urlGetDepartamentos = '/api/departamento'; // Cambia esto según tu endpoint para departamentos
-
+const urlPostDepartamento = '/api/departamento';
+const urlPutDepartamento = '/api/departamento/';
+const urlDeleteDepartamento = '/api/departamento/'; // Define la URL base para eliminar marcas
 // Obtener referencia al contenedor de departamentos
 const contenedorDepartamentos = document.getElementById('departamentoData');
 let currentPageDepartamentos = 1;
 const itemsPerPageDepartamentos = 5; // Ajusta este número según tus necesidades
 const maxPageLinksDepartamentos = 5;
 let departamentos = [];
+
+let editarDepartamentoId = ''
 
 // Función para mostrar los departamentos
 const mostrarDepartamentos = (departamentos, currentPage, itemsPerPage) => {
@@ -115,3 +119,167 @@ function cambiarPaginaDepartamentos(page) {
 
 // Cargar los departamentos al iniciar
 cargarDepartamentos();
+
+document.getElementById('btnAddDepartamento').addEventListener('click', () => {
+    const clave = document.getElementById('claveDepartamento').value.trim();
+    const nombre = document.getElementById('nombreDepartamento').value.trim();
+    const descripcion = document.getElementById('descripcionDepartamento').value.trim();
+
+    if (validarCampos(clave, nombre, descripcion)) {
+        if (opcion === 'crear') {
+            fetch(urlPostDepartamento, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    clave,
+                    nombre,
+                    descripcion,
+                }),
+            })
+            .then((response) => response.json())
+            .then(() => {
+                Swal.fire(
+                    'Guardado!',
+                    'El departamento ha sido guardado.',
+                    'success'
+                );
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalDepartamento'));
+                document.getElementById('claveDepartamento').value = '';
+                document.getElementById('nombreDepartamento').value = '';
+                document.getElementById('descripcionDepartamento').value = '';
+                document.getElementById('btnAddDepartamento').textContent = 'Agregar';
+                cargarDepartamentos(); // Actualizar lista de departamentos
+                opcion = 'crear';
+            })
+            .catch((error) => console.log(error));
+        } else {
+            fetch(`${urlPutDepartamento}${editarDepartamentoId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    clave,
+                    nombre,
+                    descripcion,
+                }),
+            })
+            .then((response) => response.json())
+            .then(() => {
+                Swal.fire(
+                    'Guardado!',
+                    'El departamento ha sido actualizado.',
+                    'success'
+                );
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalDepartamento'));
+                document.getElementById('claveDepartamento').value = '';
+                document.getElementById('nombreDepartamento').value = '';
+                document.getElementById('descripcionDepartamento').value = '';
+                document.getElementById('btnAddDepartamento').textContent = 'Agregar';
+                cargarDepartamentos(); // Actualizar lista de departamentos
+                opcion = 'crear';
+            })
+            .catch((error) => console.log(error));
+        }
+    }
+});
+
+// Resetear formulario y opción de agregar
+document.getElementById('btnAgregarDepartamentoModal').addEventListener('click', () => {
+    document.getElementById('claveDepartamento').value = '';
+    document.getElementById('nombreDepartamento').value = '';
+    document.getElementById('descripcionDepartamento').value = '';
+    document.getElementById('btnAddDepartamento').textContent = 'Agregar';
+    opcion = 'crear'; // Resetear la opción a crear
+});
+
+// Eliminar
+document.addEventListener('click', function(e) {
+    const button = e.target.closest('.btnDeleteDepartamentos');
+    
+    if (button) {
+        const idDepartamento = button.id;
+
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esto.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await deleteDepartamento(idDepartamento);
+            }
+        });
+    }
+});
+
+async function deleteDepartamento(id) {
+    try {
+        const response = await fetch(`${urlDeleteDepartamento}${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            Swal.fire({
+                title: 'Eliminado',
+                text: 'El departamento ha sido eliminado.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                cargarDepartamentos(); // Actualizar lista de departamentos después de la eliminación
+            });
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al eliminar el departamento.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'Error',
+            text: 'Error en la conexión con el servidor.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+}
+
+// Editar
+document.addEventListener('click', function(e) {
+    const button = e.target.closest('.btnEditDepartamentos');
+    
+    if (button) {
+        const idDepartamento = button.id;
+        opcion = 'editar'; // Cambiar a editar
+        editarDepartamentoId = idDepartamento;
+
+        const row = button.closest('tr');
+        const rowData = Array.from(row.querySelectorAll('td')).map(cell => cell.textContent.trim());
+
+        // Asigna los valores a los inputs
+        document.getElementById('claveDepartamento').value = rowData[0];
+        document.getElementById('nombreDepartamento').value = rowData[1];
+        document.getElementById('descripcionDepartamento').value = rowData[2];
+        document.getElementById('btnAddDepartamento').textContent = 'Editar';
+
+        // Revalida los inputs para que la animación de MDB se aplique correctamente
+        document.getElementById('claveDepartamento').focus();
+        document.getElementById('claveDepartamento').blur();
+        
+        document.getElementById('nombreDepartamento').focus();
+        document.getElementById('nombreDepartamento').blur();
+        
+        document.getElementById('descripcionDepartamento').focus();
+        document.getElementById('descripcionDepartamento').blur();
+    }
+});

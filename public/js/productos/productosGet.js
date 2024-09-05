@@ -6,6 +6,7 @@ let currentPageProductos = 1;
 const itemsPerPageProductos = 30; // Puedes ajustar este número según tus necesidades
 const maxPageLinksProductos = 5;
 let productos = [];
+let productosShow = [];
 let productosFiltrados = []; // Nueva variable para almacenar productos filtrados
 
 
@@ -33,9 +34,9 @@ const mostrarProductos = (productos, currentPage, itemsPerPage) => {
 
                     <button id="${item._id}" 
                             type="button" 
-                            class="btn ${item.esActivo === true ? 'btn-success' : 'btn-danger'} btn-rounded "
+                            class="btn ${item.esActivo === true ? 'btn-success' : 'btn-danger'} btn-rounded btnChangeStatus "
                             data-status="${item.esActivo}">
-                      <i class="fa-regular fa-circle"></i>
+                            ${item.esActivo == true ? '<i class="fa-solid fa-toggle-on"></i>' : '<i class="fa-solid fa-toggle-off"></i>'}
                     </button>
 
                     <button id="${
@@ -112,6 +113,7 @@ function cargarProductos() {
   fetch(urlGetProductos)
     .then((response) => response.json())
     .then((data) => {
+      productosShow= data.products;
       productos = data.products;
       mostrarProductos(productos, currentPageProductos, itemsPerPageProductos);
       actualizarControlesPaginacionProductos();
@@ -148,6 +150,7 @@ document.getElementById('busquedaProductosMain').addEventListener('input', funct
   actualizarControlesPaginacionProductos();
   generarNumerosDePaginaProductos();
 });
+
 
 
 cargarProductos();
