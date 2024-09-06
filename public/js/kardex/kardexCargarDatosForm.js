@@ -1,5 +1,6 @@
 const selectOptions = [
     { url: '/api/sucursal', selectId: 'sucursal' },
+    {url: '/api/sucursal', selectId: 'sucursalSelect'}
 ];
 
 async function loadSelectOptions(options) {
@@ -22,7 +23,7 @@ async function loadSelectOptions(options) {
 
             // Agrega una opción predeterminada (opcional)
             const defaultOption = document.createElement('option');
-            defaultOption.textContent = `Selecciona un ${selectId}`;
+            defaultOption.textContent = `Selecciona una sucursal`;
             defaultOption.value = '';
             select.appendChild(defaultOption);
 
