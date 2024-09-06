@@ -2,8 +2,10 @@ const urlDeleteProductos = '/api/productos/'; // Define la URL base para elimina
 
 // Capturar el id del usuario al hacer clic en el botón eliminar
 document.addEventListener('click', function(e) {
-    if (e.target && e.target.matches('.btnDeleteProductos')) {
-        const button = e.target.closest('.btnDeleteProductos'); // Obtiene el botón que fue clicado
+    const button = e.target.closest('.btnDeleteProductos');
+
+ if (button) {
+
         const idProduct = button.id;
 
         Swal.fire({

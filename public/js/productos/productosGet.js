@@ -28,7 +28,7 @@ const mostrarProductos = (productos, currentPage, itemsPerPage) => {
                 
                     <button id="${
                       item._id
-                    }" type="button" class="btn btn-primary btn-rounded ">
+                    }" type="button" class="btn btn-primary btn-rounded btnEditProductos ">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
 

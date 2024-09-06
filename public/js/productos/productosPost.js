@@ -1,15 +1,61 @@
 
 const modalProducto = new mdb.Modal(document.getElementById('ModalAddProducto'));
-
+const btnGuardarProducto = document.getElementById('btnGuardarProducto')
 
 btnAddProducto.addEventListener('click', () => {
     modalProducto.show();
 });
 
 btnGuardarProducto.addEventListener('click', () => {
+
+    if (!validarCamposNoNulosYSeleccion()) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Por favor, completa todos los campos correctamente.',
+            icon: 'warning',
+            confirmButtonText: 'Aceptar'
+        });
+        return;
+    }
     validaciones()
 });
 
+function validarCamposNoNulosYSeleccion() {
+
+    // Obtener los campos de entrada
+    const camposProducto = [
+        document.getElementById('claveProducto'),
+        document.getElementById('nombreProducto'),
+        document.getElementById('descripcionProducto'),
+        document.getElementById('precio1'),
+        document.getElementById('costo')
+    ];
+
+    let todosLlenos = true;
+
+    // Validar campos vacíos
+    camposProducto.forEach(campo => {
+        if (campo.value.trim() === '') {
+            campo.classList.add('is-invalid'); // Agregar clase si el campo está vacío
+            todosLlenos = false;
+        } else {
+            campo.classList.remove('is-invalid'); // Remover la clase si el campo tiene valor
+            campo.classList.add('is-valid'); // Agregar clase si el campo está correcto
+        }
+    });
+
+    // Si no todos los campos están llenos, mostrar alerta con SweetAlert2
+    if (!todosLlenos) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error de validación',
+            text: 'Por favor, completa todos los campos obligatorios.',
+        });
+        return false; // Evitar que el formulario se envíe
+    }
+
+    return true; // Si todo está bien, permitir el envío
+}
 
 function validaciones() {
     // Obtener los valores de los campos
@@ -79,9 +125,9 @@ function validaciones() {
         codigoBarra: "",
         name: nombreProducto,
         productKey: "47131700",
-        descripcion: descripcionProducto,
+        description: descripcionProducto,
         inventory: {
-                unit: "pieza"
+                unit: "H87"
         },
         tiempoSurtido,
         controlAlmacen,
@@ -159,15 +205,11 @@ function validaciones() {
         GrupoProducto : []
     };
 
-    // Convertir el objeto a JSON
-    const jsonData = JSON.stringify(datosProducto, null, 2);
-
-
-
+   postUserData(datosProducto)
 
 }
 
-async function postUserData() {
+async function postUserData(datosProducto) {
 
     try {
         const response = await fetch('/api/productos', {
@@ -175,7 +217,7 @@ async function postUserData() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(jsonData)
+            body: JSON.stringify(datosProducto)
         });
 
         if (response.ok) {

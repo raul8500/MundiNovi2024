@@ -261,6 +261,7 @@ exports.createProduct = async (req, res) => {
             productKey,
             type,
         } = req.body;
+
   
         const productoAlegra = {
             name: name ?? null,
@@ -290,8 +291,7 @@ exports.createProduct = async (req, res) => {
         headers: {
           accept: 'application/json',
           'content-type': 'application/json',
-          authorization:
-            'Basic ZmFjdHVyYWxpbXBpb3NAaG90bWFpbC5jb206YWI0MTQ2YzQyZjhkMzY3ZjA1MmQ=',
+          authorization: 'Basic bG9wZXpqbzI5OUBnbWFpbC5jb206MDNmZjVkNjMwZjRhNzk2YmZmZjA='
         },
         body: productoAlegra,
         json: true,
@@ -301,6 +301,7 @@ exports.createProduct = async (req, res) => {
         if (error) {
           return res.status(500).json({ error: 'Error al comunicarse con la API de Alegra' });
         }
+        console.log(response.statusCode, body)
   
         if (response.statusCode === 200 || response.statusCode === 201) {
             const idAlegra = body.id;
@@ -370,10 +371,10 @@ exports.createProduct = async (req, res) => {
                     idPriceList: p.idPriceList ?? null,
                     price: p.price ?? null,
                 })) ?? [],
-                linea: req.body.linea ?? null,
-                departamento: req.body.departamento ?? null,
-                marca: req.body.marca ?? null,
-                grupo: req.body.grupo ?? null,
+                linea: req.body.linea === '' ? null :  req.body.linea,
+                departamento: req.body.departamento === '' ? null :  req.body.departamento,
+                marca: req.body.marca === '' ? null : req.body.marca,
+                grupo: req.body.grupo === '' ? null :  req.body.grupo,
                 tax: req.body.tax?.map(t => ({
                     id: t.id ?? null,
                     name: t.name ?? null,
@@ -385,7 +386,7 @@ exports.createProduct = async (req, res) => {
                 esGrupoProductos: req.body.esGrupoProductos ?? null,
                 esVisible: req.body.esVisible ?? null,
                 kitProducto: req.body.kitProducto?.map(k => ({
-                    producto: k.producto ?? null,
+                    producto: k.id ?? null,
                     cantidad: k.cantidad ?? null,
                 })) ?? [],
                 GrupoProducto: req.body.GrupoProducto?.map(g => ({
@@ -405,6 +406,7 @@ exports.createProduct = async (req, res) => {
                     savedProduct: savedProduct,
                 });
             } catch (dbError) {
+                console.log(dbError)
                 res.status(500).json({ error: 'Error al guardar el producto en la base de datos' });
             }
         } else {

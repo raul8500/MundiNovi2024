@@ -253,8 +253,9 @@ function agregarProducto() {
 
         // Añadir el producto al array productosKitTotales
         productosKitTotales.push({
+            id: productoSeleccionado._id,
             name: productoSeleccionado.name,
-            clave: productoSeleccionado.clave,
+            clave: productoSeleccionado.reference,
             cantidad: cantidad,
             precio: precio,
             total: total

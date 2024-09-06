@@ -33,6 +33,14 @@
             overflow-y: auto;
             z-index: 1000;
         }
+        #sugerenciasEdit {
+            position: absolute;
+            border: 1px solid #ddd;
+            background: #fff;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
         .sugerencia {
             padding: 10px;
             cursor: pointer;
@@ -559,7 +567,7 @@
                                     </div>
                                     
                                     <div class="tab-pane fade" id="ex1-pills-6" role="tabpanel" aria-labelledby="ex1-tab-6">
-                                        <label style="font-weight: 600;" for="busquedaProductoKit" class="col-form-label">Buscar producto del kit:</label>
+                                        <label style="font-weight: 600;" for="producto" class="col-form-label">Buscar producto del kit:</label>
                                     
                                         
                                         <!-- Sección de Productos -->
@@ -958,6 +966,472 @@
 
 
 
+        <div class="modal fade" id="ModalEditProducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            <i class="fa-regular fa-address-card" style="color: #000000;"></i>
+                            Editar  producto
+                        </h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <div class="modal-body">
+                                <!-- Pills navs -->
+                                <ul class="nav nav-pills mb-3" id="ex1" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a data-mdb-pill-init class="nav-link active" id="ex1-tab-9" href="#ex1-pills-9"
+                                            role="tab" aria-controls="ex1-pills-9" aria-selected="true">Datos generales</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a data-mdb-pill-init class="nav-link" id="ex1-tab-10" href="#ex1-pills-10" role="tab"
+                                            aria-controls="ex1-pills-10" aria-selected="false">Datos financieros</a>
+                                    </li>
+                                    <li id="productoKitVisibility" class="nav-item" role="presentation"
+                                        style="visibility:visible;">
+                                        <a data-mdb-pill-init class="nav-link" id="ex1-tab-11" href="#ex1-pills-11" role="tab"
+                                            aria-controls="ex1-pills-11" aria-selected="false">Productos del kit</a>
+                                    </li>
+                                    <li id="productoGrupoVisibility" class="nav-item" role="presentation"
+                                        style="visibility: visible;">
+                                        <a data-mdb-pill-init class="nav-link" id="ex1-tab-12" href="#ex1-pills-12" role="tab"
+                                            aria-controls="ex1-pills-12" aria-selected="false">Productos del grupo</a>
+                                    </li>
+                                </ul>
+                                <!-- Pills navs -->
+        
+                                <!-- Pills content -->
+                                <div class="tab-content" id="ex1-content">
+                                    <div class="tab-pane fade show active" id="ex1-pills-9" role="tabpanel"
+                                        aria-labelledby="ex1-tab-9">
+
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="claveProductoEdit" class="col-form-label">Clave:</label>
+                                                <input type="text" class="form-control" id="claveProductoEdit" />
+                                            </div>
+                                        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="nombreProductoEdit" class="col-form-label">Nombre:</label>
+                                                <input type="text" class="form-control" id="nombreProductoEdit" />
+                                            </div>
+                                        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="descripcionProductoEdit" class="col-form-label">Descripción:</label>
+                                                <input type="text" class="form-control" id="descripcionProductoEdit" />
+                                            </div>
+                                        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" class="col-form-label" for="esKitEdit">Tipo de Producto:</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="esKitEdit" value="esKit">
+                                                    <label class="form-check-label" for="esKitEdit">Es kit</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="esGrupoEdit" value="esGrupo">
+                                                    <label class="form-check-label" for="esGrupoEdit">Es Grupo de Productos</label>
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" class="form-label" for="grupoEdit">Grupo:</label>
+                                                <select id="grupoEdit" class="form-select" aria-label="Combo box example"></select>
+                                            </div>
+                                        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" class="form-label" for="marcaEdit">Marca:</label>
+                                                <select id="marcaEdit" class="form-select" aria-label="Combo box example"></select>
+                                            </div>
+                                        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" class="form-label" for="lineaEdit">Linea:</label>
+                                                <select id="lineaEdit" class="form-select" aria-label="Combo box example"></select>
+                                            </div>
+                                        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" class="form-label" for="departamentoEdit">Departamento:</label>
+                                                <select id="departamentoEdit" class="form-select" aria-label="Combo box example"></select>
+                                            </div>
+                                        </div>
+
+                                        <br>
+                                        <br>
+                                    </div>
+        
+                                    <div class="tab-pane fade" id="ex1-pills-10" role="tabpanel" aria-labelledby="ex1-tab-10">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="tiempoSurtidoEdit" class="col-form-label">Tiempo de surtido</label>
+                                                <input type="number" class="form-control" id="tiempoSurtidoEdit" name="tiempoSurtidoEdit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="controlAlmacenEdit" class="col-form-label">Control de almacén</label>
+                                                <input type="text" class="form-control" id="controlAlmacenEdit" />
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="volumenEdit" class="col-form-label">Volumen</label>
+                                                <input type="number" class="form-control" id="volumenEdit" name="volumenEdit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="pesoEdit" class="col-form-label">Peso</label>
+                                                <input type="number" class="form-control" id="pesoEdit" name="pesoEdit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="costoEdit" class="col-form-label">Costo</label>
+                                                <input type="number" class="form-control" id="costoEdit" name="costoEdit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="ultimoCostoEdit" class="col-form-label">Último costo</label>
+                                                <input type="number" class="form-control" id="ultimoCostoEdit" name="ultimoCostoEdit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="costoPromedioEdit" class="col-form-label">Costo promedio</label>
+                                                <input type="number" class="form-control" id="costoPromedioEdit" name="costoPromedioEdit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="unidadEmpaqueEdit" class="col-form-label">Unidad de empaque</label>
+                                                <input type="number" class="form-control" id="unidadEmpaqueEdit" name="unidadEmpaqueEdit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-3" style="margin-top: 10px; margin-bottom: 10px;">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="calcularPrecioEdit" value="calcularPrecio">
+                                                    <label class="form-check-label" for="calcularPrecioEdit">Calcular precio</label>
+                                                </div>
+                                            </div>
+
+        
+                                            <hr class="my-4">
+        
+                                            <div class="col-md-2">
+                                                <label for="porcentajePrecio1Edit" class="col-form-label">Porcentaje precio 1</label>
+                                                <input type="number" class="form-control" id="porcentajePrecio1Edit" name="porcentajePrecio1Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="precio1Edit" class="col-form-label">Precio 1</label>
+                                                <input type="number" class="form-control" id="precio1Edit" name="precio1Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label for="porcentajePrecio2Edit" class="col-form-label">Porcentaje precio 2</label>
+                                                <input type="number" class="form-control" id="porcentajePrecio2Edit" name="porcentajePrecio2Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="precio2Edit" class="col-form-label">Precio 2</label>
+                                                <input type="number" class="form-control" id="precio2Edit" name="precio2Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label for="porcentajePrecio3Edit" class="col-form-label">Porcentaje precio 3</label>
+                                                <input type="number" class="form-control" id="porcentajePrecio3Edit" name="porcentajePrecio3Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="precio3Edit" class="col-form-label">Precio 3</label>
+                                                <input type="number" class="form-control" id="precio3Edit" name="precio3Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label for="porcentajePrecio4Edit" class="col-form-label">Porcentaje precio 4</label>
+                                                <input type="number" class="form-control" id="porcentajePrecio4Edit" name="porcentajePrecio4Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="precio4Edit" class="col-form-label">Precio 4</label>
+                                                <input type="number" class="form-control" id="precio4Edit" name="precio4Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label for="porcentajePrecio5Edit" class="col-form-label">Porcentaje precio 5</label>
+                                                <input type="number" class="form-control" id="porcentajePrecio5Edit" name="porcentajePrecio5Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="precio5Edit" class="col-form-label">Precio 5</label>
+                                                <input type="number" class="form-control" id="precio5Edit" name="precio5Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label for="porcentajePrecio6Edit" class="col-form-label">Porcentaje precio 6</label>
+                                                <input type="number" class="form-control" id="porcentajePrecio6Edit" name="porcentajePrecio6Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="precio6Edit" class="col-form-label">Precio 6</label>
+                                                <input type="number" class="form-control" id="precio6Edit" name="precio6Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label for="porcentajePrecio7Edit" class="col-form-label">Porcentaje precio 7</label>
+                                                <input type="number" class="form-control" id="porcentajePrecio7Edit" name="porcentajePrecio7Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="precio7Edit" class="col-form-label">Precio 7</label>
+                                                <input type="number" class="form-control" id="precio7Edit" name="precio7Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label for="porcentajePrecio8Edit" class="col-form-label">Porcentaje precio 8</label>
+                                                <input type="number" class="form-control" id="porcentajePrecio8Edit" name="porcentajePrecio8Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="precio8Edit" class="col-form-label">Precio 8</label>
+                                                <input type="number" class="form-control" id="precio8Edit" name="precio8Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label for="porcentajePrecio9Edit" class="col-form-label">Porcentaje precio 9</label>
+                                                <input type="number" class="form-control" id="porcentajePrecio9Edit" name="porcentajePrecio9Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="precio9Edit" class="col-form-label">Precio 9</label>
+                                                <input type="number" class="form-control" id="precio9Edit" name="precio9Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label for="porcentajePrecio10Edit" class="col-form-label">Porcentaje precio 10</label>
+                                                <input type="number" class="form-control" id="porcentajePrecio10Edit" name="porcentajePrecio10Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="precio10Edit" class="col-form-label">Precio 10</label>
+                                                <input type="number" class="form-control" id="precio10Edit" name="precio10Edit" min="0">
+                                            </div>
+
+        
+                                            <hr class="my-4">
+        
+                                            <!-- Rango 1 -->
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoInicial1Edit" class="col-form-label">Rango inicial 1</label>
+                                                <input type="number" class="form-control" id="rangoInicial1Edit" name="rangoInicial1Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoFinal1Edit" class="col-form-label">Rango final 1</label>
+                                                <input type="number" class="form-control" id="rangoFinal1Edit" name="rangoFinal1Edit" min="0">
+                                            </div>
+                                            
+                                            <!-- Rango 2 -->
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoInicial2Edit" class="col-form-label">Rango inicial 2</label>
+                                                <input type="number" class="form-control" id="rangoInicial2Edit" name="rangoInicial2Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoFinal2Edit" class="col-form-label">Rango final 2</label>
+                                                <input type="number" class="form-control" id="rangoFinal2Edit" name="rangoFinal2Edit" min="0">
+                                            </div>
+                                            
+                                            <!-- Rango 3 -->
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoInicial3Edit" class="col-form-label">Rango inicial 3</label>
+                                                <input type="number" class="form-control" id="rangoInicial3Edit" name="rangoInicial3Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoFinal3Edit" class="col-form-label">Rango final 3</label>
+                                                <input type="number" class="form-control" id="rangoFinal3Edit" name="rangoFinal3Edit" min="0">
+                                            </div>
+                                            
+                                            <!-- Rango 4 -->
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoInicial4Edit" class="col-form-label">Rango inicial 4</label>
+                                                <input type="number" class="form-control" id="rangoInicial4Edit" name="rangoInicial4Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoFinal4Edit" class="col-form-label">Rango final 4</label>
+                                                <input type="number" class="form-control" id="rangoFinal4Edit" name="rangoFinal4Edit" min="0">
+                                            </div>
+                                            
+                                            <!-- Rango 5 -->
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoInicial5Edit" class="col-form-label">Rango inicial 5</label>
+                                                <input type="number" class="form-control" id="rangoInicial5Edit" name="rangoInicial5Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoFinal5Edit" class="col-form-label">Rango final 5</label>
+                                                <input type="number" class="form-control" id="rangoFinal5Edit" name="rangoFinal5Edit" min="0">
+                                            </div>
+                                            
+                                            <!-- Rango 6 -->
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoInicial6Edit" class="col-form-label">Rango inicial 6</label>
+                                                <input type="number" class="form-control" id="rangoInicial6Edit" name="rangoInicial6Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoFinal6Edit" class="col-form-label">Rango final 6</label>
+                                                <input type="number" class="form-control" id="rangoFinal6Edit" name="rangoFinal6Edit" min="0">
+                                            </div>
+                                            
+                                            <!-- Rango 7 -->
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoInicial7Edit" class="col-form-label">Rango inicial 7</label>
+                                                <input type="number" class="form-control" id="rangoInicial7Edit" name="rangoInicial7Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoFinal7Edit" class="col-form-label">Rango final 7</label>
+                                                <input type="number" class="form-control" id="rangoFinal7Edit" name="rangoFinal7Edit" min="0">
+                                            </div>
+                                            
+                                            <!-- Rango 8 -->
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoInicial8Edit" class="col-form-label">Rango inicial 8</label>
+                                                <input type="number" class="form-control" id="rangoInicial8Edit" name="rangoInicial8Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoFinal8Edit" class="col-form-label">Rango final 8</label>
+                                                <input type="number" class="form-control" id="rangoFinal8Edit" name="rangoFinal8Edit" min="0">
+                                            </div>
+                                            
+                                            <!-- Rango 9 -->
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoInicial9Edit" class="col-form-label">Rango inicial 9</label>
+                                                <input type="number" class="form-control" id="rangoInicial9Edit" name="rangoInicial9Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoFinal9Edit" class="col-form-label">Rango final 9</label>
+                                                <input type="number" class="form-control" id="rangoFinal9Edit" name="rangoFinal9Edit" min="0">
+                                            </div>
+                                            
+                                            <!-- Rango 10 -->
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoInicial10Edit" class="col-form-label">Rango inicial 10</label>
+                                                <input type="number" class="form-control" id="rangoInicial10Edit" name="rangoInicial10Edit" min="0">
+                                            </div>
+                                            
+                                            <div class="col-md-2">
+                                                <label style="font-weight: 600;" for="rangoFinal10Edit" class="col-form-label">Rango final 10</label>
+                                                <input type="number" class="form-control" id="rangoFinal10Edit" name="rangoFinal10Edit" min="0">
+                                            </div>
+
+        
+        
+        
+                                        </div>
+                                    </div>
+        
+                                    <div class="tab-pane fade" id="ex1-pills-11" role="tabpanel" aria-labelledby="ex1-tab-11">
+                                        <label style="font-weight: 600;" for="productoEdit" class="col-form-label">Buscar producto del
+                                            kit:</label>
+                                    
+                                        <!-- Sección de Productos -->
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Productos</h5>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-2 mb-3">
+                                                            <label for="cantidadEdit" class="form-label">Cantidad</label>
+                                                            <input type="number" id="cantidadEdit" class="form-control" value="">
+                                                        </div>
+                                                        <div class="col-md-8 mb-3">
+                                                            <label for="productoEdit" class="form-label">Buscar Producto</label>
+                                                            <input type="text" id="productoEdit" class="form-control" placeholder="Buscar producto...">
+                                                            <div id="sugerenciasEdit"></div>
+                                                            <!-- Aquí se mostrarán las sugerencias -->
+                                                            <ul id="listaProductosEdit" class="list-group mt-2"
+                                                                style="display: none; position: absolute; z-index: 1000;"></ul>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label for="agregarProductoEdit" class="form-label">Agregar</label>
+                                                            <button id="agregarProductoEdit" class="btn btn-primary w-100">Agregar [F4]</button>
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <!-- Tabla de Productos -->
+                                                    <div class="table-responsive">
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Producto</th>
+                                                                    <th>Precio</th>
+                                                                    <th>Cantidad</th>
+                                                                    <th>Total</th>
+                                                                    <th>Acciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="productosEdit">
+                                                                <!-- Aquí se agregarán dinámicamente los productos -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="tab-pane fade" id="ex1-pills-12" role="tabpanel" aria-labelledby="ex1-tab-12">
+                                        <label style="font-weight: 600;" for="busquedaProductoGrupoEdit" class="col-form-label">Buscar producto del
+                                            grupo:</label>
+                                    
+                                        <div class="col-md-12 d-flex align-items-center">
+                                            <div class="col-md-6 pe-2">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="busquedaProductoGrupoEdit"
+                                                        placeholder="Ingrese el nombre del producto del grupo">
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-3 d-flex align-items-center">
+                                                <input type="number" class="form-control me-2" id="cantidadProductoGrupoEdit" placeholder="Cantidad"
+                                                    min="1">
+                                                <button class="btn btn-primary" type="button" id="agregarProductoGrupoEdit">Agregar</button>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="col-md-12">
+                                            <label style="font-weight: 600;" class="col-form-label">Productos del grupo seleccionados:</label>
+                                            <ul class="list-group" id="productosGrupoSeleccionadosEdit">
+                                                <!-- Aquí se irán agregando los productos del grupo -->
+                                            </ul>
+                                        </div>
+                                    </div>
+
+        
+        
+                                </div>
+                                <!-- Pills content -->
+        
+                                <div class="modal-footer d-flex justify-content-between align-items-center">
+                                    <button type="button" class="btn btn-success" data-mdb-dismiss="modal">Recalcular
+                                        precio</button>
+                                    <div>
+                                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
+                                        <button type="submit" id="btnGuardarProducto" class="btn btn-primary">Guardar</button>
+                                    </div>
+                                </div>
+        
+        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
 
 
 
@@ -977,9 +1451,11 @@
 
 
     <script src="js/productos/productos.js"></script>
+    <script src="js/productos/productosEditLoad.js"></script>
     <script src="js/productos/productosPost.js"></script>
     <script src="js/productos/productosGet.js"></script>
     <script src="js/productos/productosDelete.js"></script>
+        <script src="js/productos/productosPut.js"></script>
 
     <script src="js/productos/complementos/grupos.js"></script>
     <script src="js/productos/complementos/lineas.js"></script>
