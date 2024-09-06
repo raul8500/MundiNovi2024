@@ -26,7 +26,7 @@ const departamento = require('../controllers/productos/complementos/departamento
 const authToken = require('../controllers/pruebas/auth')
 const clientes = require('../controllers/clientes/clientesController')
 const zonaClientes = require('../controllers/clientes/complementos/zonasClienteController')
-
+const kardex = require('../controllers/kardex/kardexController')
 
 
 
@@ -67,6 +67,11 @@ router.get('/ventasGenerales', authenticated.isAuthenticated,  verifyToken.verif
 router.get('/clientes', (req, res) => {    
     res.render('Clientes/clientes');
 });
+
+router.get('/kardex', (req, res) => {    
+    res.render('Kardex/kardex');
+});
+
 
 
 //Funciones al API
@@ -178,6 +183,10 @@ router.delete('/api/clientesDeleteID/:id', clientes.deleteContactByUserId)
 //chat
 router.delete('/chat', mesaje.chatDelete);
 
+
+//Kardex
+router.post('/api/kardex', kardex.createKardex)
+router.get('/api/kardex', kardex.getAllKardex)
 
 
 
