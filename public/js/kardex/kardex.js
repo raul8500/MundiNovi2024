@@ -20,7 +20,6 @@ const mostrarKardex = (kardex, currentPage, itemsPerPage) => {
                 <td class="text-center">${item.folio}</td>
                 <td class="text-center">${item.usuario.username}</td>
                 <td class="text-center">${item.movimiento}</td>
-                <td class="text-center">${item.sucursal.nombre}</td>
                 <td class="text-center">${item.reference}</td>
                 <td class="text-center">${item.nombre}</td>
                 <td class="text-center">${item.cantidad}</td>
@@ -179,3 +178,92 @@ document.getElementById('btnCargarKardex').addEventListener('click', cargarKarde
 // Cargar Kardex al iniciar
 // Puedes comentar esta línea si no quieres que se cargue al inicio
 // cargarKardex(); 
+document.getElementById('btnImprimirKardex').addEventListener('click', printTable);
+
+function printTable() {
+    // Obtener el HTML de la tabla
+    const table = document.getElementById('kardexTable');
+    const tableClone = table.cloneNode(true); // Clonar la tabla
+
+    // Eliminar la última columna de la tabla
+    const headers = tableClone.querySelectorAll('th');
+    const rows = tableClone.querySelectorAll('tr');
+    headers[headers.length - 1].remove(); // Eliminar la última columna del encabezado
+    rows.forEach(row => row.querySelectorAll('td').length > 0 ? row.querySelectorAll('td')[row.querySelectorAll('td').length - 1].remove() : null);
+
+    // Obtener los valores de los campos
+    const sucursalSelect = document.getElementById('sucursal');
+    const sucursal = sucursalSelect.options[sucursalSelect.selectedIndex].text;
+    const fechaInicio = document.getElementById('fechaInicial').value;
+    const fechaFinal = document.getElementById('fechaFinal').value;
+    const codigoProducto = productoSeleccionado.reference
+
+    // Crear la ventana emergente para la impresión
+    const printWindow = window.open('', '', 'height=600,width=800');
+    printWindow.document.open();
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Impresión Kardex</title>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+            <style>
+                @media print {
+                    .no-print {
+                        display: none;
+                    }
+                }
+                .center-text {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .center-text p {
+                    font-size: 22px; /* Tamaño de fuente para los párrafos */
+                    margin: -1px 0; /* Espacio reducido entre párrafos */
+                }
+                .center-text h2 {
+                    font-size: 30px; /* Tamaño de fuente para el encabezado */
+                }
+                .center-text .bold {
+                    font-weight: bold; /* Negritas para los campos iniciales */
+                }
+                table {
+                    font-size: 20px; /* Tamaño de fuente para la tabla */
+                    border-collapse: collapse; /* Asegura que los bordes se colapsen en uno solo */
+                    width: 100%; /* Asegura que la tabla use todo el ancho disponible */
+                }
+                th, td {
+                    border: 1px solid black; /* Contornos para las celdas */
+                    padding: 5px; /* Espaciado interno para las celdas */
+                    text-align: left; /* Alineación a la izquierda */
+                }
+                th {
+                    font-weight: bold; /* Negritas para los encabezados de la tabla */
+                }
+                td {
+                    vertical-align: top; /* Alineación vertical superior para las celdas */
+                }
+            </style>
+        </head>
+        <body>
+            <div class="center-text"  style="padding-bottom: 20px;">
+                <h2>Kardex</h2>
+                <p>Sucursal:<span class="bold"> ${sucursal} </span></p>
+                <p>Fecha inicial:<span class="bold"> ${fechaInicio} </span></p>
+                <p>Fecha final:<span class="bold">${fechaFinal} </span></p>
+                <p>Código producto:<span class="bold">${codigoProducto} </span> </p>
+            </div>
+            ${tableClone.outerHTML}
+            <script>
+                window.print();
+                window.onafterprint = function() {
+                    window.close();
+                };
+            </script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
+
+
+
