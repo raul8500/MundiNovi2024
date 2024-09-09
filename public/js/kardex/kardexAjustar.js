@@ -145,7 +145,7 @@ if (inputBuscarProductoAjuste && listaProductosAjuste) {
 }
 
 // Manejar el clic en el botón "Guardar Ajuste"
-document.getElementById('btnGuardarAjuste').addEventListener('click', () => {
+document.getElementById('btnGuardarAjuste').addEventListener('click', async () => {
     const sucursalSelect = document.getElementById('sucursalSelect');
     const cantidadAjuste = document.getElementById('inputCantidadAjuste').value;
     const movimientoAjuste = document.getElementById('inputMovimiento').value;

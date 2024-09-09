@@ -4,6 +4,10 @@ let indexSugerencia = -1; // Índice de la sugerencia actualmente seleccionada
 let inputCantidad = document.getElementById('cantidad');
 inputCantidad.value = ''
 inputCantidad.focus()
+const modalSelectUser = new mdb.Modal(document.getElementById('selectUserModal'));
+let user = false
+
+let esFactura = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     let inputCantidad = document.getElementById('cantidad');
@@ -176,23 +180,38 @@ function agregarProducto() {
     if (!productoExistente) {
         // Seleccionar el precio basado en la cantidad
         let precio = parseFloat(productoSeleccionado.precio1); // Precio predeterminado para 1 artículo
-        for (let i = 10; i >= 1; i--) {
-            if (cantidad >= i) {
+
+        for (let i = 1; i <= 10; i++) {
+            const rangoInicial = productoSeleccionado[`rangoInicial${i}`];
+            const rangoFinal = productoSeleccionado[`rangoFinal${i}`];
+            if (cantidad >= rangoInicial && cantidad <= rangoFinal) {
                 precio = parseFloat(productoSeleccionado[`precio${i}`]) || precio;
                 break;
             }
         }
 
         const total = cantidad * precio;
-
         const nuevaFila = document.createElement('tr');
         nuevaFila.innerHTML = `
             <td>${productoSeleccionado.nombre}</td>
+            <td style="width: 250px;">
+                <div style="display: flex; flex-wrap: wrap; font-size: 0.8rem; gap: 0;">
+                    ${[...Array(4).keys()].map(i => `
+                        ${productoSeleccionado[`rangoInicial${i + 1}`] !== undefined ? `
+                            <div style="flex: 1 0 50%; padding: 0.2rem; box-sizing: border-box; border-bottom: 1px solid #ddd;">
+                                ${productoSeleccionado[`rangoInicial${i + 1}`]} - ${productoSeleccionado[`rangoFinal${i + 1}`]}: 
+                                <strong> ${productoSeleccionado[`precio${i + 1}`]} </strong>
+                            </div>
+                        ` : ''}`).join('')}
+                </div>
+            </td>
             <td><input type="number" class="form-control precio" value="${precio.toFixed(2)}" step="0.01"></td>
             <td><input type="number" class="form-control cantidad" value="${cantidad}" step="1"></td>
             <td class="total">$${total.toFixed(2)}</td>
             <td><button class="btn btn-warning btn-sm eliminarProducto">Eliminar</button></td>
         `;
+
+
         document.getElementById('productos').appendChild(nuevaFila);
     }
 
@@ -201,7 +220,6 @@ function agregarProducto() {
 
     // Limpiar el input de búsqueda y la cantidad
     inputProducto.value = '';
-    inputCantidad.value = '1';
     inputCantidad.value = '';
     inputCantidad.focus(); // Regresar al input de búsqueda
 }
@@ -219,14 +237,15 @@ document.getElementById('productos').addEventListener('input', (event) => {
         const producto = productos.find(p => p.nombre === productoNombre);
 
         if (producto) {
-            // Actualizar el precio basado en la cantidad si no se está editando manualmente
+            // Actualizar el precio basado en el rango de la cantidad
             if (event.target.classList.contains('cantidad')) {
-                if (cantidad >= 10) {
-                    precio = producto.precio10;
-                } else if (cantidad >= 5) {
-                    precio = producto.precio5;
-                } else {
-                    precio = producto[`precio${cantidad}`] || precioInput.value;
+                for (let i = 1; i <= 10; i++) {
+                    const rangoInicial = producto[`rangoInicial${i}`];
+                    const rangoFinal = producto[`rangoFinal${i}`];
+                    if (cantidad >= rangoInicial && cantidad <= rangoFinal) {
+                        precio = parseFloat(producto[`precio${i}`]) || precio;
+                        break;
+                    }
                 }
                 precioInput.value = precio.toFixed(2);
             }
@@ -240,6 +259,7 @@ document.getElementById('productos').addEventListener('input', (event) => {
         actualizarResumenVenta();
     }
 });
+
 
 
 // Manejo del clic en el botón de agregar producto
@@ -266,7 +286,12 @@ document.addEventListener('keydown', (event) => {
 
 // Manejo del clic en el botón de completar venta
 document.getElementById('completarVenta').addEventListener('click', () => {
-    completarVenta();
+    const modalPago = new mdb.Modal(document.getElementById('modalPago'));
+    let totalVenta = parseFloat(document.getElementById('totalVenta').textContent)
+    document.getElementById('totalAPagar').value = totalVenta
+    verificarFactura()
+    modalPago.show()
+    //completarVenta();
 });
 
 // Actualizar el resumen de la venta
@@ -313,7 +338,14 @@ function confirmarCancelarVenta() {
             document.getElementById('productos').innerHTML = '';
             document.getElementById('totalProductos').textContent = '0';
             document.getElementById('totalVenta').textContent = '0.00';
-
+            document.getElementById('ventaCliente').textContent = '';
+            document.getElementById('ventaCliente').style.color = 'black'
+            document.getElementById('btnCancelarCliente').style.visibility = 'hidden';
+            document.getElementById('btnCancelarFactura').style.visibility = 'hidden';
+            document.getElementById('monederoCliente').textContent = ''
+            facturarVenta()
+            limpiarCliente()
+            clienteSeleccionado = []
             // Limpiar los campos de producto y cantidad
             document.getElementById('producto').value = '';
             let inputCantidad = document.getElementById('cantidad');
@@ -455,28 +487,154 @@ function facturarVenta() {
 
     // Verifica si el botón tiene la clase 'btn-success'
     if (btnFacturar.classList.contains('btn-success')) {
+        esFactura = false;
         // Si tiene 'btn-success', la cambia a 'btn-primary'
         btnFacturar.classList.remove('btn-success');
         btnFacturar.classList.add('btn-primary');
         var facturaResumenVenta = document.getElementById('facturaResumenVenta')
-        facturaResumenVenta.textContent = 'N/A'
+        facturaResumenVenta.textContent = ''
         facturaResumenVenta.style.color = 'black'
+        document.getElementById('btnCancelarFactura').style.visibility = 'hidden';
     } else {
+        esFactura = true
         // Si no tiene 'btn-success', la cambia a 'btn-success'
         btnFacturar.classList.remove('btn-primary');
         btnFacturar.classList.add('btn-success');
         var facturaResumenVenta = document.getElementById('facturaResumenVenta')
         facturaResumenVenta.textContent = 'Con Factura'
         facturaResumenVenta.style.color = 'green'
+        modalSelectUser.show()
     }
+    
 
 }
-
-
 // Manejo del clic en el botón de facturar
 document.getElementById('btnFacturar').addEventListener('click', () => {
-    facturarVenta();
+    user = false;
+    modalSelectUser.show()
 });
+
+document.getElementById('btnSeleccionarUsuario').addEventListener('click', () => {
+    user = true;
+    modalSelectUser.show()
+});
+
+  // Agregar forma de pago adicional
+document.getElementById('btnAgregarFormaPago').addEventListener('click', function () {
+const formasDePagoContainer = document.getElementById('formasDePago');
+
+// Crear un nuevo contenedor de forma de pago
+const nuevaFormaDePago = document.createElement('div');
+nuevaFormaDePago.classList.add('row', 'mb-3', 'formaDePago');
+nuevaFormaDePago.innerHTML = `
+    <div class="col-md-5">
+    <label for="formaPago" class="form-label">Forma de Pago</label>
+    <select class="form-select formaPago">
+        <option value="efectivo">Efectivo</option>
+        <option value="tarjeta">Tarjeta</option>
+        <option value="transferencia">Transferencia</option>
+    </select>
+    </div>
+    <div class="col-md-4">
+    <label for="importePago" class="form-label">Importe</label>
+    <input type="number" class="form-control importePago" placeholder="0.00" />
+    </div>
+    <div class="col-md-2">
+    <label for="cambio" class="form-label">Cambio</label>
+    <input type="text" class="form-control cambio" value="0.00" readonly />
+    </div>
+    <div class="col-md-1 d-flex align-items-end">
+    <button type="button" class="btn btn-danger btn-sm eliminarFormaPago"><i class="fa-solid fa-trash"></i></button>
+    </div>
+    <div class="col-md-12 mb-3 cuentaBancaria" style="display: none;">
+    <label for="digitosCuenta" class="form-label">Últimos 4 dígitos de la cuenta bancaria</label>
+    <input type="text" class="form-control digitosCuenta" maxlength="4" placeholder="0000" />
+    </div>
+`;
+formasDePagoContainer.appendChild(nuevaFormaDePago);
+
+// Habilitar la eliminación de las nuevas formas de pago
+activarBotonesEliminar();
+activarCalculoCambio();
+activarFormaPagoTransferencia(); // Activar select de "Forma de Pago"
+});
+
+function verificarFactura() {
+    const facturaResumenVenta = document.getElementById('facturaResumenVenta').textContent.trim();
+    const usoCFDIContainer = document.getElementById('usoCFDIContainer');
+
+    if (facturaResumenVenta === '') {
+        usoCFDIContainer.style.display = 'none';
+    } else {
+        usoCFDIContainer.style.display = 'block';
+    }
+}
+
+// Función para activar los botones de eliminar
+function activarBotonesEliminar() {
+const botonesEliminar = document.querySelectorAll('.eliminarFormaPago');
+
+botonesEliminar.forEach(function (boton) {
+    boton.addEventListener('click', function () {
+    const formaDePago = boton.closest('.formaDePago');
+    formaDePago.remove();
+    calcularCambio(); // Recalcular el cambio al eliminar una forma de pago
+    });
+});
+}
+
+// Activar el cálculo de cambio cuando se ingrese un importe
+function activarCalculoCambio() {
+const inputsImporte = document.querySelectorAll('.importePago');
+
+inputsImporte.forEach(function (input) {
+    input.addEventListener('input', function () {
+    calcularCambio();
+    });
+});
+}
+
+// Función para calcular el cambio
+function calcularCambio() {
+const totalAPagar = parseFloat(document.getElementById('totalAPagar').value) || 0;
+const inputsImporte = document.querySelectorAll('.importePago');
+let totalPagado = 0;
+
+// Sumar todos los importes ingresados
+inputsImporte.forEach(function (input) {
+    totalPagado += parseFloat(input.value) || 0;
+});
+
+// Calcular el cambio
+const cambio = totalPagado - totalAPagar;
+
+// Actualizar el valor de cambio en todos los campos de "Cambio"
+const inputsCambio = document.querySelectorAll('.cambio');
+inputsCambio.forEach(function (input) {
+    input.value = cambio.toFixed(2);
+});
+}
+
+// Activar la opción de ingresar los últimos 4 dígitos de la cuenta bancaria para transferencias
+function activarFormaPagoTransferencia() {
+const selectsFormaPago = document.querySelectorAll('.formaPago');
+
+selectsFormaPago.forEach(function (select) {
+    select.addEventListener('change', function () {
+    const cuentaBancariaContainer = this.closest('.formaDePago').querySelector('.cuentaBancaria');
+    if (this.value === 'transferencia') {
+        cuentaBancariaContainer.style.display = 'block';
+    } else {
+        cuentaBancariaContainer.style.display = 'none';
+    }
+    });
+});
+}
+
+// Activar el cálculo de cambio y select de "Forma de Pago" para la forma de pago inicial
+activarCalculoCambio();
+activarBotonesEliminar();
+activarFormaPagoTransferencia();
 
 
 

@@ -42,8 +42,33 @@
         .total {
             font-weight: bold;
         }
+
+        #listaClientes {
+            max-height: 150px;
+            overflow-y: auto;
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            z-index: 1000;
+            width: 100%;
+            display: none;
+        }
+
+        #listaClientes li:hover {
+            background-color: #f1f1f1;
+        }
+
+        #listaClientes li.active {
+            background-color: #007bff;
+            color: white;
+        }
+
         
     </style>
+
+    
+
+
 </head>
 <body>
     <header>
@@ -101,7 +126,7 @@
     </header>
 
     <main>
-        <div class="container my-5">
+        <div class="container-fluid pt-4" style="width: 85%;">
             <h1 class="text-center mb-2" style="margin-bottom: 5px;">Mundi Novi</h1>
             <h2 class="text-center mb-2" style="margin-top: 0;">Punto de Venta 2024</h2>
             <br>
@@ -110,17 +135,15 @@
             <div class="d-flex justify-content-center">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button id="btnFacturar" type="button" class="btn btn-primary" data-mdb-ripple-init>Facturar (F3) <i class="fa-solid fa-newspaper"></i></button>
-                    <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#selectUserModal">
-                        (F4) Cliente <i class="fa-solid fa-user"></i>
-                    </button>
-                    <button type="button" class="btn btn-primary" data-mdb-ripple-init>Buscar (F6) <i class="fa-solid fa-magnifying-glass"></i></button>
-                    <button type="button" class="btn btn-primary" data-mdb-ripple-init>Descuento (F7) <i class="fa-solid fa-tags"></i></button>
-                    <button type="button" class="btn btn-primary" data-mdb-ripple-init>Guardar (F8) <i class="fa-solid fa-floppy-disk"></i></button>
-                    <button type="button" class="btn btn-primary" data-mdb-ripple-init>Precios (F10) <i class="fa-solid fa-barcode"></i></button>
+                    <button id="btnSeleccionarUsuario" type="button" class="btn btn-primary">(F4) Cliente <i class="fa-solid fa-user"></i></button>
+                    <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Buscar (F6) <i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Descuento (F7) <i class="fa-solid fa-tags"></i></button>
+                    <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Guardar (F8) <i class="fa-solid fa-floppy-disk"></i></button>
+                    <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Precios (F10) <i class="fa-solid fa-barcode"></i></button>
                 </div>
             </div>        
 
-            <div class="row mb-4">
+            <div class="row mb-4" style="margin-top: 50px;">
 
                 <!-- Sección de Productos -->
                 <div class="col-md-8">
@@ -128,16 +151,21 @@
                         <div class="card-body">
                             <h5 class="card-title">Productos</h5>
                             <div class="row mb-3">
+
+                                
                                 <div class="col-md-2 mb-3">
                                     <label for="cantidad" class="form-label">Cantidad</label>
                                     <input type="number" id="cantidad" class="form-control" value="">
                                 </div>
+
                                 <div class="col-md-8 mb-3">
                                     <label for="producto" class="form-label">Buscar Producto</label>
                                     <input type="text" id="producto" class="form-control" placeholder="Buscar producto...">
                                     <div id="sugerencias"></div> <!-- Aquí se mostrarán las sugerencias -->
                                     <ul id="listaProductos" class="list-group mt-2" style="display: none; position: absolute; z-index: 1000;"></ul>
                                 </div>
+
+
                                 <div class="col-md-2">
                                     <label for="agregarProducto" class="form-label">Agregar</label>
                                     <button id="agregarProducto" class="btn btn-primary w-100">Agregar [F4]</button>
@@ -151,6 +179,7 @@
                                     <thead>
                                         <tr>
                                             <th>Producto</th>
+                                            <th>Rangos</th>
                                             <th>Precio</th>
                                             <th>Cantidad</th>
                                             <th>Total</th>
@@ -171,8 +200,21 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Resumen de Venta</h4>
-                            <h5>Cliente: <span>Venta General</span></h5>
-                            <h5>Factura: <span id="facturaResumenVenta" style="color: black;">N/A</span></h5>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5><i class="fa-solid fa-user"></i> Cliente: <span id="ventaCliente"></span></h5>
+                                <button id="btnCancelarCliente" class="btn btn-danger btn-sm" style="visibility: hidden;"><i class="fa-solid fa-ban"></i></button>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5><i class="fa-solid fa-coins"></i> Monedero: <span id="monederoCliente" style="color: green;"></span></h5>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="me-2"><i class="fa-solid fa-file-invoice-dollar"></i> Factura: <span id="facturaResumenVenta" style="color: black;"></span></h5>
+                                <button id="btnCancelarFactura" class="btn btn-danger btn-sm" style="visibility: hidden;"><i class="fa-solid fa-ban"></i></button>
+                            </div>
+                            <br>
+
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <button id="cancelarVenta" class="btn btn-danger w-100">Cancelar (CTRL + Supr)</button>
@@ -195,31 +237,165 @@
                 </div>
             </div>
 
-            <!-- Modal -->
+            <!-- Modal seleccionar el usuario -->
             <div class="modal fade" id="selectUserModal" tabindex="-1" aria-labelledby="selectUserModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="selectUserModalLabel">Seleccionar Usuario</h5>
                             <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <!-- Combobox (Select) -->
-                            <div class="form-outline mb-4">
-                                <select class="form-select" id="selectUser" aria-label="Seleccionar Usuario">
-                                    <option selected disabled>Seleccione un usuario</option>
-                                    <option value="1">Usuario 1</option>
-                                    <option value="2">Usuario 2</option>
-                                    <option value="3">Usuario 3</option>
-                                </select>
-                                <label class="form-label" for="selectUser">Usuarios</label>
+
+
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label style="font-weight: 600;" for="inputBuscarCliente" class="col-form-label">Buscar cliente:</label>
+                                    <input type="text" class="form-control" id="inputBuscarCliente" />
+                                    <ul id="listaClientes" class="list-group" style="position: absolute; z-index: 1000; max-height: 150px; overflow-y: auto; width: 100%; display: none;"></ul>
+                                </div>
+                                <hr style="margin-top: 20pt; margin-bottom: 20pt;">
+                            </div>                            
+                            
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label style="font-weight: 600;" for="nombreCliente" class="col-form-label">Nombre:</label>
+                                    <input type="text" class="form-control" id="nombreCliente" />
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label style="font-weight: 600;" for="rfcCliente" class="col-form-label">RFC:</label>
+                                    <input type="text" class="form-control" id="rfcCliente" />
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label style="font-weight: 600;" for="regimenFiscalCliente" class="col-form-label">Regimen Fiscal:</label>
+                                    <input type="text" class="form-control" id="regimenFiscalCliente" />
+                                </div>
+
+                                <hr style="margin-top: 20pt; margin-bottom: 20pt;">
+
+                                <div class="col-md-4">
+                                    <label style="font-weight: 600;" for="calleCliente" class="col-form-label">Calle:</label>
+                                    <input type="text" class="form-control" id="calleCliente" />
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label style="font-weight: 600;" for="localidadCliente" class="col-form-label">Localidad:</label>
+                                    <input type="text" class="form-control" id="localidadCliente"/>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label style="font-weight: 600;" for="exteriorCliente" class="col-form-label">#Exterior:</label>
+                                    <input type="text" class="form-control" id="exteriorCliente"/>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label style="font-weight: 600;" for="interiorCliente" class="col-form-label">#Interior:</label>
+                                    <input type="text" class="form-control" id="interiorCliente"/>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label style="font-weight: 600;" for="coloniaCliente" class="col-form-label">Colonia:</label>
+                                    <input type="text" class="form-control" id="coloniaCliente"/>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label style="font-weight: 600;" for="municipioCliente" class="col-form-label">Municipio:</label>
+                                    <input type="text" class="form-control" id="municipioCliente"/>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label style="font-weight: 600;" for="estadoCiente" class="col-form-label">Estado:</label>
+                                    <input type="text" class="form-control" id="estadoCiente"/>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label style="font-weight: 600;" for="codigoPostalCliente" class="col-form-label">Codigo postal:</label>
+                                    <input type="text" class="form-control" id="codigoPostalCliente"/>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label style="font-weight: 600;" for="correoCliente" class="col-form-label">Correo electronico:</label>
+                                    <input type="text" class="form-control" id="correoCliente"/>
+                                </div>
+
+
                             </div>
+
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-primary" onclick="selectUser()">Seleccionar</button>
+                            <button id="btnSelectUser" type="button" class="btn btn-primary">Seleccionar</button>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Modal para el Pago -->
+            <div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="modalPagoLabel">Realizar Pago</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <!-- Información del Total -->
+                    <div class="mb-3">
+                        <label for="totalAPagar" class="form-label">Total a Pagar</label>
+                        <input type="text" class="form-control" id="totalAPagar" value="1000.00" readonly />
+                    </div>
+            
+                    <!-- Select para el Uso de CFDI (visible solo si es venta con factura) -->
+                    <div class="mb-3" id="usoCFDIContainer" style="display: none;">
+                        <label for="usoCFDI" class="form-label">Uso de CFDI</label>
+                        <select class="form-select" id="usoCFDI">
+                        <option value="G01">G01 - Adquisición de mercancías</option>
+                        <option value="G02">G02 - Devoluciones, descuentos o bonificaciones</option>
+                        <option value="G03">G03 - Gastos en general</option>
+                        <option value="P01">P01 - Por definir</option>
+                        </select>
+                    </div>
+            
+                    <!-- Contenedor de Formas de Pago -->
+                    <div id="formasDePago">
+                        <!-- Forma de Pago Inicial -->
+                        <div class="row mb-3 formaDePago">
+                        <div class="col-md-5">
+                            <label for="formaPago" class="form-label">Forma de Pago</label>
+                            <select class="form-select formaPago">
+                            <option value="efectivo">Efectivo</option>
+                            <option value="tarjeta">Tarjeta</option>
+                            <option value="transferencia">Transferencia</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="importePago" class="form-label">Importe</label>
+                            <input type="number" class="form-control importePago" placeholder="0.00" />
+                        </div>
+                        <div class="col-md-2">
+                            <label for="cambio" class="form-label">Cambio</label>
+                            <input type="text" class="form-control cambio" value="0.00" readonly />
+                        </div>
+                        <div class="col-md-1 d-flex align-items-end">
+                            <button type="button" class="btn btn-danger btn-sm eliminarFormaPago" disabled><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                        </div>
+                    </div>
+            
+                    <!-- Botón para agregar más formas de pago -->
+                    <button type="button" class="btn btn-secondary" id="btnAgregarFormaPago">
+                        Agregar forma de pago adicional
+                    </button>
+                    </div>
+            
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnRealizarPago">Pagar</button>
+                    </div>
+                </div>
                 </div>
             </div>
 
@@ -235,5 +411,6 @@
     <script src="js/main.js"></script>
     <script src="js/utils/historyBack.js"></script>
     <script src="js/puntoDeVenta/puntoDeVenta.js"></script>
+    <script src="js/puntoDeVenta/puntoDeVentaClientes.js"></script>
 </body>
 </html>
