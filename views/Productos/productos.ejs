@@ -213,6 +213,16 @@
                                         <a data-mdb-pill-init class="nav-link" id="ex1-tab-2" href="#ex1-pills-2" role="tab"
                                             aria-controls="ex1-pills-2" aria-selected="false">Datos financieros</a>
                                     </li>
+
+                                    <li class="nav-item" role="presentation">
+                                        <a data-mdb-pill-init class="nav-link" id="ex1-tab-3" href="#ex1-pills-3" role="tab" aria-controls="ex1-pills-3"
+                                            aria-selected="false">Proveedores</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation"></li>
+                                        <a data-mdb-pill-init class="nav-link" id="ex1-tab-4" href="#ex1-pills-4" role="tab" aria-controls="ex1-pills-4"
+                                            aria-selected="false">Productos complementarios</a>
+                                    </li>
+
                                     <li id="productoKitVisibility" class="nav-item" role="presentation" style="visibility:visible;">
                                         <a data-mdb-pill-init class="nav-link" id="ex1-tab-6" href="#ex1-pills-6" role="tab"
                                             aria-controls="ex1-pills-6" aria-selected="false">Productos del kit</a>
@@ -226,11 +236,18 @@
                             
                                 <!-- Pills content -->
                                 <div class="tab-content" id="ex1-content">
+
+                                    <!--Datos  generales-->
                                     <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <label style="font-weight: 600;" for="claveProducto" class="col-form-label">Clave:</label>
                                                 <input type="text" class="form-control" id="claveProducto" />
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="codigoBarraasProducto" class="col-form-label">Codigo de barras:</label>
+                                                <input type="text" class="form-control" id="codigoBarraasProducto" />
                                             </div>
 
                                             <div class="col-md-3">
@@ -241,6 +258,11 @@
                                             <div class="col-md-3">
                                                 <label style="font-weight: 600;" for="descripcionProducto" class="col-form-label">Descripción:</label>
                                                 <input type="text" class="form-control" id="descripcionProducto" />
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="claveProductoSAT" class="col-form-label">Clave producto SAT:</label>
+                                                <input type="text" class="form-control" id="claveProductoSAT" />
                                             </div>
                 
                                     
@@ -287,13 +309,25 @@
                                                 <select id="departamento" class="form-select" aria-label="Combo box example">
                                                 </select>
                                             </div>
-                                    
-                                            
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" class="form-label" for="unidad">Unidad:</label>
+                                                <select id="unidad" class="form-select" aria-label="Combo box example">
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" class="form-label" for="impuesto">Impuesto:</label>
+                                                <select id="impuesto" class="form-select" aria-label="Combo box example">
+                                                </select>
+                                            </div>
+                                
                                         </div>
                                         <br>
                                         <br>
                                     </div>
                                     
+                                    <!--Datos financieros-->
                                     <div class="tab-pane fade" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
                                         <div class="row">
                                             <div class="col-md-3">
@@ -301,10 +335,6 @@
                                                 <input type="number" class="form-control" id="tiempoSurtido" name="tiempoSurtido" min="0">
                                             </div>
                                     
-                                            <div class="col-md-3">
-                                                <label style="font-weight: 600;" for="controlAlmacen" class="col-form-label">Control de almacén</label>
-                                                <input type="text" class="form-control" id="controlAlmacen" />
-                                            </div>
                                     
                                             <div class="col-md-3">
                                                 <label style="font-weight: 600;" for="volumen" class="col-form-label">Volumen</label>
@@ -315,7 +345,16 @@
                                                 <label style="font-weight: 600;" for="peso" class="col-form-label">Peso</label>
                                                 <input type="number" class="form-control" id="peso" name="peso" min="0">
                                             </div>
-                                    
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="stockMinimo" class="col-form-label">Stock minimo</label>
+                                                <input type="number" class="form-control" id="stockMinimo" name="peso" min="0">
+                                            </div>
+                                        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="stockMaximo" class="col-form-label">Stock maximo</label>
+                                                <input type="number" class="form-control" id="stockMaximo" name="peso" min="0">
+                                            </div>
                                     
                                             <div class="col-md-3">
                                                 <label style="font-weight: 600;" for="costo" class="col-form-label">Costo</label>
@@ -335,6 +374,16 @@
                                             <div class="col-md-3">
                                                 <label style="font-weight: 600;" for="unidadEmpaque" class="col-form-label">Unidad de empaque</label>
                                                 <input type="number" class="form-control" id="unidadEmpaque" name="unidadEmpaque" min="0">
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="numeroPrecioMinimo" class="col-form-label">Numero precio minimo</label>
+                                                <input type="number" class="form-control" id="numeroPrecioMinimo" name="numeroPrecioMinimo" min="0">
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="numeroPrecioMaximo" class="col-form-label">Numero precio maximo</label>
+                                                <input type="number" class="form-control" id="numeroPrecioMaximo" name="numeroPrecioMaximo" min="0">
                                             </div>
                                 
                                     
@@ -565,6 +614,26 @@
 
                                         </div>
                                     </div>
+
+                                    
+                                    <!--Proveedores-->
+                                    <div class="tab-pane fade" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
+                                        <div class="row">
+
+                                                        
+                                    
+                                        </div>
+                                    </div>
+
+                                    <!--Complementarios-->
+                                    <div class="tab-pane fade" id="ex1-pills-4" role="tabpanel" aria-labelledby="ex1-tab-4">
+                                        <div class="row">
+                                    
+                                    
+                                    
+                                        </div>
+                                    </div>
+                                    
                                     
                                     <div class="tab-pane fade" id="ex1-pills-6" role="tabpanel" aria-labelledby="ex1-tab-6">
                                         <label style="font-weight: 600;" for="producto" class="col-form-label">Buscar producto del kit:</label>
@@ -738,6 +807,10 @@
                 </div>
             </div>
         </div>
+
+
+
+
 
         <!-- Modal Marca -->
         <div class="modal fade" id="modalMarca" tabindex="-1" aria-labelledby="modalMarcaLabel" aria-hidden="true">

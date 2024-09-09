@@ -18,7 +18,6 @@ const userFunctions = require('../controllers/functionsUsers/userFunctions')
 const franquicia = require('../controllers/franquicia/franquiciaController')
 const sucursal = require('../controllers/sucursal/sucursalController')
 const productos = require('../controllers/productos/productosController')
-const complementos  = require('../controllers/productos/complementosController')
 const grupos = require('../controllers/productos/complementos/grupoController')
 const marca = require('../controllers/productos/complementos/marcaController')
 const linea = require('../controllers/productos/complementos/lineaController')
@@ -125,7 +124,6 @@ router.put('/api/productos/:id', productos.updateProduct)
 router.put('/api/productosStatus/:id', productos.updateProduct)
 
     //Complementos
-    router.get('/api/complementos', complementos.getAllRecords)
         //grupos
         router.get('/api/grupos', grupos.getGrupos)
         router.get('/api/grupos/:id', grupos.getGrupoById)
