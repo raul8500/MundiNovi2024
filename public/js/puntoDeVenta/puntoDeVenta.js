@@ -7,6 +7,7 @@ inputCantidad.focus()
 const modalSelectUser = new mdb.Modal(document.getElementById('selectUserModal'));
 let user = false
 
+
 let esFactura = false;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -21,6 +22,7 @@ function cargarSucursal() {
         .then(response => response.json())
         .then(data => {
             sucursalInfo = data;
+            document.getElementById('nombreSucursal').textContent = sucursalInfo.nombre
         })
         .catch(error => console.error('Error al cargar sucursal:', error));
 }
@@ -199,12 +201,13 @@ function agregarProducto() {
                     ${[...Array(4).keys()].map(i => `
                         ${productoSeleccionado[`rangoInicial${i + 1}`] !== undefined ? `
                             <div style="flex: 1 0 50%; padding: 0.2rem; box-sizing: border-box; border-bottom: 1px solid #ddd;">
-                                ${productoSeleccionado[`rangoInicial${i + 1}`]} - ${productoSeleccionado[`rangoFinal${i + 1}`]}: 
+                                Mas de ${productoSeleccionado[`rangoInicial${i + 1}`] === 0 ? 1 : productoSeleccionado[`rangoInicial${i + 1}`]} = 
                                 <strong> ${productoSeleccionado[`precio${i + 1}`]} </strong>
                             </div>
                         ` : ''}`).join('')}
                 </div>
             </td>
+
             <td><input type="number" class="form-control precio" value="${precio.toFixed(2)}" step="0.01"></td>
             <td><input type="number" class="form-control cantidad" value="${cantidad}" step="1"></td>
             <td class="total">$${total.toFixed(2)}</td>
@@ -343,7 +346,9 @@ function confirmarCancelarVenta() {
             document.getElementById('btnCancelarCliente').style.visibility = 'hidden';
             document.getElementById('btnCancelarFactura').style.visibility = 'hidden';
             document.getElementById('monederoCliente').textContent = ''
-            facturarVenta()
+            if(esFactura == true){
+                facturarVenta()
+            }
             limpiarCliente()
             clienteSeleccionado = []
             // Limpiar los campos de producto y cantidad
@@ -488,6 +493,7 @@ function facturarVenta() {
     // Verifica si el botón tiene la clase 'btn-success'
     if (btnFacturar.classList.contains('btn-success')) {
         esFactura = false;
+        
         // Si tiene 'btn-success', la cambia a 'btn-primary'
         btnFacturar.classList.remove('btn-success');
         btnFacturar.classList.add('btn-primary');

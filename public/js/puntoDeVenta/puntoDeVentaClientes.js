@@ -166,7 +166,6 @@ function limpiarCliente(){
 
 document.getElementById('btnCancelarFactura').addEventListener('click', (e) => {
     facturarVenta()
-    
 });
 
 document.getElementById('btnCancelarCliente').addEventListener('click', (e) => {

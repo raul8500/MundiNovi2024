@@ -127,27 +127,30 @@
 
     <main>
         <div class="container-fluid pt-4" style="width: 85%;">
-            <h1 class="text-center mb-2" style="margin-bottom: 5px;">Mundi Novi</h1>
-            <h2 class="text-center mb-2" style="margin-top: 0;">Punto de Venta 2024</h2>
+            <h2 class="text-center mb-1" style="margin-bottom: 2px;">Mundi Novi</h2>
+            <h3 class="text-center mb-1" style="margin-top: 2px; margin-bottom: 2px;">Punto de Venta 2024</h3>
+            <h3 id="nombreSucursal" class="text-center mb-1" style="margin-top: 2px; margin-bottom: 2px;"></h3>
+
             <br>
 
-            <!--Botones de opciones-->
-            <div class="d-flex justify-content-center">
-                <div class="btn-group" role="group" aria-label="Basic example">
-                    <button id="btnFacturar" type="button" class="btn btn-primary" data-mdb-ripple-init>Facturar (F3) <i class="fa-solid fa-newspaper"></i></button>
-                    <button id="btnSeleccionarUsuario" type="button" class="btn btn-primary">(F4) Cliente <i class="fa-solid fa-user"></i></button>
-                    <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Buscar (F6) <i class="fa-solid fa-magnifying-glass"></i></button>
-                    <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Descuento (F7) <i class="fa-solid fa-tags"></i></button>
-                    <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Guardar (F8) <i class="fa-solid fa-floppy-disk"></i></button>
-                    <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Precios (F10) <i class="fa-solid fa-barcode"></i></button>
-                </div>
-            </div>        
+            <!--Botones de opciones-->       
 
-            <div class="row mb-4" style="margin-top: 50px;">
-
+            <div class="row mb-4">
+                
                 <!-- Sección de Productos -->
                 <div class="col-md-8">
-                    <div class="card">
+                    <div class="d-flex justify-content-center">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button id="btnFacturar" type="button" class="btn btn-primary" data-mdb-ripple-init>Facturar (F3) <i class="fa-solid fa-newspaper"></i></button>
+                            <button id="btnSeleccionarUsuario" type="button" class="btn btn-primary">(F4) Cliente <i class="fa-solid fa-user"></i></button>
+                            <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Buscar (F6) <i class="fa-solid fa-magnifying-glass"></i></button>
+                            <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Descuento (F7) <i class="fa-solid fa-tags"></i></button>
+                            <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Guardar (F8) <i class="fa-solid fa-floppy-disk"></i></button>
+                            <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Precios (F10) <i class="fa-solid fa-barcode"></i></button>
+                        </div>
+                    </div> 
+
+                    <div class="card" style="margin-top: 20px;">
                         <div class="card-body">
                             <h5 class="card-title">Productos</h5>
                             <div class="row mb-3">
@@ -352,36 +355,58 @@
                     <div class="mb-3" id="usoCFDIContainer" style="display: none;">
                         <label for="usoCFDI" class="form-label">Uso de CFDI</label>
                         <select class="form-select" id="usoCFDI">
-                        <option value="G01">G01 - Adquisición de mercancías</option>
-                        <option value="G02">G02 - Devoluciones, descuentos o bonificaciones</option>
-                        <option value="G03">G03 - Gastos en general</option>
-                        <option value="P01">P01 - Por definir</option>
+                            <option value="G01">Adquisición de mercancias</option>
+                            <option value="G02">Devoluciones, descuentos o bonificaciones</option>
+                            <option value="G03">Gastos en general</option>
+                            <option value="I01">Construcciones</option>
+                            <option value="I02">Mobilario y equipo de oficina por inversiones</option>
+                            <option value="I03">Equipo de transporte</option>
+                            <option value="I04">Equipo de computo y accesorios</option>
+                            <option value="I05">Dados, troqueles, moldes, matrices y herramental</option>
+                            <option value="I06">Comunicaciones telefónicas</option>
+                            <option value="I07">Comunicaciones satelitales</option>
+                            <option value="I08">Otra maquinaria y equipo</option>
+                            <option value="D01">Honorarios médicos, dentales y gastos hospitalarios</option>
+                            <option value="D02">Gastos médicos por incapacidad o discapacidad</option>
+                            <option value="D03">Gastos funerales</option>
+                            <option value="D04">Donativos</option>
+                            <option value="D05">Intereses reales efectivamente pagados por créditos hipotecarios (casa habitación)</option>
+                            <option value="D06">Aportaciones voluntarias al SAR</option>
+                            <option value="D07">Primas por seguros de gastos médicos</option>
+                            <option value="D08">Gastos de transportación escolar obligatoria</option>
+                            <option value="D09">Depósitos en cuentas para el ahorro, primas que tengan como base planes de pensiones</option>
+                            <option value="D10">Pagos por servicios educativos (colegiaturas)</option>
+                            <option value="P01">Por definir</option>
+                            <option value="S01">Sin efectos fiscales</option>
+                            <option value="CP01">Pagos</option>
+                            <option value="CN01">Nómina</option>
                         </select>
+                        
                     </div>
             
                     <!-- Contenedor de Formas de Pago -->
                     <div id="formasDePago">
                         <!-- Forma de Pago Inicial -->
                         <div class="row mb-3 formaDePago">
-                        <div class="col-md-5">
-                            <label for="formaPago" class="form-label">Forma de Pago</label>
-                            <select class="form-select formaPago">
-                            <option value="efectivo">Efectivo</option>
-                            <option value="tarjeta">Tarjeta</option>
-                            <option value="transferencia">Transferencia</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="importePago" class="form-label">Importe</label>
-                            <input type="number" class="form-control importePago" placeholder="0.00" />
-                        </div>
-                        <div class="col-md-2">
-                            <label for="cambio" class="form-label">Cambio</label>
-                            <input type="text" class="form-control cambio" value="0.00" readonly />
-                        </div>
-                        <div class="col-md-1 d-flex align-items-end">
-                            <button type="button" class="btn btn-danger btn-sm eliminarFormaPago" disabled><i class="fa-solid fa-trash"></i></button>
-                        </div>
+                            <div class="col-md-5">
+                                <label class="form-label">Forma de Pago</label>
+                                <select class="form-select formaPago">
+                                <option value="efectivo">Efectivo</option>
+                                <option value="tarjeta">Tarjeta</option>
+                                <option value="transferencia">Transferencia</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Importe</label>
+                                <input type="number" class="form-control importePago" placeholder="0.00" />
+                            </div>
+                            <div class="col-md-2">
+                                <labelclass="form-label">Cambio</label>
+                                <input type="text" class="form-control cambio" value="0.00" readonly />
+                            </div>
+                            <div class="col-md-1 d-flex align-items-end">
+                                <button type="button" class="btn btn-danger btn-sm eliminarFormaPago" disabled><i class="fa-solid fa-trash"></i></button>
+                            </div>
                         </div>
                     </div>
             
