@@ -70,6 +70,9 @@ router.get('/clientes', (req, res) => {
 router.get('/kardex', (req, res) => {    
     res.render('Kardex/kardex');
 });
+router.get('/ventas', (req, res) => {    
+    res.render('Ventas/ventas');
+});
 
 
 
