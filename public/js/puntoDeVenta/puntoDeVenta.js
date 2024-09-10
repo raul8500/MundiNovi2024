@@ -10,6 +10,7 @@ let user = false
 
 let esFactura = false;
 
+//focus en el input de cantidad al inciar la pagina
 document.addEventListener('DOMContentLoaded', () => {
     let inputCantidad = document.getElementById('cantidad');
     inputCantidad.value = '';
@@ -141,7 +142,7 @@ function seleccionarProducto(producto) {
     document.getElementById('sugerencias').innerHTML = ''; // Limpiar sugerencias después de seleccionar
     document.getElementById('producto').focus(); // Regresar al input de búsqueda
 }
-
+//agregar producto
 function agregarProducto() {
     const inputProducto = document.getElementById('producto');
     const inputCantidad = document.getElementById('cantidad');
@@ -264,7 +265,6 @@ document.getElementById('productos').addEventListener('input', (event) => {
 });
 
 
-
 // Manejo del clic en el botón de agregar producto
 document.getElementById('agregarProducto').addEventListener('click', () => {
     agregarProducto();
@@ -322,6 +322,7 @@ document.getElementById('productos').addEventListener('click', event => {
     }
 });
 
+//cancelar venta con click
 document.getElementById('cancelarVenta').addEventListener('click', () => {
     confirmarCancelarVenta();
 });
@@ -358,11 +359,15 @@ function confirmarCancelarVenta() {
             
             // Enfocar el campo de cantidad
             inputCantidad.focus();
+
+            document.getElementById('selectFormaPago').value = 
+            document.getElementsByClassName('importePago')[0].value = 0;
+            ocument.getElementsByClassName('cambio')[0].value = 0;
+
         }
         inputCantidad.focus();
     });
 }
-
 
 function completarVenta() {
     const filas = document.querySelectorAll('#productos tr');
@@ -520,51 +525,58 @@ document.getElementById('btnFacturar').addEventListener('click', () => {
     modalSelectUser.show()
 });
 
+// Manejo del clic en el botón de seleccionar usuario
 document.getElementById('btnSeleccionarUsuario').addEventListener('click', () => {
     user = true;
     modalSelectUser.show()
 });
 
+
+
+
+
+
   // Agregar forma de pago adicional
 document.getElementById('btnAgregarFormaPago').addEventListener('click', function () {
-const formasDePagoContainer = document.getElementById('formasDePago');
+    const formasDePagoContainer = document.getElementById('formasDePago');
 
-// Crear un nuevo contenedor de forma de pago
-const nuevaFormaDePago = document.createElement('div');
-nuevaFormaDePago.classList.add('row', 'mb-3', 'formaDePago');
-nuevaFormaDePago.innerHTML = `
-    <div class="col-md-5">
-    <label for="formaPago" class="form-label">Forma de Pago</label>
-    <select class="form-select formaPago">
-        <option value="efectivo">Efectivo</option>
-        <option value="tarjeta">Tarjeta</option>
-        <option value="transferencia">Transferencia</option>
-    </select>
-    </div>
-    <div class="col-md-4">
-    <label for="importePago" class="form-label">Importe</label>
-    <input type="number" class="form-control importePago" placeholder="0.00" />
-    </div>
-    <div class="col-md-2">
-    <label for="cambio" class="form-label">Cambio</label>
-    <input type="text" class="form-control cambio" value="0.00" readonly />
-    </div>
-    <div class="col-md-1 d-flex align-items-end">
-    <button type="button" class="btn btn-danger btn-sm eliminarFormaPago"><i class="fa-solid fa-trash"></i></button>
-    </div>
-    <div class="col-md-12 mb-3 cuentaBancaria" style="display: none;">
-    <label for="digitosCuenta" class="form-label">Últimos 4 dígitos de la cuenta bancaria</label>
-    <input type="text" class="form-control digitosCuenta" maxlength="4" placeholder="0000" />
-    </div>
-`;
-formasDePagoContainer.appendChild(nuevaFormaDePago);
+    // Crear un nuevo contenedor de forma de pago
+    const nuevaFormaDePago = document.createElement('div');
+    nuevaFormaDePago.classList.add('row', 'mb-3', 'formaDePago');
+    nuevaFormaDePago.innerHTML = `
+        <div class="col-md-5">
+        <label for="formaPago" class="form-label">Forma de Pago</label>
+        <select class="form-select formaPago">
+            <option value="efectivo">Efectivo</option>
+            <option value="tarjeta">Tarjeta</option>
+            <option value="transferencia">Transferencia</option>
+        </select>
+        </div>
+        <div class="col-md-4">
+        <label for="importePago" class="form-label">Importe</label>
+        <input type="number" class="form-control importePago" placeholder="0.00" />
+        </div>
+        <div class="col-md-2">
+        <label for="cambio" class="form-label">Cambio</label>
+        <input type="text" class="form-control cambio" value="0.00" readonly />
+        </div>
+        <div class="col-md-1 d-flex align-items-end">
+        <button type="button" class="btn btn-danger btn-sm eliminarFormaPago"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        <div class="col-md-12 mb-3 cuentaBancaria" style="display: none;">
+        <label for="digitosCuenta" class="form-label">Últimos 4 dígitos de la cuenta bancaria</label>
+        <input type="text" class="form-control digitosCuenta" maxlength="4" placeholder="0000" />
+        </div>
+    `;
+    formasDePagoContainer.appendChild(nuevaFormaDePago);
 
-// Habilitar la eliminación de las nuevas formas de pago
-activarBotonesEliminar();
-activarCalculoCambio();
-activarFormaPagoTransferencia(); // Activar select de "Forma de Pago"
+    // Habilitar la eliminación de las nuevas formas de pago
+    activarBotonesEliminar();
+    activarCalculoCambio();
+    //activarFormaPagoTransferencia(); // Activar select de "Forma de Pago"
 });
 
+//verificar si es factura y cargar los CFDI
 function verificarFactura() {
     const facturaResumenVenta = document.getElementById('facturaResumenVenta').textContent.trim();
     const usoCFDIContainer = document.getElementById('usoCFDIContainer');
@@ -588,7 +600,6 @@ botonesEliminar.forEach(function (boton) {
     });
 });
 }
-
 // Activar el cálculo de cambio cuando se ingrese un importe
 function activarCalculoCambio() {
 const inputsImporte = document.querySelectorAll('.importePago');
@@ -640,7 +651,7 @@ selectsFormaPago.forEach(function (select) {
 // Activar el cálculo de cambio y select de "Forma de Pago" para la forma de pago inicial
 activarCalculoCambio();
 activarBotonesEliminar();
-activarFormaPagoTransferencia();
+//activarFormaPagoTransferencia();
 
 
 

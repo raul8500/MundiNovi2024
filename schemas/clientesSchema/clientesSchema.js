@@ -1,99 +1,96 @@
 const mongoose = require('mongoose');
 
-const clienteSchema = new mongoose.Schema({
-    clave: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    datosGenerales: {
-        nombre: {
-            type: String,
-            required: true
-        },
-        telefonoPersonal: {
-            type: String
-        },
-        telefonoCelular: {
-            type: String
-        },
-        correoElectronicoPersonal: {
-            type: String
-        },
-        
-        zonaCliente: {
-            type: String
-        }
-    },
-    datosUbicacion: {
-        rfc: {
-            type: String
-        },
-        razonSocial: {
-            type: String
-        },
-        correoElectronicoContacto: {
-            type: String
-        },
-        calle: {
-            type: String
-        },
-        numeroExterior: {
-            type: String
-        },
-        numeroInterior: {
-            type: String
-        },
-        colonia: {
-            type: String
-        },
-        localidad: {
-            type: String
-        },
-        municipio: {
-            type: String
-        },
-        estado: {
-            type: String
-        },
-        pais: {
-            type: String
-        },
-        codigoPostal: {
-            type: String
-        }
-    },
-    datosFinancieros: {
-        diasDeCredito: {
-            type: Number,
-            default: 0
-        },
-        limiteDeCredito: {
-            type: Number,
-            default: 0
-        },
-        saldo: {
-            type: Number,
-            default: 0
-        },
-        diaDeRevision: {
-            type: Number
-        },
-        diaDePago: {
-            type: Number
-        },
-        descuento: {
-            type: Number,
-            default: 0
-        },
-        fechaUltimoPago: {
-            type: Date
-        },
-        montoUltimoPago: {
-            type: Number,
-            default: 0
-        }
-    }
-});
+// Subschema para Address
+const addressSchema = new mongoose.Schema({
+    street: { type: String, default: null },
+    exteriorNumber: { type: String, default: null },
+    interiorNumber: { type: String, default: null },
+    colony: { type: String, default: null },
+    locality: { type: String, default: null },
+    municipality: { type: String, default: null },
+    zipCode: { type: String, default: null },
+    state: { type: String, default: null },
+    country: { type: String, default: null },
+    reference: { type: String, default: null },
+}, { _id: false });
 
-module.exports = mongoose.model('Cliente', clienteSchema);
+// Subschema para Accounting Details
+const accountingDetailSchema = new mongoose.Schema({
+    id: { type: String, default: null },
+    idParent: { type: String, default: null },
+    name: { type: String, default: null },
+    text: { type: String, default: null },
+    code: { type: String, default: null },
+    description: { type: String, default: null },
+    type: { type: String, default: null },
+    readOnly: { type: Boolean, default: null },
+    nature: { type: String, default: null },
+    blocked: { type: String, default: null },
+    status: { type: String, default: null },
+    categoryRule: {
+        id: { type: String, default: null },
+        name: { type: String, default: null },
+        key: { type: String, default: null },
+    },
+    use: { type: String, default: null },
+    showThirdPartyBalance: { type: Boolean, default: null },
+    metadata: {
+        satGroupingCode: { type: String, default: null },
+        satGroupingText: { type: String, default: null },
+    },
+}, { _id: false });
+
+// Subschema para Accounting
+const accountingSchema = new mongoose.Schema({
+    accountReceivable: { type: accountingDetailSchema, default: null },
+    debtToPay: { type: accountingDetailSchema, default: null },
+}, { _id: false });
+
+// Esquema principal para los datos del cliente
+const clientDataSchema = new mongoose.Schema({
+    id: { type: String, default: null },
+    name: { type: String, default: null },
+    identification: { type: String, default: null },
+    email: { type: String, default: null },
+    phonePrimary: { type: String, default: null },
+    phoneSecondary: { type: String, default: null },
+    fax: { type: String, default: null },
+    mobile: { type: String, default: null },
+    observations: { type: String, default: null },
+    status: { type: String, default: null },
+    cfdiUse: { type: String, default: null },
+    paymentType: { type: String, default: null },
+    paymentMethod: { type: String, default: null },
+    operationType: { type: String, default: null },
+    thirdType: { type: String, default: null },
+    fiscalId: { type: String, default: null },
+    regime: { type: String, default: null },
+    regimeObject: { type: [String], default: [] },
+    address: { type: addressSchema, default: null },
+    type: { type: [String], default: null },
+    seller: { type: String, default: null },
+    term: {
+        id: { type: Number, default: null },
+        name: { type: String, default: null },
+        days: { type: String, default: null }
+    },
+    priceList: {
+        id: { type: Number, default: null },
+        name: { type: String, default: null }
+    },
+    internalContacts: { type: [Object], default: [] },
+    statementAttached: { type: Boolean, default: false },
+    accounting: { type: accountingSchema, default: null },
+}, { _id: false });
+
+// Esquema principal que incluye _id, factura y estado
+const clientSchema = new mongoose.Schema({
+    _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
+    esfactura: { type: Boolean, default: null },
+    estado: { type: String, default: null },
+    clientData: { type: clientDataSchema, default: null },
+    monedero: { type: Number, default: null }
+}, { timestamps: true });
+
+// Exportar el esquema
+module.exports = mongoose.model('Client', clientSchema);

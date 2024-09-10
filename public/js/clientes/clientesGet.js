@@ -1,4 +1,4 @@
-const urlGetClientes = '/api/clientesBD';
+const urlGetClientes = '/api/clientes';
 
 // Obtener elementos del DOM
 const contenedorClientes = document.getElementById('clientesData');
@@ -16,29 +16,31 @@ const mostrarClientes = (clientes, currentPage, itemsPerPage) => {
     let resultadosClientes = '';
   
     clientes.slice(startIndex, endIndex).forEach((item) => {
-      const identificacionBadge = item.identification
-        ? '<span class="badge badge-success rounded-pill d-inline">Sí</span>'
-        : '<span class="badge badge-danger rounded-pill d-inline">No</span>';
+      const identificacionBadge = item.clientData.identification
+      ? '<span class="badge badge-success rounded-pill d-inline">Sí</span>'
+      : '<span class="badge badge-danger rounded-pill d-inline">No</span>';
+    
   
       resultadosClientes += `
               <tr>
-                  <td class="text-center">${item.id ?? ''}</td>
-                  <td class="text-center">${item.name ?? ''}</td>
-                  <td class="text-center">${item.identification ?? ''}</td>
-                  <td class="text-center">${item.email ?? ''}</td>
-                  <td class="text-center">${item.phonePrimary ? item.phonePrimary : ''}</td>
+                  <td class="text-center">${item.clientData.id ?? ''}</td>
+                  <td class="text-center">${item.clientData.name ?? ''}</td>
+                  <td class="text-center">${item.clientData.identification ?? ''}</td>
+                  <td class="text-center">${item.clientData.email ?? ''}</td>
+                  <td class="text-center">${item.clientData.phonePrimary ? item.clientData.phonePrimary : ''}</td>
                   <td class="text-center">${identificacionBadge}</td>
+                  <td class="text-center">$ ${item.monedero}</td>
                   <td class="text-center">${formatearFecha(item.updatedAt)}</td>
                   <td class="text-center">
                   
                       <button id="${
-                        item.id
+                        item.clientData.id
                       }" type="button" class="btn btn-primary btn-rounded btnEditClientes">
                           <i class="fa-solid fa-pen-to-square"></i>
                       </button>
   
                       <button id="${
-                        item.id
+                        item.clientData.id
                       }" type="button" class="btn btn-danger btn-rounded btnDeleteClientes">
                           <i class="fa-solid fa-trash"></i>
                       </button>
@@ -137,12 +139,11 @@ function cambiarPaginaClientes(page) {
     generarNumerosDePaginaClientes();
   }
 }
-
 // Búsqueda rápida por nombre
 document.getElementById('busquedaClientesMain').addEventListener('input', function () {
     const searchText = this.value.toLowerCase();
     clientesFiltrados = clientes.filter((cliente) =>
-      cliente.name && cliente.name.toLowerCase().includes(searchText)
+      cliente.clientData.name && cliente.clientData.name.toLowerCase().includes(searchText)
     );
     currentPageClientes = 1; // Reinicia a la primera página
     mostrarClientes(clientesFiltrados, currentPageClientes, itemsPerPageClientes);

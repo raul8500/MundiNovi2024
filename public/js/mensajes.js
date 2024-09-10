@@ -20,7 +20,7 @@ function addMessage(message) {
     const messageElem = document.createElement('li');
     messageElem.className = 'mb-2';
     messageElem.innerHTML = `
-        <div><strong>${message.user.name}</strong> [Sucursal: ${message.user.sucursal}] <small>[${new Date(message.date).toLocaleString()}]</small></div>
+        <div><strong>${message.user.name}</strong> [${message.user.sucursal}] <small>[${new Date(message.date).toLocaleString()}]</small></div>
         <div>${message.text}</div>
     `;
 

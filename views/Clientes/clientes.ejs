@@ -125,6 +125,7 @@
                           <th scope="col">Email contacto</th>
                           <th scope="col">Telefono principal</th>
                           <th scope="col">Factura</th>
+                          <th scope="col">Monedero</th>
                           <th scope="col">Fecha Ult. Act.</th>
                           <th scope="col">Acciones</th>
                         </tr>
@@ -303,84 +304,151 @@
             </div>
         </div>
 
-        <!-- Modal Zonas de Clientes -->
-        <div class="modal fade" id="modalZonaCliente" tabindex="-1" aria-labelledby="modalZonaClienteLabel" aria-hidden="true">
-            <div class="modal-dialog">
+        <div class="modal fade" id="ModalEditCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalZonaClienteLabel">Zonas de Clientes</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            <i class="fa-regular fa-address-card" style="color: #000000;"></i>
+                            Editar cliente
+                        </h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <div class="form-outline" data-mdb-input-init>
-                                    <input type="text" id="formZonaClave" class="form-control" />
-                                    <label class="form-label" for="formZonaClave">Clave</label>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-outline" data-mdb-input-init>
-                                    <input type="text" id="formZonaNombre" class="form-control" />
-                                    <label class="form-label" for="formZonaNombre">Nombre</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-outline" data-mdb-input-init>
-                                    <input type="text" id="formZonaDescripcion" class="form-control" />
-                                    <label class="form-label" for="formZonaDescripcion">Descripción</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mt-3">
-                            <div class="col-md-12 d-flex justify-content-end">
-                                <button id="btnAddZonaCliente" type="button" class="btn btn-primary btn-rounded" data-mdb-ripple-color="dark">
-                                    Agregar <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="table-responsive pt-3">
-                            <table class="table align-middle mb-0 bg-white">
-                                <thead class="bg-light">
-                                    <tr class="text-center">
-                                        <th scope="col">Clave</th>
-                                        <th scope="col">Nombre</th>
-                                        <th scope="col">Descripción</th>
-                                        <th scope="col">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="zonaClienteData" class="table-group-divider">
-                                    <!-- Aquí se cargarán las zonas de clientes -->
-                                </tbody>
-                            </table>
-                            <div class="d-flex justify-content-center pt-3">
-                                <ul class="pagination" id="paginationZonaClientes">
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" onclick="cambiarPaginaZonaClientes(currentPageZonaClientes - 1)" aria-label="Previous" id="anteriorZonaClientes">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" onclick="cambiarPaginaZonaClientes(currentPageZonaClientes + 1)" aria-label="Next" id="siguienteZonaClientes">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
+                        <div>
+                            <div class="modal-body">
+                                <!-- Pills navs -->
+                                <ul class="nav nav-pills mb-3" id="ex1" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a data-mdb-pill-init class="nav-link active" id="ex1-tab-1" href="#ex1-pills-1" role="tab"
+                                            aria-controls="ex1-pills-1" aria-selected="true">Datos generales</a>
                                     </li>
                                 </ul>
+                                <!-- Pills navs -->
+        
+                                <!-- Pills content -->
+                                <div class="tab-content" id="ex1-content">
+        
+                                    <!--Datos generales-->
+                                    <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
+                                        <div class="row">
+                                            <h4>Datos generales</h4>
+                                            
+                                            <!-- Hidden field for client ID -->
+                                            <input type="hidden" id="clientIdEdit" />
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="facturaEdit" class="col-form-label">¿Factura?</label>
+                                                <div>
+                                                    <input type="radio" name="facturaEdit" id="factura_siEdit" value="si" /> Sí
+                                                    <input type="radio" name="facturaEdit" id="factura_noEdit" value="no" /> No
+                                                </div>
+                                            </div>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="nombreClienteEdit" class="col-form-label">
+                                                    Nombre: <span style="color: red; font-weight: bold;">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="nombreClienteEdit" required />
+                                            </div>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="rfcEdit" class="col-form-label">Identificación (RFC):</label>
+                                                <input type="text" class="form-control" id="rfcEdit" />
+                                            </div>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" class="form-label" for="regimenEdit">Régimen:
+                                                    <span style="color: red; font-weight: bold;">*</span>
+                                                </label>
+                                                <select id="regimenEdit" class="form-select" aria-label="Combo box example">
+                                                </select>
+                                            </div>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="telefonoPrincipalEdit" class="col-form-label">Teléfono principal:</label>
+                                                <input type="text" class="form-control" id="telefonoPrincipalEdit" />
+                                            </div>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="telefonoContactoEdit" class="col-form-label">Teléfono de contacto:</label>
+                                                <input type="text" class="form-control" id="telefonoContactoEdit" />
+                                            </div>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="correoElectronicoContactoEdit" class="col-form-label">Correo electrónico de contacto:</label>
+                                                <input type="text" class="form-control" id="correoElectronicoContactoEdit" />
+                                            </div>
+        
+                                            <hr style="margin-top: 10px;">
+        
+                                            <h4>Dirección</h4>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="calleEdit" class="col-form-label">Calle:</label>
+                                                <input type="text" class="form-control" id="calleEdit" />
+                                            </div>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="numeroExteriorEdit" class="col-form-label">Número Exterior:</label>
+                                                <input type="text" class="form-control" id="numeroExteriorEdit" />
+                                            </div>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="numeroInteriorEdit" class="col-form-label">Número Interior:</label>
+                                                <input type="text" class="form-control" id="numeroInteriorEdit" />
+                                            </div>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="coloniaEdit" class="col-form-label">Colonia:</label>
+                                                <input type="text" class="form-control" id="coloniaEdit" />
+                                            </div>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="localidadEdit" class="col-form-label">Localidad:</label>
+                                                <input type="text" class="form-control" id="localidadEdit" />
+                                            </div>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="municipioDelegacionEdit" class="col-form-label">Municipio/Delegación:</label>
+                                                <input type="text" class="form-control" id="municipioDelegacionEdit" />
+                                            </div>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="estadoEdit" class="col-form-label">Estado:</label>
+                                                <input type="text" class="form-control" id="estadoEdit" />
+                                            </div>
+        
+                                            <div class="col-md-3">
+                                                <label style="font-weight: 600;" for="codigoPostalEdit" class="col-form-label">Código postal:
+                                                    <span style="color: red; font-weight: bold;">*</span>
+                                                </label>
+                                                <input type="text" class="form-control" id="codigoPostalEdit" />
+                                            </div>
+        
+                                            <hr style="margin-top: 10px;">
+                                        </div>
+                                    </div>
+        
+                                </div>
+                                <!-- Pills content -->
+        
+                                <div class="modal-footer d-flex justify-content-between align-items-center">
+                                    <h5 class="text-start mb-0"></h5>
+                                    <div>
+                                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
+                                        <button type="button" id="btnGuardarClienteEdit" class="btn btn-primary">Guardar</button>
+                                    </div>
+                                </div>
+        
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>
         </div>
-
-
         
-
+        
 
 
 
@@ -403,6 +471,7 @@
     <script src="js/clientes/clientesGet.js"></script>
     <script src="js/clientes/clientesDelete.js"></script>
     <script src="js/clientes/complementosVisuales.js"></script>
+    <script src="js/clientes/clientesPUT.js"></script>
 
     <script src="js/clientes/complementos/zonasClientes.js" ></script>
 </body>

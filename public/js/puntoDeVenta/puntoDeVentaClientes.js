@@ -5,7 +5,7 @@ let clientesFiltrados = [];
 
 // Cargar los clientes desde la base de datos
 function cargarClientes() {
-    fetch('/api/clientesBD')
+    fetch('/api/clientes')
         .then(response => response.json())
         .then(data => {
             clientes = data;
@@ -16,11 +16,12 @@ function cargarClientes() {
 // Filtrar clientes y mostrar resultados
 function filtrarClientes(query) {
     clientesFiltrados = clientes.filter(cliente => {
-        const nombreValido = cliente.name && typeof cliente.name === 'string';
-        const mobileValido = cliente.mobile && typeof cliente.mobile === 'string';
 
-        return (nombreValido && cliente.name.toLowerCase().includes(query.toLowerCase())) ||
-               (mobileValido && cliente.mobile.includes(query));
+        const nombreValido = cliente.clientData.name && typeof cliente.clientData.name === 'string';
+        const mobileValido = cliente.clientData.mobile && typeof cliente.clientData.mobile === 'string';
+
+        return (nombreValido && cliente.clientData.name.toLowerCase().includes(query.toLowerCase())) ||
+               (mobileValido && cliente.clientData.mobile.includes(query));
     });
 
     mostrarResultados(clientesFiltrados);
@@ -39,7 +40,7 @@ function mostrarResultados(resultados) {
     resultados.forEach((cliente, index) => {
         const li = document.createElement('li');
         li.classList.add('list-group-item');
-        li.textContent = `${cliente.name} - ${cliente.mobile || '-No tiene-'}`;
+        li.textContent = `${cliente.clientData.name} - ${cliente.clientData.mobile || '-No tiene-'}`;
         li.setAttribute('data-index', index); // Ahora el data-index corresponde a clientesFiltrados
         li.addEventListener('click', () => seleccionarCliente(clientesFiltrados[index])); // Usar clientesFiltrados
         lista.appendChild(li);
@@ -50,26 +51,28 @@ function mostrarResultados(resultados) {
 
 // Función para seleccionar un cliente
 function seleccionarCliente(cliente) {
-    document.getElementById('inputBuscarCliente').value = `${cliente.name} - ${cliente.mobile || 'Sin numero mobile'}`;
+    document.getElementById('inputBuscarCliente').value = `${cliente.clientData.name} - ${cliente.clientData.mobile || 'Sin numero mobile'}`;
     document.getElementById('listaClientes').style.display = 'none';
     indexSeleccionado = -1;  // Resetear el índice seleccionado
 
     // Guardar toda la información del cliente en la variable global
     clienteSeleccionado = cliente;
 
-    document.getElementById('nombreCliente').value = cliente.name || '';
-    document.getElementById('rfcCliente').value = cliente.identification || '';
-    document.getElementById('regimenFiscalCliente').value = cliente.regimeObject || '';
-    document.getElementById('calleCliente').value = cliente.address.street || '';
-    document.getElementById('localidadCliente').value = cliente.address.locality || '';
-    document.getElementById('exteriorCliente').value = cliente.address.exteriorNumber || '';
-    document.getElementById('interiorCliente').value = cliente.address.interiorNumber || '';
-    document.getElementById('coloniaCliente').value = cliente.address.colony || '';
-    document.getElementById('municipioCliente').value = cliente.address.municipality || '';
-    document.getElementById('estadoCiente').value = cliente.address.state || '';
-    document.getElementById('codigoPostalCliente').value = cliente.address.zipCode || '';
-    document.getElementById('correoCliente').value = cliente.email || '';
+    document.getElementById('nombreCliente').value = cliente.clientData.name || '';
+    document.getElementById('rfcCliente').value = cliente.clientData.identification || '';
+    document.getElementById('regimenFiscalCliente').value = cliente.clientData.regimeObject || '';
+    document.getElementById('calleCliente').value = cliente.clientData.address.street || '';
+    document.getElementById('localidadCliente').value = cliente.clientData.address.locality || '';
+    document.getElementById('exteriorCliente').value = cliente.clientData.address.exteriorNumber || '';
+    document.getElementById('interiorCliente').value = cliente.clientData.address.interiorNumber || '';
+    document.getElementById('coloniaCliente').value = cliente.clientData.address.colony || '';
+    document.getElementById('municipioCliente').value = cliente.clientData.address.municipality || '';
+    document.getElementById('estadoCiente').value = cliente.clientData.address.state || '';
+    document.getElementById('codigoPostalCliente').value = cliente.clientData.address.zipCode || '';
+    document.getElementById('correoCliente').value = cliente.clientData.email || '';
     document.getElementById('monederoCliente').textContent = cliente.monedero || '0.0';
+    document.getElementById('guardarNuevaInfoCliente').disabled = false;
+
     console.log('Cliente seleccionado:', clienteSeleccionado);
 
 }
@@ -180,3 +183,4 @@ document.getElementById('btnCancelarCliente').addEventListener('click', (e) => {
     document.getElementById('btnCancelarFactura').style.visibility = 'hidden';
     document.getElementById('monederoCliente').textContent = '';
 });
+

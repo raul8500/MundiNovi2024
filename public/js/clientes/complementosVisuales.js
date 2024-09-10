@@ -124,3 +124,5 @@ rfcInput.addEventListener('input', loadRegimenOptions);
 
 // Inicializar con "No" seleccionado
 handleFacturaChange();
+
+

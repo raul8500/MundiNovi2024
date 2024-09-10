@@ -1,5 +1,4 @@
-const urlDeleteClientes = '/api/clientesDeleteID/'; // Define la URL base para eliminar
-
+const urlDeleteClientes = '/api/clientes/';
 
 on(document, 'click', '.btnDeleteClientes', async e => {
     const button = e.target.closest('.btnDeleteClientes'); // Obtiene el botón que fue clicado
@@ -19,7 +18,6 @@ on(document, 'click', '.btnDeleteClientes', async e => {
     });
 });
 
-
 async function deleteCliente(id) {
     try {
         const response = await fetch(`${urlDeleteClientes}${id}`, {
@@ -37,9 +35,8 @@ async function deleteCliente(id) {
                 confirmButtonText: 'Aceptar'
             }).then(() => {
                 // Eliminar cliente de la lista local
-                clientes = clientes.filter(cliente => cliente.id !== id);
-                
-                // Actualizar la tabla
+                clientes = clientes.filter(cliente => cliente.clientData.id !== id);
+            
                 mostrarClientes(clientes, currentPageClientes, itemsPerPageClientes);
                 actualizarControlesPaginacionClientes();
                 generarNumerosDePaginaClientes();

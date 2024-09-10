@@ -24,7 +24,6 @@ const linea = require('../controllers/productos/complementos/lineaController')
 const departamento = require('../controllers/productos/complementos/departamentoController')
 const authToken = require('../controllers/pruebas/auth')
 const clientes = require('../controllers/clientes/clientesController')
-const zonaClientes = require('../controllers/clientes/complementos/zonasClienteController')
 const kardex = require('../controllers/kardex/kardexController')
 
 
@@ -165,21 +164,19 @@ router.post('/api/ventas/crear', venta.createVenta);
 router.post('/api/productos/put', productosController.actualizarProductosConProductKey);
 router.post('/api/productos/id', productosController.actualizarProductosConExcel);
 
-//Clientes 
-router.get('/api/clientes', clientes.getContacts)
-router.get('/api/clientesBD', clientes.getAllContactsBD)
-router.post('/api/clientessavealegra', clientes.getContactsAndSave)
-router.post('/api/createClient', clientes.createContact)
-router.post('/api/createClientNoBilling', clientes.createContactNoBilling)
-router.delete('/api/clientesDelete/:id', clientes.deleteContactById)
-router.delete('/api/clientesDeleteID/:id', clientes.deleteContactByUserId)
 
-    //Zonas clientes
-    router.get('/api/zonasClientes', zonaClientes.getZonasClientes)
-    router.get('/api/zonasClientes/:id', zonaClientes.getZonaClienteById)
-    router.post('/api/zonasClientes', zonaClientes.createZonaCliente)
-    router.put('/api/zonasClientes/:id', zonaClientes.updateZonaCliente)
-    router.delete('/api/zonasClientes/:id', zonaClientes.deleteZonaCliente)
+
+
+//Clientes 
+router.get('/api/clientes', clientes.getAllClientesFromBD);
+router.post('/api/clientes', clientes.createContact);
+router.get('/api/clientes/:clientDataId', clientes.getClienteByClientDataId);
+router.delete('/api/clientes/:clientDataId', clientes.deleteClienteByClientDataId);
+router.put('/api/clientes/:alegraId', clientes.updateClient);
+router.put('/api/clientesUpdateCompleto/:alegraId', clientes.updateClientComplete);
+
+
+
 
 //chat
 router.delete('/chat', mesaje.chatDelete);

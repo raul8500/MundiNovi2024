@@ -1,4 +1,7 @@
 const modalClientes = new mdb.Modal(document.getElementById('ModalAddCliente'));
+
+const btnGuardarCliente = document.getElementById('btnGuardarCliente')
+
 btnAddProducto.addEventListener('click', () => {
     // Recuperar y vaciar los valores de todos los campos
     const fieldsToClear = [
@@ -37,8 +40,11 @@ btnGuardarCliente.addEventListener('click', () => {
     // Obtener el valor del campo de "Factura"
     const facturaSi = document.getElementById('factura_si').checked;
 
-    // Crear objeto JSON
-    const clienteData = {};
+
+    const clienteData = {
+        esFactura: facturaSi
+    };
+
 
     // Validar campos y construir el JSON
     let todosLlenos = true;
@@ -80,11 +86,8 @@ btnGuardarCliente.addEventListener('click', () => {
         return;
     }
 
-    // Determinar la URL según el estado del campo "Factura"
-    const url = facturaSi ? '/api/createClient' : '/api/createClientNoBilling';
 
-    // Enviar datos con POST (ejemplo usando fetch)
-    fetch(url, {
+    fetch('/api/clientes', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -101,10 +104,9 @@ btnGuardarCliente.addEventListener('click', () => {
         
         // Ocultar el modal y limpiar los campos
         modalClientes.hide();
-        btnAddProducto.click(); // Llama al click del botón de agregar producto para limpiar los campos
-        
-        // Actualizar la tabla de clientes
-        clientes.push(data); // Añade el nuevo cliente a la lista de clientes
+        btnAddProducto.click();
+        console.log(data.data)
+        clientes.push(data.data); // Añade el nuevo cliente a la lista de clientes
         mostrarClientes(clientes, currentPageClientes, itemsPerPageClientes); // Actualiza la tabla
         actualizarControlesPaginacionClientes(); // Actualiza los controles de paginación
         generarNumerosDePaginaClientes(); // Genera los números de página
@@ -119,7 +121,6 @@ btnGuardarCliente.addEventListener('click', () => {
         console.error('Error:', error);
     });
 });
-
 
 // Función para agregar cliente a la tabla
 function agregarClienteATabla(cliente) {
