@@ -16,7 +16,7 @@ const mostrarClientes = (clientes, currentPage, itemsPerPage) => {
     let resultadosClientes = '';
   
     clientes.slice(startIndex, endIndex).forEach((item) => {
-      const identificacionBadge = item.clientData.identification
+      const identificacionBadge = item.esfactura
       ? '<span class="badge badge-success rounded-pill d-inline">Sí</span>'
       : '<span class="badge badge-danger rounded-pill d-inline">No</span>';
     

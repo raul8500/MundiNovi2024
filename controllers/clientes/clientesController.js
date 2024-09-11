@@ -358,10 +358,9 @@ exports.updateClient = async (req, res) => {
   }
 };
 
-
 exports.updateClientComplete = async (req, res) => {
   const { alegraId } = req.params;
-  const {name, identification, regime, phonePrimary, email, street ,exteriorNumber,interiorNumber,
+  const {esFactura, name, identification, regime, phonePrimary, email, street ,exteriorNumber,interiorNumber,
     colony, locality, municipality, state, zipCode
    } = req.body;
 
@@ -372,12 +371,11 @@ exports.updateClientComplete = async (req, res) => {
       return res.status(404).json({ message: 'Cliente no encontrado.' });
     }
     
-    if (client.esfactura) {
+    if (esFactura) {
       client.clientData.regimeObject = [regime]
     } else {
-      client.clientData.regimeObject = ['NO_REGIME']
+      client.clientData.regimeObject = ['SIMPLIFIED_REGIME']
     }
-
     client.clientData.name = name
     client.clientData.identification = identification
     client.clientData.email = email
@@ -391,9 +389,16 @@ exports.updateClientComplete = async (req, res) => {
     client.clientData.address.municipality = municipality
     client.clientData.address.state = state
     client.clientData.address.zipCode = zipCode
+    
+
     let json = client.clientData
     
-    await Client.updateOne({ 'clientData.id': alegraId }, { clientData: json });
+    await Client.updateOne(
+      { 'clientData.id': alegraId }, // Filtro para buscar el cliente
+      { $set: { 'esfactura': esFactura, clientData: json } } // Actualiza los campos con $set
+    );
+    
+
 
     const options = {
       method: 'PUT',
@@ -415,7 +420,7 @@ exports.updateClientComplete = async (req, res) => {
       }
 
       // Verificar respuesta de Alegra
-      if (response.statusCode !== 200) {
+      if (response.statusCode != 200) {
         return res.status(response.statusCode).json({ message: 'Error al actualizar el cliente en Alegra.', body });
       }
 
