@@ -163,7 +163,8 @@ router.get('/api/productos/cobros/load', productosController.getAllProductos);
 router.post('/api/ventas/crear', venta.createVenta);
 router.post('/api/productos/put', productosController.actualizarProductosConProductKey);
 router.post('/api/productos/id', productosController.actualizarProductosConExcel);
-
+    //ventas
+    router.post('/api/ventas', venta.createVenta);
 
 
 

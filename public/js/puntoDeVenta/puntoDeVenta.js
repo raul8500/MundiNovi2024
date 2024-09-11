@@ -5,6 +5,7 @@ let inputCantidad = document.getElementById('cantidad');
 inputCantidad.value = ''
 inputCantidad.focus()
 const modalSelectUser = new mdb.Modal(document.getElementById('selectUserModal'));
+const modalPago = new mdb.Modal(document.getElementById('modalPago'));
 let user = false
 
 
@@ -30,10 +31,10 @@ function cargarSucursal() {
 
 // Cargar los productos
 function cargarProductos() {
-    fetch('/api/productos/cobros/load')
+    fetch('/api/productos')
         .then(response => response.json())
         .then(data => {
-            productos = data;
+            productos = data.products;
             cargarSucursal();
         })
         .catch(error => console.error('Error al cargar productos:', error));
@@ -70,8 +71,8 @@ document.getElementById('producto').addEventListener('input', function () {
 
     const listaFiltrada = productos.filter(producto => {
         // Verifica y convierte `producto.nombre` y `producto.clave` a minúsculas si son cadenas
-        const nombre = typeof producto.nombre === 'string' ? producto.nombre.toLowerCase() : '';
-        const clave = typeof producto.clave === 'string' ? producto.clave.toLowerCase() : '';
+        const nombre = typeof producto.name === 'string' ? producto.name.toLowerCase() : '';
+        const clave = typeof producto.reference === 'string' ? producto.reference.toLowerCase() : '';
 
         return nombre.includes(valorInput) || clave.includes(valorInput);
     });
@@ -82,7 +83,7 @@ document.getElementById('producto').addEventListener('input', function () {
         const elementoSugerencia = document.createElement('div');
         elementoSugerencia.classList.add('sugerencia');
         // Mostrar tanto el nombre como la clave del producto
-        elementoSugerencia.textContent = `${producto.nombre} (${producto.clave})`;
+        elementoSugerencia.textContent = `${producto.name} (${producto.reference})`;
         elementoSugerencia.dataset.index = index;
         elementoSugerencia.addEventListener('click', function () {
             seleccionarProducto(producto);
@@ -109,7 +110,7 @@ document.getElementById('producto').addEventListener('keydown', function (event)
     } else if (event.key === 'Enter') {
         event.preventDefault();
         if (indexSugerencia >= 0 && indexSugerencia < sugerencias.length) {
-            const productoSeleccionado = productos.find(p => p.nombre === sugerencias[indexSugerencia].textContent.split(' (')[0]);
+            const productoSeleccionado = productos.find(p => p.name === sugerencias[indexSugerencia].textContent.split(' (')[0]);
             if (productoSeleccionado) {
                 seleccionarProducto(productoSeleccionado);
                 agregarProducto(); // Asegúrate de que se llame a la función de agregar producto
@@ -138,16 +139,19 @@ function actualizarSugerencias() {
 
 // Seleccionar un producto de la lista de sugerencias
 function seleccionarProducto(producto) {
-    document.getElementById('producto').value = producto.nombre;
+    document.getElementById('producto').value = producto.name;
     document.getElementById('sugerencias').innerHTML = ''; // Limpiar sugerencias después de seleccionar
     document.getElementById('producto').focus(); // Regresar al input de búsqueda
 }
-//agregar producto
+
+let productosEnVenta = []; // Arreglo para almacenar productos seleccionados
+
+
 function agregarProducto() {
     const inputProducto = document.getElementById('producto');
     const inputCantidad = document.getElementById('cantidad');
 
-    const productoSeleccionado = productos.find(p => p.nombre === inputProducto.value);
+    const productoSeleccionado = productos.find(p => p.name === inputProducto.value);
     const cantidad = parseInt(inputCantidad.value);
 
     if (!productoSeleccionado || cantidad <= 0) {
@@ -165,15 +169,23 @@ function agregarProducto() {
 
     filas.forEach(fila => {
         const nombreProducto = fila.children[0].textContent;
-        if (nombreProducto === productoSeleccionado.nombre) {
+        if (nombreProducto === productoSeleccionado.name) {
             // Producto ya está en la tabla, actualizar cantidad
             const cantidadActual = parseInt(fila.querySelector('.cantidad').value);
             const nuevaCantidad = cantidadActual + cantidad;
             fila.querySelector('.cantidad').value = nuevaCantidad;
 
-            // Disparar el evento de 'input' para actualizar el precio y total
-            const inputEvent = new Event('input', { bubbles: true });
-            fila.querySelector('.cantidad').dispatchEvent(inputEvent);
+            // Actualizar el total de la fila
+            const precio = parseFloat(fila.querySelector('.precio').value);
+            const total = nuevaCantidad * precio;
+            fila.querySelector('.total').textContent = `$${total.toFixed(2)}`;
+
+            // Actualizar el objeto en el arreglo productosEnVenta
+            const index = productosEnVenta.findIndex(p => p.name === productoSeleccionado.name);
+            if (index !== -1) {
+                productosEnVenta[index].cantidad = nuevaCantidad;
+                productosEnVenta[index].total = total;
+            }
 
             productoExistente = true;
         }
@@ -182,13 +194,13 @@ function agregarProducto() {
     // Si el producto no existe en la tabla, agregar una nueva fila
     if (!productoExistente) {
         // Seleccionar el precio basado en la cantidad
-        let precio = parseFloat(productoSeleccionado.precio1); // Precio predeterminado para 1 artículo
+        let precio = parseFloat(productoSeleccionado.datosFinancieros.precio1); // Precio predeterminado para 1 artículo
 
         for (let i = 1; i <= 10; i++) {
-            const rangoInicial = productoSeleccionado[`rangoInicial${i}`];
-            const rangoFinal = productoSeleccionado[`rangoFinal${i}`];
+            const rangoInicial = productoSeleccionado.datosFinancieros[`rangoInicial${i}`];
+            const rangoFinal = productoSeleccionado.datosFinancieros[`rangoFinal${i}`];
             if (cantidad >= rangoInicial && cantidad <= rangoFinal) {
-                precio = parseFloat(productoSeleccionado[`precio${i}`]) || precio;
+                precio = parseFloat(productoSeleccionado.datosFinancieros[`precio${i}`]) || precio;
                 break;
             }
         }
@@ -196,27 +208,34 @@ function agregarProducto() {
         const total = cantidad * precio;
         const nuevaFila = document.createElement('tr');
         nuevaFila.innerHTML = `
-            <td>${productoSeleccionado.nombre}</td>
+            <td>${productoSeleccionado.name}</td>
             <td style="width: 250px;">
                 <div style="display: flex; flex-wrap: wrap; font-size: 0.8rem; gap: 0;">
-                    ${[...Array(4).keys()].map(i => `
-                        ${productoSeleccionado[`rangoInicial${i + 1}`] !== undefined ? `
+                    ${[...Array(4).keys()].map(i => ` 
+                        ${productoSeleccionado.datosFinancieros[`rangoInicial${i + 1}`] !== undefined ? `
                             <div style="flex: 1 0 50%; padding: 0.2rem; box-sizing: border-box; border-bottom: 1px solid #ddd;">
-                                Mas de ${productoSeleccionado[`rangoInicial${i + 1}`] === 0 ? 1 : productoSeleccionado[`rangoInicial${i + 1}`]} = 
-                                <strong> ${productoSeleccionado[`precio${i + 1}`]} </strong>
+                                Más de ${productoSeleccionado.datosFinancieros[`rangoInicial${i + 1}`] === 0 ? 1 : productoSeleccionado.datosFinancieros[`rangoInicial${i + 1}`]} = 
+                                <strong>${productoSeleccionado.datosFinancieros[`precio${i + 1}`]}</strong>
                             </div>
                         ` : ''}`).join('')}
                 </div>
             </td>
-
             <td><input type="number" class="form-control precio" value="${precio.toFixed(2)}" step="0.01"></td>
             <td><input type="number" class="form-control cantidad" value="${cantidad}" step="1"></td>
             <td class="total">$${total.toFixed(2)}</td>
             <td><button class="btn btn-warning btn-sm eliminarProducto">Eliminar</button></td>
         `;
 
-
         document.getElementById('productos').appendChild(nuevaFila);
+
+        // Agregar producto al arreglo productosEnVenta
+        productosEnVenta.push({
+            _id: productoSeleccionado._id,
+            nombre: productoSeleccionado.name,
+            cantidad,
+            precio,
+            total
+        });
     }
 
     // Actualizar el total de productos y el total de la venta
@@ -227,42 +246,24 @@ function agregarProducto() {
     inputCantidad.value = '';
     inputCantidad.focus(); // Regresar al input de búsqueda
 }
+// Actualizar el resumen de la venta
+function actualizarResumenVenta() {
+    const filas = document.querySelectorAll('#productos tr');
+    let totalProductos = 0;
+    let totalVenta = 0;
 
-// Manejo de cambios en precios y cantidades
-document.getElementById('productos').addEventListener('input', (event) => {
-    if (event.target.classList.contains('cantidad') || event.target.classList.contains('precio')) {
-        const fila = event.target.closest('tr');
+    filas.forEach(fila => {
         const cantidad = parseInt(fila.querySelector('.cantidad').value);
-        const precioInput = fila.querySelector('.precio');
-        let precio = parseFloat(precioInput.value);
+        const total = parseFloat(fila.querySelector('.total').textContent.replace('$', ''));
+        totalProductos += cantidad;
+        totalVenta += total;
+    });
 
-        // Obtener el producto correspondiente basado en el nombre
-        const productoNombre = fila.children[0].textContent;
-        const producto = productos.find(p => p.nombre === productoNombre);
+    document.getElementById('totalProductos').textContent = totalProductos;
+    document.getElementById('totalVenta').textContent = totalVenta.toFixed(2);
+}
 
-        if (producto) {
-            // Actualizar el precio basado en el rango de la cantidad
-            if (event.target.classList.contains('cantidad')) {
-                for (let i = 1; i <= 10; i++) {
-                    const rangoInicial = producto[`rangoInicial${i}`];
-                    const rangoFinal = producto[`rangoFinal${i}`];
-                    if (cantidad >= rangoInicial && cantidad <= rangoFinal) {
-                        precio = parseFloat(producto[`precio${i}`]) || precio;
-                        break;
-                    }
-                }
-                precioInput.value = precio.toFixed(2);
-            }
 
-            // Calcular el total de la fila basado en la cantidad y el precio actualizado
-            const total = cantidad * precio;
-            fila.querySelector('.total').textContent = `$${total.toFixed(2)}`;
-        }
-
-        // Actualizar el resumen de la venta
-        actualizarResumenVenta();
-    }
-});
 
 
 // Manejo del clic en el botón de agregar producto
@@ -289,38 +290,76 @@ document.addEventListener('keydown', (event) => {
 
 // Manejo del clic en el botón de completar venta
 document.getElementById('completarVenta').addEventListener('click', () => {
-    const modalPago = new mdb.Modal(document.getElementById('modalPago'));
     let totalVenta = parseFloat(document.getElementById('totalVenta').textContent)
     document.getElementById('totalAPagar').value = totalVenta
     verificarFactura()
     modalPago.show()
-    //completarVenta();
 });
 
-// Actualizar el resumen de la venta
-function actualizarResumenVenta() {
-    const filas = document.querySelectorAll('#productos tr');
-    let totalProductos = 0;
-    let totalVenta = 0;
+// Manejo de cambios en precios y cantidades
+document.getElementById('productos').addEventListener('input', (event) => {
+    if (event.target.classList.contains('cantidad') || event.target.classList.contains('precio')) {
+        const fila = event.target.closest('tr');
+        const cantidad = parseInt(fila.querySelector('.cantidad').value) || 0;
+        const precioInput = fila.querySelector('.precio');
+        let precio = parseFloat(precioInput.value) || 0;
 
-    filas.forEach(fila => {
-        const cantidad = parseInt(fila.querySelector('.cantidad').value);
-        const total = parseFloat(fila.querySelector('.total').textContent.replace('$', ''));
-        totalProductos += cantidad;
-        totalVenta += total;
-    });
+        // Obtener el nombre del producto y buscar el producto en el arreglo
+        const productoNombre = fila.children[0].textContent;
+        const producto = productos.find(p => p.name === productoNombre);
 
-    document.getElementById('totalProductos').textContent = totalProductos;
-    document.getElementById('totalVenta').textContent = totalVenta.toFixed(2);
-}
+        if (producto) {
+            // Actualizar el precio basado en el rango de la cantidad
+            if (event.target.classList.contains('cantidad')) {
+                for (let i = 1; i <= 10; i++) {
+                    const rangoInicial = producto.datosFinancieros[`rangoInicial${i}`];
+                    const rangoFinal = producto.datosFinancieros[`rangoFinal${i}`];
+                    if (cantidad >= rangoInicial && cantidad <= rangoFinal) {
+                        precio = parseFloat(producto.datosFinancieros[`precio${i}`]) || precio;
+                        break;
+                    }
+                }
+                precioInput.value = precio.toFixed(2);
+            }
+
+            // Calcular el total de la fila basado en la cantidad y el precio actualizado
+            const total = cantidad * precio;
+            fila.querySelector('.total').textContent = `$${total.toFixed(2)}`;
+            const index = productosEnVenta.findIndex(p => p.nombre === productoNombre);
+            console.log(index)
+            if (index !== -1) {
+                productosEnVenta[index] = {
+                    ...productosEnVenta[index],
+                    cantidad,
+                    precio,
+                    total
+                };
+            }
+        }
+
+        // Actualizar el resumen de la venta
+        actualizarResumenVenta();
+    }
+});
+
 
 // Manejo del clic en el botón de eliminar producto
 document.getElementById('productos').addEventListener('click', event => {
     if (event.target.classList.contains('eliminarProducto')) {
-        event.target.closest('tr').remove();
+        const fila = event.target.closest('tr');
+        const productoNombre = fila.children[0].textContent;
+
+        // Eliminar la fila de la tabla
+        fila.remove();
+
+        // Eliminar el producto del arreglo productosEnVenta
+        productosEnVenta = productosEnVenta.filter(p => p.nombre !== productoNombre);
+
+        // Actualizar el resumen de la venta
         actualizarResumenVenta();
     }
 });
+
 
 //cancelar venta con click
 document.getElementById('cancelarVenta').addEventListener('click', () => {
@@ -379,7 +418,47 @@ function confirmarCancelarVenta() {
     });
 }
 
-function completarVenta() {
+function limpiarVenta(){
+    // Limpiar la tabla y el resumen
+    document.getElementById('productos').innerHTML = '';
+    document.getElementById('totalProductos').textContent = '0';
+    document.getElementById('totalVenta').textContent = '0.00';
+    document.getElementById('ventaCliente').textContent = '';
+    document.getElementById('ventaCliente').style.color = 'black';
+    document.getElementById('btnCancelarCliente').style.visibility = 'hidden';
+    document.getElementById('btnCancelarFactura').style.visibility = 'hidden';
+    document.getElementById('monederoCliente').textContent = '';
+
+    if (esFactura == true) {
+        facturarVenta();
+    }
+
+    limpiarCliente();
+    clienteSeleccionado = [];
+
+    // Limpiar los campos de producto y cantidad
+    document.getElementById('producto').value = '';
+    let inputCantidad = document.getElementById('cantidad');
+    inputCantidad.value = '';
+    inputCantidad.focus();
+
+    // Limpiar las formas de pago adicionales (exceptuando la default)
+    const formasDePago = document.querySelectorAll('.formaDePago');
+    formasDePago.forEach((formaDePago, index) => {
+        if (index > 0) { // No elimina la primera forma de pago
+            formaDePago.remove();
+        }
+    });
+
+    // Reiniciar los valores de la forma de pago principal (si es necesario)
+    document.getElementsByClassName('importePago')[0].value = 0;
+    document.getElementsByClassName('cambio')[0].value = 0;
+
+    inputCantidad.focus();  // Volver a enfocar el campo de cantidad
+}
+
+
+function completarVenta(resumenVenta) {
     const filas = document.querySelectorAll('#productos tr');
     if (filas.length === 0) {
         Swal.fire({
@@ -390,43 +469,39 @@ function completarVenta() {
         return;
     }
 
-    
-    const productosVendidos = [];
-    filas.forEach(fila => {
-        const nombre = fila.children[0].textContent;
-        const precio = parseFloat(fila.querySelector('.precio').value);
-        const cantidad = parseInt(fila.querySelector('.cantidad').value);
-        const total = cantidad * precio;
 
-        productosVendidos.push({ nombre, cantidad, precio, total });
-    });
-
-    const venta = {
+    let venta = {
         sucursalId: sucursalInfo._id,
         fecha: new Date().toISOString(),
         direccion: sucursalInfo.datosTicket.direccion,
-        productos: productosVendidos,
+        productos: productosEnVenta,
         totalVenta: parseFloat(document.getElementById('totalVenta').textContent),
         totalProductos: parseInt(document.getElementById('totalProductos').textContent)
     };
 
-    // Enviar los datos al backend
-    fetch('/api/ventas/crear', {
+    const ventaYResumen = {
+        venta,
+        resumenVenta,
+        infoUser
+    };
+
+
+    fetch('/api/ventas', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(venta)
+        body: JSON.stringify(ventaYResumen)
     })
         .then(response => response.json())
         .then(data => {
-            if (data.message === 'Venta guardada exitosamente') {
-                Swal.fire('Venta realizada con éxito!', '', 'success');
-                imprimirTicket(venta); // Imprimir el ticket después de completar la venta
-                cancelarVenta(); // Limpia la venta actual
-            } else {
-                Swal.fire('Error', 'Hubo un problema al completar la venta. Por favor, inténtalo de nuevo.', 'error');
-            }
+            venta = ''
+            productosEnVenta = ''
+            resumenVenta = ''
+
+            console.log(data)
+            modalPago.hide()
+            limpiarVenta()
         })
         .catch(error => {
             console.error('Error al guardar la venta:', error);
@@ -529,6 +604,11 @@ function facturarVenta() {
     
 
 }
+
+
+
+
+
 // Manejo del clic en el botón de facturar
 document.getElementById('btnFacturar').addEventListener('click', () => {
     user = false;

@@ -122,6 +122,7 @@ function generarResumenVentaJSON() {
     const cfdiSelect = document.getElementById('usoCFDI');
     
     const resumenVenta = {
+        cliente: clienteSeleccionado || '', // Asigna clienteSeleccionado o una cadena vacía si es nulo o indefinido
         totalAPagar: totalAPagar.toFixed(2),
         totalPagado: totalPagado.toFixed(2),
         formasDePago: formasDePagoUtilizadas,
@@ -129,7 +130,7 @@ function generarResumenVentaJSON() {
         cfdiSeleccionado: cfdiSelect ? cfdiSelect.value : '' // CFDI seleccionado
     };
 
-    console.log('Resumen de la Venta:', JSON.stringify(resumenVenta, null, 2));
+    completarVenta(resumenVenta);
 
     // Mensaje de éxito si el pago cubre el total
     Swal.fire({
