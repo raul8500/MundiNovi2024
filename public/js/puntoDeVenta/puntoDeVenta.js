@@ -338,34 +338,44 @@ function confirmarCancelarVenta() {
         cancelButtonText: 'No, continuar'
     }).then(result => {
         if (result.isConfirmed) {
+            
             // Limpiar la tabla y el resumen
             document.getElementById('productos').innerHTML = '';
             document.getElementById('totalProductos').textContent = '0';
             document.getElementById('totalVenta').textContent = '0.00';
             document.getElementById('ventaCliente').textContent = '';
-            document.getElementById('ventaCliente').style.color = 'black'
+            document.getElementById('ventaCliente').style.color = 'black';
             document.getElementById('btnCancelarCliente').style.visibility = 'hidden';
             document.getElementById('btnCancelarFactura').style.visibility = 'hidden';
-            document.getElementById('monederoCliente').textContent = ''
-            if(esFactura == true){
-                facturarVenta()
+            document.getElementById('monederoCliente').textContent = '';
+
+            if (esFactura == true) {
+                facturarVenta();
             }
-            limpiarCliente()
-            clienteSeleccionado = []
+
+            limpiarCliente();
+            clienteSeleccionado = [];
+
             // Limpiar los campos de producto y cantidad
             document.getElementById('producto').value = '';
             let inputCantidad = document.getElementById('cantidad');
             inputCantidad.value = '';
-            
-            // Enfocar el campo de cantidad
             inputCantidad.focus();
 
-            document.getElementById('selectFormaPago').value = 
-            document.getElementsByClassName('importePago')[0].value = 0;
-            ocument.getElementsByClassName('cambio')[0].value = 0;
+            // Limpiar las formas de pago adicionales (exceptuando la default)
+            const formasDePago = document.querySelectorAll('.formaDePago');
+            formasDePago.forEach((formaDePago, index) => {
+                if (index > 0) { // No elimina la primera forma de pago
+                    formaDePago.remove();
+                }
+            });
 
+            // Reiniciar los valores de la forma de pago principal (si es necesario)
+            document.getElementsByClassName('importePago')[0].value = 0;
+            document.getElementsByClassName('cambio')[0].value = 0;
+
+            inputCantidad.focus();  // Volver a enfocar el campo de cantidad
         }
-        inputCantidad.focus();
     });
 }
 
@@ -531,11 +541,6 @@ document.getElementById('btnSeleccionarUsuario').addEventListener('click', () =>
     modalSelectUser.show()
 });
 
-
-
-
-
-
   // Agregar forma de pago adicional
 document.getElementById('btnAgregarFormaPago').addEventListener('click', function () {
     const formasDePagoContainer = document.getElementById('formasDePago');
@@ -550,6 +555,7 @@ document.getElementById('btnAgregarFormaPago').addEventListener('click', functio
             <option value="efectivo">Efectivo</option>
             <option value="tarjeta">Tarjeta</option>
             <option value="transferencia">Transferencia</option>
+            <option value="monedero">Monedero</option>
         </select>
         </div>
         <div class="col-md-4">
@@ -576,6 +582,17 @@ document.getElementById('btnAgregarFormaPago').addEventListener('click', functio
     //activarFormaPagoTransferencia(); // Activar select de "Forma de Pago"
 });
 
+function activarBotonesEliminar() {
+    const botonesEliminar = document.querySelectorAll('.eliminarFormaPago');
+
+    botonesEliminar.forEach(function (boton) {
+        boton.addEventListener('click', function () {
+        const formaDePago = boton.closest('.formaDePago');
+        formaDePago.remove();
+        calcularCambio(); // Recalcular el cambio al eliminar una forma de pago
+        });
+    });
+}
 //verificar si es factura y cargar los CFDI
 function verificarFactura() {
     const facturaResumenVenta = document.getElementById('facturaResumenVenta').textContent.trim();
@@ -588,18 +605,6 @@ function verificarFactura() {
     }
 }
 
-// Función para activar los botones de eliminar
-function activarBotonesEliminar() {
-const botonesEliminar = document.querySelectorAll('.eliminarFormaPago');
-
-botonesEliminar.forEach(function (boton) {
-    boton.addEventListener('click', function () {
-    const formaDePago = boton.closest('.formaDePago');
-    formaDePago.remove();
-    calcularCambio(); // Recalcular el cambio al eliminar una forma de pago
-    });
-});
-}
 // Activar el cálculo de cambio cuando se ingrese un importe
 function activarCalculoCambio() {
 const inputsImporte = document.querySelectorAll('.importePago');
@@ -652,6 +657,8 @@ selectsFormaPago.forEach(function (select) {
 activarCalculoCambio();
 activarBotonesEliminar();
 //activarFormaPagoTransferencia();
+
+
 
 
 

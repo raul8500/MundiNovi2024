@@ -18,7 +18,7 @@ function filtrarClientes(query) {
     clientesFiltrados = clientes.filter(cliente => {
 
         const nombreValido = cliente.clientData.name && typeof cliente.clientData.name === 'string';
-        const mobileValido = cliente.clientData.mobile && typeof cliente.clientData.mobile === 'string';
+        const mobileValido = cliente.clientData.phonePrimary && typeof cliente.clientData.phonePrimary === 'string';
 
         return (nombreValido && cliente.clientData.name.toLowerCase().includes(query.toLowerCase())) ||
                (mobileValido && cliente.clientData.mobile.includes(query));
@@ -40,7 +40,7 @@ function mostrarResultados(resultados) {
     resultados.forEach((cliente, index) => {
         const li = document.createElement('li');
         li.classList.add('list-group-item');
-        li.textContent = `${cliente.clientData.name} - ${cliente.clientData.mobile || '-No tiene-'}`;
+        li.textContent = `${cliente.clientData.name} - ${cliente.clientData.phonePrimary || '-No tiene-'}`;
         li.setAttribute('data-index', index); // Ahora el data-index corresponde a clientesFiltrados
         li.addEventListener('click', () => seleccionarCliente(clientesFiltrados[index])); // Usar clientesFiltrados
         lista.appendChild(li);
@@ -51,13 +51,13 @@ function mostrarResultados(resultados) {
 
 // Función para seleccionar un cliente
 function seleccionarCliente(cliente) {
-    document.getElementById('inputBuscarCliente').value = `${cliente.clientData.name} - ${cliente.clientData.mobile || 'Sin numero mobile'}`;
+    document.getElementById('inputBuscarCliente').value = `${cliente.clientData.name} - ${cliente.clientData.phonePrimary || 'Sin numero mobile'}`;
     document.getElementById('listaClientes').style.display = 'none';
     indexSeleccionado = -1;  // Resetear el índice seleccionado
 
     // Guardar toda la información del cliente en la variable global
     clienteSeleccionado = cliente;
-
+    document.getElementById('numeroTelefonoCliente').value = cliente.clientData.phonePrimary || '';
     document.getElementById('nombreCliente').value = cliente.clientData.name || '';
     document.getElementById('rfcCliente').value = cliente.clientData.identification || '';
     document.getElementById('regimenFiscalCliente').value = cliente.clientData.regimeObject || '';
@@ -119,19 +119,32 @@ document.getElementById('inputBuscarCliente').addEventListener('input', (e) => {
 cargarClientes();
 
 // Buscar mientras escribes
-document.getElementById('btnSelectUser').addEventListener('click', (e) => {
+document.getElementById('btnSelectUser').addEventListener('click', async (e) => {
+    //esto es de la factura
     if(user == true){
-        Swal.fire({
-            icon: "success",
-            title: "Cliente seleccionado",
-            showConfirmButton: false,
-            timer: 1000
-          });
-        modalSelectUser.hide()
-        document.getElementById('btnCancelarCliente').style.visibility = 'visible';
-        ventaCliente.textContent = clienteSeleccionado.name
-        ventaCliente.style.color = 'green'
-        esFactura = false
+        if(validarGuardado()){
+            Swal.fire({
+                icon: "success",
+                title: "Cliente seleccionado",
+                showConfirmButton: false,
+                timer: 1000
+              });
+            modalSelectUser.hide()
+            document.getElementById('btnCancelarCliente').style.visibility = 'visible';
+            ventaCliente.textContent = clienteSeleccionado.clientData.name
+            ventaCliente.style.color = 'green'
+            esFactura = false
+    
+            console.log(clienteSeleccionado)
+        }else{
+            const result = await Swal.fire({
+                title: '¡Atención!',
+                text: '¿Deseas guardar los cambios realizados en el cliente?',
+                icon: 'warning',
+                showCancelButton: true,  // Muestra botón de cancelar
+                confirmButtonText: 'OK',
+            });
+        }
     }else{
         Swal.fire({
             icon: "success",
@@ -143,7 +156,7 @@ document.getElementById('btnSelectUser').addEventListener('click', (e) => {
         facturarVenta()
         document.getElementById('btnCancelarFactura').style.visibility = 'visible';
         document.getElementById('btnCancelarCliente').style.visibility = 'visible';
-        ventaCliente.textContent = clienteSeleccionado.name
+        ventaCliente.textContent = clienteSeleccionado.clientData.name
         ventaCliente.style.color = 'green'
         
         esFactura = true
@@ -183,4 +196,18 @@ document.getElementById('btnCancelarCliente').addEventListener('click', (e) => {
     document.getElementById('btnCancelarFactura').style.visibility = 'hidden';
     document.getElementById('monederoCliente').textContent = '';
 });
+
+function validarGuardado() {
+    // Obtenemos el valor actual del campo de correo
+    const correoActual = document.getElementById('correoCliente').value;
+    const telefonoActual = document.getElementById('numeroTelefonoCliente').value;
+
+    // Comparamos si el correo actual es diferente del almacenado en el cliente
+    if (clienteSeleccionado.clientData.email == correoActual && clienteSeleccionado.clientData.phonePrimary == telefonoActual) {
+        return true;
+    }else{
+        return false;
+    }
+}
+
 

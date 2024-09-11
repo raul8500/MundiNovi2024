@@ -1,20 +1,17 @@
-guardarNuevaInfoCliente
+// Define la función de guardado por separado
+async function guardarNuevaInfoCliente() {
+    console.log(document.getElementById('regimenFiscalCliente').value);
 
-document.getElementById('guardarNuevaInfoCliente').addEventListener('click', async (e) => {
-
-    console.log(document.getElementById('regimenFiscalCliente').value)
-
-    clienteSeleccionado.phonePrimary = document.getElementById('numeroTelefonoCliente').value
-    clienteSeleccionado.phonePrimary = document.getElementById('numeroTelefonoCliente').value
-    clienteSeleccionado.regime = document.getElementById('regimenFiscalCliente').value
+    clienteSeleccionado.phonePrimary = document.getElementById('numeroTelefonoCliente').value;
+    clienteSeleccionado.regime = document.getElementById('regimenFiscalCliente').value;
     if (!Array.isArray(clienteSeleccionado.regimeObject)) {
         clienteSeleccionado.regimeObject = [];
     }
     clienteSeleccionado.regimeObject[0] = document.getElementById('regimenFiscalCliente').value;
-    clienteSeleccionado.email = document.getElementById('correoCliente').value
+    clienteSeleccionado.email = document.getElementById('correoCliente').value;
 
     try {
-        const response = await fetch('/api/clientesUpdate/puntoVenta/' + clienteSeleccionado.id, {
+        const response = await fetch('/api/clientes/' + clienteSeleccionado.clientData.id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -30,8 +27,10 @@ document.getElementById('guardarNuevaInfoCliente').addEventListener('click', asy
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
             }).then(() => {
-                modalSelectUser.hide()
-                
+                cargarClientes();
+                clienteSeleccionado.clientData.email = document.getElementById('correoCliente').value;
+                clienteSeleccionado.clientData.phonePrimary = document.getElementById('numeroTelefonoCliente').value;
+                const telefonoActual = document.getElementById('numeroTelefonoCliente').value;
             });
 
         } else {
@@ -52,5 +51,8 @@ document.getElementById('guardarNuevaInfoCliente').addEventListener('click', asy
             confirmButtonText: 'Aceptar'
         });
     }
+}
 
-});
+// Asociar la función al evento click
+document.getElementById('guardarNuevaInfoCliente').addEventListener('click', guardarNuevaInfoCliente);
+

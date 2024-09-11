@@ -29,6 +29,14 @@ function mostrarRolUsuario(data) {
     nameRol.textContent = data.name;
     rol.textContent = obtenerNombreRol(data.rol);
     profilePicture.setAttribute("src", `img/profile${data.img}.png`);
+
+    if (infoUser.rol === 1) {
+        const estadisticasMain = document.getElementById('estadisticasMain');
+        if (estadisticasMain) {
+            estadisticasMain.style.visibility = 'visible';
+        }
+    }
+    
 }
 
 function capitalizeWords(str) {

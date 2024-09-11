@@ -147,6 +147,8 @@
                             <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Descuento (F7) <i class="fa-solid fa-tags"></i></button>
                             <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Guardar (F8) <i class="fa-solid fa-floppy-disk"></i></button>
                             <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Precios (F10) <i class="fa-solid fa-barcode"></i></button>
+                            <button type="button" class="btn btn-secondary" data-mdb-ripple-init disabled>Monedero<i class="fa-solid fa-wallet"></i></button>
+
                         </div>
                     </div> 
 
@@ -246,7 +248,11 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="selectUserModalLabel">Seleccionar Usuario</h5>
-                            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                            <!-- Contenedor del botón con `inert` -->
+                            <div id="modalContainer" inert>
+                                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
                         </div>
 
                         <div class="modal-body">
@@ -287,7 +293,7 @@
 
                                 <div class="col-md-4">
                                     <label style="font-weight: 600;" for="regimenFiscalCliente" class="col-form-label">Régimen Fiscal:</label>
-                                    <select class="form-select" id="regimenFiscalCliente">
+                                    <select class="form-select" id="regimenFiscalCliente" disabled>
                                         <option value="">Seleccione un régimen fiscal</option>
                                         <option value="SALARIED_REGIME">Sueldos y Salarios e Ingresos Asimilados a Salarios</option>
                                         <option value="BUSINESS_ACTIVITIES_REGIME">Personas Físicas con Actividades Empresariales y Profesionales</option>
@@ -373,13 +379,17 @@
                 <div class="modal-content">
                     <div class="modal-header">
                     <h5 class="modal-title" id="modalPagoLabel">Realizar Pago</h5>
-                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    <!-- Contenedor del botón con `inert` -->
+                    <div id="modalContainer" inert>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
                     </div>
                     <div class="modal-body">
                     <!-- Información del Total -->
                     <div class="mb-3">
                         <label for="totalAPagar" class="form-label">Total a Pagar</label>
-                        <input type="text" class="form-control" id="totalAPagar" value="1000.00" readonly />
+                        <input type="text" class="form-control" id="totalAPagar" value="0.00" readonly />
                     </div>
             
                     <!-- Select para el Uso de CFDI (visible solo si es venta con factura) -->
@@ -412,8 +422,8 @@
                             <option value="CP01">Pagos</option>
                             <option value="CN01">Nómina</option>
                         </select>
-                        
                     </div>
+                    
             
                     <!-- Contenedor de Formas de Pago -->
                     <div id="formasDePago">
@@ -425,7 +435,7 @@
                                     <option value="efectivo">Efectivo</option>
                                     <option value="tarjeta">Tarjeta</option>
                                     <option value="transferencia">Transferencia</option>
-                                    <option value="transferencia">Monedero</option>
+                                    <option value="monedero">Monedero</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
@@ -450,7 +460,7 @@
             
                     <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="btnRealizarPago">Pagar</button>
+                    <button id="btnPagar" type="button" class="btn btn-primary" id="btnRealizarPago">Pagar</button>
                     </div>
                 </div>
                 </div>
@@ -470,5 +480,6 @@
     <script src="js/puntoDeVenta/puntoDeVenta.js"></script>
     <script src="js/puntoDeVenta/puntoDeVentaClientes.js"></script>
     <script src="js/puntoDeVenta/puntoVentaActualizarDatosCliente.js"></script>
+    <script src="js/puntoDeVenta/puntoDeVentaPagar.js"></script>
 </body>
 </html>
