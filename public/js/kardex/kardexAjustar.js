@@ -70,7 +70,6 @@ if (inputBuscarProductoAjuste && listaProductosAjuste) {
         productoSeleccionadoAjuste = productosAjuste.find(p => p._id === productoId);
 
         if (productoSeleccionadoAjuste) {
-            console.log('Producto seleccionado:', productoSeleccionadoAjuste);
 
             // Muestra el nombre del producto en el input
             inputBuscarProductoAjuste.value = `${productoSeleccionadoAjuste.name} (${productoSeleccionadoAjuste.reference})`;
@@ -145,7 +144,8 @@ if (inputBuscarProductoAjuste && listaProductosAjuste) {
 }
 
 // Manejar el clic en el botón "Guardar Ajuste"
-document.getElementById('btnGuardarAjuste').addEventListener('click', async () => {
+document.getElementById('ajustarKardexGeneral').addEventListener('click', async () => {
+
     const sucursalSelect = document.getElementById('sucursalSelect');
     const cantidadAjuste = document.getElementById('inputCantidadAjuste').value;
     const movimientoAjuste = document.getElementById('inputMovimiento').value;
@@ -171,7 +171,7 @@ document.getElementById('btnGuardarAjuste').addEventListener('click', async () =
     
 
     try {
-        const response = await fetch(urlPostUser, {
+        const response = await fetch('/api/kardex', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

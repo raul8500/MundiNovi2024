@@ -433,3 +433,20 @@ exports.updateClientComplete = async (req, res) => {
     res.status(500).json({ message: 'Error al actualizar el cliente.', error });
   }
 };
+
+exports.getNombreCliente = async (req, res) => {
+  const { id } = req.params;
+
+  console.log(id)
+  
+  try {
+      const cliente = await Client.findById(id).select('clientData');
+      if (!cliente) {
+          return res.status(404).json({ message: 'Cliente no encontrado' });
+      }
+      res.json({ cliente: cliente.clientData.name });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error en el servidor' });
+  }
+};

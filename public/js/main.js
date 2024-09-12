@@ -35,6 +35,7 @@ function mostrarRolUsuario(data) {
         if (estadisticasMain) {
             estadisticasMain.style.visibility = 'visible';
         }
+        mostrarInfoPanel()
     }
     
 }
@@ -118,3 +119,22 @@ function funciones(data) {
     document.getElementById('options').innerHTML = resultados;
 }
 
+
+function mostrarInfoPanel() {
+    fetch('/api/ventasMainInfo')
+        .then(response => response.json())
+        .then(data => {
+            cargarInfoPanel(data);
+        })
+        .catch(error => console.log(error)); // Mover .catch() al final
+}
+
+
+function cargarInfoPanel(data){
+
+    document.getElementById('ingresosDelDia').textContent = '$'+data.totalDinero;
+    document.getElementById('ventasRealizadas').textContent = data.totalVentas;
+    document.getElementById('productosVendidos').textContent = data.totalProductos;
+    document.getElementById('sucursalMasVenta').textContent = data.sucursalQueVendioMas;
+    
+}

@@ -165,6 +165,7 @@ router.post('/api/productos/put', productosController.actualizarProductosConProd
 router.post('/api/productos/id', productosController.actualizarProductosConExcel);
     //ventas
     router.post('/api/ventas', venta.createVenta);
+    router.get('/api/ventas/:sucursal/:fechaInicio/:fechaFin', venta.getVentasPorSucursalYFechas)
 
 
 
@@ -175,13 +176,15 @@ router.get('/api/clientes/:clientDataId', clientes.getClienteByClientDataId);
 router.delete('/api/clientes/:clientDataId', clientes.deleteClienteByClientDataId);
 router.put('/api/clientes/:alegraId', clientes.updateClient);
 router.put('/api/clientesUpdateCompleto/:alegraId', clientes.updateClientComplete);
+router.get('/api/clientesNombre/:id', clientes.getNombreCliente);
+
 
 
 
 
 //chat
 router.delete('/chat', mesaje.chatDelete);
-
+router.get('/api/ventasMainInfo', venta.getVentasDelDia);
 
 //Kardex
 router.post('/api/kardex', kardex.createKardex)

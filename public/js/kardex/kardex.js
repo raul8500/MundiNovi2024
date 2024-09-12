@@ -5,8 +5,6 @@ const itemsPerPageKardex = 30; // Ajusta según tus necesidades
 const maxPageLinksKardex = 5;
 let kardex = [];
 let kardexShow = [];
-let kardexFiltrados = []; // Nueva variable para almacenar kardex filtrado
-
 // Mostrar los datos del Kardex
 const mostrarKardex = (kardex, currentPage, itemsPerPage) => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -84,20 +82,18 @@ function generarNumerosDePaginaKardex() {
     }
 }
 
-function construirQueryString(params) {
-    const queryString = new URLSearchParams(params).toString();
-    return queryString;
+// Cambiar la página actual
+function cambiarPaginaKardex(page) {
+    if (page > 0 && page <= Math.ceil(kardex.length / itemsPerPageKardex)) {
+        currentPageKardex = page;
+        mostrarKardex(kardex, currentPageKardex, itemsPerPageKardex);
+        actualizarControlesPaginacionKardex();
+        generarNumerosDePaginaKardex();
+    }
 }
 
 
-// Función para formatear una fecha al estilo "YYYY-MM-DDTHH:mm:ssZ"
-function formatearFechaISO(fecha) {
-    const date = new Date(fecha);
-    return date.toISOString();
-}
 
-
-// Cargar los datos del Kardex
 function cargarKardex() {
     const fechaInicio = document.getElementById('fechaInicial').value;
     const fechaFinal = document.getElementById('fechaFinal').value;
@@ -114,7 +110,6 @@ function cargarKardex() {
 
     const queryString = construirQueryString(parametros);
     const urlConParametros = `${urlGetKardex}?${queryString}`;
-    console.log(urlConParametros)
     fetch(urlConParametros, {
         method: 'GET', // Cambia a 'POST' si es necesario
         headers: {
@@ -134,7 +129,6 @@ function cargarKardex() {
             console.error('Datos del Kardex no están en el formato esperado.');
             return;
         }
-        console.log(data)
         kardexShow = data.data;
         kardex = data.data;
         mostrarKardex(kardex, currentPageKardex, itemsPerPageKardex);
@@ -144,40 +138,22 @@ function cargarKardex() {
     .catch((error) => console.error('Error al cargar Kardex:', error));
 }
 
-// Cambiar la página actual
-function cambiarPaginaKardex(page) {
-    if (page > 0 && page <= Math.ceil(kardex.length / itemsPerPageKardex)) {
-        currentPageKardex = page;
-        mostrarKardex(kardex, currentPageKardex, itemsPerPageKardex);
-        actualizarControlesPaginacionKardex();
-        generarNumerosDePaginaKardex();
-    }
+function construirQueryString(params) {
+    const queryString = new URLSearchParams(params).toString();
+    return queryString;
 }
 
-/*
-// Funcionalidad de búsqueda rápida
-document.getElementById('busquedaKardexMain').addEventListener('input', function () {
-    const searchText = this.value.toLowerCase();
 
-    kardexFiltrados = kardex.filter((item) => {
-        const nombre = item.nombre ? item.nombre.toLowerCase() : '';
-        const referencia = item.reference ? item.reference.toLowerCase() : '';
-        return nombre.includes(searchText) || referencia.includes(searchText);
-    });
+// Función para formatear una fecha al estilo "YYYY-MM-DDTHH:mm:ssZ"
+function formatearFechaISO(fecha) {
+    const date = new Date(fecha);
+    return date.toISOString();
+}
 
-    currentPageKardex = 1; // Reinicia a la primera página
-    mostrarKardex(kardexFiltrados, currentPageKardex, itemsPerPageKardex);
-    actualizarControlesPaginacionKardex();
-    generarNumerosDePaginaKardex();
-});
-*/
 
-// Asignar evento al botón
+
 document.getElementById('btnCargarKardex').addEventListener('click', cargarKardex);
 
-// Cargar Kardex al iniciar
-// Puedes comentar esta línea si no quieres que se cargue al inicio
-// cargarKardex(); 
 document.getElementById('btnImprimirKardex').addEventListener('click', printTable);
 
 function printTable() {

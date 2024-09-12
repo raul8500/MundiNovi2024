@@ -1,12 +1,52 @@
 const Venta = require('../../schemas/venta/ventaSchema');
 const Kardex = require('../../schemas/kardexSchema/kardexSchema'); // Asegúrate de ajustar la ruta según tu estructura
 const Producto = require('../../schemas/productosSchema/productosSchema'); // Asegúrate de ajustar la ruta según tu estructura
+const Client = require('../../schemas/clientesSchema/clientesSchema'); // Ajusta la ruta según tu estructura
+
+
+exports.getVentasPorSucursalYFechas = async (req, res) => {
+  try {
+    const { sucursal, fechaInicio, fechaFin } = req.params;
+
+    // Validar fechas
+    if (!fechaInicio || !fechaFin) {
+      return res.status(400).json({ error: 'Fecha de inicio y fecha final son requeridas.' });
+    }
+
+    const fechaInicioDate = new Date(fechaInicio);
+    const fechaFinDate = new Date(fechaFin);
+
+    if (isNaN(fechaInicioDate.getTime()) || isNaN(fechaFinDate.getTime())) {
+      return res.status(400).json({ error: 'Fecha de inicio o fecha final inválida.' });
+    }
+
+    fechaInicioDate.setUTCHours(0);
+    fechaFinDate.setUTCHours(23, 59, 59);
+
+    const query = {
+      fecha: {
+        $gte: fechaInicioDate.toISOString(),
+        $lte: fechaFinDate.toISOString(),
+      },
+      ...(sucursal && { sucursal }),
+    };
+    
+
+    const ventas = await Venta.find(query)
+      .populate('sucursal', 'nombre')
+      .sort({ fecha: -1 });
+
+    res.status(200).json({ data: ventas });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener las ventas.' });
+  }
+};
 
 // Función para generar un folio único de 7 dígitos
 const generateFolio = () => {
     return String(Math.floor(1000000 + Math.random() * 9000000)); // Genera un número aleatorio de 7 dígitos
 };
-
 
 exports.createVenta = async (req, res) => {
     try {
@@ -113,5 +153,68 @@ exports.createVenta = async (req, res) => {
         res.status(500).json({ error: 'Error general en la creación de la venta' });
     }
 };
+
+
+exports.getVentasDelDia = async (req, res) => {
+  try {
+    // Obtener la fecha actual (solo día)
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00 para iniciar el día
+
+    const mañana = new Date(hoy);
+    mañana.setDate(hoy.getDate() + 1); // Establecer la fecha límite para el final del día (23:59:59)
+
+    // Buscar todas las ventas realizadas hoy
+    const ventas = await Venta.find({
+      fecha: { $gte: hoy, $lt: mañana }
+    }).populate('sucursal');
+
+    // Inicializar acumuladores
+    let totalVentas = 0;
+    let totalDinero = 0;
+    let totalProductos = 0;
+    let sucursalesVentas = {};
+
+    // Procesar las ventas
+    ventas.forEach(venta => {
+      totalVentas++;
+      totalDinero += venta.totalVenta;
+      totalProductos += venta.totalProductos;
+
+      // Contabilizar las ventas por sucursal
+      const sucursalId = venta.sucursal._id;
+      if (!sucursalesVentas[sucursalId]) {
+        sucursalesVentas[sucursalId] = {
+          nombre: venta.sucursal.nombre,
+          totalVentasSucursal: 0,
+          totalDineroSucursal: 0
+        };
+      }
+      sucursalesVentas[sucursalId].totalVentasSucursal += venta.totalProductos;
+      sucursalesVentas[sucursalId].totalDineroSucursal += venta.totalVenta;
+    });
+
+    // Determinar la sucursal que vendió más
+    let sucursalTop = null;
+    Object.keys(sucursalesVentas).forEach(sucursalId => {
+      if (!sucursalTop || sucursalesVentas[sucursalId].totalDineroSucursal > sucursalesVentas[sucursalTop].totalDineroSucursal) {
+        sucursalTop = sucursalId;
+      }
+    });
+
+    // Responder con los datos agregados
+    res.status(200).json({
+      totalVentas,
+      totalDinero,
+      totalProductos,
+      sucursalQueVendioMas: sucursalTop ? sucursalesVentas[sucursalTop].nombre : null
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener las ventas del día' });
+  }
+};
+
 
 

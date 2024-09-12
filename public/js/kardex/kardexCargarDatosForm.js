@@ -114,7 +114,6 @@ if (inputBusqueda && listaProductos) {
         productoSeleccionado = productos.find(p => p._id === productoId);
 
         if (productoSeleccionado) {
-            console.log('Producto seleccionado:', productoSeleccionado);
 
             // Muestra el nombre del producto en el input
             inputBusqueda.value = `${productoSeleccionado.name} (${productoSeleccionado.reference})`;
