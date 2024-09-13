@@ -1,54 +1,4 @@
 
-document.getElementById('btnCargarVenta').addEventListener('click', cargarKardex);
-
-// Cargar los datos del Kardex
-function cargarKardex() {
-    let fechaInicio = document.getElementById('fechaInicial').value;
-    let fechaFin = document.getElementById('fechaFinal').value;
-    let sucursal = document.getElementById('sucursal').value;
-
-    fechaInicio = convertirFecha(fechaInicio)
-    fechaFin = convertirFecha(fechaFin)
-
-    fetch(`/api/ventas/${sucursal}/${fechaInicio}/${fechaFin}`, {
-        method: 'GET', // Cambia a 'POST' si es necesario
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error(`Error en la solicitud: ${response.statusText}`);
-
-        }
-        return response.json();
-
-    })
-    .then((data) => {
-        ventasShow = data.data;
-        ventas = data.data;
-        mostrarVentas(ventas, currentPageVentas, itemsPerPageVentas);
-        actualizarControlesPaginacionVentas();
-        generarNumerosDePaginaVentas();
-    })
-    .catch((error) => console.error('Error al cargar Kardex:', error));
-
-}
-
-function convertirFecha(fecha) {
-    // Convertir la fecha en un objeto Date
-    const [ano, mes, dia] = fecha.split('-');
-    const fechaObj = new Date(ano, mes - 1, dia); // Mes es 0-indexado en Date
-  
-    // Obtener el mes, día y año
-    const mesFormateado = String(fechaObj.getMonth() + 1).padStart(2, '0'); // Mes es 0-indexado
-    const diaFormateado = String(fechaObj.getDate()).padStart(2, '0');
-    const anoFormateado = fechaObj.getFullYear();
-  
-    // Formatear la fecha en mm/dd/aaaa
-    return `${mesFormateado}-${diaFormateado}-${anoFormateado}`;
-}
-
 
 const contenedorVentas = document.getElementById('ventasData');
 let currentPageVentas = 1;
@@ -80,9 +30,10 @@ const mostrarVentas = async (ventas, currentPage, itemsPerPage) => {
 
     // Procesar cada venta
     for (const item of ventas.slice(startIndex, endIndex)) {
-        const tipoVentaBadge = item.tipoVenta
-            ? '<span class="badge bg-success">Con Factura</span>'
-            : '<span class="badge bg-danger">Sin Factura</span>';
+        const tipoVentaBadge = item.tipoVenta === 'true'
+        ? '<span class="badge bg-success rounded-pill d-inline">Con Factura</span>'
+        : '<span class="badge bg-warning rounded-pill d-inline">Sin Factura</span>';
+
 
         // Cargar el nombre del cliente
         let nombreCliente = 'Público General'; // Valor por defecto
@@ -102,10 +53,11 @@ const mostrarVentas = async (ventas, currentPage, itemsPerPage) => {
                 <td class="text-center">${tipoVentaBadge}</td>
                 <td class="text-center">${nombreCliente}</td>
                 <td class="text-center">$${item.totalVenta}</td>
+                <td class="text-center">${item.formasDePago[0].tipo}</td>
                 <td class="text-center">${new Date(item.fecha).toLocaleDateString()}</td>
                 <td class="text-center">
-                    <button id="${item._id}" type="button" class="btn btn-primary btn-rounded btnEditVenta" disabled>
-                        <i class="fa-solid fa-pen-to-square"></i>
+                    <button id="${item._id}" type="button" class="btn btn-primary btn-rounded btnVerVenta" >
+                        <i class="fa-solid fa-eye"></i>
                     </button>
                     <button id="${item._id}" type="button" class="btn btn-danger btn-rounded btnDeleteVenta" disabled>
                         <i class="fa-solid fa-trash"></i>
@@ -171,4 +123,57 @@ function cambiarPaginaVentas(page) {
         actualizarControlesPaginacionVentas();
         generarNumerosDePaginaVentas();
     }
+}
+
+
+document.getElementById('btnCargarVenta').addEventListener('click', cargarVenta);
+
+// Cargar los datos del Kardex
+function cargarVenta() {
+    let fechaInicio = document.getElementById('fechaInicial').value;
+    let fechaFin = document.getElementById('fechaFinal').value;
+    let sucursal = document.getElementById('sucursal').value;
+
+    fechaInicio = convertirFecha(fechaInicio)
+    fechaFin = convertirFecha(fechaFin)
+
+
+
+    fetch(`/api/ventas/${sucursal}/${fechaInicio}/${fechaFin}`, {
+        method: 'GET', // Cambia a 'POST' si es necesario
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.statusText}`);
+
+        }
+        return response.json();
+
+    })
+    .then((data) => {
+        ventasShow = data.data;
+        ventas = data.data;
+        mostrarVentas(ventas, currentPageVentas, itemsPerPageVentas);
+        actualizarControlesPaginacionVentas();
+        generarNumerosDePaginaVentas();
+    })
+    .catch((error) => console.error('Error al cargar Kardex:', error));
+
+}
+
+function convertirFecha(fecha) {
+    // Convertir la fecha en un objeto Date
+    const [ano, mes, dia] = fecha.split('-');
+    const fechaObj = new Date(ano, mes - 1, dia); // Mes es 0-indexado en Date
+  
+    // Obtener el mes, día y año
+    const mesFormateado = String(fechaObj.getMonth() + 1).padStart(2, '0'); // Mes es 0-indexado
+    const diaFormateado = String(fechaObj.getDate()).padStart(2, '0');
+    const anoFormateado = fechaObj.getFullYear();
+  
+    // Formatear la fecha en mm/dd/aaaa
+    return `${mesFormateado}-${diaFormateado}-${anoFormateado}`;
 }

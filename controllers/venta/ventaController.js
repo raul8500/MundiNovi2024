@@ -2,6 +2,7 @@ const Venta = require('../../schemas/venta/ventaSchema');
 const Kardex = require('../../schemas/kardexSchema/kardexSchema'); // Asegúrate de ajustar la ruta según tu estructura
 const Producto = require('../../schemas/productosSchema/productosSchema'); // Asegúrate de ajustar la ruta según tu estructura
 const Client = require('../../schemas/clientesSchema/clientesSchema'); // Ajusta la ruta según tu estructura
+const mongoose = require('mongoose');
 
 
 exports.getVentasPorSucursalYFechas = async (req, res) => {
@@ -36,6 +37,7 @@ exports.getVentasPorSucursalYFechas = async (req, res) => {
       .populate('sucursal', 'nombre')
       .sort({ fecha: -1 });
 
+    console.log(ventas)
     res.status(200).json({ data: ventas });
   } catch (error) {
     console.error(error);
@@ -49,114 +51,117 @@ const generateFolio = () => {
 };
 
 exports.createVenta = async (req, res) => {
-    try {
-        console.log("Request body:", req.body); // Imprime el cuerpo completo de la solicitud
+  try {
+      console.log("Request body:", req.body);
 
-        const sucursal = req.body.venta.sucursalId;
-        const productos = req.body.venta.productos;
-        const tipoVenta = req.body.resumenVenta.esFactura;
-        const cliente = req.body.resumenVenta.cliente ? req.body.resumenVenta.cliente._id : null;
-        const totalAPagar = req.body.venta.totalVenta;
+      const sucursal = req.body.venta.sucursalId;
+      const productos = req.body.venta.productos;
+      const tipoVenta = req.body.resumenVenta.esFactura;
+      const cliente = req.body.resumenVenta.cliente ? req.body.resumenVenta.cliente._id : null;
+      const totalAPagar = req.body.venta.totalVenta;
+      const formasDePago = req.body.resumenVenta.formasDePago;
 
-        // Inicializar totalVenta y totalProductos
-        let totalVenta = 0;
-        let totalProductos = 0;
+      let totalVenta = 0;
+      let totalProductos = 0;
 
-        // Procesar cada producto en la venta
-        for (const producto of productos) {
-            const { _id, cantidad, precio } = producto;
+      // Array para almacenar los productos con referencia a Kardex
+      const productosConKardex = [];
 
-            try {
-                // Buscar el producto
-                const productoEncontrado = await Producto.findById(_id);
-                if (!productoEncontrado) {
-                    console.error("Producto no encontrado:", _id);
-                    return res.status(404).json({ error: 'Producto no encontrado' });
-                }
+      for (const producto of productos) {
+          const { _id, cantidad, precio } = producto;
 
-                // Calcular el total del producto
-                const totalProducto = cantidad * precio;
-                totalVenta += totalProducto;
-                totalProductos += cantidad;
+          try {
+              const productoEncontrado = await Producto.findById(_id);
+              if (!productoEncontrado) {
+                  console.error("Producto no encontrado:", _id);
+                  return res.status(404).json({ error: 'Producto no encontrado' });
+              }
 
-                try {
-                    // Buscar el último registro del Kardex para el producto
-                    const ultimoKardex = await Kardex.findOne({ reference: productoEncontrado.reference }).sort({ fecha: -1 });
+              const totalProducto = cantidad * precio;
+              totalVenta += totalProducto;
+              totalProductos += cantidad;
 
-                    // Calcular la nueva existencia
-                    let nuevaExistencia;
-                    if (ultimoKardex) {
-                        nuevaExistencia = ultimoKardex.existencia - cantidad;
-                    } else {
-                        nuevaExistencia = -cantidad;
-                    }
+              try {
+                  const ultimoKardex = await Kardex.findOne({ reference: productoEncontrado.reference }).sort({ fecha: -1 });
 
-                    // Crear el registro en Kardex
-                    const folio = generateFolio();
-                    await Kardex.create({
-                        fecha: new Date(),
-                        folio,
-                        usuario: req.body.infoUser._id, // Suponiendo que el usuario está en req.user
-                        movimiento: 'Venta',
-                        sucursal,
-                        reference: productoEncontrado.reference,
-                        nombre: productoEncontrado.name,
-                        cantidad: -cantidad,
-                        costoUnitario: precio,
-                        existencia: nuevaExistencia
-                    });
-                } catch (kardexError) {
-                    console.error("Error al crear el registro en Kardex:", kardexError);
-                    return res.status(500).json({ error: 'Error al crear el registro en Kardex' });
-                }
+                  let nuevaExistencia;
+                  if (ultimoKardex) {
+                      nuevaExistencia = ultimoKardex.existencia - cantidad;
+                  } else {
+                      nuevaExistencia = -cantidad;
+                  }
 
-                // Actualizar la existencia del producto
-                try {
-                    const nuevaExistencia = productoEncontrado.controlAlmacen - cantidad;
-                    await Producto.updateOne(
-                        { _id },
-                        { $set: { controlAlmacen: nuevaExistencia } }
-                    );
-                } catch (updateError) {
-                    console.error("Error al actualizar el inventario del producto:", updateError);
-                    return res.status(500).json({ error: 'Error al actualizar el inventario del producto' });
-                }
-            } catch (productoError) {
-                console.error("Error al procesar el producto:", productoError);
-                return res.status(500).json({ error: 'Error al procesar el producto' });
-            }
-        }
+                  // Generar el folio y crear el registro en Kardex
+                  const folio = generateFolio();
+                  const nuevoKardex = await Kardex.create({
+                      fecha: new Date(),
+                      folio,  // Usamos el folio personalizado
+                      usuario: req.body.infoUser._id,
+                      movimiento: 'Venta',
+                      sucursal,
+                      reference: productoEncontrado.reference,
+                      nombre: productoEncontrado.name,
+                      cantidad: -cantidad,
+                      costoUnitario: precio,
+                      existencia: nuevaExistencia
+                  });
 
-        try {
-            // Crear la venta
-            const nuevaVenta = new Venta({
-                noVenta: generateFolio(), // Asignar un folio único para la venta
-                sucursal,
-                tipoVenta,
-                cliente, // Manejar cliente nulo o vacío
-                totalVenta,
-                totalProductos,
-                productos
-            });
+                  // Actualizar la existencia del producto
+                  await Producto.updateOne(
+                      { _id },
+                      { $set: { controlAlmacen: nuevaExistencia } }
+                  );
 
-            // Guardar la venta
-            const ventaGuardada = await nuevaVenta.save();
-            console.log("Venta guardada correctamente:", ventaGuardada);
+                  // Guardar el folio y el ID del Kardex
+                  productosConKardex.push({
+                      productoId: _id,
+                      cantidad,
+                      precio,
+                      kardexId: nuevoKardex._id,  // Guardar el ObjectId de Kardex
+                      kardexFolio: folio  // Guardar también el folio generado
+                  });
 
-            res.status(201).json({ message: 'Venta creada correctamente', data: ventaGuardada });
-        } catch (ventaError) {
-            console.error("Error al crear la venta:", ventaError);
-            res.status(500).json({ error: 'Error al crear la venta' });
-        }
-    } catch (error) {
-        console.error("Error general en la creación de la venta:", error);
-        res.status(500).json({ error: 'Error general en la creación de la venta' });
-    }
+              } catch (kardexError) {
+                  console.error("Error al crear el registro en Kardex:", kardexError);
+                  return res.status(500).json({ error: 'Error al crear el registro en Kardex' });
+              }
+          } catch (productoError) {
+              console.error("Error al procesar el producto:", productoError);
+              return res.status(500).json({ error: 'Error al procesar el producto' });
+          }
+      }
+
+      try {
+          // Crear la venta con los productos que ahora incluyen el folio y el ObjectId de Kardex
+          const nuevaVenta = new Venta({
+              noVenta: generateFolio(),
+              sucursal,
+              tipoVenta,
+              cliente,
+              totalVenta,
+              totalProductos,
+              productos: productosConKardex, // Usar los productos con el ObjectId y el folio de Kardex
+              formasDePago
+          });
+
+          const ventaGuardada = await nuevaVenta.save();
+          console.log("Venta guardada correctamente:", ventaGuardada);
+
+          res.status(201).json({ message: 'Venta creada correctamente', data: ventaGuardada });
+      } catch (ventaError) {
+          console.error("Error al crear la venta:", ventaError);
+          res.status(500).json({ error: 'Error al crear la venta' });
+      }
+  } catch (error) {
+      console.error("Error general en la creación de la venta:", error);
+      res.status(500).json({ error: 'Error general en la creación de la venta' });
+  }
 };
 
 
 exports.getVentasDelDia = async (req, res) => {
   try {
+
     // Obtener la fecha actual (solo día)
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00 para iniciar el día
@@ -213,6 +218,35 @@ exports.getVentasDelDia = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al obtener las ventas del día' });
+  }
+};
+
+
+exports.getVentaPorId = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validar que el id es un ObjectId válido
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'ID inválido.' });
+    }
+
+    // Buscar la venta por su _id
+    const venta = await Venta.findById(id)
+      .populate('sucursal', 'nombre') // Ajusta según los campos que necesites
+      .populate({
+        path: 'productos',
+      })
+      .exec();
+
+    if (!venta) {
+      return res.status(404).json({ error: 'Venta no encontrada.' });
+    }
+
+    res.status(200).json({ data: venta });
+  } catch (error) {
+    console.error('Error al obtener la venta:', error);
+    res.status(500).json({ error: 'Error al obtener la venta.' });
   }
 };
 

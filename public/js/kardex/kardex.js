@@ -1,32 +1,39 @@
-const urlGetKardex = '/api/kardex'; // Cambia esto a la URL de tu endpoint
+const urlGetKardex = '/api/kardex';
 const contenedorKardex = document.getElementById('kardexData');
 let currentPageKardex = 1;
 const itemsPerPageKardex = 30; // Ajusta según tus necesidades
 const maxPageLinksKardex = 5;
 let kardex = [];
 let kardexShow = [];
-// Mostrar los datos del Kardex
+
+
 const mostrarKardex = (kardex, currentPage, itemsPerPage) => {
+    // Obtener el valor seleccionado del select de movimientos
+    const tipoMovimientoSeleccionado = document.getElementById('tipoMovimiento').value;
+    // Filtrar los productos por movimiento si no es "Todo"
+    const kardexFiltrado = kardex.filter(item => 
+        tipoMovimientoSeleccionado == 'Todo' || item.movimiento == tipoMovimientoSeleccionado
+    );
+
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
+    
+    // Mostrar solo los productos filtrados
     let resultadosKardex = '';
-
-    kardex.slice(startIndex, endIndex).forEach((item) => {
+    kardexFiltrado.slice(startIndex, endIndex).forEach((item) => {
         resultadosKardex += `
             <tr>
                 <td class="text-center">${new Date(item.fecha).toLocaleDateString()}</td>
                 <td class="text-center">${item.folio}</td>
                 <td class="text-center">${item.usuario.username}</td>
                 <td class="text-center">${item.movimiento}</td>
+                <td class="text-center">${item.sucursalDestino ?? ''}</td>
                 <td class="text-center">${item.reference}</td>
                 <td class="text-center">${item.nombre}</td>
                 <td class="text-center">${item.cantidad}</td>
                 <td class="text-center">${item.existencia}</td>
                 <td class="text-center">${item.costoUnitario}</td>
                 <td class="text-center">
-                    <button id="${item._id}" type="button" class="btn btn-primary btn-rounded btnEditKardex">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
                     <button id="${item._id}" type="button" class="btn btn-danger btn-rounded btnDeleteKardex">
                         <i class="fa-solid fa-trash"></i>
                     </button>
@@ -35,26 +42,21 @@ const mostrarKardex = (kardex, currentPage, itemsPerPage) => {
     });
 
     contenedorKardex.innerHTML = resultadosKardex;
+    
+    // Actualizar paginación con los datos filtrados
+    generarNumerosDePaginaKardex(kardexFiltrado.length);
+    actualizarControlesPaginacionKardex(kardexFiltrado.length);
 };
 
-// Actualizar los controles de paginación
-function actualizarControlesPaginacionKardex() {
-    const botonAnterior = document.querySelector('#anteriorKardex');
-    const botonSiguiente = document.querySelector('#siguienteKardex');
+document.getElementById('tipoMovimiento').addEventListener('change', () => {
+    mostrarKardex(kardex, currentPageKardex, itemsPerPageKardex);
+});
 
-    if (botonAnterior && botonSiguiente) {
-        botonAnterior.disabled = currentPageKardex === 1;
-        botonSiguiente.disabled = currentPageKardex === Math.ceil(kardex.length / itemsPerPageKardex);
-    }
-}
-
-// Generar los números de página
-function generarNumerosDePaginaKardex() {
+function generarNumerosDePaginaKardex(totalItems) {
     const paginacionContainer = document.getElementById('paginationKardex');
+    const numeroTotalPaginas = Math.ceil(totalItems / itemsPerPageKardex);
 
     if (paginacionContainer) {
-        const numeroTotalPaginas = Math.ceil(kardex.length / itemsPerPageKardex);
-
         let paginacionHTML = '';
 
         let startPage = Math.max(1, currentPageKardex - Math.floor(maxPageLinksKardex / 2));
@@ -82,6 +84,17 @@ function generarNumerosDePaginaKardex() {
     }
 }
 
+function actualizarControlesPaginacionKardex(totalItems) {
+    const botonAnterior = document.querySelector('#anteriorKardex');
+    const botonSiguiente = document.querySelector('#siguienteKardex');
+    const totalPaginas = Math.ceil(totalItems / itemsPerPageKardex);
+
+    if (botonAnterior && botonSiguiente) {
+        botonAnterior.disabled = currentPageKardex === 1;
+        botonSiguiente.disabled = currentPageKardex === totalPaginas;
+    }
+}
+
 // Cambiar la página actual
 function cambiarPaginaKardex(page) {
     if (page > 0 && page <= Math.ceil(kardex.length / itemsPerPageKardex)) {
@@ -92,8 +105,7 @@ function cambiarPaginaKardex(page) {
     }
 }
 
-
-
+// Función para cargar los datos del Kardex
 function cargarKardex() {
     const fechaInicio = document.getElementById('fechaInicial').value;
     const fechaFinal = document.getElementById('fechaFinal').value;
@@ -106,12 +118,10 @@ function cargarKardex() {
         reference: productoSeleccionado.reference
     };
 
-    
-
     const queryString = construirQueryString(parametros);
     const urlConParametros = `${urlGetKardex}?${queryString}`;
     fetch(urlConParametros, {
-        method: 'GET', // Cambia a 'POST' si es necesario
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
@@ -119,10 +129,8 @@ function cargarKardex() {
     .then((response) => {
         if (!response.ok) {
             throw new Error(`Error en la solicitud: ${response.statusText}`);
-
         }
         return response.json();
-
     })
     .then((data) => {
         if (!Array.isArray(data.data)) {
@@ -132,8 +140,6 @@ function cargarKardex() {
         kardexShow = data.data;
         kardex = data.data;
         mostrarKardex(kardex, currentPageKardex, itemsPerPageKardex);
-        actualizarControlesPaginacionKardex();
-        generarNumerosDePaginaKardex();
     })
     .catch((error) => console.error('Error al cargar Kardex:', error));
 }
@@ -143,13 +149,11 @@ function construirQueryString(params) {
     return queryString;
 }
 
-
 // Función para formatear una fecha al estilo "YYYY-MM-DDTHH:mm:ssZ"
 function formatearFechaISO(fecha) {
     const date = new Date(fecha);
     return date.toISOString();
 }
-
 
 
 document.getElementById('btnCargarKardex').addEventListener('click', cargarKardex);

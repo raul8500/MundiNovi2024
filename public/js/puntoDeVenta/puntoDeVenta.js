@@ -263,9 +263,6 @@ function actualizarResumenVenta() {
     document.getElementById('totalVenta').textContent = totalVenta.toFixed(2);
 }
 
-
-
-
 // Manejo del clic en el botón de agregar producto
 document.getElementById('agregarProducto').addEventListener('click', () => {
     agregarProducto();
@@ -484,6 +481,8 @@ function completarVenta(resumenVenta) {
         resumenVenta,
         infoUser
     };
+
+    console.log(ventaYResumen)
 
 
     fetch('/api/ventas', {

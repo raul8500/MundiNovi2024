@@ -1,7 +1,6 @@
 const modal = new mdb.Modal(document.getElementById('ajustarModal'));
 
 btnAjustarKardex.addEventListener('click', () => {
-    
     modal.show();
 });
 
@@ -148,7 +147,7 @@ document.getElementById('ajustarKardexGeneral').addEventListener('click', async 
 
     const sucursalSelect = document.getElementById('sucursalSelect');
     const cantidadAjuste = document.getElementById('inputCantidadAjuste').value;
-    const movimientoAjuste = document.getElementById('inputMovimiento').value;
+    const movimientoAjuste = document.getElementById('tipoMovimientoAjuste').value;
     if (!productoSeleccionadoAjuste) {
         alert('Por favor, seleccione un producto.');
         return;
@@ -209,4 +208,8 @@ document.getElementById('ajustarKardexGeneral').addEventListener('click', async 
             confirmButtonText: 'Aceptar'
         });
     }
+});
+
+document.getElementById('cerraModalKardexAjuste').addEventListener('click', async () => {
+    modal.hide()
 });

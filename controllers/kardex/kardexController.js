@@ -128,8 +128,6 @@ exports.getAllKardex = async (req, res) => {
             query.reference = reference;
         }
 
-        console.log('Query:', query);
-
         // Buscar los registros en la colección Kardex e incluir datos de usuario y sucursal
         const kardexRegistros = await Kardex.find(query)
             .populate('sucursal', 'nombre') // Obtener el campo 'nombre' de la sucursal
@@ -144,4 +142,28 @@ exports.getAllKardex = async (req, res) => {
     }
 };
 
+exports.deleteKardexById = async (req, res) => {
+  try {
+      const { id } = req.params; // Obtenemos el ID desde los parámetros de la solicitud
+
+      // Validar si el ID es proporcionado
+      if (!id) {
+          return res.status(400).json({ error: 'El ID del Kardex es requerido' });
+      }
+
+      // Eliminar el registro del Kardex
+      const result = await Kardex.findByIdAndDelete(id);
+
+      // Verificar si se encontró y eliminó el registro
+      if (!result) {
+          return res.status(404).json({ error: 'Registro de Kardex no encontrado' });
+      }
+
+      res.status(200).json({ message: 'Registro de Kardex eliminado exitosamente' });
+
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error al eliminar el registro del Kardex' });
+  }
+};
 

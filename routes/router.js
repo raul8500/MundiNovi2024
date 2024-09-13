@@ -166,6 +166,7 @@ router.post('/api/productos/id', productosController.actualizarProductosConExcel
     //ventas
     router.post('/api/ventas', venta.createVenta);
     router.get('/api/ventas/:sucursal/:fechaInicio/:fechaFin', venta.getVentasPorSucursalYFechas)
+    router.get('/api/venta/:id', venta.getVentaPorId)
 
 
 
@@ -189,6 +190,7 @@ router.get('/api/ventasMainInfo', venta.getVentasDelDia);
 //Kardex
 router.post('/api/kardex', kardex.createKardex)
 router.get('/api/kardex', kardex.getAllKardex)
+router.delete('/api/kardex/:id', kardex.deleteKardexById)
 
 
 
