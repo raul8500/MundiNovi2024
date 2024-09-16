@@ -32,10 +32,11 @@ function mostrarRolUsuario(data) {
 
     if (infoUser.rol === 1) {
         const estadisticasMain = document.getElementById('estadisticasMain');
-        if (estadisticasMain) {
+
+        if (estadisticasMain != null) {
             estadisticasMain.style.visibility = 'visible';
+            mostrarInfoPanel()
         }
-        mostrarInfoPanel()
     }
     
 }
@@ -128,7 +129,6 @@ function mostrarInfoPanel() {
         })
         .catch(error => console.log(error)); // Mover .catch() al final
 }
-
 
 function cargarInfoPanel(data){
 
