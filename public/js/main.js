@@ -120,7 +120,6 @@ function funciones(data) {
     document.getElementById('options').innerHTML = resultados;
 }
 
-
 function mostrarInfoPanel() {
     fetch('/api/ventasMainInfo')
         .then(response => response.json())

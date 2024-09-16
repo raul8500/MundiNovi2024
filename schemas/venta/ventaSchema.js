@@ -29,8 +29,3 @@ const ventaSchema = new mongoose.Schema({
 
 
 module.exports = mongoose.model('ventas', ventaSchema);
-
-
-
-
-module.exports = mongoose.model('ventas', ventaSchema);

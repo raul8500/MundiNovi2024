@@ -22,9 +22,9 @@ const grupos = require('../controllers/productos/complementos/grupoController')
 const marca = require('../controllers/productos/complementos/marcaController')
 const linea = require('../controllers/productos/complementos/lineaController')
 const departamento = require('../controllers/productos/complementos/departamentoController')
-const authToken = require('../controllers/pruebas/auth')
 const clientes = require('../controllers/clientes/clientesController')
 const kardex = require('../controllers/kardex/kardexController')
+const proveedor = require('../controllers/proveedor/proveedorController')
 
 
 
@@ -72,6 +72,11 @@ router.get('/kardex', (req, res) => {
 router.get('/ventas', (req, res) => {    
     res.render('Ventas/ventas');
 });
+
+router.get('/proveedor', (req, res) => {    
+    res.render('Proveedor/proveedor');
+});
+
 
 
 
@@ -180,6 +185,12 @@ router.put('/api/clientesUpdateCompleto/:alegraId', clientes.updateClientComplet
 router.get('/api/clientesNombre/:id', clientes.getNombreCliente);
 
 
+//Proveedor
+router.get('/api/proveedor', proveedor.getProveedores)
+router.get('/api/proveedor/:id', proveedor.getProveedorById)
+router.post('/api/proveedor', proveedor.addProveedor)
+router.put('/api/proveedor/:id', proveedor.updateProveedor)
+router.delete('/api/proveedor/:id', proveedor.deleteProveedor)
 
 
 
