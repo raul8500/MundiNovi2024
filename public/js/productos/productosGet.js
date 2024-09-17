@@ -1,156 +1,60 @@
-const urlGetProductos ='/api/productos';
 
-//get usuarios
-const contenedorProductos = document.getElementById('productosData');
-let currentPageProductos = 1;
-const itemsPerPageProductos = 30; // Puedes ajustar este número según tus necesidades
-const maxPageLinksProductos = 5;
-let productos = [];
-let productosShow = [];
-let productosFiltrados = []; // Nueva variable para almacenar productos filtrados
+$(document).ready(function () {
+    $('#tablaProductos').DataTable({
+        ajax: {
+            url: '/api/productos', // URL donde obtienes los datos
+            dataSrc: 'products' 
+        },
+        columns: [
+            { data: 'reference' },
+            {
+                data: 'esActivo',
+                render: function (data, type, row) {
+                    if (data === true) {
+                        return `<span class="badge badge-success rounded-pill d-inline">Activo</span>`;
+                    } else {
+                        return `<span class="badge badge-danger rounded-pill d-inline">Inactivo</span>`;
+                    }
+                }
+            },
+            { data: 'name' },
+            { data: 'datosFinancieros.costo' },
+            { data: 'datosFinancieros.precio1' },
+            { data: 'idAlegra' },
+            {
+                data: null, // Esta columna es para los botones
+                render: function (data, type, row) {
+                    return `
+                        <button class="btn btn-primary btn-editar" data-id="${row._id}" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="btn btn-danger btn-eliminar" data-id="${row._id}" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                    `;
+                },
+                orderable: false, // Desactiva el ordenamiento en esta columna
+                searchable: false // Desactiva la búsqueda en esta columna
+            }
 
-
-const mostrarProductos = (productos, currentPage, itemsPerPage) => {
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  let resultadosProductos = '';
-
-  productos.slice(startIndex, endIndex).forEach((item) => {
-    resultadosProductos += `
-            <tr>
-                <td class="text-center">${item.reference}</td>
-                <td class="text-center">${item.esActivo ? '<span class="badge badge-success rounded-pill d-inline">Activado</span>' : '<span class="badge badge-danger rounded-pill d-inline">Desactivado</span>'}</td>
-                <td class="text-center">${item.name}</td>
-                <td class="text-center">${item.datosFinancieros.costo}</td>
-                <td class="text-center">${item.datosFinancieros.precio1}</td>
-                <td class="text-center">${item.idAlegra}</td>
-                <td class="text-center">
-                
-                    <button id="${
-                      item._id
-                    }" type="button" class="btn btn-primary btn-rounded btnEditProductos ">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-
-                    <button id="${item._id}" 
-                            type="button" 
-                            class="btn ${item.esActivo === true ? 'btn-success' : 'btn-danger'} btn-rounded btnChangeStatus "
-                            data-status="${item.esActivo}">
-                            ${item.esActivo == true ? '<i class="fa-solid fa-toggle-on"></i>' : '<i class="fa-solid fa-toggle-off"></i>'}
-                    </button>
-
-                    <button id="${
-                      item._id
-                    }" type="button" class="btn btn-danger btn-rounded btnDeleteProductos">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-
-                </td>
-            </tr>`;
-  });
-
-  contenedorProductos.innerHTML = resultadosProductos;
-};
-
-function actualizarControlesPaginacionProductos() {
-  const botonAnterior = document.querySelector('#anteriorProductos');
-  const botonSiguiente = document.querySelector('#siguienteProductos');
-
-  if (botonAnterior && botonSiguiente) {
-    botonAnterior.disabled = currentPageProductos === 1;
-    botonSiguiente.disabled =
-      currentPageProductos === Math.ceil(productos.length / itemsPerPageProductos);
-  }
-}
-
-function generarNumerosDePaginaProductos() {
-  const paginacionContainer = document.getElementById('paginationProductos');
-
-  if (paginacionContainer) {
-    const numeroTotalPaginas = Math.ceil(
-      productos.length / itemsPerPageProductos,
-    );
-
-    let paginacionHTML = '';
-
-    let startPage = Math.max(
-      1,
-      currentPageProductos - Math.floor(maxPageLinksProductos / 2),
-    );
-    let endPage = Math.min(
-      numeroTotalPaginas,
-      startPage + maxPageLinksProductos - 1,
-    );
-
-    if (startPage > 1) {
-      paginacionHTML +=
-        '<li class="page-item"><a class="page-link" href="#" onclick="cambiarPaginaProductos(1)">1</a></li>';
-      if (startPage > 2) {
-        paginacionHTML +=
-          '<li class="page-item disabled"><span class="page-link">...</span></li>';
-      }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      paginacionHTML += `<li class="page-item ${
-        i === currentPageProductos ? 'active' : ''
-      }"><a class="page-link" href="#" onclick="cambiarPaginaProductos(${i})">${i}</a></li>`;
-    }
-
-    if (endPage < numeroTotalPaginas) {
-      if (endPage < numeroTotalPaginas - 1) {
-        paginacionHTML +=
-          '<li class="page-item disabled"><span class="page-link">...</span></li>';
-      }
-      paginacionHTML += `<li class="page-item"><a class="page-link" href="#" onclick="cambiarPaginaProductos(${numeroTotalPaginas})">${numeroTotalPaginas}</a></li>`;
-    }
-
-    paginacionContainer.innerHTML = paginacionHTML;
-  }
-}
-
-function cargarProductos() {
-  fetch(urlGetProductos)
-    .then((response) => response.json())
-    .then((data) => {
-      productosShow= data.products;
-      productos = data.products;
-      mostrarProductos(productos, currentPageProductos, itemsPerPageProductos);
-      actualizarControlesPaginacionProductos();
-      generarNumerosDePaginaProductos();
-    })
-    .catch((error) => console.log(error));
-}
-
-function cambiarPaginaProductos(page) {
-  if (page > 0 && page <= Math.ceil(productos.length / itemsPerPageProductos)) {
-    currentPageProductos = page;
-    mostrarProductos(productos, currentPageProductos, itemsPerPageProductos);
-    actualizarControlesPaginacionProductos();
-    generarNumerosDePaginaProductos();
-  }
-}
-
-// Nueva funcionalidad para búsqueda rápida
-document.getElementById('busquedaProductosMain').addEventListener('input', function () {
-  const searchText = this.value.toLowerCase();
-
-  productosFiltrados = productos.filter((producto) => {
-      const name = producto.name ? producto.name.toLowerCase() : '';
-      const codigoBarras = producto.codigoBarras ? producto.codigoBarras : '';
-      const reference = producto.reference ? producto.reference.toLowerCase() : '';
-
-      return name.includes(searchText) || 
-             codigoBarras.includes(searchText) || 
-             reference.includes(searchText);
-  });
-
-  currentPageProductos = 1; // Reinicia a la primera página
-  mostrarProductos(productosFiltrados, currentPageProductos, itemsPerPageProductos);
-  actualizarControlesPaginacionProductos();
-  generarNumerosDePaginaProductos();
+        ],
+        language: {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando 0 a 0 de 0 registros",
+            "sInfoFiltered": "(filtrado de _MAX_ registros totales)",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primera",
+                "sLast": "Última",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": activar para ordenar la columna de manera descendente"
+            }
+        }
+    });
 });
-
-
-
-cargarProductos();

@@ -1,5 +1,6 @@
 const modalProveedorEdit = new mdb.Modal(document.getElementById('modalEditarProveedor'));
 let idEditProveedor = ''
+
 on(document, 'click', '.btn-editar', async e => {
     const button = e.target.closest('.btn-editar'); 
     idEditProveedor = button.getAttribute('data-id');

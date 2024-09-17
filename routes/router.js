@@ -1,10 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const multer = require('multer');
-const path = require('path');
 
 //Imports
-const productosController = require('../controllers/cobroController/cobroController');
 const venta = require('../controllers/venta/ventaController');
 const auth = require('../controllers/auth/auth')
 const mesaje = require('../controllers/chat/chatController')
@@ -125,10 +122,6 @@ router.post('/api/loadProductosFromExcelToBDtoAlegra', productos.createProductFr
 
 router.post('/api/productos', productos.createProduct)
 router.get('/api/productos', productos.getAllProducts)
-router.get('/api/productos/:id', productos.getProductById)
-router.delete('/api/productos/:id', productos.deleteProductById)
-router.put('/api/productos/:id', productos.updateProduct)
-router.put('/api/productosStatus/:id', productos.updateProduct)
 
     //Complementos
         //grupos
@@ -163,11 +156,8 @@ router.put('/api/productosStatus/:id', productos.updateProduct)
     
 
 //Punto de venta
-router.post('/api/productos/load-from-file', productosController.loadProductosFromFile);
-router.get('/api/productos/cobros/load', productosController.getAllProductos);
 router.post('/api/ventas/crear', venta.createVenta);
-router.post('/api/productos/put', productosController.actualizarProductosConProductKey);
-router.post('/api/productos/id', productosController.actualizarProductosConExcel);
+
     //ventas
     router.post('/api/ventas', venta.createVenta);
     router.get('/api/ventas/:sucursal/:fechaInicio/:fechaFin', venta.getVentasPorSucursalYFechas)
