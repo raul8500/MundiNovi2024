@@ -22,7 +22,7 @@ const departamento = require('../controllers/productos/complementos/departamento
 const clientes = require('../controllers/clientes/clientesController')
 const kardex = require('../controllers/kardex/kardexController')
 const proveedor = require('../controllers/proveedor/proveedorController')
-
+const materiasPrimas = require('../controllers/materiaPrima/materiaPrimaController')
 
 
 
@@ -72,6 +72,10 @@ router.get('/ventas', (req, res) => {
 
 router.get('/proveedor', (req, res) => {    
     res.render('Proveedor/proveedor');
+});
+
+router.get('/materiasPrimas', (req, res) => {    
+    res.render('MateriasPrimas/materiasPrimas');
 });
 
 
@@ -182,8 +186,6 @@ router.post('/api/proveedor', proveedor.addProveedor)
 router.put('/api/proveedor/:id', proveedor.updateProveedor)
 router.delete('/api/proveedor/:id', proveedor.deleteProveedor)
 
-
-
 //chat
 router.delete('/chat', mesaje.chatDelete);
 router.get('/api/ventasMainInfo', venta.getVentasDelDia);
@@ -192,6 +194,17 @@ router.get('/api/ventasMainInfo', venta.getVentasDelDia);
 router.post('/api/kardex', kardex.createKardex)
 router.get('/api/kardex', kardex.getAllKardex)
 router.delete('/api/kardex/:id', kardex.deleteKardexById)
+
+
+//materiasPrimas
+router.get('/api/materiasPrimas', materiasPrimas.getMateriasPrimas)
+router.get('/api/materiasPrimas/:id', materiasPrimas.getMateriaPrimaById)
+router.post('/api/materiasPrimas', materiasPrimas.addMateriaPrima)
+router.put('/api/materiasPrimas/:id', materiasPrimas.updateMateriaPrima)
+router.delete('/api/materiasPrimas/:id', materiasPrimas.deleteMateriaPrima)
+
+
+
 
 
 

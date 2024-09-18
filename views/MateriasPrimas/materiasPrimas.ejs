@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mundi Novi 2024</title>
+    <link rel="icon" href="img/logoColor.png" type="image/png">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
+    <style>
+        /* Estilos para la lista desplegable */
+    
+        #sugerencias {
+            position: absolute;
+            border: 1px solid #ddd;
+            background: black;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+    
+        .sugerencia {
+            padding: 10px;
+            cursor: pointer;
+        }
+    
+        .sugerencia.seleccionado {
+            background: #ddd;
+        }
+    
+        .total {
+            font-weight: bold;
+        }
+    
+        /* Estilos para la lista desplegable */
+        #listaProveedor {
+            max-height: 150px; /* Ajusta según sea necesario */
+            overflow-y: auto;
+            position: absolute;
+            background: white; /* Cambié de negro a blanco para una mejor visibilidad */
+            border: 1px solid #ddd;
+            z-index: 1000;
+            width: 50%;
+            display: none;
+        }
+
+        #listaProveedor li {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #listaProveedor li:hover {
+            background-color: #f1f1f1;
+        }
+
+        #listaProveedor li.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        #listaProveedorEdit {
+            background-color: white; /* O el color que prefieras */
+            border: 1px solid #ccc;  /* Opcional: para agregar un borde alrededor de la lista */
+            border-radius: 4px;      /* Opcional: para bordes redondeados */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Opcional: para una sombra sutil */
+            z-index: 1000;           /* Asegúrate de que esté por encima de otros elementos */
+            padding: 0;              /* Asegúrate de que el padding sea 0 si no quieres espacios extras */
+        }
+
+        #listaProveedorEdit li {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        #listaProveedorEdit li.active {
+            background-color: #007bff; /* O el color que prefieras para el ítem activo */
+            color: white;
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+                <!-- Toggle button -->
+                <button data-mdb-collapse-init class="navbar-toggler" type="button"
+                    data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Collapsible wrapper -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Navbar brand -->
+                    <a class="navbar-brand mt-2 mt-lg-0" href="/main">
+                        <img src="img/logoColor.png" height="45" alt="MDB Logo" loading="lazy" />
+                    </a>
+                    <!-- Left links -->
+                    <ul id="options" class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    </ul>
+                    <!-- Left links -->
+                </div>
+                <!-- Collapsible wrapper -->
+
+                <!-- Right elements -->
+                <div class="d-flex align-items-center">
+                    <!-- Avatar -->
+
+                    <div class="info"
+                        style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 10px;">
+                        <span id="name" class="name" style="margin-bottom: -5px; font-weight: 600;">Jesus Aguirre</span>
+                        <span id="rol" class="job" style="margin-top: 0px;">GGeneral</span>
+                    </div>
+
+                    <div class="dropdown">
+                        <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow"
+                            href="#" id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
+                            <img id="profilePicture" src="" class="rounded-circle" height="35"
+                                alt="Black and White Portrait of a Man" loading="lazy" />
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                            <li>
+                                <a class="dropdown-item" href="#">Perfil</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Configuraciones</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/logout">Cerrar sesión</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Right elements -->
+            </div>
+            <!-- Container wrapper -->
+        </nav>
+        <!-- Navbar -->
+    </header>
+
+    
+    <main style="margin-top: 20px">
+        <div class="container pt-4">
+            <h3 class="text-center">Materia prima</h3>
+            <div class="tab-content" id="pills-tabContent2">
+
+                <div class="d-flex justify-content-end " style="margin-top: 20px;">
+
+                    <button id="btnAñadirMateriaPrima" type="button" class="btn btn-primary btn-rounded"
+                        data-mdb-ripple-color="dark" data-mdb-toggle="modal" data-mdb-target="#modalMateriaPrima"
+                        data-mdb-whatever="@mdo">
+                        Añadir <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                    </button>
+
+                </div>
+
+                <div class="table-responsive pt-3">
+                    <table id="tablaMateriasPrimas" class="table align-middle mb-0 bg-white">
+                        <thead class="bg-light">
+                            <tr class="text-center">
+                                <th scope="col">Clave</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Fecha alta</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Costo</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+            <!-- Crear -->
+            <div class="modal fade" id="modalMateriaPrima" tabindex="-1" aria-labelledby="modalMateriaPrimaLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalMateriaPrimaLabel">Capturar Materia Prima</h5>
+                            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Pills tabs -->
+                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="pills-generales-tab" data-bs-toggle="pill"
+                                        href="#pills-generales" role="tab" aria-controls="pills-generales"
+                                        aria-selected="true">Datos Generales</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="pills-financieros-tab" data-bs-toggle="pill" href="#pills-financieros"
+                                        role="tab" aria-controls="pills-financieros" aria-selected="false">Datos Financieros</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="pills-proveedores-tab" data-bs-toggle="pill" href="#pills-proveedores" role="tab"
+                                        aria-controls="pills-proveedores" aria-selected="false">Proveedores</a>
+                                </li>
+                            </ul>
+            
+                            <div class="tab-content" id="pills-tabContent">
+                                <!-- Datos Generales -->
+                                <div class="tab-pane fade show active" id="pills-generales" role="tabpanel"
+                                    aria-labelledby="pills-generales-tab">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="clave" class="form-label">Clave</label>
+                                            <input type="text" class="form-control" id="clave" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="codigoBarras" class="form-label">Código de Barras</label>
+                                            <input type="text" class="form-control" id="codigoBarras" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="nombre" class="form-label">Nombre</label>
+                                            <input type="text" class="form-control" id="nombre" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="descripcion" class="form-label">Descripción</label>
+                                            <textarea class="form-control" id="descripcion" rows="3" required></textarea>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="claveProductoSAT" class="form-label">Clave Producto SAT</label>
+                                            <input type="text" class="form-control" id="claveProductoSAT" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="estado" class="form-label">Estado</label>
+                                            <select class="form-select" id="estado" required>
+                                                <option value="activo">Activo</option>
+                                                <option value="inactivo">Inactivo</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <!-- Datos Financieros -->
+                                <div class="tab-pane fade" id="pills-financieros" role="tabpanel"
+                                    aria-labelledby="pills-financieros-tab">
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="tiempoSurtido" class="form-label">Tiempo de Surtido</label>
+                                            <input type="number" class="form-control" id="tiempoSurtido" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="controlAlmacen" class="form-label">Control Almacén</label>
+                                            <input type="text" class="form-control" id="controlAlmacen" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="volumen" class="form-label">Volumen</label>
+                                            <input type="number" class="form-control" id="volumen" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="peso" class="form-label">Peso</label>
+                                            <input type="number" class="form-control" id="peso" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="stockMinimo" class="form-label">Stock Mínimo</label>
+                                            <input type="number" class="form-control" id="stockMinimo" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="stockMaximo" class="form-label">Stock Máximo</label>
+                                            <input type="number" class="form-control" id="stockMaximo" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="costo" class="form-label">Costo</label>
+                                            <input type="number" class="form-control" id="costo" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="ultimoCosto" class="form-label">Último Costo</label>
+                                            <input type="number" class="form-control" id="ultimoCosto" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="costoPromedio" class="form-label">Costo Promedio</label>
+                                            <input type="number" class="form-control" id="costoPromedio" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="numeroPrecioMinimo" class="form-label">Número Precio Mínimo</label>
+                                            <input type="number" class="form-control" id="numeroPrecioMinimo" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="numeroPrecioMaximo" class="form-label">Número Precio Máximo</label>
+                                            <input type="number" class="form-control" id="numeroPrecioMaximo" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="presentacion" class="form-label">Presentación</label>
+                                            <input type="text" class="form-control" id="presentacion" required>
+                                        </div>
+
+                                    </div>
+
+                                    <hr style="margin: 20px;">
+                                    <h5>Precios</h5>
+            
+                                    <div class="row">
+
+                                        <div class="col-md-3">
+                                            <label for="precio1" class="form-label">Precio 1</label>
+                                            <input type="number" class="form-control" id="precio1">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="porcentajePrecio1" class="form-label">Porcentaje precio 1</label>
+                                            <input type="number" class="form-control" id="porcentajePrecio1">
+                                        </div>
+                                    
+                                        <div class="col-md-3">
+                                            <label for="precio2" class="form-label">Precio 2</label>
+                                            <input type="number" class="form-control" id="precio2">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="porcentajePrecio2" class="form-label">Porcentaje precio 2</label>
+                                            <input type="number" class="form-control" id="porcentajePrecio2">
+                                        </div>
+                                    
+                                        <div class="col-md-3">
+                                            <label for="precio3" class="form-label">Precio 3</label>
+                                            <input type="number" class="form-control" id="precio3">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="porcentajePrecio3" class="form-label">Porcentaje precio 3</label>
+                                            <input type="number" class="form-control" id="porcentajePrecio3">
+                                        </div>
+                                    
+                                        <div class="col-md-3">
+                                            <label for="precio4" class="form-label">Precio 4</label>
+                                            <input type="number" class="form-control" id="precio4">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="porcentajePrecio4" class="form-label">Porcentaje precio 4</label>
+                                            <input type="number" class="form-control" id="porcentajePrecio4">
+                                        </div>
+                                    
+                                        <div class="col-md-3">
+                                            <label for="precio5" class="form-label">Precio 5</label>
+                                            <input type="number" class="form-control" id="precio5">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="porcentajePrecio5" class="form-label">Porcentaje precio 5</label>
+                                            <input type="number" class="form-control" id="porcentajePrecio5">
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label for="precio6" class="form-label">Precio 6</label>
+                                            <input type="number" class="form-control" id="precio6">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="porcentajePrecio6" class="form-label">Porcentaje precio 6</label>
+                                            <input type="number" class="form-control" id="porcentajePrecio6">
+                                        </div>
+                                        
+                                        <div class="col-md-3">
+                                            <label for="precio7" class="form-label">Precio 7</label>
+                                            <input type="number" class="form-control" id="precio7">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="porcentajePrecio7" class="form-label">Porcentaje precio 7</label>
+                                            <input type="number" class="form-control" id="porcentajePrecio7">
+                                        </div>
+                                        
+                                        <div class="col-md-3">
+                                            <label for="precio8" class="form-label">Precio 8</label>
+                                            <input type="number" class="form-control" id="precio8">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="porcentajePrecio8" class="form-label">Porcentaje precio 8</label>
+                                            <input type="number" class="form-control" id="porcentajePrecio8">
+                                        </div>
+                                        
+                                        <div class="col-md-3">
+                                            <label for="precio9" class="form-label">Precio 9</label>
+                                            <input type="number" class="form-control" id="precio9">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="porcentajePrecio9" class="form-label">Porcentaje precio 9</label>
+                                            <input type="number" class="form-control" id="porcentajePrecio9">
+                                        </div>
+                                        
+                                        <div class="col-md-3">
+                                            <label for="precio10" class="form-label">Precio 10</label>
+                                            <input type="number" class="form-control" id="precio10">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="porcentajePrecio10" class="form-label">Porcentaje precio 10</label>
+                                            <input type="number" class="form-control" id="porcentajePrecio10">
+                                        </div>
+                                    </div>
+                                    
+                                    <hr style="margin: 20px;">
+                                    <h5>Rangos</h5>
+
+                                    <div class="row">
+                                        <!-- Rango Inicial 1 y Rango Final 1 -->
+                                        <div class="col-md-3">
+                                            <label for="rangoInicial1" class="form-label">Rango Inicial 1</label>
+                                            <input type="number" class="form-control" id="rangoInicial1">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="rangoFinal1" class="form-label">Rango Final 1</label>
+                                            <input type="number" class="form-control" id="rangoFinal1">
+                                        </div>
+                                    
+                                        <!-- Rango Inicial 2 y Rango Final 2 -->
+                                        <div class="col-md-3">
+                                            <label for="rangoInicial2" class="form-label">Rango Inicial 2</label>
+                                            <input type="number" class="form-control" id="rangoInicial2">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="rangoFinal2" class="form-label">Rango Final 2</label>
+                                            <input type="number" class="form-control" id="rangoFinal2">
+                                        </div>
+                                    
+                                        <!-- Rango Inicial 3 y Rango Final 3 -->
+                                        <div class="col-md-3">
+                                            <label for="rangoInicial3" class="form-label">Rango Inicial 3</label>
+                                            <input type="number" class="form-control" id="rangoInicial3">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="rangoFinal3" class="form-label">Rango Final 3</label>
+                                            <input type="number" class="form-control" id="rangoFinal3">
+                                        </div>
+                                    
+                                        <!-- Rango Inicial 4 y Rango Final 4 -->
+                                        <div class="col-md-3">
+                                            <label for="rangoInicial4" class="form-label">Rango Inicial 4</label>
+                                            <input type="number" class="form-control" id="rangoInicial4">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="rangoFinal4" class="form-label">Rango Final 4</label>
+                                            <input type="number" class="form-control" id="rangoFinal4">
+                                        </div>
+                                    
+                                        <!-- Rango Inicial 5 y Rango Final 5 -->
+                                        <div class="col-md-3">
+                                            <label for="rangoInicial5" class="form-label">Rango Inicial 5</label>
+                                            <input type="number" class="form-control" id="rangoInicial5">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="rangoFinal5" class="form-label">Rango Final 5</label>
+                                            <input type="number" class="form-control" id="rangoFinal5">
+                                        </div>
+
+                                        <!-- Rango Inicial 6 y Rango Final 6 -->
+                                        <div class="col-md-3">
+                                            <label for="rangoInicial6" class="form-label">Rango Inicial 6</label>
+                                            <input type="number" class="form-control" id="rangoInicial6">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="rangoFinal6" class="form-label">Rango Final 6</label>
+                                            <input type="number" class="form-control" id="rangoFinal6">
+                                        </div>
+                                        
+                                        <!-- Rango Inicial 7 y Rango Final 7 -->
+                                        <div class="col-md-3">
+                                            <label for="rangoInicial7" class="form-label">Rango Inicial 7</label>
+                                            <input type="number" class="form-control" id="rangoInicial7">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="rangoFinal7" class="form-label">Rango Final 7</label>
+                                            <input type="number" class="form-control" id="rangoFinal7">
+                                        </div>
+                                        
+                                        <!-- Rango Inicial 8 y Rango Final 8 -->
+                                        <div class="col-md-3">
+                                            <label for="rangoInicial8" class="form-label">Rango Inicial 8</label>
+                                            <input type="number" class="form-control" id="rangoInicial8">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="rangoFinal8" class="form-label">Rango Final 8</label>
+                                            <input type="number" class="form-control" id="rangoFinal8">
+                                        </div>
+                                        
+                                        <!-- Rango Inicial 9 y Rango Final 9 -->
+                                        <div class="col-md-3">
+                                            <label for="rangoInicial9" class="form-label">Rango Inicial 9</label>
+                                            <input type="number" class="form-control" id="rangoInicial9">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="rangoFinal9" class="form-label">Rango Final 9</label>
+                                            <input type="number" class="form-control" id="rangoFinal9">
+                                        </div>
+                                        
+                                        <!-- Rango Inicial 10 y Rango Final 10 -->
+                                        <div class="col-md-3">
+                                            <label for="rangoInicial10" class="form-label">Rango Inicial 10</label>
+                                            <input type="number" class="form-control" id="rangoInicial10">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="rangoFinal10" class="form-label">Rango Final 10</label>
+                                            <input type="number" class="form-control" id="rangoFinal10">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- Datos Proveedores -->
+                                <div class="tab-pane fade" id="pills-proveedores" role="tabpanel" aria-labelledby="pills-proveedores-tab">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <input type="text" id="producto" class="form-control" placeholder="Buscar Proveedores..." autocomplete="off">
+                                            <ul id="listaProveedor" class="list-group mt-2" style="display: none; position: absolute; z-index: 1000;"></ul>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button id="agregarProveedor" class="btn btn-primary w-100">Agregar</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="table-responsive mt-3" style="width: 500px;">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="proveedores">
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
+                            <button type="button" id="btnGuardarMateriaPrima" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Editar-->
+            <div class="modal fade" id="modalMateriaPrimaEdit" tabindex="-1" aria-labelledby="modalMateriaPrimaLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalMateriaPrimaLabel">Capturar Materia Prima</h5>
+                            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Pills tabs -->
+                            <ul class="nav nav-pills mb-3" id="pills-tab2" role="tablist">
+
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="pills-generalesEdit-tab" data-bs-toggle="pill"
+                                        href="#pills-generalesEdit" role="tab" aria-controls="pills-generalesEdit"
+                                        aria-selected="true">Datos Generales</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="pills-financierosEdit-tab" data-bs-toggle="pill" href="#pills-financierosEdit"
+                                        role="tab" aria-controls="pills-financierosEdit" aria-selected="false">Datos Financieros</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="pills-proveedoresEdit-tab" data-bs-toggle="pill" href="#pills-proveedoresEdit"
+                                        role="tab" aria-controls="pills-proveedoresEdit" aria-selected="false">Proveedores</a>
+                                </li>
+                            </ul>
+            
+                            <div class="tab-content" id="pills-tabContent">
+                                <!-- Datos Generales -->
+                                <div class="tab-pane fade show active" id="pills-generalesEdit" role="tabpanel"
+                                    aria-labelledby="pills-generales-tab">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="editClave" class="form-label">Clave</label>
+                                            <input type="text" class="form-control" id="editClave" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editCodigoBarras" class="form-label">Código de Barras</label>
+                                            <input type="text" class="form-control" id="editCodigoBarras" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editNombre" class="form-label">Nombre</label>
+                                            <input type="text" class="form-control" id="editNombre" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editDescripcion" class="form-label">Descripción</label>
+                                            <textarea class="form-control" id="editDescripcion" rows="3" required></textarea>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editClaveProductoSAT" class="form-label">Clave Producto SAT</label>
+                                            <input type="text" class="form-control" id="editClaveProductoSAT" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editEstado" class="form-label">Estado</label>
+                                            <select class="form-select" id="editEstado" required>
+                                                <option value="activo">Activo</option>
+                                                <option value="inactivo">Inactivo</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+            
+                                <!-- Datos Financieros -->
+                                <div class="tab-pane fade" id="pills-financierosEdit" role="tabpanel" aria-labelledby="pills-financieros-tab">
+                                
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="editTiempoSurtido" class="form-label">Tiempo de Surtido</label>
+                                            <input type="number" class="form-control" id="editTiempoSurtido" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editControlAlmacen" class="form-label">Control Almacén</label>
+                                            <input type="text" class="form-control" id="editControlAlmacen" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editVolumen" class="form-label">Volumen</label>
+                                            <input type="number" class="form-control" id="editVolumen" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editPeso" class="form-label">Peso</label>
+                                            <input type="number" class="form-control" id="editPeso" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editStockMinimo" class="form-label">Stock Mínimo</label>
+                                            <input type="number" class="form-control" id="editStockMinimo" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editStockMaximo" class="form-label">Stock Máximo</label>
+                                            <input type="number" class="form-control" id="editStockMaximo" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editCosto" class="form-label">Costo</label>
+                                            <input type="number" class="form-control" id="editCosto" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editUltimoCosto" class="form-label">Último Costo</label>
+                                            <input type="number" class="form-control" id="editUltimoCosto" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editCostoPromedio" class="form-label">Costo Promedio</label>
+                                            <input type="number" class="form-control" id="editCostoPromedio" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editNumeroPrecioMinimo" class="form-label">Número Precio Mínimo</label>
+                                            <input type="number" class="form-control" id="editNumeroPrecioMinimo" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editNumeroPrecioMaximo" class="form-label">Número Precio Máximo</label>
+                                            <input type="number" class="form-control" id="editNumeroPrecioMaximo" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="editPresentacion" class="form-label">Presentación</label>
+                                            <input type="text" class="form-control" id="editPresentacion" required>
+                                        </div>
+                                    </div>
+                                
+                                    <hr style="margin: 20px;">
+                                    <h5>Precios</h5>
+                                
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for="editPrecio1" class="form-label">Precio 1</label>
+                                            <input type="number" class="form-control" id="editPrecio1">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editPorcentajePrecio1" class="form-label">Porcentaje precio 1</label>
+                                            <input type="number" class="form-control" id="editPorcentajePrecio1">
+                                        </div>
+                                
+                                        <div class="col-md-3">
+                                            <label for="editPrecio2" class="form-label">Precio 2</label>
+                                            <input type="number" class="form-control" id="editPrecio2">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editPorcentajePrecio2" class="form-label">Porcentaje precio 2</label>
+                                            <input type="number" class="form-control" id="editPorcentajePrecio2">
+                                        </div>
+                                
+                                        <div class="col-md-3">
+                                            <label for="editPrecio3" class="form-label">Precio 3</label>
+                                            <input type="number" class="form-control" id="editPrecio3">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editPorcentajePrecio3" class="form-label">Porcentaje precio 3</label>
+                                            <input type="number" class="form-control" id="editPorcentajePrecio3">
+                                        </div>
+                                
+                                        <div class="col-md-3">
+                                            <label for="editPrecio4" class="form-label">Precio 4</label>
+                                            <input type="number" class="form-control" id="editPrecio4">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editPorcentajePrecio4" class="form-label">Porcentaje precio 4</label>
+                                            <input type="number" class="form-control" id="editPorcentajePrecio4">
+                                        </div>
+                                
+                                        <div class="col-md-3">
+                                            <label for="editPrecio5" class="form-label">Precio 5</label>
+                                            <input type="number" class="form-control" id="editPrecio5">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editPorcentajePrecio5" class="form-label">Porcentaje precio 5</label>
+                                            <input type="number" class="form-control" id="editPorcentajePrecio5">
+                                        </div>
+                                
+                                        <div class="col-md-3">
+                                            <label for="editPrecio6" class="form-label">Precio 6</label>
+                                            <input type="number" class="form-control" id="editPrecio6">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editPorcentajePrecio6" class="form-label">Porcentaje precio 6</label>
+                                            <input type="number" class="form-control" id="editPorcentajePrecio6">
+                                        </div>
+                                
+                                        <div class="col-md-3">
+                                            <label for="editPrecio7" class="form-label">Precio 7</label>
+                                            <input type="number" class="form-control" id="editPrecio7">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editPorcentajePrecio7" class="form-label">Porcentaje precio 7</label>
+                                            <input type="number" class="form-control" id="editPorcentajePrecio7">
+                                        </div>
+                                
+                                        <div class="col-md-3">
+                                            <label for="editPrecio8" class="form-label">Precio 8</label>
+                                            <input type="number" class="form-control" id="editPrecio8">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editPorcentajePrecio8" class="form-label">Porcentaje precio 8</label>
+                                            <input type="number" class="form-control" id="editPorcentajePrecio8">
+                                        </div>
+                                
+                                        <div class="col-md-3">
+                                            <label for="editPrecio9" class="form-label">Precio 9</label>
+                                            <input type="number" class="form-control" id="editPrecio9">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editPorcentajePrecio9" class="form-label">Porcentaje precio 9</label>
+                                            <input type="number" class="form-control" id="editPorcentajePrecio9">
+                                        </div>
+                                
+                                        <div class="col-md-3">
+                                            <label for="editPrecio10" class="form-label">Precio 10</label>
+                                            <input type="number" class="form-control" id="editPrecio10">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editPorcentajePrecio10" class="form-label">Porcentaje precio 10</label>
+                                            <input type="number" class="form-control" id="editPorcentajePrecio10">
+                                        </div>
+                                    </div>
+                                
+                                    <hr style="margin: 20px;">
+                                    <h5>Rangos</h5>
+                                
+                                    <div class="row">
+                                        <!-- Rango Inicial 1 y Rango Final 1 -->
+                                        <div class="col-md-3">
+                                            <label for="editRangoInicial1" class="form-label">Rango Inicial 1</label>
+                                            <input type="number" class="form-control" id="editRangoInicial1">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editRangoFinal1" class="form-label">Rango Final 1</label>
+                                            <input type="number" class="form-control" id="editRangoFinal1">
+                                        </div>
+                                
+                                        <!-- Rango Inicial 2 y Rango Final 2 -->
+                                        <div class="col-md-3">
+                                            <label for="editRangoInicial2" class="form-label">Rango Inicial 2</label>
+                                            <input type="number" class="form-control" id="editRangoInicial2">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editRangoFinal2" class="form-label">Rango Final 2</label>
+                                            <input type="number" class="form-control" id="editRangoFinal2">
+                                        </div>
+                                
+                                        <!-- Rango Inicial 3 y Rango Final 3 -->
+                                        <div class="col-md-3">
+                                            <label for="editRangoInicial3" class="form-label">Rango Inicial 3</label>
+                                            <input type="number" class="form-control" id="editRangoInicial3">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editRangoFinal3" class="form-label">Rango Final 3</label>
+                                            <input type="number" class="form-control" id="editRangoFinal3">
+                                        </div>
+                                
+                                        <!-- Rango Inicial 4 y Rango Final 4 -->
+                                        <div class="col-md-3">
+                                            <label for="editRangoInicial4" class="form-label">Rango Inicial 4</label>
+                                            <input type="number" class="form-control" id="editRangoInicial4">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editRangoFinal4" class="form-label">Rango Final 4</label>
+                                            <input type="number" class="form-control" id="editRangoFinal4">
+                                        </div>
+                                
+                                        <!-- Rango Inicial 5 y Rango Final 5 -->
+                                        <div class="col-md-3">
+                                            <label for="editRangoInicial5" class="form-label">Rango Inicial 5</label>
+                                            <input type="number" class="form-control" id="editRangoInicial5">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editRangoFinal5" class="form-label">Rango Final 5</label>
+                                            <input type="number" class="form-control" id="editRangoFinal5">
+                                        </div>
+                                
+                                        <!-- Rango Inicial 6 y Rango Final 6 -->
+                                        <div class="col-md-3">
+                                            <label for="editRangoInicial6" class="form-label">Rango Inicial 6</label>
+                                            <input type="number" class="form-control" id="editRangoInicial6">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editRangoFinal6" class="form-label">Rango Final 6</label>
+                                            <input type="number" class="form-control" id="editRangoFinal6">
+                                        </div>
+                                
+                                        <!-- Rango Inicial 7 y Rango Final 7 -->
+                                        <div class="col-md-3">
+                                            <label for="editRangoInicial7" class="form-label">Rango Inicial 7</label>
+                                            <input type="number" class="form-control" id="editRangoInicial7">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editRangoFinal7" class="form-label">Rango Final 7</label>
+                                            <input type="number" class="form-control" id="editRangoFinal7">
+                                        </div>
+                                
+                                        <!-- Rango Inicial 8 y Rango Final 8 -->
+                                        <div class="col-md-3">
+                                            <label for="editRangoInicial8" class="form-label">Rango Inicial 8</label>
+                                            <input type="number" class="form-control" id="editRangoInicial8">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editRangoFinal8" class="form-label">Rango Final 8</label>
+                                            <input type="number" class="form-control" id="editRangoFinal8">
+                                        </div>
+                                
+                                        <!-- Rango Inicial 9 y Rango Final 9 -->
+                                        <div class="col-md-3">
+                                            <label for="editRangoInicial9" class="form-label">Rango Inicial 9</label>
+                                            <input type="number" class="form-control" id="editRangoInicial9">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editRangoFinal9" class="form-label">Rango Final 9</label>
+                                            <input type="number" class="form-control" id="editRangoFinal9">
+                                        </div>
+                                
+                                        <!-- Rango Inicial 10 y Rango Final 10 -->
+                                        <div class="col-md-3">
+                                            <label for="editRangoInicial10" class="form-label">Rango Inicial 10</label>
+                                            <input type="number" class="form-control" id="editRangoInicial10">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="editRangoFinal10" class="form-label">Rango Final 10</label>
+                                            <input type="number" class="form-control" id="editRangoFinal10">
+                                        </div>
+                                    </div>
+                                </div>
+
+            
+                                <!-- Datos Proveedores -->
+                                <div class="tab-pane fade" id="pills-proveedoresEdit" role="tabpanel" aria-labelledby="pills-proveedores-tab">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <input type="text" id="proveedorEdit" class="form-control" placeholder="Buscar Proveedores..."
+                                                autocomplete="off">
+                                            <ul id="listaProveedorEdit" class="list-group mt-2"
+                                                style="display: none; position: absolute; z-index: 1000;"></ul>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button id="editAgregarProveedor" class="btn btn-primary w-100">Agregar</button>
+                                        </div>
+                                    </div>
+                                
+                                    <div class="table-responsive mt-3" style="width: 500px;">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="editProveedores">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+            
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
+                            <button type="button" id="btnGuardarMateriaPrimaEdit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </main>
+
+
+    <!-- MDB -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/main.js"></script>
+    <script src="https://cdn.datatables.net/2.1.6/js/dataTables.js"></script>
+
+    <script src="js/materiaPrima/materiaPrima.js"></script>
+    <script src="js/materiaPrima/materiaPrimaProveedores.js"></script>
+    <script src="js/materiaPrima/materiaPrimaDel.js"></script>
+    <script src="js/materiaPrima/materiaPrimaEdit.js"></script>
+    <script src="js/materiaPrima/materiaPrimaProveedorEdit.js"></script>
+
+</body>
+</html>
