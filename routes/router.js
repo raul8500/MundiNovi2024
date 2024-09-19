@@ -23,7 +23,7 @@ const clientes = require('../controllers/clientes/clientesController')
 const kardex = require('../controllers/kardex/kardexController')
 const proveedor = require('../controllers/proveedor/proveedorController')
 const materiasPrimas = require('../controllers/materiaPrima/materiaPrimaController')
-
+const formulasProduccion = require('../controllers/formulas/formulasController')
 
 
 //Vistas
@@ -76,6 +76,10 @@ router.get('/proveedor', (req, res) => {
 
 router.get('/materiasPrimas', (req, res) => {    
     res.render('MateriasPrimas/materiasPrimas');
+});
+
+router.get('/formulas', (req, res) => {    
+    res.render('Formulas/formulasProduccion');
 });
 
 
@@ -203,6 +207,12 @@ router.post('/api/materiasPrimas', materiasPrimas.addMateriaPrima)
 router.put('/api/materiasPrimas/:id', materiasPrimas.updateMateriaPrima)
 router.delete('/api/materiasPrimas/:id', materiasPrimas.deleteMateriaPrima)
 
+//Formulas de produccion
+router.get('/api/formulasProduccion', formulasProduccion.getFormulasProduccion)
+router.get('/api/formulasProduccion/:id', formulasProduccion.getFormulaProduccionById)
+router.post('/api/formulasProduccion', formulasProduccion.addFormulaProduccion)
+router.put('/api/formulasProduccion/:id', formulasProduccion.updateFormulaProduccion)
+router.delete('/api/formulasProduccion/:id', formulasProduccion.deleteFormulaProduccion)
 
 
 
