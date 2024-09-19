@@ -27,8 +27,18 @@ $(document).ready(function () {
                 }
             },
             { data: 'observaciones' },
-            { data: 'costoPorcion' },
-            { data: 'costoUnidad' },
+            {
+                data: 'costoPorcion',
+                render: function (data, type, row) {
+                    return parseFloat(data).toFixed(2); // Formatear a 2 decimales
+                }
+            },
+            {
+                data: 'costoUnidad',
+                render: function (data, type, row) {
+                    return parseFloat(data).toFixed(2); // Formatear a 2 decimales
+                }
+            },
             {
                 data: null, // Esta columna es para los botones
                 render: function (data, type, row) {
@@ -66,15 +76,81 @@ $(document).ready(function () {
     });
 });
 
+
 btnAñadirFormula.addEventListener('click', () => {
+    setFormValuesEmpty()
     formulaModal.show();
 });
 
 btnGuardarFormula.addEventListener('click', () => {
-    console.log(selectedProductId)
-    console.log(materiasPrimasSeleccionadas)
+
+    let formData = getFormValues()
+
+    fetch('/api/formulasProduccion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            
+            // Mostrar alerta de éxito con SweetAlert2
+            Swal.fire({
+                title: 'Éxito',
+                text: 'Formula agregada correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                location.reload();
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 });
 
-
-
  
+function setFormValuesEmpty() {
+    // Limpiar campos del modal de fórmula de producción
+    document.getElementById('producto').value = '';
+    document.getElementById('nombreFormulaInput').value = '';
+    document.getElementById('paraQueCantidadInput').value = '';
+    document.getElementById('observacionesInput').value = '';
+    
+    // Limpiar campos de materias primas
+    document.getElementById('materiasPrimasCantidad').value = '';
+    document.getElementById('materiasPrimasInput').value = '';
+    document.getElementById('materiasPrimasTotal').value = '0.0'; // Dejar total en 0.0
+
+    // Limpiar la tabla de materias primas
+    const materiasPrimasTableBody = document.getElementById('materiasPrimasTableBody');
+    materiasPrimasTableBody.innerHTML = '';
+
+    // Limpiar la lista de productos
+    const listaProductos = document.getElementById('listaProductos');
+    listaProductos.innerHTML = '';
+    listaProductos.style.display = 'none'; // Ocultar la lista de productos
+    
+    // Limpiar la lista de sugerencias de materias primas
+    const listaMateriasPrimas = document.getElementById('listaMateriasPrimas');
+    listaMateriasPrimas.innerHTML = '';
+    listaMateriasPrimas.style.display = 'none'; // Ocultar la lista de materias primas
+
+    selectedProductId = ''
+    materiasPrimasSeleccionadas = []
+}
+
+function getFormValues() {
+    return {
+        productoFinal: selectedProductId,
+        nombreFormula: document.getElementById('nombreFormulaInput').value,
+        observaciones: document.getElementById('observacionesInput').value,
+        paraQueCantidadEsLaFormula: document.getElementById('paraQueCantidadInput').value,
+        materiasPrimas: materiasPrimasSeleccionadas,
+        costoPorcion: document.getElementById('materiasPrimasTotal').value,
+        costoUnidad: parseInt(document.getElementById('materiasPrimasTotal').value) / parseInt(document.getElementById('paraQueCantidadInput').value),
+    };
+}

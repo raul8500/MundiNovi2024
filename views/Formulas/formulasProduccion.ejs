@@ -52,6 +52,43 @@
             color: white; /* Texto blanco */
         }
 
+        #listaProductosEdit {
+    max-height: 300px;
+    overflow-y: auto;
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    z-index: 1000;
+    width: 100%;
+    display: none;
+}
+
+#listaProductosEdit .list-group-item {
+    cursor: pointer;
+}
+
+#listaProductosEdit .list-group-item:hover,
+#listaProductosEdit .list-group-item.active {
+    background-color: #007bff;
+    color: white;
+}
+
+#listaMateriasPrimasEdit {
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    z-index: 1000;
+    width: 50%;
+}
+
+#listaMateriasPrimasEdit .list-group-item {
+    cursor: pointer;
+}
+
+        
+
 
 
     </style>
@@ -127,13 +164,11 @@
             <div class="tab-content" id="pills-tabContent2">
 
                 <div class="d-flex justify-content-end " style="margin-top: 20px;">
-
                     <button id="btnAñadirFormula" type="button" class="btn btn-primary btn-rounded"
                         data-mdb-ripple-color="dark" data-mdb-toggle="modal" data-mdb-target="#modalFormulaProduccion"
                         data-mdb-whatever="@mdo">
                         Añadir <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
                     </button>
-
                 </div>
 
                 <div class="table-responsive pt-3">
@@ -158,30 +193,30 @@
 
             </div>
 
-            <!-- Modal HTML -->
+            <!-- Modal Crear -->
             <div class="modal fade" id="formulaModal" tabindex="-1" aria-labelledby="formulaModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="formulaModalLabel">Crear/Editar Fórmula de Producción</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h5 class="modal-title" id="formulaModalLabel">Crear Fórmula de Producción</h5>
+                            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-12" style="margin-bottom: 15px;">
                                     <label for="producto" class="form-label">Buscar Producto</label>
-                                    <input type="text" id="producto" class="form-control" placeholder="Buscar producto...">
+                                    <input type="text" id="producto" class="form-control" placeholder="Buscar producto..." autocomplete="off"> 
                                     <ul id="listaProductos" class="list-group mt-2" style="display: none; position: absolute; z-index: 1000;"></ul>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="nombreFormulaInput" class="form-label">Nombre de la Fórmula</label>
-                                    <input type="text" class="form-control" id="nombreFormulaInput">
+                                    <input type="text" class="form-control" id="nombreFormulaInput" autocomplete="off">
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="paraQueCantidadInput" class="form-label">Para que cantidad es la fórmula</label>
-                                    <input type="text" class="form-control" id="paraQueCantidadInput">
+                                    <input type="text" class="form-control" id="paraQueCantidadInput" autocomplete="off">
                                 </div>
 
                                 <div class="col-md-4">
@@ -196,11 +231,11 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <label for="materiasPrimasCantidad" class="form-label">Cantidad</label>
-                                    <input type="number" class="form-control" id="materiasPrimasCantidad" placeholder="0.0">
+                                    <input type="number" class="form-control" id="materiasPrimasCantidad" placeholder="0.0" autocomplete="off">
                                 </div>
                                 <div class="col-md-9">
                                     <label for="materiasPrimasInput" class="form-label">Materias Primas</label>
-                                    <input type="text" class="form-control" id="materiasPrimasInput" placeholder="Selecciona una materia prima">
+                                    <input type="text" class="form-control" id="materiasPrimasInput" placeholder="Selecciona una materia prima" autocomplete="off">
                                     <ul id="listaMateriasPrimas" class="list-group mt-2" style="display: none;"></ul> <!-- Sugerencias -->
                                 </div>
                                 
@@ -210,7 +245,7 @@
                             
                             <div class="row justify-content-end">
                                 <div class="col-md-3">
-                                    <input type="text" class="form-control" id="materiasPrimasTotal" placeholder="0.0" disabled>
+                                    <input type="text" class="form-control" id="materiasPrimasTotal" placeholder="0.0" disabled autocomplete="off">
                                 </div>
                             </div>
                             
@@ -229,13 +264,97 @@
 
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
                                 <button id="btnGuardarFormula" type="button" class="btn btn-primary">Guardar</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Modal Edit -->
+            <div class="modal fade" id="editFormulaModal" tabindex="-1" aria-labelledby="editFormulaModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editFormulaModalLabel">Editar Fórmula de Producción</h5>
+                            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12" style="margin-bottom: 15px;">
+                                    <label for="productoEdit" class="form-label">Buscar Producto</label>
+                                    <input type="text" id="productoEdit" class="form-control" placeholder="Buscar producto..."
+                                        autocomplete="off">
+                                    <ul id="listaProductosEdit" class="list-group mt-2"
+                                        style="display: none; position: absolute; z-index: 1000;"></ul>
+                                </div>
+            
+                                <div class="col-md-4">
+                                    <label for="nombreFormulaEdit" class="form-label">Nombre de la Fórmula</label>
+                                    <input type="text" class="form-control" id="nombreFormulaEdit" autocomplete="off">
+                                </div>
+            
+                                <div class="col-md-4">
+                                    <label for="paraQueCantidadEdit" class="form-label">Para que cantidad es la fórmula</label>
+                                    <input type="text" class="form-control" id="paraQueCantidadEdit" autocomplete="off">
+                                </div>
+            
+                                <div class="col-md-4">
+                                    <label for="observacionesEdit" class="form-label">Observaciones</label>
+                                    <textarea class="form-control" id="observacionesEdit" rows="3"></textarea>
+                                </div>
+            
+                            </div>
+            
+                            <hr style="margin: 20px;">
+            
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="materiasPrimasCantidadEdit" class="form-label">Cantidad</label>
+                                    <input type="number" class="form-control" id="materiasPrimasCantidadEdit" placeholder="0.0"
+                                        autocomplete="off">
+                                </div>
+                                <div class="col-md-9">
+                                    <label for="materiasPrimasEdit" class="form-label">Materias Primas</label>
+                                    <input type="text" class="form-control" id="materiasPrimasEdit"
+                                        placeholder="Selecciona una materia prima" autocomplete="off">
+                                    <ul id="listaMateriasPrimasEdit" class="list-group mt-2" style="display: none;"></ul>
+                                    <!-- Sugerencias -->
+                                </div>
+                            </div>
+            
+                            <br>
+            
+                            <div class="row justify-content-end">
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" id="materiasPrimasTotalEdit" placeholder="0.0" disabled
+                                        autocomplete="off">
+                                </div>
+                            </div>
+            
+                            <table class="table mt-2">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Cantidad</th>
+                                        <th>Costo</th>
+                                        <th>Importe</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="materiasPrimasTableBodyEdit"></tbody>
+                            </table>
+            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
+                                <button id="btnActualizarFormula" type="button" class="btn btn-primary">Actualizar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
 
     </main>
@@ -254,6 +373,11 @@
     <script src="js/formulas/formulas.js"></script>
     <script src="js/formulas/formulasLoad.js"></script>
     <script src="js/formulas/formulasLoadMateriasPrimas.js"></script>
+    <script src="js/formulas/formulasDel.js"></script>
+    <script src="js/formulas/formulasLoadEdit.js"></script>
+
+    <script src="js/formulas/formulasEdit.js"></script>
+    <script src="js/formulas/formulasLoadMateriasPrimasEdit.js"></script>
 
 
 </body>

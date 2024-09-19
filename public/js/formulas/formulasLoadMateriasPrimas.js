@@ -85,6 +85,9 @@ function agregarMateriaPrima(materiaPrima, cantidad) {
     totalCosto += importe;
     actualizarTabla();
     actualizarTotal();
+
+    document.getElementById('materiasPrimasCantidad').value = ''
+    document.getElementById('materiasPrimasCantidad').focus()
 }
 
 // Actualizar la tabla de materias primas seleccionadas
@@ -153,5 +156,6 @@ function seleccionarElemento(items) {
         items[selectedIndexFormulas].scrollIntoView({ block: 'nearest' }); // Asegura que el elemento seleccionado esté visible
     }
 }
+
 
 
