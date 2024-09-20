@@ -213,20 +213,19 @@
                 <!-- Info General Section -->
                 <div class="card mb-3">
                     <div class="card-header">
-                    <h6>Información General</h6>
+                        <h6>Información General</h6>
                     </div>
                     <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>No. Venta:</strong> 6069718</li>
-                        <li class="list-group-item"><strong>Sucursal:</strong> 66c36fbc469394cf8b91a1ea</li>
-                        <li class="list-group-item"><strong>Tipo de Venta:</strong> Con Factura</li>
-                        <li class="list-group-item"><strong>Cliente:</strong> No registrado</li>
-                        <li class="list-group-item"><strong>Total de Venta:</strong> $780</li>
-                        <li class="list-group-item"><strong>Total de Productos:</strong> 60</li>
-                        <li class="list-group-item"><strong>Fecha:</strong> 2024-09-13 17:45:02</li>
-                    </ul>
+                        <div id="noVenta" class="mb-2"></div>
+                        <div id="sucursal" class="mb-2"></div>
+                        <div id="tipoVenta" class="mb-2"></div>
+                        <div id="cliente" class="mb-2"></div>
+                        <div id="totalVenta" class="mb-2"></div>
+                        <div id="totalProductos" class="mb-2"></div>
+                        <div id="fecha" class="mb-2"></div>
                     </div>
                 </div>
+
         
                 <!-- Productos Section -->
                 <div class="card mb-3">
@@ -234,16 +233,22 @@
                     <h6>Productos</h6>
                     </div>
                     <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <!-- Repite este bloque para cada producto -->
-                        <li class="list-group-item">
-                        <strong>Producto ID:</strong> 66d8cea7564b62425c255a96<br>
-                        <strong>Cantidad:</strong> 60<br>
-                        <strong>Precio Unitario:</strong> $13<br>
-                        <strong>Kardex ID:</strong> 66e47a1e670d16f672e9fab0<br>
-                        <strong>Kardex Folio:</strong> 5691453
-                        </li>
-                    </ul>
+
+                        <table class="table align-middle mb-0 bg-white">
+                            <thead class="bg-light">
+                                <tr class="text-center">
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">Kardex</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaProductos" class="table-group-divider">
+
+                            </tbody>
+                        </table>
+
                     </div>
                 </div>
         
@@ -253,13 +258,9 @@
                     <h6>Formas de Pago</h6>
                     </div>
                     <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <!-- Repite este bloque para cada forma de pago -->
-                        <li class="list-group-item">
-                        <strong>Tipo de Pago:</strong> Transferencia<br>
-                        <strong>Importe:</strong> $780
-                        </li>
-                    </ul>
+                        <ul id="listaFormasDePago" class="list-group list-group-flush">
+                        
+                        </ul>
                     </div>
                 </div>
         

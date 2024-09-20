@@ -1,7 +1,7 @@
 const Venta = require('../../schemas/venta/ventaSchema');
 const Kardex = require('../../schemas/kardexSchema/kardexSchema'); // Asegúrate de ajustar la ruta según tu estructura
-const Producto = require('../../schemas/productosSchema/productosSchema'); // Asegúrate de ajustar la ruta según tu estructura
-const Client = require('../../schemas/clientesSchema/clientesSchema'); // Ajusta la ruta según tu estructura
+const Producto = require('../../schemas/productosSchema/productosSchema'); 
+const Client = require('../../schemas/clientesSchema/clientesSchema'); 
 const mongoose = require('mongoose');
 
 
@@ -9,7 +9,6 @@ exports.getVentasPorSucursalYFechas = async (req, res) => {
   try {
     const { sucursal, fechaInicio, fechaFin } = req.params;
 
-    // Validar fechas
     if (!fechaInicio || !fechaFin) {
       return res.status(400).json({ error: 'Fecha de inicio y fecha final son requeridas.' });
     }
@@ -34,8 +33,9 @@ exports.getVentasPorSucursalYFechas = async (req, res) => {
     
 
     const ventas = await Venta.find(query)
-      .populate('sucursal', 'nombre')
-      .sort({ fecha: -1 });
+        .populate('sucursal', 'nombre')
+        .populate('productos.productoId')
+        .sort({ fecha: -1 });
 
     console.log(ventas)
     res.status(200).json({ data: ventas });
@@ -43,11 +43,6 @@ exports.getVentasPorSucursalYFechas = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'Error al obtener las ventas.' });
   }
-};
-
-// Función para generar un folio único de 7 dígitos
-const generateFolio = () => {
-    return String(Math.floor(1000000 + Math.random() * 9000000)); // Genera un número aleatorio de 7 dígitos
 };
 
 exports.createVenta = async (req, res) => {
@@ -114,6 +109,7 @@ exports.createVenta = async (req, res) => {
 
                   // Guardar el folio y el ID del Kardex
                   productosConKardex.push({
+                      nombre:  productoEncontrado.name,
                       productoId: _id,
                       cantidad,
                       precio,
@@ -157,7 +153,6 @@ exports.createVenta = async (req, res) => {
       res.status(500).json({ error: 'Error general en la creación de la venta' });
   }
 };
-
 
 exports.getVentasDelDia = async (req, res) => {
   try {
@@ -221,7 +216,6 @@ exports.getVentasDelDia = async (req, res) => {
   }
 };
 
-
 exports.getVentaPorId = async (req, res) => {
   try {
     const { id } = req.params;
@@ -250,5 +244,8 @@ exports.getVentaPorId = async (req, res) => {
   }
 };
 
+const generateFolio = () => {
+    return String(Math.floor(1000000 + Math.random() * 9000000)); // Genera un número aleatorio de 7 dígitos
+};
 
 

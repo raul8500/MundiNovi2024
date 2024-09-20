@@ -4,12 +4,13 @@ const ventaSchema = new mongoose.Schema({
     noVenta: { type: String, required: true },
     sucursal: { type: mongoose.Schema.Types.ObjectId, ref: 'sucursal', required: true },
     tipoVenta: { type: String, required: true },
-    cliente: { type: mongoose.Schema.Types.ObjectId, ref: 'client', default: null },
+    cliente: { type: mongoose.Schema.Types.ObjectId, ref: 'Client', default: null },
     totalVenta: { type: Number, required: true },
     totalProductos: { type: Number, required: true },
     productos: [
         {
-            productoId: { type: mongoose.Schema.Types.ObjectId, ref: 'products', required: true },
+            nombre: { type: String, required: true },
+            productoId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
             cantidad: { type: Number, required: true },
             precio: { type: Number, required: true },
             kardexId: { type: mongoose.Schema.Types.ObjectId, ref: 'Kardex', required: true }, // Mantener el ObjectId de Kardex
@@ -24,8 +25,5 @@ const ventaSchema = new mongoose.Schema({
     ],
     fecha: { type: Date, default: Date.now }
 });
-
-
-
 
 module.exports = mongoose.model('ventas', ventaSchema);
