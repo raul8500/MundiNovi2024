@@ -482,9 +482,6 @@ function completarVenta(resumenVenta) {
         infoUser
     };
 
-    console.log(ventaYResumen)
-
-
     fetch('/api/ventas', {
         method: 'POST',
         headers: {
@@ -494,11 +491,11 @@ function completarVenta(resumenVenta) {
     })
         .then(response => response.json())
         .then(data => {
+            imprimirTicket(venta)
             venta = ''
             productosEnVenta = ''
             resumenVenta = ''
 
-            console.log(data)
             modalPago.hide()
             limpiarVenta()
         })
@@ -604,10 +601,6 @@ function facturarVenta() {
 
 }
 
-
-
-
-
 // Manejo del clic en el botón de facturar
 document.getElementById('btnFacturar').addEventListener('click', () => {
     user = false;
@@ -686,50 +679,50 @@ function verificarFactura() {
 
 // Activar el cálculo de cambio cuando se ingrese un importe
 function activarCalculoCambio() {
-const inputsImporte = document.querySelectorAll('.importePago');
+    const inputsImporte = document.querySelectorAll('.importePago');
 
-inputsImporte.forEach(function (input) {
-    input.addEventListener('input', function () {
-    calcularCambio();
+    inputsImporte.forEach(function (input) {
+        input.addEventListener('input', function () {
+        calcularCambio();
+        });
     });
-});
 }
 
 // Función para calcular el cambio
 function calcularCambio() {
-const totalAPagar = parseFloat(document.getElementById('totalAPagar').value) || 0;
-const inputsImporte = document.querySelectorAll('.importePago');
-let totalPagado = 0;
+    const totalAPagar = parseFloat(document.getElementById('totalAPagar').value) || 0;
+    const inputsImporte = document.querySelectorAll('.importePago');
+    let totalPagado = 0;
 
-// Sumar todos los importes ingresados
-inputsImporte.forEach(function (input) {
-    totalPagado += parseFloat(input.value) || 0;
-});
+    // Sumar todos los importes ingresados
+    inputsImporte.forEach(function (input) {
+        totalPagado += parseFloat(input.value) || 0;
+    });
 
-// Calcular el cambio
-const cambio = totalPagado - totalAPagar;
+    // Calcular el cambio
+    const cambio = totalPagado - totalAPagar;
 
-// Actualizar el valor de cambio en todos los campos de "Cambio"
-const inputsCambio = document.querySelectorAll('.cambio');
-inputsCambio.forEach(function (input) {
-    input.value = cambio.toFixed(2);
-});
+    // Actualizar el valor de cambio en todos los campos de "Cambio"
+    const inputsCambio = document.querySelectorAll('.cambio');
+    inputsCambio.forEach(function (input) {
+        input.value = cambio.toFixed(2);
+    });
 }
 
 // Activar la opción de ingresar los últimos 4 dígitos de la cuenta bancaria para transferencias
 function activarFormaPagoTransferencia() {
-const selectsFormaPago = document.querySelectorAll('.formaPago');
+    const selectsFormaPago = document.querySelectorAll('.formaPago');
 
-selectsFormaPago.forEach(function (select) {
-    select.addEventListener('change', function () {
-    const cuentaBancariaContainer = this.closest('.formaDePago').querySelector('.cuentaBancaria');
-    if (this.value === 'transferencia') {
-        cuentaBancariaContainer.style.display = 'block';
-    } else {
-        cuentaBancariaContainer.style.display = 'none';
-    }
+    selectsFormaPago.forEach(function (select) {
+        select.addEventListener('change', function () {
+        const cuentaBancariaContainer = this.closest('.formaDePago').querySelector('.cuentaBancaria');
+        if (this.value === 'transferencia') {
+            cuentaBancariaContainer.style.display = 'block';
+        } else {
+            cuentaBancariaContainer.style.display = 'none';
+        }
+        });
     });
-});
 }
 
 // Activar el cálculo de cambio y select de "Forma de Pago" para la forma de pago inicial
