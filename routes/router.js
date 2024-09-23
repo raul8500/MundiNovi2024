@@ -82,6 +82,9 @@ router.get('/formulas', (req, res) => {
     res.render('Formulas/formulasProduccion');
 });
 
+router.get('/corteparcial', (req, res) => {    
+    res.render('Cortes/cortesParciales');
+});
 
 
 
