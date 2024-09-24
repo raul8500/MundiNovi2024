@@ -86,6 +86,10 @@ router.get('/corteparcial', (req, res) => {
     res.render('Cortes/cortesParciales');
 });
 
+router.get('/corteVenta', (req, res) => {    
+    res.render('Cortes/cortesVenta');
+});
+
 
 
 //Funciones al API
