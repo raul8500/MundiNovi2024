@@ -466,7 +466,6 @@ function completarVenta(resumenVenta) {
         return;
     }
 
-
     let venta = {
         sucursalId: sucursalInfo._id,
         usuario: infoUser,
@@ -483,6 +482,7 @@ function completarVenta(resumenVenta) {
         infoUser
     };
 
+    // Llamada para realizar la venta y verificar si se necesita corte parcial automáticamente
     fetch('/api/ventas', {
         method: 'POST',
         headers: {
@@ -490,22 +490,51 @@ function completarVenta(resumenVenta) {
         },
         body: JSON.stringify(ventaYResumen)
     })
-        .then(response => response.json())
-        .then(data => {
-            imprimirTicket(venta)
-            venta = ''
-            productosEnVenta = ''
-            resumenVenta = ''
+    .then(response => {
+        if (response.status === 304) {
+            // Si el backend devuelve un código 304, mostrar la alerta de corte parcial
+            Swal.fire({
+                icon: 'warning',
+                title: 'Corte parcial necesario',
+                text: 'Se han acumulado más de $2000 en efectivo. Realiza un corte parcial antes de proceder.',
+                showCancelButton: true,
+                confirmButtonText: 'Realizar corte parcial',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/corteparcial';
+                }
+            });
+        } else if (response.status === 201) {
+            // Si la venta fue creada correctamente
+            return response.json();
+        } else {
+            throw new Error('Error en la respuesta del servidor.');
+        }
+    })
+    .then(data => {
+        if (data) {
+            // Venta completada con éxito
+            imprimirTicket(venta);
+            venta = '';
+            productosEnVenta = '';
+            resumenVenta = '';
+            modalPago.hide();
+            limpiarVenta();
 
-            modalPago.hide()
-            limpiarVenta()
-        })
-        .catch(error => {
-            console.error('Error al guardar la venta:', error);
-            Swal.fire('Error', 'Hubo un problema al completar la venta. Por favor, inténtalo de nuevo.', 'error');
-        });
-        
+            Swal.fire({
+                icon: 'success',
+                title: 'Venta completada',
+                text: 'La venta se ha registrado exitosamente.'
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error al guardar la venta:', error);
+        Swal.fire('Error', 'Hubo un problema al completar la venta. Por favor, inténtalo de nuevo.', 'error');
+    });
 }
+
 
 function imprimirTicket(venta) {
     const ticketWidth = 32; // Ancho máximo del ticket en caracteres

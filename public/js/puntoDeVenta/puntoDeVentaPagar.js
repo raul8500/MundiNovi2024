@@ -34,19 +34,23 @@ function verificarFacturaVenta() {
     return true; // Puede proceder si es factura y CFDI está seleccionado
 }
 
+
+
 function generarResumenVentaJSON() {
     const totalAPagar = parseFloat(document.getElementById('totalAPagar').value) || 0;
     let totalPagado = 0;
     const formasDePagoUtilizadas = [];
-
-    // Obtener todas las formas de pago adicionales (incluye la default)
-    const formasDePago = document.querySelectorAll('.formaDePago');
     let saldoMonedero = 0;
+    let cambio = 0;
+    let restanteAPagar = totalAPagar; // Variable para llevar un seguimiento del total que aún queda por pagar
 
     // Verificar si hay cliente seleccionado
     if (clienteSeleccionado && typeof clienteSeleccionado.monedero === 'number') {
         saldoMonedero = clienteSeleccionado.monedero;
     }
+
+    // Obtener todas las formas de pago adicionales (incluye la default)
+    const formasDePago = document.querySelectorAll('.formaDePago');
 
     for (const forma of formasDePago) {
         const tipoPago = forma.querySelector('.form-select').value;
@@ -61,7 +65,7 @@ function generarResumenVentaJSON() {
                         text: "No se puede usar monedero sin un cliente seleccionado o sin saldo suficiente en el monedero.",
                         showConfirmButton: true,
                     });
-                    return; // Salir si hay un problema con el monedero
+                    return;
                 }
 
                 if (importePago > saldoMonedero) {
@@ -71,38 +75,58 @@ function generarResumenVentaJSON() {
                         text: `El importe de ${importePago.toFixed(2)} excede el saldo disponible de ${saldoMonedero.toFixed(2)}.`,
                         showConfirmButton: true,
                     });
-                    return; // Salir si el saldo es insuficiente
+                    return;
                 }
 
-                // Asegúrate de no permitir que el importe del monedero exceda el total a pagar
-                if (importePago > totalAPagar) {
+                if (importePago > restanteAPagar) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Importe excedido',
                         text: 'El importe del monedero no puede exceder el total a pagar.',
                         showConfirmButton: true,
                     });
-                    return; // Salir si el importe excede el total
+                    return;
                 }
 
                 saldoMonedero -= importePago; // Actualiza el saldo después de aceptar el pago
-            } else if (tipoPago !== 'efectivo' && importePago > totalAPagar) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Importe excedido',
-                    text: 'No puedes ingresar un importe mayor al total a pagar para tarjetas, transferencias y monederos.',
-                    showConfirmButton: true,
+            }
+
+            // Si el tipo de pago es efectivo, y supera lo que queda por pagar, calculamos el cambio
+            if (tipoPago === 'efectivo') {
+                if (importePago > restanteAPagar) {
+                    cambio = importePago - restanteAPagar; // Calculamos el cambio
+                    formasDePagoUtilizadas.push({
+                        tipo: tipoPago,
+                        importe: importePago, // El importe completo que el cliente dio
+                        cambio: cambio.toFixed(2) // Se agrega el cambio que se devolvió
+                    });
+                } else {
+                    formasDePagoUtilizadas.push({
+                        tipo: tipoPago,
+                        importe: importePago,
+                        cambio: 0 // No hay cambio
+                    });
+                }
+            } else {
+                // Otros tipos de pago no generan cambio
+                if (importePago > restanteAPagar) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Importe excedido',
+                        text: 'No puedes ingresar un importe mayor al total a pagar para tarjetas, transferencias y monederos.',
+                        showConfirmButton: true,
+                    });
+                    return;
+                }
+
+                formasDePagoUtilizadas.push({
+                    tipo: tipoPago,
+                    importe: importePago
                 });
-                return; // Salir si el importe excede el total
             }
 
             totalPagado += importePago;
-
-            // Guardar la forma de pago y su importe en la variable
-            formasDePagoUtilizadas.push({
-                tipo: tipoPago,
-                importe: importePago
-            });
+            restanteAPagar -= importePago; // Reducimos lo que queda por pagar
         }
     }
 
@@ -114,13 +138,13 @@ function generarResumenVentaJSON() {
             text: `Faltan ${(totalAPagar - totalPagado).toFixed(2)} para cubrir el total.`,
             showConfirmButton: true,
         });
-        return; // Salir si el pago es insuficiente
+        return;
     }
 
     // Crear el resumen de la venta en formato JSON
     const facturaResumenVenta = document.getElementById('facturaResumenVenta')?.textContent.trim() || '';
     const cfdiSelect = document.getElementById('usoCFDI');
-    
+
     const resumenVenta = {
         cliente: clienteSeleccionado || '', // Asigna clienteSeleccionado o una cadena vacía si es nulo o indefinido
         totalAPagar: totalAPagar.toFixed(2),
@@ -131,17 +155,10 @@ function generarResumenVentaJSON() {
     };
 
     completarVenta(resumenVenta);
-
-    // Mensaje de éxito si el pago cubre el total
-    Swal.fire({
-        icon: "success",
-        title: "Pago completado",
-        text: `El total pagado fue ${totalPagado.toFixed(2)}.`,
-        showConfirmButton: true,
-    });
-
-    // Aquí puedes realizar las acciones necesarias para procesar el pago.
 }
+
+
+
 
 function pagarVenta() {
     // Paso 1: Obtener el importe total a pagar

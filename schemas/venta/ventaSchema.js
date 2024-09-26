@@ -20,6 +20,7 @@ const ventaSchema = new mongoose.Schema({
     formasDePago: [
         {
             tipo: { type: String, required: true },
+            cambio : {type: Number, required: false, default : 0 },
             importe: { type: Number, required: true }
         }
     ],

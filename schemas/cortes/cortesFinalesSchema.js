@@ -24,6 +24,8 @@ const corteFinalSchema = new Schema({
     ind_ventas: { type: Number, required: false },  
     total_ventas: { type: Number, required: false },  
     corte_total: { type: Number, required: false },
+    totalVentasEfectivoCortes: { type: Number, required: false },
+    totalVentaCorte: { type: Number, required: false },
     ventas: [ 
         {
             venta: { type: mongoose.Schema.Types.ObjectId, ref: 'Ventas', required: false },
