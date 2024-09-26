@@ -1,23 +1,29 @@
 const Venta = require('../../schemas/venta/ventaSchema');
 const Kardex = require('../../schemas/kardexSchema/kardexSchema'); // Asegúrate de ajustar la ruta según tu estructura
-const Producto = require('../../schemas/productosSchema/productosSchema'); 
-const Client = require('../../schemas/clientesSchema/clientesSchema'); 
-const mongoose = require('mongoose');
+const Producto = require('../../schemas/productosSchema/productosSchema');
+const Client = require('../../schemas/clientesSchema/clientesSchema');
+const CorteGeneral = require('../../schemas/cortes/cortesFinalesSchema');
+const CorteFinal = require('../../schemas/cortes/cortesFinalesSchema');
 
+const mongoose = require('mongoose');
 
 exports.getVentasPorSucursalYFechas = async (req, res) => {
   try {
     const { sucursal, fechaInicio, fechaFin } = req.params;
 
     if (!fechaInicio || !fechaFin) {
-      return res.status(400).json({ error: 'Fecha de inicio y fecha final son requeridas.' });
+      return res
+        .status(400)
+        .json({ error: 'Fecha de inicio y fecha final son requeridas.' });
     }
 
     const fechaInicioDate = new Date(fechaInicio);
     const fechaFinDate = new Date(fechaFin);
 
     if (isNaN(fechaInicioDate.getTime()) || isNaN(fechaFinDate.getTime())) {
-      return res.status(400).json({ error: 'Fecha de inicio o fecha final inválida.' });
+      return res
+        .status(400)
+        .json({ error: 'Fecha de inicio o fecha final inválida.' });
     }
 
     fechaInicioDate.setUTCHours(0);
@@ -30,14 +36,13 @@ exports.getVentasPorSucursalYFechas = async (req, res) => {
       },
       ...(sucursal && { sucursal }),
     };
-    
 
     const ventas = await Venta.find(query)
-        .populate('sucursal', 'nombre')
-        .populate('productos.productoId')
-        .sort({ fecha: -1 });
+      .populate('sucursal', 'nombre')
+      .populate('productos.productoId')
+      .sort({ fecha: -1 });
 
-    console.log(ventas)
+    console.log(ventas);
     res.status(200).json({ data: ventas });
   } catch (error) {
     console.error(error);
@@ -46,117 +51,142 @@ exports.getVentasPorSucursalYFechas = async (req, res) => {
 };
 
 exports.createVenta = async (req, res) => {
+
+  let vendedor = req.body.venta.usuario._id
+
   try {
-      console.log("Request body:", req.body);
+    let corteFolio = ''
+    const cortePendiente = await checkCorteUsuarioIniciadoONoFinalizado(vendedor);
 
-      const sucursal = req.body.venta.sucursalId;
-      const productos = req.body.venta.productos;
-      const tipoVenta = req.body.resumenVenta.esFactura;
-      const cliente = req.body.resumenVenta.cliente ? req.body.resumenVenta.cliente._id : null;
-      const totalAPagar = req.body.venta.totalVenta;
-      const formasDePago = req.body.resumenVenta.formasDePago;
+    if (cortePendiente) {
+      corteFolio = cortePendiente
+    } else {
+      corteFolio = await crearCorteFinal(vendedor);
+    }
 
-      let totalVenta = 0;
-      let totalProductos = 0;
+    const sucursal = req.body.venta.sucursalId;
+    const productos = req.body.venta.productos;
+    const tipoVenta = req.body.resumenVenta.esFactura;
+    const cliente = req.body.resumenVenta.cliente
+      ? req.body.resumenVenta.cliente._id
+      : null;
+    const totalAPagar = req.body.venta.totalVenta;
+    const formasDePago = req.body.resumenVenta.formasDePago;
 
-      // Array para almacenar los productos con referencia a Kardex
-      const productosConKardex = [];
+    let totalVenta = 0;
+    let totalProductos = 0;
 
-      for (const producto of productos) {
-          const { _id, cantidad, precio } = producto;
+    // Array para almacenar los productos con referencia a Kardex
+    const productosConKardex = [];
 
-          try {
-              const productoEncontrado = await Producto.findById(_id);
-              if (!productoEncontrado) {
-                  console.error("Producto no encontrado:", _id);
-                  return res.status(404).json({ error: 'Producto no encontrado' });
-              }
-
-              const totalProducto = cantidad * precio;
-              totalVenta += totalProducto;
-              totalProductos += cantidad;
-
-              try {
-                  const ultimoKardex = await Kardex.findOne({ reference: productoEncontrado.reference }).sort({ fecha: -1 });
-
-                  let nuevaExistencia;
-                  if (ultimoKardex) {
-                      nuevaExistencia = ultimoKardex.existencia - cantidad;
-                  } else {
-                      nuevaExistencia = -cantidad;
-                  }
-
-                  // Generar el folio y crear el registro en Kardex
-                  const folio = generateFolio();
-                  const nuevoKardex = await Kardex.create({
-                      fecha: new Date(),
-                      folio,  // Usamos el folio personalizado
-                      usuario: req.body.infoUser._id,
-                      movimiento: 'Venta',
-                      sucursal,
-                      reference: productoEncontrado.reference,
-                      nombre: productoEncontrado.name,
-                      cantidad: -cantidad,
-                      costoUnitario: precio,
-                      existencia: nuevaExistencia
-                  });
-
-                  // Actualizar la existencia del producto
-                  await Producto.updateOne(
-                      { _id },
-                      { $set: { controlAlmacen: nuevaExistencia } }
-                  );
-
-                  // Guardar el folio y el ID del Kardex
-                  productosConKardex.push({
-                      nombre:  productoEncontrado.name,
-                      productoId: _id,
-                      cantidad,
-                      precio,
-                      kardexId: nuevoKardex._id,  // Guardar el ObjectId de Kardex
-                      kardexFolio: folio  // Guardar también el folio generado
-                  });
-
-              } catch (kardexError) {
-                  console.error("Error al crear el registro en Kardex:", kardexError);
-                  return res.status(500).json({ error: 'Error al crear el registro en Kardex' });
-              }
-          } catch (productoError) {
-              console.error("Error al procesar el producto:", productoError);
-              return res.status(500).json({ error: 'Error al procesar el producto' });
-          }
-      }
+    for (const producto of productos) {
+      const { _id, cantidad, precio } = producto;
 
       try {
-          // Crear la venta con los productos que ahora incluyen el folio y el ObjectId de Kardex
-          const nuevaVenta = new Venta({
-              noVenta: generateFolio(),
-              sucursal,
-              tipoVenta,
-              cliente,
-              totalVenta,
-              totalProductos,
-              productos: productosConKardex, // Usar los productos con el ObjectId y el folio de Kardex
-              formasDePago
+        const productoEncontrado = await Producto.findById(_id);
+        if (!productoEncontrado) {
+          console.error('Producto no encontrado:', _id);
+          return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+
+        const totalProducto = cantidad * precio;
+        totalVenta += totalProducto;
+        totalProductos += cantidad;
+
+        try {
+          const ultimoKardex = await Kardex.findOne({
+            reference: productoEncontrado.reference,
+          }).sort({ fecha: -1 });
+
+          let nuevaExistencia;
+          if (ultimoKardex) {
+            nuevaExistencia = ultimoKardex.existencia - cantidad;
+          } else {
+            nuevaExistencia = -cantidad;
+          }
+
+          // Generar el folio y crear el registro en Kardex
+          const folio = generateFolio();
+          const nuevoKardex = await Kardex.create({
+            fecha: new Date(),
+            folio, // Usamos el folio personalizado
+            usuario: req.body.infoUser._id,
+            movimiento: 'Venta',
+            sucursal,
+            reference: productoEncontrado.reference,
+            nombre: productoEncontrado.name,
+            cantidad: -cantidad,
+            costoUnitario: precio,
+            existencia: nuevaExistencia,
           });
 
-          const ventaGuardada = await nuevaVenta.save();
-          console.log("Venta guardada correctamente:", ventaGuardada);
+          // Actualizar la existencia del producto
+          await Producto.updateOne(
+            { _id },
+            { $set: { controlAlmacen: nuevaExistencia } },
+          );
 
-          res.status(201).json({ message: 'Venta creada correctamente', data: ventaGuardada });
-      } catch (ventaError) {
-          console.error("Error al crear la venta:", ventaError);
-          res.status(500).json({ error: 'Error al crear la venta' });
+          // Guardar el folio y el ID del Kardex
+          productosConKardex.push({
+            nombre: productoEncontrado.name,
+            productoId: _id,
+            cantidad,
+            precio,
+            kardexId: nuevoKardex._id, // Guardar el ObjectId de Kardex
+            kardexFolio: folio, // Guardar también el folio generado
+          });
+        } catch (kardexError) {
+          console.error('Error al crear el registro en Kardex:', kardexError);
+          return res
+            .status(500)
+            .json({ error: 'Error al crear el registro en Kardex' });
+        }
+      } catch (productoError) {
+        console.error('Error al procesar el producto:', productoError);
+        return res.status(500).json({ error: 'Error al procesar el producto' });
       }
+    }
+
+    try {
+      // Crear la venta con los productos que ahora incluyen el folio y el ObjectId de Kardex
+      const nuevaVenta = new Venta({
+        noVenta: generateFolio(),
+        sucursal,
+        tipoVenta,
+        cliente,
+        totalVenta,
+        totalProductos,
+        productos: productosConKardex, // Usar los productos con el ObjectId y el folio de Kardex
+        formasDePago,
+      });
+
+      const ventaGuardada = await nuevaVenta.save();
+      
+      console.log('Venta guardada correctamente:', ventaGuardada);
+      const corteFinal = await CorteFinal.findOne({ folio: corteFolio });
+      console.log(corteFinal)
+
+      corteFinal.ventas.push({
+              venta: ventaGuardada._id,
+              contada: false 
+          });
+      await corteFinal.save();
+
+      res
+        .status(201)
+        .json({ message: 'Venta creada correctamente', data: ventaGuardada });
+    } catch (ventaError) {
+      console.error('Error al crear la venta:', ventaError);
+      res.status(500).json({ error: 'Error al crear la venta' });
+    }
   } catch (error) {
-      console.error("Error general en la creación de la venta:", error);
-      res.status(500).json({ error: 'Error general en la creación de la venta' });
+    console.error('Error general en la creación de la venta:', error);
+    res.status(500).json({ error: 'Error general en la creación de la venta' });
   }
 };
 
 exports.getVentasDelDia = async (req, res) => {
   try {
-
     // Obtener la fecha actual (solo día)
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0); // Establecer la hora a 00:00:00 para iniciar el día
@@ -166,7 +196,7 @@ exports.getVentasDelDia = async (req, res) => {
 
     // Buscar todas las ventas realizadas hoy
     const ventas = await Venta.find({
-      fecha: { $gte: hoy, $lt: mañana }
+      fecha: { $gte: hoy, $lt: mañana },
     }).populate('sucursal');
 
     // Inicializar acumuladores
@@ -176,7 +206,7 @@ exports.getVentasDelDia = async (req, res) => {
     let sucursalesVentas = {};
 
     // Procesar las ventas
-    ventas.forEach(venta => {
+    ventas.forEach((venta) => {
       totalVentas++;
       totalDinero += venta.totalVenta;
       totalProductos += venta.totalProductos;
@@ -187,7 +217,7 @@ exports.getVentasDelDia = async (req, res) => {
         sucursalesVentas[sucursalId] = {
           nombre: venta.sucursal.nombre,
           totalVentasSucursal: 0,
-          totalDineroSucursal: 0
+          totalDineroSucursal: 0,
         };
       }
       sucursalesVentas[sucursalId].totalVentasSucursal += venta.totalProductos;
@@ -196,8 +226,12 @@ exports.getVentasDelDia = async (req, res) => {
 
     // Determinar la sucursal que vendió más
     let sucursalTop = null;
-    Object.keys(sucursalesVentas).forEach(sucursalId => {
-      if (!sucursalTop || sucursalesVentas[sucursalId].totalDineroSucursal > sucursalesVentas[sucursalTop].totalDineroSucursal) {
+    Object.keys(sucursalesVentas).forEach((sucursalId) => {
+      if (
+        !sucursalTop ||
+        sucursalesVentas[sucursalId].totalDineroSucursal >
+          sucursalesVentas[sucursalTop].totalDineroSucursal
+      ) {
         sucursalTop = sucursalId;
       }
     });
@@ -207,9 +241,10 @@ exports.getVentasDelDia = async (req, res) => {
       totalVentas,
       totalDinero,
       totalProductos,
-      sucursalQueVendioMas: sucursalTop ? sucursalesVentas[sucursalTop].nombre : null
+      sucursalQueVendioMas: sucursalTop
+        ? sucursalesVentas[sucursalTop].nombre
+        : null,
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al obtener las ventas del día' });
@@ -245,7 +280,68 @@ exports.getVentaPorId = async (req, res) => {
 };
 
 const generateFolio = () => {
-    return String(Math.floor(1000000 + Math.random() * 9000000)); // Genera un número aleatorio de 7 dígitos
+  return String(Math.floor(1000000 + Math.random() * 9000000)); // Genera un número aleatorio de 7 dígitos
 };
 
+async function checkCorteUsuarioIniciadoONoFinalizado(userId) {
+    try {
+        const corte = await CorteGeneral.findOne({
+            usuario: userId,
+            $or: [
+                { fecha_inicial: { $exists: true } }, // Verifica si tiene un corte iniciado
+                { fecha_final: { $exists: false } }    // Verifica si no está finalizado
+            ]
+        });
+
+        // Si existe un corte iniciado o no finalizado, retorna el folio
+        if (corte) {
+            return corte.folio; // Devolver el folio del corte
+        }
+
+        // Si no hay corte iniciado ni pendiente, retorna null o false
+        return null;
+    } catch (error) {
+        console.log('Error al buscar corte:', error);
+        throw new Error('Error interno del servidor');
+    }
+}
+
+async function crearCorteFinal(usuario) {
+    try {
+        const folioUnico = await generarFolioPadreUnico();
+        const nuevoCorteFinal = new CorteFinal({
+            folio: folioUnico,
+            fecha_inicial:  new Date(),
+            usuario: usuario,
+            ventas: []
+        });
+
+        const corteGuardado = await nuevoCorteFinal.save();
+        return corteGuardado;
+
+    } catch (error) {
+        console.error('Error al crear el corte final:', error);
+        throw new Error('Error al crear el corte final');
+    }
+}
+
+async function generarFolioPadreUnico() {
+    let folioPadre;
+    let folioExiste = true;
+
+    // Bucle para seguir generando folios hasta que sea único
+    while (folioExiste) {
+        // Generar un número aleatorio de 4 dígitos
+        folioPadre = Math.floor(1000 + Math.random() * 9000);
+
+        // Comprobar si ya existe un corte final con este folio
+        const corteExistente = await CorteFinal.findOne({ folio: folioPadre });
+
+        if (!corteExistente) {
+            folioExiste = false; // Si no existe, salir del bucle
+        }
+    }
+
+    return folioPadre.toString(); // Devolver el folio como string si es necesario
+}
 

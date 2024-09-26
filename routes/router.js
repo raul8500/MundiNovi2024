@@ -24,6 +24,8 @@ const kardex = require('../controllers/kardex/kardexController')
 const proveedor = require('../controllers/proveedor/proveedorController')
 const materiasPrimas = require('../controllers/materiaPrima/materiaPrimaController')
 const formulasProduccion = require('../controllers/formulas/formulasController')
+const cortesParciales = require('../controllers/cortes/cortesParcialesController')
+
 
 
 //Vistas
@@ -89,6 +91,11 @@ router.get('/corteparcial', (req, res) => {
 router.get('/corteVenta', (req, res) => {    
     res.render('Cortes/cortesVenta');
 });
+
+router.get('/cortesRecoleccion', (req, res) => {    
+    res.render('Cortes/cortesRecoleccion');
+});
+
 
 
 
@@ -221,6 +228,12 @@ router.post('/api/formulasProduccion', formulasProduccion.addFormulaProduccion)
 router.put('/api/formulasProduccion/:id', formulasProduccion.updateFormulaProduccion)
 router.delete('/api/formulasProduccion/:id', formulasProduccion.deleteFormulaProduccion)
 
+//Cortes Parciales
+router.get('/api/cortesParciales', cortesParciales.getCortesParciales)
+router.get('/api/cortesParciales/:id', cortesParciales.getCorteParcialById)
+router.post('/api/cortesParciales', cortesParciales.addCorteParcial)
+router.put('/api/cortesParciales/:id', cortesParciales.updateCorteParcial)
+router.delete('/api/cortesParciales/:id', cortesParciales.deleteCorteParcial)
 
 
 

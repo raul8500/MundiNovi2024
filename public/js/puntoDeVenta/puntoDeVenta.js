@@ -469,6 +469,7 @@ function completarVenta(resumenVenta) {
 
     let venta = {
         sucursalId: sucursalInfo._id,
+        usuario: infoUser,
         fecha: new Date().toISOString(),
         direccion: sucursalInfo.datosTicket.direccion,
         productos: productosEnVenta,
@@ -573,6 +574,7 @@ function imprimirTicket(venta) {
     printWindow.print();
     printWindow.close();
 }
+
 function facturarVenta() {
     var btnFacturar = document.getElementById('btnFacturar');
 
