@@ -13,6 +13,8 @@
     <!-- MDB -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css" rel="stylesheet" />
 
+        <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
 
 </head>
@@ -85,27 +87,33 @@
             <h3 class="text-center" style="margin-bottom: 50px;">Listado de cortes de venta por sucursal (Recolección)</h3>
 
             <div class="row">
-                <div class="col-md-4">
-
+                <div class="col-md-3">
+                    <label for="sucursal" class="form-label">Sucursal</label>
+                    <select id="sucursal" class="form-select" aria-label="Combo box example">
+                    </select>
 
                 </div>
 
                 <div class="col-md-3">
-                
-                
+                    <label for="fechaInicial" class="form-label">Fecha Incial</label>
+                    <input type="text" class="form-control" id="fechaInicial" placeholder="Seleccione fecha inicial">
                 </div>
-
+                
                 <div class="col-md-3">
-                
-                
+                    <label for="fechaFinal" class="form-label">Fecha Final</label>
+                    <input type="text" class="form-control" id="fechaFinal" placeholder="Seleccione fecha final">
                 </div>
 
-                <div class="col-md-2">
-                
-                
+                <div class="col-md-3 d-flex flex-column" style="justify-content: flex-end;">
+                    <button id="btnCargarCortes" type="button" class="btn btn-primary me-2" data-mdb-ripple-init>
+                        <i class="fa-solid fa-database"></i> Cargar
+                    </button>
                 </div>
+
 
             </div>
+
+            <hr>
 
             <div class="row">
 
@@ -190,8 +198,7 @@
         });
     </script>
 
-
+    <script src="js/cortes/cortesRecoleccion.js"></script>
 
 </body>
-
 </html>

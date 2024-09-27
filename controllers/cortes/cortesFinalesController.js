@@ -62,21 +62,55 @@ exports.getCorteFinalById = async (req, res) => {
     }
 };
 
-// Crear un nuevo corte final
+// Crear reporte
 exports.addCorteFinal = async (req, res) => {
     try {
-        const body = req.body;
+        const userId = req.body.userId;  // Asegúrate de obtener el userId correctamente
+        const body = req.body.cantidad;
+        const observaciones = req.body.observaciones;
 
-        // Crear un nuevo corte final con los datos proporcionados
-        const nuevoCorteFinal = new CorteFinal(body);
+        // Verificar si el usuario ya tiene un corte iniciado o no finalizado
+        const corteAbierto = await checkCorteUsuarioIniciadoONoFinalizado(userId);
 
-        await nuevoCorteFinal.save();
-        res.status(201).send(nuevoCorteFinal);
+        if (corteAbierto) {
+            // Si hay un corte abierto, actualizamos el corteFinal y la fecha_final.
+            const corteActualizado = await CorteFinal.findOneAndUpdate(
+                { folio: corteAbierto },
+                {
+                    $set: {
+                        'corteFinal': {
+                            cantidad: body,
+                            observaciones: observaciones
+                        },
+                        'fecha_final': new Date()  // Actualiza la fecha_final con la fecha actual
+                    },
+                    $inc: {
+                        'totalVentasEfectivoCortes': -body,  // Resta el valor de body de totalVentasEfectivoCortes
+                        'totalVentaCorte': body  // Suma el valor de body a totalVentaCorte
+                    }
+                },
+                { new: true, upsert: true }  // upsert asegura que si no existe corteFinal, lo creará
+            );
+
+            // Retorna los datos del corte actualizado
+            return res.status(200).json({
+                message: 'Corte final actualizado exitosamente.',
+                corte: {
+                    corteActualizado
+                }
+            });
+        } else {
+            // Si no existe un corte abierto, devuelve un error 409 Conflict
+            return res.status(409).json({
+                error: 'No se puede hacer un corte final porque no existe un corte abierto.'
+            });
+        }
     } catch (error) {
-        console.error('Error al crear el corte final:', error);
-        res.status(500).send('Error interno del servidor');
+        console.error('Error al crear o actualizar el corte final:', error);
+        return res.status(500).send('Error interno del servidor');
     }
 };
+
 
 
 // Actualizar un corte final por ID
@@ -116,3 +150,24 @@ exports.deleteCorteFinalById = async (req, res) => {
         res.status(500).send('Error interno del servidor');
     }
 };
+
+async function checkCorteUsuarioIniciadoONoFinalizado(userId) {
+    try {
+        const corte = await CorteFinal.findOne({
+            usuario: userId,
+            folio: { $exists: true },  // Asegura que el folio exista (es decir, que el corte esté iniciado)
+            fecha_final: { $exists: false }  // Verifica que el corte no esté finalizado
+        });
+
+        // Si existe un corte iniciado y no finalizado, retorna el folio
+        if (corte) {
+            return corte.folio;  // Devolver el folio del corte
+        }
+
+        // Si no hay corte iniciado ni pendiente, retorna null
+        return null;
+    } catch (error) {
+        console.log('Error al buscar corte:', error);
+        throw new Error('Error interno del servidor');
+    }
+}

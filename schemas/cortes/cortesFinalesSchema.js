@@ -33,6 +33,11 @@ const corteFinalSchema = new Schema({
         }
     ],
     sucursal: { type: mongoose.Schema.Types.ObjectId, ref: 'sucursal', required: false }, 
+    corteFinal: 
+        {
+            cantidad: { type: Number, required: false },
+            observaciones: { type: String, required: false }
+        }
 });
 
 module.exports = mongoose.model('CorteFinal', corteFinalSchema);
