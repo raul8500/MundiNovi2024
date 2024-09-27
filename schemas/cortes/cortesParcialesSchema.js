@@ -14,13 +14,15 @@ const cortesParcialesSchema = new Schema({
     monedas_5: { type: Number, required: true },
     monedas_2: { type: Number, required: true },
     monedas_1: { type: Number, required: true },
-    monedas_050: { type: Number, required: true },
+    monedas_50c: { type: Number, required: true },
     cantidad : { type: Number, required: true },
     observaciones: { type: String, required: false },
     folio: { type: String, required: true },
     folioPadre: { type: String, required: true },
     fechaCreacion: {type: Date, default: Date.now},
-
+    recibido: {type: Boolean, required : false},
+    recibido: {type: Boolean, required : false},
+    vendedor :  { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: false }
 });
 
 module.exports = mongoose.model('CortesParciales', cortesParcialesSchema);

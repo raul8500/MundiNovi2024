@@ -19,7 +19,7 @@ const corteFinalSchema = new Schema({
     transferencias: { type: Boolean, required: false }, 
     monto_transferencias: { type: Number, required: false }, 
     devolucion_ventas: { type: Number, required: false },  
-    cortes: [ { type: mongoose.Schema.Types.ObjectId, ref: 'CortesParciales', required: false } ],
+    cortes: [ { type: String, required: false } ],
     salidas: { type: Number, required: false },  
     ind_ventas: { type: Number, required: false },  
     total_ventas: { type: Number, required: false },  

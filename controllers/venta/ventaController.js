@@ -164,8 +164,6 @@ exports.createVenta = async (req, res) => {
         // Verificar si es necesario hacer un corte parcial
         const resultado = await checkCorteUsuarioIniciadoConVentas(vendedor);
 
-        console.log(resultado)
-
         if (resultado.codigo == 1) {
 
             return res.status(304).json({

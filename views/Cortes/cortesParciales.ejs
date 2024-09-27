@@ -91,32 +91,32 @@
     
                     <div class="d-flex align-items-center mb-2">
                         <label for="billetes1000_1" class="form-label me-2" style="font-size: 1rem;">Billetes de <strong>$1,000</strong></label>
-                        <input type="number" class="form-control form-control-sm" id="billetes1000_1" min="0"
+                        <input type="number" class="form-control form-control-sm" id="billetes1000" min="0"
                             style="width: 100px;">
                     </div>
                     <div class="d-flex align-items-center mb-2">
                         <label for="billetes500_1" class="form-label me-2" style="font-size: 1rem;">Billetes de <strong>$500</strong></label>
-                        <input type="number" class="form-control form-control-sm" id="billetes500_1" min="0"
+                        <input type="number" class="form-control form-control-sm" id="billetes500" min="0"
                             style="width: 115px;">
                     </div>
                     <div class="d-flex align-items-center mb-2">
                         <label for="billetes200_1" class="form-label me-2" style="font-size: 1rem;">Billetes de <strong>$200</strong></label>
-                        <input type="number" class="form-control form-control-sm" id="billetes200_1" min="0"
+                        <input type="number" class="form-control form-control-sm" id="billetes200" min="0"
                             style="width: 115px;">
                     </div>
                     <div class="d-flex align-items-center mb-2">
                         <label for="billetes100_1" class="form-label me-2" style="font-size: 1rem;">Billetes de <strong>$100</strong></label>
-                        <input type="number" class="form-control form-control-sm" id="billetes100_1" min="0"
+                        <input type="number" class="form-control form-control-sm" id="billetes100" min="0"
                             style="width: 115px;">
                     </div>
                     <div class="d-flex align-items-center mb-2">
                         <label for="billetes50_1" class="form-label me-2" style="font-size: 1rem;">Billetes de <strong>$50</strong></label>
-                        <input type="number" class="form-control form-control-sm" id="billetes50_1" min="0"
+                        <input type="number" class="form-control form-control-sm" id="billetes50" min="0"
                             style="width: 125px;">
                     </div>
                     <div class="d-flex align-items-center mb-2">
                         <label for="billetes20_1" class="form-label me-2" style="font-size: 1rem;">Billetes de <strong>$20</strong></label>
-                        <input type="number" class="form-control form-control-sm" id="billetes20_1" min="0"
+                        <input type="number" class="form-control form-control-sm" id="billetes20" min="0"
                             style="width: 125px;">
                     </div>
                 </div>
@@ -168,7 +168,7 @@
                 
                     <!-- Contenedor para alinear los botones a la derecha -->
                     <div class="text-end">
-                        <button type="button" class="btn btn-primary" data-mdb-ripple-init>Guardar</button>
+                        <button id="btnGuardarCorteParcial" type="button" class="btn btn-primary" data-mdb-ripple-init>Guardar</button>
                         <button type="button" class="btn btn-danger" data-mdb-ripple-init>Cancelar</button>
                     </div>
                 </div>
@@ -191,8 +191,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/main.js"></script>
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.js"></script>
-
-
+    <script src="js/cortes/corteParcial.js"></script>
 
 </body>
 </html>
