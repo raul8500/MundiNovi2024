@@ -34,17 +34,32 @@ exports.getCortesFinales = async (req, res) => {
         };
 
         // Buscar los cortes finales según la consulta
-        const cortesFinales = await CorteFinal.find(query)
+        let cortesFinales = await CorteFinal.find(query)
             .populate('sucursal', 'nombre')
             .populate('usuario', 'username') // Obtener más detalles de la sucursal
             .sort({ fecha_inicial: -1 });   // Ordenar los resultados por fecha_inicial de manera descendente
 
-        res.status(200).send(cortesFinales);
+        // Iterar sobre cada corte final y buscar los detalles de los cortes parciales si existen
+        cortesFinales = await Promise.all(cortesFinales.map(async (corte) => {
+            if (corte.cortes && corte.cortes.length > 0) {
+                // Buscar los detalles de cada corte parcial por su folio
+                const cortesParciales = await CorteParcial.find({ folio: { $in: corte.cortes } });
+                // Agregar la información de los cortes parciales al corte final
+                return { ...corte.toObject(), cortesParciales };
+            } else {
+                // Si no hay cortes parciales, devolvemos el campo vacío
+                return { ...corte.toObject(), cortesParciales: [] };
+            }
+        }));
+
+        // Enviar la respuesta con los cortes finales y sus cortes parciales
+        res.status(200).json(cortesFinales);
     } catch (error) {
         console.error('Error al obtener los cortes finales:', error);
         res.status(500).send('Error interno del servidor');
     }
 };
+
 
 // Obtener un corte final por ID
 exports.getCorteFinalById = async (req, res) => {
@@ -111,8 +126,6 @@ exports.addCorteFinal = async (req, res) => {
         return res.status(500).send('Error interno del servidor');
     }
 };
-
-
 
 // Actualizar un corte final por ID
 exports.updateCorteFinalById = async (req, res) => {

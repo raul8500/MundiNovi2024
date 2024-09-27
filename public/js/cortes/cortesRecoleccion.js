@@ -102,6 +102,7 @@ function getFormValuesAndBuildUrl() {
 
 
 function mostrarEnTabla(cortes){
+    console.log(cortes)
     let resultadosCortes = '';
     cortes.forEach((item) => {
         resultadosCortes += `
@@ -113,9 +114,9 @@ function mostrarEnTabla(cortes){
                     <td class="text-center">0.0</td>
                     <td class="text-center">0.0</td>
                     <td class="text-center">0.0</td>
-                    <td class="text-center">${item.total_tarjetas+ item.monto_transferencias + item.totalVentasEfectivoCortes}</td>
+                    <td class="text-center">${item.total_tarjetas+ item.monto_transferencias + item.totalVentasEfectivoCortes + item.totalVentaCorte}</td>
                     <td class="text-center">0.0</td>
-                    <td class="text-center">${item.total_tarjetas+ item.monto_transferencias + item.totalVentasEfectivoCortes}</td>
+                    <td class="text-center">${item.total_tarjetas+ item.monto_transferencias + item.totalVentasEfectivoCortes + item.totalVentaCorte}</td>
                     <td class="text-center">${item.totalVentasEfectivoCortes}</td>
                     <td class="text-center">0.0</td>                    
                     <td class="text-center">
