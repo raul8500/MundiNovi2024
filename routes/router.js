@@ -25,7 +25,7 @@ const proveedor = require('../controllers/proveedor/proveedorController')
 const materiasPrimas = require('../controllers/materiaPrima/materiaPrimaController')
 const formulasProduccion = require('../controllers/formulas/formulasController')
 const cortesParciales = require('../controllers/cortes/cortesParcialesController')
-
+const cortesFinales = require('../controllers/cortes/cortesFinalesController')
 
 
 //Vistas
@@ -234,6 +234,13 @@ router.get('/api/cortesParciales/:id', cortesParciales.getCorteParcialById)
 router.post('/api/cortesParciales', cortesParciales.addCorteParcial)
 router.put('/api/cortesParciales/:id', cortesParciales.updateCorteParcial)
 router.delete('/api/cortesParciales/:id', cortesParciales.deleteCorteParcial)
+
+//Cortes Finales
+router.get('/api/cortesFinales', cortesFinales.getCortesFinales)
+router.get('/api/cortesFinales/:id', cortesFinales.getCorteFinalById)
+router.post('/api/cortesFinales', cortesFinales.addCorteFinal)
+router.put('/api/cortesFinales/:id', cortesFinales.updateCorteFinalById)
+router.delete('/api/cortesFinales/:id', cortesFinales.deleteCorteFinalById)
 
 
 

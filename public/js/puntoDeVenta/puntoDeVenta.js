@@ -656,7 +656,8 @@ document.getElementById('btnAgregarFormaPago').addEventListener('click', functio
         <label for="formaPago" class="form-label">Forma de Pago</label>
         <select class="form-select formaPago">
             <option value="efectivo">Efectivo</option>
-            <option value="tarjeta">Tarjeta</option>
+            <option value="tarjeta credito">Tarjeta credito</option>
+            <option value="tarjeta debito">Tarjeta debito</option>
             <option value="transferencia">Transferencia</option>
             <option value="monedero">Monedero</option>
         </select>
