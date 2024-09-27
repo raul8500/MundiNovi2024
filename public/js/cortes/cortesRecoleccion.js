@@ -164,7 +164,7 @@ function mostrarEnTabla(cortes) {
                         <td class="text-center">${fechaCreacionParcial}</td>
                         <td class="text-center">${cantidadParcial}</td>
                         <td class="text-center">
-                            <button id="${corteParcial._id}" type="button" class="btn btn-primary btn-rounded btnAccion corteParcial">
+                            <button id="${corteParcial._id}" type="button" class="btn btn-primary btn-rounded btnRecibir corteParcial">
                                 <i class="fa-solid fa-hand-holding-dollar"></i>
                             </button>
                         </td>
@@ -182,6 +182,53 @@ function mostrarEnTabla(cortes) {
     // Insertar el contenido generado en el cuerpo de la tabla
     tablaRecoleccionBody.innerHTML = resultadosCortes;
 }
+
+on(document, 'click', '.btnRecibir', async e => {
+    const button = e.target.closest('.btnRecibir');
+    const id = button.getAttribute('id');
+
+    // Obtener la fila que contiene el botón
+    const row = button.closest('tr');
+
+    // Recorrer las celdas de la fila para obtener sus valores
+    const cells = row.querySelectorAll('td');
+    const rowData = Array.from(cells).map(cell => cell.textContent.trim());
+
+    // Obtener el folio
+    const folio = rowData[0]; // El folio es el primer valor en la fila
+    const esParcial = button.classList.contains('corteParcial') ? 'Sí' : 'No'; // Comprobar si el botón tiene la clase corteParcial
+
+    // Crear una nueva fila en la tabla #tablaRecibirCortes
+    const tablaRecibirCortes = document.getElementById('tablaRecibirCortes');
+    const nuevaFila = document.createElement('tr');
+
+    // Asignar el contenido de la nueva fila
+    nuevaFila.innerHTML = `
+        <td class="text-center">${folio}</td>
+        <td class="text-center">${esParcial}</td>
+        <td class="text-center">
+            <button type="button" class="btn btn-danger btn-sm btnEliminarFila">X</button>
+        </td>
+    `;
+
+    // Insertar la nueva fila en la tabla
+    tablaRecibirCortes.appendChild(nuevaFila);
+
+    // Ocultar el botón "Recibir" utilizando visibility
+    button.style.visibility = 'hidden';
+
+    // Agregar evento para eliminar la fila cuando se haga clic en el botón "X"
+    nuevaFila.querySelector('.btnEliminarFila').addEventListener('click', function() {
+        nuevaFila.remove(); // Elimina la fila
+
+        // Mostrar de nuevo el botón "Recibir"
+        button.style.visibility = 'visible';
+    });
+});
+
+
+
+
 
 
 
