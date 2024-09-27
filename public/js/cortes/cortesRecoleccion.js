@@ -3,6 +3,8 @@ const selectOptions = [
     { url: '/api/sucursal', selectId: 'sucursal' },
 ];
 
+let tablaRecoleccionBody = document.getElementById('tablaRecoleccionBody')
+
 loadSelectOptions(selectOptions);
 
 
@@ -49,7 +51,33 @@ async function loadSelectOptions(options) {
 }
 
 btnCargarCortes.addEventListener('click', () => {
-    console.log(getFormValuesAndBuildUrl())
+    let url = getFormValuesAndBuildUrl()
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(async response => {
+        if (response.status === 200) {
+            const data = await response.json();
+            mostrarEnTabla(data)
+        } else {
+            throw new Error('Error inesperado en la respuesta del servidor.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'Error',
+            text: 'Hubo un problema al realizar el corte. Por favor, inténtalo de nuevo.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+    });
+
+
 });
 
 function getFormValuesAndBuildUrl() {
@@ -70,5 +98,39 @@ function getFormValuesAndBuildUrl() {
     const url = `http://localhost:3000/api/cortesFinales?fechaInicio=${fechaInicioISO}&fechaFin=${fechaFinISO}&sucursalId=${sucursalId}`;
 
     return url;
+}
+
+
+function mostrarEnTabla(cortes){
+    let resultadosCortes = '';
+    cortes.forEach((item) => {
+        resultadosCortes += `
+                <tr class="table-danger">
+                    <td class="text-center">${item.folio}</td>
+                    <td colspan="2"  class="text-center">${new Date(item.fecha_inicial).toLocaleString()}</td>
+                    <td class="text-center">${item.usuario.username}</td>
+                    <td class="text-center">0.0</td>
+                    <td class="text-center">0.0</td>
+                    <td class="text-center">0.0</td>
+                    <td class="text-center">0.0</td>
+                    <td class="text-center">${item.total_tarjetas+ item.monto_transferencias + item.totalVentasEfectivoCortes}</td>
+                    <td class="text-center">0.0</td>
+                    <td class="text-center">${item.total_tarjetas+ item.monto_transferencias + item.totalVentasEfectivoCortes}</td>
+                    <td class="text-center">${item.totalVentasEfectivoCortes}</td>
+                    <td class="text-center">0.0</td>                    
+                    <td class="text-center">
+                    
+                        <button id="${
+                          item._id
+                        }" type="button" class="btn btn-primary btn-rounded btnRecibir">
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                        </button>
+    
+                    </td>
+                </tr>`;
+    });
+
+    tablaRecoleccionBody.innerHTML = resultadosCortes;
+
 }
 

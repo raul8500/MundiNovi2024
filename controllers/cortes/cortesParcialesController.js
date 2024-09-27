@@ -116,7 +116,7 @@ exports.deleteCorteParcial = async (req, res) => {
 
 async function checkCorteUsuarioIniciadoONoFinalizado(userId) {
     try {
-        const corte = await CorteFinal.findOne({
+        const corte = await CorteGeneral.findOne({
             usuario: userId,
             folio: { $exists: true },  // Asegura que el folio exista (es decir, que el corte esté iniciado)
             fecha_final: { $exists: false }  // Verifica que el corte no esté finalizado
