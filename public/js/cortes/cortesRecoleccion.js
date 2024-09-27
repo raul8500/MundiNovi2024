@@ -100,38 +100,88 @@ function getFormValuesAndBuildUrl() {
     return url;
 }
 
-
-function mostrarEnTabla(cortes){
-    console.log(cortes)
+function mostrarEnTabla(cortes) {
+    console.log(cortes);
     let resultadosCortes = '';
+    
     cortes.forEach((item) => {
+        // Si no existen las fechas, dejarlas en blanco
+        const fechaInicial = item.fecha_inicial ? new Date(item.fecha_inicial).toLocaleString() : '';
+        const fechaFinal = item.fecha_final ? new Date(item.fecha_final).toLocaleString() : '';
+        const username = item.usuario && item.usuario.username ? item.usuario.username : '';
+        const totalVenta = item.total_tarjetas + item.monto_transferencias + (item.totalVentasEfectivoCortes || 0) + (item.totalVentaCorte || 0);
+        const totalEfectivo = item.totalVentasEfectivoCortes || 0;
+
+        // Agregar la fila del corte final
         resultadosCortes += `
-                <tr class="table-danger">
-                    <td class="text-center">${item.folio}</td>
-                    <td colspan="2"  class="text-center">${new Date(item.fecha_inicial).toLocaleString()}</td>
-                    <td class="text-center">${item.usuario.username}</td>
+                <tr class="table-warning">
+                    <td class="text-center">${item.folio || ''}</td>
+                    <td class="text-center">${fechaInicial}</td>
+                    <td class="text-center">${fechaFinal}</td>
+                    <td class="text-center">${username}</td>
                     <td class="text-center">0.0</td>
                     <td class="text-center">0.0</td>
                     <td class="text-center">0.0</td>
                     <td class="text-center">0.0</td>
-                    <td class="text-center">${item.total_tarjetas+ item.monto_transferencias + item.totalVentasEfectivoCortes + item.totalVentaCorte}</td>
+                    <td class="text-center">${totalVenta}</td>
                     <td class="text-center">0.0</td>
-                    <td class="text-center">${item.total_tarjetas+ item.monto_transferencias + item.totalVentasEfectivoCortes + item.totalVentaCorte}</td>
-                    <td class="text-center">${item.totalVentasEfectivoCortes}</td>
+                    <td class="text-center">${totalVenta}</td>
+                    <td class="text-center">${totalEfectivo}</td>
                     <td class="text-center">0.0</td>                    
                     <td class="text-center">
-                    
-                        <button id="${
-                          item._id
-                        }" type="button" class="btn btn-primary btn-rounded btnRecibir">
+                        <button id="${item._id}" type="button" class="btn btn-primary btn-rounded btnRecibir corteFinal">
                             <i class="fa-solid fa-hand-holding-dollar"></i>
                         </button>
-    
                     </td>
                 </tr>`;
+        
+        // Si el corte tiene cortes parciales, crear una tabla anidada
+        if (item.cortesParciales && item.cortesParciales.length > 0) {
+            resultadosCortes += `
+                <tr>
+                    <td colspan="14">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="table-primary">
+                                    <th class="text-center">Folio</th>
+                                    <th class="text-center">Folio Padre</th>
+                                    <th class="text-center">Fecha de Creación</th>
+                                    <th class="text-center">Cantidad</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+
+            // Iterar sobre los cortes parciales y generar las filas de la tabla anidada
+            item.cortesParciales.forEach((corteParcial) => {
+                const fechaCreacionParcial = corteParcial.fechaCreacion ? new Date(corteParcial.fechaCreacion).toLocaleString() : '';
+                const cantidadParcial = corteParcial.cantidad || '';
+
+                resultadosCortes += `
+                    <tr>
+                        <td class="text-center">${corteParcial.folio || ''}</td>
+                        <td class="text-center">${item.folio || ''}</td>
+                        <td class="text-center">${fechaCreacionParcial}</td>
+                        <td class="text-center">${cantidadParcial}</td>
+                        <td class="text-center">
+                            <button id="${corteParcial._id}" type="button" class="btn btn-primary btn-rounded btnAccion corteParcial">
+                                <i class="fa-solid fa-hand-holding-dollar"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+            });
+
+            resultadosCortes += `
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>`;
+        }
     });
 
+    // Insertar el contenido generado en el cuerpo de la tabla
     tablaRecoleccionBody.innerHTML = resultadosCortes;
-
 }
+
+
 
