@@ -16,6 +16,7 @@
         <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
+    
 
 </head>
 
@@ -116,63 +117,47 @@
             <hr>
 
             <div class="row">
-
-                <div class="col-md-10">
+                <div class="col-md-12">
                     <div class="table-responsive pt-3">
-                        <table id="tablaRecoleccion" class="table align-middle mb-0 bg-white">
-                            <thead class="table-info">
-                                <tr class="text-center" style="font-size:9.5pt; font-weight:bolder; color: white;">
+                        <table class="table table-hover table-bordered table-striped">
+                            <thead class="table-dark">
+                                <tr class="text-center" style="font-size:9.5pt; font-weight:bolder;">
                                     <th>Folio</th>
                                     <th>Fecha Inicial</th>
                                     <th>Fecha Final</th>
                                     <th>Usuario</th>
+                                    <th>Recepción</th>
+                                    <th>U. Recepción</th>
+                                    <th>Fecha Recepción</th>
+                                    
                                     <th>T. Cobranzas</th>
+                                    <th>Monto Doc. Cobrar</th>
+                                    <th>Venta Efectivo</th>
                                     <th>T. Crédito</th>
                                     <th>T. Débito</th>
-                                    <th>T. Electrónicas</th>
-                                    <th>Ventas</th>
+                                    <th>Monto Tarjetas</th>
+                                    <th>Transferencia E.</th>
+                                    <th>Monto Trans. Elec.</th>
                                     <th>Dev. ventas</th>
-                                    <th>Total Venta</th>
-                                    <th>Efectivo en Caja</th>
+                                    <th>Cortes</th>
+                                    <th>Salidas</th>
+                                    <th>Ind. Ventas</th>
+                                    <th>Total de Ventas <i class="fa fa-money"></i> </th>
+                                    <th>Corte Total</th>
+                                    <th>Sem. Vales</th>
                                     <th>Vales</th>
+                                    <th>Observaciones</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="tablaRecoleccionBody" class="table-group-divider">
-                    
+                                <!-- Aquí se agregarán las filas -->
                             </tbody>
                         </table>
                     </div>
                 </div>
-
-                <div class="col-md-2">
-                    <div class="card border shadow-4 mb-3" style="width: 250px;">
-                        <div class="card-header">
-                            <h5 class="card-title">Cortes a recibir</h5>
-                        </div>
-                        <div class="card-body p-0"> <!-- Se eliminó el padding del cuerpo de la tarjeta -->
-                            <table id="tablaReconectar" class="table align-middle mb-0 bg-white table-responsive" style="overflow-x: hidden;">
-                                <thead class="bg-light">
-                                    <tr class="text-center" style="font-size:9.5pt; font-weight:bolder;">
-                                        <th>Folio</th>
-                                        <th>Es parcial</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablaRecibirCortes" class="table-group-divider">
-                                    <!-- Aquí se agregarán las filas -->
-                                </tbody>
-                            </table>
-                            <!-- Botón para recibir cortes -->
-                            <div class="text-center mt-3">
-                                <button style="margin-bottom: 20px;" id="btnRecibirCortes" class="btn btn-success">Recibir</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                
             </div>
+            
 
         </div>
     </main>
@@ -204,7 +189,6 @@
         });
     </script>
 
-    <script src="js/cortes/cortesRecoleccion.js"></script>
 
 </body>
 </html>

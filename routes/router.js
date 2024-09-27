@@ -96,6 +96,10 @@ router.get('/cortesRecoleccion', (req, res) => {
     res.render('Cortes/cortesRecoleccion');
 });
 
+router.get('/listadoCortesVenta', (req, res) => {    
+    res.render('Cortes/listadoCortesVenta');
+});
+
 
 
 

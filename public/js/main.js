@@ -66,7 +66,7 @@ function obtenerNombreRol(rol) {
         case 3:
             return "STPS";
         case 4:
-            return "Autor";
+            return "AAdministrativo";
         case 5:
             return "Colaborador";
         case 6:
