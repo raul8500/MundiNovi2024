@@ -95,7 +95,7 @@ function getFormValuesAndBuildUrl() {
     const fechaFinISO = new Date(fechaFinDate.setHours(23, 59, 59, 999)).toISOString();  // 23:59:59
 
     // Construir la URL con los parámetros
-    const url = `http://localhost:3000/api/cortesFinales?fechaInicio=${fechaInicioISO}&fechaFin=${fechaFinISO}&sucursalId=${sucursalId}`;
+    const url = `/api/cortesFinales?fechaInicio=${fechaInicioISO}&fechaFin=${fechaFinISO}&sucursalId=${sucursalId}`;
 
     return url;
 }
