@@ -120,8 +120,8 @@
                 <div class="col-md-10">
                     <div class="table-responsive pt-3">
                         <table id="tablaRecoleccion" class="table align-middle mb-0 bg-white">
-                            <thead class="bg-light">
-                                <tr class="text-center" style="font-size:9.5pt; font-weight:bolder;">
+                            <thead class="table-info">
+                                <tr class="text-center" style="font-size:9.5pt; font-weight:bolder; color: white;">
                                     <th>Folio</th>
                                     <th>Fecha Inicial</th>
                                     <th>Fecha Final</th>
@@ -138,7 +138,7 @@
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody class="table-group-divider">
+                            <tbody id="tablaRecoleccionBody" class="table-group-divider">
                     
                             </tbody>
                         </table>
@@ -146,12 +146,12 @@
                 </div>
 
                 <div class="col-md-2">
-                    <div class="card border border-primary shadow-0 mb-3" style="width: 250px;">
+                    <div class="card border shadow-4 mb-3" style="width: 250px;">
                         <div class="card-header">
                             <h5 class="card-title">Cortes a recibir</h5>
                         </div>
-                        <div class="card-body">
-                            <table id="tablaReconectar" class="table align-middle mb-0 bg-white">
+                        <div class="card-body p-0"> <!-- Se eliminó el padding del cuerpo de la tarjeta -->
+                            <table id="tablaReconectar" class="table align-middle mb-0 bg-white table-responsive" style="overflow-x: hidden;">
                                 <thead class="bg-light">
                                     <tr class="text-center" style="font-size:9.5pt; font-weight:bolder;">
                                         <th>Folio</th>
@@ -159,13 +159,19 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody class="table-group-divider">
-                    
+                                <tbody id="tablaRecibirCortes" class="table-group-divider">
+                                    <!-- Aquí se agregarán las filas -->
                                 </tbody>
                             </table>
+                            <!-- Botón para recibir cortes -->
+                            <div class="text-center mt-3">
+                                <button style="margin-bottom: 20px;" id="btnRecibirCortes" class="btn btn-success">Recibir</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+                
+                
             </div>
 
         </div>
