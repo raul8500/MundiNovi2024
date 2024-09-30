@@ -123,11 +123,10 @@
         <div class="container pt-4">
                 <h3 class="text-center"><i class="fa-solid fa-dolly"></i> Productos</h3>
             
-
                 <div class="d-flex justify-content-end align-items-center" style="margin-top: 20px;">
                     <div class="d-flex align-items-center">
                         <button id="btnAddProducto" type="button" class="btn btn-primary btn-rounded me-2" data-mdb-ripple-color="dark"
-                            data-mdb-toggle="modal" data-mdb-target="#ModalAddProducto" data-mdb-whatever="@mdo">
+                            data-mdb-toggle="modal" data-mdb-target="#añadirProductos" data-mdb-whatever="@mdo">
                             Añadir <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
                         </button>
                 
@@ -170,9 +169,121 @@
                     </table>
                 </div>
 
-            
-
         </div>
+
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="añadirProductos" tabindex="-1" aria-labelledby="añadirProductosLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="añadirProductosLabel">Añadir Productos</h5>
+                                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Pills navs -->
+                                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link active" id="pills-datos-generales-tab" data-mdb-toggle="pill"
+                                                    href="#pills-datos-generales" role="tab" aria-controls="pills-datos-generales"
+                                                    aria-selected="true">Datos Generales</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="pills-datos-financieros-tab" data-mdb-toggle="pill"
+                                                    href="#pills-datos-financieros" role="tab" aria-controls="pills-datos-financieros"
+                                                    aria-selected="false">Datos Financieros</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="pills-otros-tab" data-mdb-toggle="pill" href="#pills-otros" role="tab"
+                                                    aria-controls="pills-otros" aria-selected="false">Otros</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="pills-proveedores-tab" data-mdb-toggle="pill" href="#pills-proveedores"
+                                                    role="tab" aria-controls="pills-proveedores" aria-selected="false">Proveedores</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="pills-productos-adicionales-tab" data-mdb-toggle="pill"
+                                                    href="#pills-productos-adicionales" role="tab" aria-controls="pills-productos-adicionales"
+                                                    aria-selected="false">Productos Adicionales</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="pills-productos-kit-tab" data-mdb-toggle="pill"
+                                                    href="#pills-productos-kit" role="tab" aria-controls="pills-productos-kit"
+                                                    aria-selected="false">Productos Kit</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="pills-productos-grupo-tab" data-mdb-toggle="pill"
+                                                    href="#pills-productos-grupo" role="tab" aria-controls="pills-productos-grupo"
+                                                    aria-selected="false">Productos Grupo</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="pills-productos-complementarios-tab" data-mdb-toggle="pill"
+                                                    href="#pills-productos-complementarios" role="tab"
+                                                    aria-controls="pills-productos-complementarios" aria-selected="false">Productos
+                                                    Complementarios</a>
+                                            </li>
+                                        </ul>
+                        
+                                        <!-- Pills content -->
+                                        <div class="tab-content" id="pills-tabContent">
+                                            <div class="tab-pane fade show active" id="pills-datos-generales" role="tabpanel"
+                                                aria-labelledby="pills-datos-generales-tab">
+                                                <!-- Contenido de Datos Generales -->
+                                                <h6>Datos Generales</h6>
+                                                <p>Aquí puedes ingresar la información general del producto.</p>
+                                            </div>
+                                            <div class="tab-pane fade" id="pills-datos-financieros" role="tabpanel"
+                                                aria-labelledby="pills-datos-financieros-tab">
+                                                <!-- Contenido de Datos Financieros -->
+                                                <h6>Datos Financieros</h6>
+                                                <p>Aquí puedes ingresar la información financiera del producto.</p>
+                                            </div>
+                                            <div class="tab-pane fade" id="pills-otros" role="tabpanel" aria-labelledby="pills-otros-tab">
+                                                <!-- Contenido de Otros -->
+                                                <h6>Otros</h6>
+                                                <p>Aquí puedes agregar información adicional sobre el producto.</p>
+                                            </div>
+                                            <div class="tab-pane fade" id="pills-proveedores" role="tabpanel"
+                                                aria-labelledby="pills-proveedores-tab">
+                                                <!-- Contenido de Proveedores -->
+                                                <h6>Proveedores</h6>
+                                                <p>Aquí puedes administrar los proveedores del producto.</p>
+                                            </div>
+                                            <div class="tab-pane fade" id="pills-productos-adicionales" role="tabpanel"
+                                                aria-labelledby="pills-productos-adicionales-tab">
+                                                <!-- Contenido de Productos Adicionales -->
+                                                <h6>Productos Adicionales</h6>
+                                                <p>Aquí puedes añadir productos adicionales.</p>
+                                            </div>
+                                            <div class="tab-pane fade" id="pills-productos-kit" role="tabpanel"
+                                                aria-labelledby="pills-productos-kit-tab">
+                                                <!-- Contenido de Productos Kit -->
+                                                <h6>Productos Kit</h6>
+                                                <p>Aquí puedes gestionar los productos que forman parte de un kit.</p>
+                                            </div>
+                                            <div class="tab-pane fade" id="pills-productos-grupo" role="tabpanel"
+                                                aria-labelledby="pills-productos-grupo-tab">
+                                                <!-- Contenido de Productos Grupo -->
+                                                <h6>Productos Grupo</h6>
+                                                <p>Aquí puedes gestionar los productos agrupados.</p>
+                                            </div>
+                                            <div class="tab-pane fade" id="pills-productos-complementarios" role="tabpanel"
+                                                aria-labelledby="pills-productos-complementarios-tab">
+                                                <!-- Contenido de Productos Complementarios -->
+                                                <h6>Productos Complementarios</h6>
+                                                <p>Aquí puedes añadir productos complementarios.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
+                                        <button type="button" class="btn btn-primary">Guardar cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
     </main>
 
 
@@ -185,7 +296,7 @@
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.js"></script>
     <script src="js/main.js"></script>
 
-    <script src="js/productos/productosGet.js"></script>
+    <script src="js/productos/productos.js"></script>
 
 </body>
 

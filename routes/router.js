@@ -244,5 +244,8 @@ router.delete('/api/cortesFinales/:id', cortesFinales.deleteCorteFinalById)
 
 
 
+const codigosBarras = require('../controllers/codigosBarras/codigosBarrasController')
+router.post('/api/codigosBarras', codigosBarras.generarCodigoDeBarras)
+
 
 module.exports = router
