@@ -125,8 +125,7 @@
             
                 <div class="d-flex justify-content-end align-items-center" style="margin-top: 20px;">
                     <div class="d-flex align-items-center">
-                        <button id="btnAddProducto" type="button" class="btn btn-primary btn-rounded me-2" data-mdb-ripple-color="dark"
-                            data-mdb-toggle="modal" data-mdb-target="#añadirProductos" data-mdb-whatever="@mdo">
+                        <button id="btnAddProducto" type="button" class="btn btn-primary btn-rounded me-2" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#exampleModal">
                             Añadir <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
                         </button>
                 
@@ -171,117 +170,195 @@
 
         </div>
 
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="añadirProductos" tabindex="-1" aria-labelledby="añadirProductosLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="añadirProductosLabel">Añadir Productos</h5>
-                                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <!-- Pills navs -->
-                                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                                            <li class="nav-item" role="presentation">
-                                                <a class="nav-link active" id="pills-datos-generales-tab" data-mdb-toggle="pill"
-                                                    href="#pills-datos-generales" role="tab" aria-controls="pills-datos-generales"
-                                                    aria-selected="true">Datos Generales</a>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <a class="nav-link" id="pills-datos-financieros-tab" data-mdb-toggle="pill"
-                                                    href="#pills-datos-financieros" role="tab" aria-controls="pills-datos-financieros"
-                                                    aria-selected="false">Datos Financieros</a>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <a class="nav-link" id="pills-otros-tab" data-mdb-toggle="pill" href="#pills-otros" role="tab"
-                                                    aria-controls="pills-otros" aria-selected="false">Otros</a>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <a class="nav-link" id="pills-proveedores-tab" data-mdb-toggle="pill" href="#pills-proveedores"
-                                                    role="tab" aria-controls="pills-proveedores" aria-selected="false">Proveedores</a>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <a class="nav-link" id="pills-productos-adicionales-tab" data-mdb-toggle="pill"
-                                                    href="#pills-productos-adicionales" role="tab" aria-controls="pills-productos-adicionales"
-                                                    aria-selected="false">Productos Adicionales</a>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <a class="nav-link" id="pills-productos-kit-tab" data-mdb-toggle="pill"
-                                                    href="#pills-productos-kit" role="tab" aria-controls="pills-productos-kit"
-                                                    aria-selected="false">Productos Kit</a>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <a class="nav-link" id="pills-productos-grupo-tab" data-mdb-toggle="pill"
-                                                    href="#pills-productos-grupo" role="tab" aria-controls="pills-productos-grupo"
-                                                    aria-selected="false">Productos Grupo</a>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <a class="nav-link" id="pills-productos-complementarios-tab" data-mdb-toggle="pill"
-                                                    href="#pills-productos-complementarios" role="tab"
-                                                    aria-controls="pills-productos-complementarios" aria-selected="false">Productos
-                                                    Complementarios</a>
-                                            </li>
-                                        </ul>
-                        
-                                        <!-- Pills content -->
-                                        <div class="tab-content" id="pills-tabContent">
-                                            <div class="tab-pane fade show active" id="pills-datos-generales" role="tabpanel"
-                                                aria-labelledby="pills-datos-generales-tab">
-                                                <!-- Contenido de Datos Generales -->
-                                                <h6>Datos Generales</h6>
-                                                <p>Aquí puedes ingresar la información general del producto.</p>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-datos-financieros" role="tabpanel"
-                                                aria-labelledby="pills-datos-financieros-tab">
-                                                <!-- Contenido de Datos Financieros -->
-                                                <h6>Datos Financieros</h6>
-                                                <p>Aquí puedes ingresar la información financiera del producto.</p>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-otros" role="tabpanel" aria-labelledby="pills-otros-tab">
-                                                <!-- Contenido de Otros -->
-                                                <h6>Otros</h6>
-                                                <p>Aquí puedes agregar información adicional sobre el producto.</p>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-proveedores" role="tabpanel"
-                                                aria-labelledby="pills-proveedores-tab">
-                                                <!-- Contenido de Proveedores -->
-                                                <h6>Proveedores</h6>
-                                                <p>Aquí puedes administrar los proveedores del producto.</p>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-productos-adicionales" role="tabpanel"
-                                                aria-labelledby="pills-productos-adicionales-tab">
-                                                <!-- Contenido de Productos Adicionales -->
-                                                <h6>Productos Adicionales</h6>
-                                                <p>Aquí puedes añadir productos adicionales.</p>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-productos-kit" role="tabpanel"
-                                                aria-labelledby="pills-productos-kit-tab">
-                                                <!-- Contenido de Productos Kit -->
-                                                <h6>Productos Kit</h6>
-                                                <p>Aquí puedes gestionar los productos que forman parte de un kit.</p>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-productos-grupo" role="tabpanel"
-                                                aria-labelledby="pills-productos-grupo-tab">
-                                                <!-- Contenido de Productos Grupo -->
-                                                <h6>Productos Grupo</h6>
-                                                <p>Aquí puedes gestionar los productos agrupados.</p>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-productos-complementarios" role="tabpanel"
-                                                aria-labelledby="pills-productos-complementarios-tab">
-                                                <!-- Contenido de Productos Complementarios -->
-                                                <h6>Productos Complementarios</h6>
-                                                <p>Aquí puedes añadir productos complementarios.</p>
-                                            </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Pills navs -->
+                        <ul class="nav nav-pills mb-3" id="ex1" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a data-mdb-pill-init class="nav-link active" id="ex1-tab-1" href="#ex1-pills-1" role="tab"
+                                    aria-controls="ex1-pills-1" aria-selected="true">Datos Generales</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-mdb-pill-init class="nav-link" id="ex1-tab-2" href="#ex1-pills-2" role="tab"
+                                    aria-controls="ex1-pills-2" aria-selected="false">Datos Financieros</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-mdb-pill-init class="nav-link" id="ex1-tab-3" href="#ex1-pills-3" role="tab"
+                                    aria-controls="ex1-pills-3" aria-selected="false">Otros</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-mdb-pill-init class="nav-link" id="ex1-tab-4" href="#ex1-pills-4" role="tab"
+                                    aria-controls="ex1-pills-4" aria-selected="false">Proveedores</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-mdb-pill-init class="nav-link" id="ex1-tab-5" href="#ex1-pills-5" role="tab"
+                                    aria-controls="ex1-pills-5" aria-selected="false">Productos Adicionales</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-mdb-pill-init class="nav-link" id="ex1-tab-6" href="#ex1-pills-6" role="tab"
+                                    aria-controls="ex1-pills-6" aria-selected="false">Productos del Kit</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-mdb-pill-init class="nav-link" id="ex1-tab-7" href="#ex1-pills-7" role="tab"
+                                    aria-controls="ex1-pills-7" aria-selected="false">Productos del Grupo</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-mdb-pill-init class="nav-link" id="ex1-tab-8" href="#ex1-pills-8" role="tab"
+                                    aria-controls="ex1-pills-8" aria-selected="false">Productos Complementarios</a>
+                            </li>
+                        </ul>
+                        <!-- Pills navs -->
+        
+                        <!-- Pills content -->
+                        <div class="tab-content" id="ex1-content">
+                            <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
+                                <!-- Datos Generales Content -->
+                                <form>
+                            
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="clave" placeholder="Clave del producto">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="nombre" placeholder="Nombre del producto">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="codigoBarras" placeholder="Código de Barras">
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
-                                        <button type="button" class="btn btn-primary">Guardar cambios</button>
+                            
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="claveSAT" placeholder="Clave SAT del producto">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="descripcion" placeholder="Descripción del producto">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="date" class="form-control" id="fechaAlta">
+                                        </div>
                                     </div>
-                                </div>
+                            
+                                    <div class="row mb-3">
+                                        <div class="col-md-3">
+                                            <label for="estadoProducto" class="form-label">Estado del Producto</label>
+                                            <select class="form-select" id="estadoProducto">
+                                                <option value="activo">Activo</option>
+                                                <option value="inactivo">Inactivo</option>
+                                            </select>
+                                        </div>
+                            
+                                        <div class="col-md-3">
+                                            <label class="form-label">Tipo</label>
+                                            <br>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="tipoKit">
+                                                <label class="form-check-label" for="tipoKit">Kit</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="tipoGrupo">
+                                                <label class="form-check-label" for="tipoGrupo">Grupo</label>
+                                            </div>
+                                        </div>                            
+                                    </div>
+                            
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="grupo" class="form-label">Grupo</label>
+                                            <select class="form-select" id="grupo">
+                                                <option value="" selected>Selecciona Grupo</option>
+                                                <!-- Opciones -->
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="marca" class="form-label">Marca</label>
+                                            <select class="form-select" id="marca">
+                                                <option value="" selected>Selecciona Marca</option>
+                                                <!-- Opciones -->
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="linea" class="form-label">Línea</label>
+                                            <select class="form-select" id="linea">
+                                                <option value="" selected>Selecciona Línea</option>
+                                                <!-- Opciones -->
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="departamento" class="form-label">Departamento</label>
+                                            <select class="form-select" id="departamento">
+                                                <option value="" selected>Selecciona Departamento</option>
+                                                <!-- Opciones -->
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="impuesto" class="form-label">Impuesto</label>
+                                            <select class="form-select" id="impuesto">
+                                                <option value="" selected>Selecciona Impuesto</option>
+                                                <!-- Opciones -->
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="unidad" class="form-label">Unidad</label>
+                                            <select class="form-select" id="unidad">
+                                                <option value="" selected>Selecciona Unidad</option>
+                                                <!-- Opciones -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="observaciones" class="form-label">Observaciones</label>
+                                        <textarea class="form-control" id="observaciones" rows="3"></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
+                                Contenido de Datos Financieros
+                            </div>
+                            <div class="tab-pane fade" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
+                                Contenido de Otros
+                            </div>
+                            <div class="tab-pane fade" id="ex1-pills-4" role="tabpanel" aria-labelledby="ex1-tab-4">
+                                Contenido de Proveedores
+                            </div>
+                            <div class="tab-pane fade" id="ex1-pills-5" role="tabpanel" aria-labelledby="ex1-tab-5">
+                                Contenido de Productos Adicionales
+                            </div>
+                            <div class="tab-pane fade" id="ex1-pills-6" role="tabpanel" aria-labelledby="ex1-tab-6">
+                                Contenido de Productos del Kit
+                            </div>
+                            <div class="tab-pane fade" id="ex1-pills-7" role="tabpanel" aria-labelledby="ex1-tab-7">
+                                Contenido de Productos del Grupo
+                            </div>
+                            <div class="tab-pane fade" id="ex1-pills-8" role="tabpanel" aria-labelledby="ex1-tab-8">
+                                Contenido de Productos Complementarios
                             </div>
                         </div>
+                        <!-- Pills content -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-mdb-ripple-init
+                            data-mdb-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-mdb-ripple-init>Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
 
 
     </main>
