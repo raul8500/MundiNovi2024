@@ -324,9 +324,261 @@
                                     </div>
                                 </form>
                             </div>
+
+
                             <div class="tab-pane fade" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
-                                Contenido de Datos Financieros
+                                <h3>Contenido de Datos Financieros</h3>
+                                <form>
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="tiempo-surtido" class="form-label">Tiempo de surtido:</label>
+                                            <input type="number" class="form-control" id="tiempo-surtido" name="tiempo-surtido" value="0">
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <label for="volumen" class="form-label">Volumen:</label>
+                                            <input type="number" class="form-control" id="volumen" name="volumen" value="0">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label for="peso" class="form-label">Peso:</label>
+                                            <input type="number" class="form-control" id="peso" name="peso" value="0">
+                                        </div>
+                                    </div>
+                            
+                                    <div class="row mb-3">
+                                        
+                                        <div class="col-md-4">
+                                            <label for="stock-minimo" class="form-label">Stock Mínimo:</label>
+                                            <input type="number" class="form-control" id="stock-minimo" name="stock-minimo" value="0">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="stock-maximo" class="form-label">Stock Máximo:</label>
+                                            <input type="number" class="form-control" id="stock-maximo" name="stock-maximo" value="0">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="costo" class="form-label">Costo:</label>
+                                            <input type="text" class="form-control" id="costo" name="costo" value="0">
+                                        </div>
+                                    </div>
+                            
+                                    <div class="row mb-3">
+                                        
+                                        <div class="col-md-4">
+                                            <label for="ultimo-costo" class="form-label">Último costo:</label>
+                                            <input type="text" class="form-control" id="ultimo-costo" name="ultimo-costo" value="0">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="costo-promedio" class="form-label">Costo promedio:</label>
+                                            <input type="text" class="form-control" id="costo-promedio" name="costo-promedio" value="0">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="num-precio-minimo" class="form-label">Número Precio mínimo:</label>
+                                            <input type="number" class="form-control" id="num-precio-minimo" name="num-precio-minimo" value="0">
+                                        </div>
+                                    </div>
+                            
+                                    <div class="row mb-3">
+                                        
+                                        <div class="col-md-4">
+                                            <label for="num-precio-maximo" class="form-label">Número Precio máximo:</label>
+                                            <input type="number" class="form-control" id="num-precio-maximo" name="num-precio-maximo" value="0">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="presentacion" class="form-label">Presentación:</label>
+                                            <input type="number" class="form-control" id="presentacion" name="presentacion" value="0">
+                                        </div>
+                                    </div>
+                            
+                                    <div class="mb-3">
+                                        <label for="calcular-precio" class="form-label">Calcular precio:</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="calcular-precio" name="calcular-precio">
+                                            <label class="form-check-label" for="calcular-precio">
+                                                Nota: el botón recalcular precios solo da una vista previa del cambio de precios. Para que se realice el cálculo automático cada vez que cambie el costo del Producto, es necesario seleccionar este checkbox.
+                                            </label>
+                                        </div>
+                                    </div>
+                            
+                                    <fieldset class="border p-3 mb-4">
+                                        <legend class="w-auto">Precios y Porcentajes</legend>
+                                        <div class="row mb-3">
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-precio-1" class="form-label">Porcentaje Precio 1:</label>
+                                                <input type="number" class="form-control" id="porcentaje-precio-1" name="porcentaje-precio-1" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="precio-1" class="form-label">Precio 1:</label>
+                                                <input type="number" class="form-control" id="precio-1" name="precio-1" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-precio-2" class="form-label">Porcentaje Precio 2:</label>
+                                                <input type="number" class="form-control" id="porcentaje-precio-2" name="porcentaje-precio-2" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="precio-2" class="form-label">Precio 2:</label>
+                                                <input type="number" class="form-control" id="precio-2" name="precio-2" value="0">
+                                            </div>
+                                        </div>
+                            
+                                        <div class="row mb-3">
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-precio-3" class="form-label">Porcentaje Precio 3:</label>
+                                                <input type="number" class="form-control" id="porcentaje-precio-3" name="porcentaje-precio-3" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="precio-3" class="form-label">Precio 3:</label>
+                                                <input type="number" class="form-control" id="precio-3" name="precio-3" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-precio-4" class="form-label">Porcentaje Precio 4:</label>
+                                                <input type="number" class="form-control" id="porcentaje-precio-4" name="porcentaje-precio-4" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="precio-4" class="form-label">Precio 4:</label>
+                                                <input type="number" class="form-control" id="precio-4" name="precio-4" value="0">
+                                            </div>
+                                        </div>
+                            
+                                        <div class="row mb-3">
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-precio-5" class="form-label">Porcentaje Precio 5:</label>
+                                                <input type="number" class="form-control" id="porcentaje-precio-5" name="porcentaje-precio-5" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="precio-5" class="form-label">Precio 5:</label>
+                                                <input type="number" class="form-control" id="precio-5" name="precio-5" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-precio-6" class="form-label">Porcentaje Precio 6:</label>
+                                                <input type="number" class="form-control" id="porcentaje-precio-6" name="porcentaje-precio-6" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="precio-6" class="form-label">Precio 6:</label>
+                                                <input type="number" class="form-control" id="precio-6" name="precio-6" value="0">
+                                            </div>
+                                        </div>
+                            
+                            
+                                        <div class="row mb-3">
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-precio-7" class="form-label">Porcentaje Precio 7:</label>
+                                                <input type="number" class="form-control" id="porcentaje-precio-7" name="porcentaje-precio-7" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="precio-7" class="form-label">Precio 7:</label>
+                                                <input type="number" class="form-control" id="precio-7" name="precio-7" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-precio-8" class="form-label">Porcentaje Precio 8:</label>
+                                                <input type="number" class="form-control" id="porcentaje-precio-8" name="porcentaje-precio-8" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="precio-8" class="form-label">Precio 8:</label>
+                                                <input type="number" class="form-control" id="precio-8" name="precio-8" value="0">
+                                            </div>
+                                        </div>
+                            
+                                        <div class="row mb-3">
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-precio-9" class="form-label">Porcentaje Precio 9:</label>
+                                                <input type="number" class="form-control" id="porcentaje-precio-9" name="porcentaje-precio-9" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="precio-9" class="form-label">Precio 9:</label>
+                                                <input type="number" class="form-control" id="precio-9" name="precio-9" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-precio-10" class="form-label">Porcentaje Precio 10:</label>
+                                                <input type="number" class="form-control" id="porcentaje-precio-10" name="porcentaje-precio-10" value="0">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="precio-10" class="form-label">Precio 10:</label>
+                                                <input type="number" class="form-control" id="precio-10" name="precio-10" value="0">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                            
+                                    <fieldset class="border p-3 mb-4">
+                                        <legend class="w-auto">Rangos</legend>
+                                        <h5>Rangos Iniciales</h5>
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <label for="rango-inicial-1" class="form-label">Rango Inicial 1:</label>
+                                                <input type="number" class="form-control" id="rango-inicial-1" name="rango-inicial-1" value="0.00">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="rango-inicial-2" class="form-label">Rango Inicial 2:</label>
+                                                <input type="number" class="form-control" id="rango-inicial-2" name="rango-inicial-2" value="5.00">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="rango-inicial-3" class="form-label">Rango Inicial 3:</label>
+                                                <input type="number" class="form-control" id="rango-inicial-3" name="rango-inicial-3" value="10.00">
+                                            </div>
+                                        </div>
+                            
+                                        <h5>Rangos Finales</h5>
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <label for="rango-final-1" class="form-label">Rango Final 1:</label>
+                                                <input type="number" class="form-control" id="rango-final-1" name="rango-final-1" value="4.99">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="rango-final-2" class="form-label">Rango Final 2:</label>
+                                                <input type="number" class="form-control" id="rango-final-2" name="rango-final-2" value="9.99">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="rango-final-3" class="form-label">Rango Final 3:</label>
+                                                <input type="number" class="form-control" id="rango-final-3" name="rango-final-3" value="19.99">
+                                            </div>
+                                        </div>
+                            
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <label for="rango-final-4" class="form-label">Rango Final 4:</label>
+                                                <input type="number" class="form-control" id="rango-final-4" name="rango-final-4" value="100000.00">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="rango-final-5" class="form-label">Rango Final 5:</label>
+                                                <input type="number" class="form-control" id="rango-final-5" name="rango-final-5" value="0.00">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="rango-final-6" class="form-label">Rango Final 6:</label>
+                                                <input type="number" class="form-control" id="rango-final-6" name="rango-final-6" value="0.00">
+                                            </div>
+                                        </div>
+                            
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <label for="rango-final-7" class="form-label">Rango Final 7:</label>
+                                                <input type="number" class="form-control" id="rango-final-7" name="rango-final-7" value="0.00">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="rango-final-8" class="form-label">Rango Final 8:</label>
+                                                <input type="number" class="form-control" id="rango-final-8" name="rango-final-8" value="0.00">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="rango-final-9" class="form-label">Rango Final 9:</label>
+                                                <input type="number" class="form-control" id="rango-final-9" name="rango-final-9" value="0.00">
+                                            </div>
+                                        </div>
+                            
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <label for="rango-final-10" class="form-label">Rango Final 10:</label>
+                                                <input type="number" class="form-control" id="rango-final-10" name="rango-final-10" value="0.00">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                            
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </form>
                             </div>
+                            
+s                            
+
+
+
                             <div class="tab-pane fade" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
                                 Contenido de Otros
                             </div>
