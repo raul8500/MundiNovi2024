@@ -35,7 +35,7 @@ btnGuardarCorteParcial.addEventListener('click', () => {
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
             }).then(async () => {
-                await imprimirTicketCorteParcial(data.corteParcial);
+                await imprimirTicketCorteParcial(data.corteParcial, data.codigoBarras);
             });
         } else {
             throw new Error('Error inesperado en la respuesta del servidor.');
@@ -52,6 +52,41 @@ btnGuardarCorteParcial.addEventListener('click', () => {
     });
 });
 
+
+async function imprimirTicketCorteParcial(corteParcial, codigoBarras) {
+    const { folio, sucursal, usuario, fechaCreacion, cantidad, observaciones } = corteParcial;
+
+    console.log(codigoBarras)
+    // Cargar el nombre de la sucursal usando await para esperar el resultado
+    const sucursalName = await cargarSucursal(infoUser.sucursalId);
+
+    // Crear el contenido del ticket
+    const contenidoTicket = `
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+            <h2 style="text-align: center;">Corte Parcial</h2>
+            <p><strong>Sucursal:</strong> ${sucursalName}</p>
+            <p><strong>Folio:</strong> ${folio}</p>
+            <p><strong>Usuario:</strong> ${infoUser.username}</p>
+            <p><strong>Fecha:</strong> ${new Date(fechaCreacion).toLocaleString()}</p>
+            <p><strong>Monto total:</strong> $${cantidad.toFixed(2)}</p>
+            <p><strong>Observaciones:</strong> ${observaciones}</p>
+            <p><strong>Código de Barras:</strong></p>
+            <img src="img/archivos/${folio}.png" alt="Código de Barras" />
+        </div>
+    `;
+
+    // Crear una nueva ventana para el ticket
+    const ventanaTicket = window.open('', '_blank', 'width=320,height=500');
+    ventanaTicket.document.write('<html><head><title>Ticket de Corte Parcial</title></head><body>');
+    ventanaTicket.document.write(contenidoTicket);
+    ventanaTicket.document.write('</body></html>');
+    ventanaTicket.document.close();
+
+    // Esperar que la ventana se cargue completamente antes de imprimir
+    ventanaTicket.onload = function() {
+        ventanaTicket.print();
+    };
+}
 
 function getfields() {
     const billetes1000 = parseInt(document.getElementById('billetes1000').value) || 0;
@@ -114,39 +149,7 @@ function getfields() {
     }
 }
 
-async function imprimirTicketCorteParcial(corteParcial) {
-    const { folio, sucursal, usuario, fechaCreacion, cantidad, observaciones } = corteParcial;
 
-    // Cargar el nombre de la sucursal usando await para esperar el resultado
-    const sucursalName = await cargarSucursal(infoUser.sucursalId);
-
-    // Crear el contenido del ticket
-    const contenidoTicket = `
-        <div style="font-family: Arial, sans-serif; padding: 20px;">
-            <h2 style="text-align: center;">Corte Parcial</h2>
-            <p><strong>Sucursal:</strong> ${sucursalName}</p>
-            <p><strong>Folio:</strong> ${folio}</p>
-            <p><strong>Usuario:</strong> ${infoUser.username}</p>
-            <p><strong>Fecha:</strong> ${new Date(fechaCreacion).toLocaleString()}</p>
-            <p><strong>Monto total:</strong> $${cantidad.toFixed(2)}</p>
-            <p><strong>Observaciones:</strong> ${observaciones}</p>
-        </div>
-    `;
-
-    // Crear una nueva ventana para el ticket
-    const ventanaTicket = window.open('', '_blank', 'width=320,height=500');
-    ventanaTicket.document.write('<html><head><title>Ticket de Corte Parcial</title></head><body>');
-    ventanaTicket.document.write(contenidoTicket);
-    ventanaTicket.document.write('</body></html>');
-    ventanaTicket.document.close();
-
-    // Esperar que la ventana se cargue completamente antes de imprimir
-    ventanaTicket.onload = function() {
-        ventanaTicket.print();
-    };
-}
-
-// Cambiar a async para devolver el nombre de la sucursal
 async function cargarSucursal(id) {
     try {
         const response = await fetch('/api/sucursal/id/' + id);

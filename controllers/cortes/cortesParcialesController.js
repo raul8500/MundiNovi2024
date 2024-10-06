@@ -1,61 +1,8 @@
 const CorteParcial = require('../../schemas/cortes/cortesParcialesSchema')
 const CorteGeneral = require('../../schemas/cortes/cortesFinalesSchema');
-
-
-
-// Crear un nuevo corte parcial
-exports.addCorteParcial = async (req, res) => {
-    try {
-        let vendedor = req.body.vendedor;
-        let folioPadre = '';
-        const cortePendiente = await checkCorteUsuarioIniciadoONoFinalizado(vendedor);
-
-        if (cortePendiente) {
-            folioPadre = cortePendiente;
-
-            // Verificación de si el total de ventas en efectivo es >= 2000
-            const esMayorOIgualA2000 = await checkTotalVentasEfectivo(folioPadre);
-
-            if (esMayorOIgualA2000) {
-                console.log('El total de ventas en efectivo es mayor o igual a 2000');
-                
-                // Generar un nuevo folio para el corte parcial
-                const nuevoFolio = await generarFolio();
-
-                // Crear el nuevo corte parcial
-                const nuevoCorteParcial = new CorteParcial({
-                    folio: nuevoFolio,
-                    folioPadre: folioPadre,
-                    ...req.body // Pasar el resto del body
-                });
-
-                await nuevoCorteParcial.save();
-
-                // Agregar el folio hijo (corte parcial) al CorteFinal
-                await agregarFolioHijoACorteFinal(folioPadre, nuevoFolio);
-
-                return res.status(201).json({
-                    message: 'Corte parcial creado exitosamente.',
-                    corteParcial: nuevoCorteParcial
-                });
-
-            } else {
-                console.log('El total de ventas en efectivo es menor a 2000');
-                return res.status(301).json({
-                    message: 'El total de ventas en efectivo es menor a $2000. No es posible realizar el corte parcial.'
-                });
-            }
-        } else {
-            return res.status(404).json({
-                message: 'No se encontró un corte pendiente para el vendedor.'
-            });
-        }
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).send('Error interno del servidor');
-    }
-};
+const bwipjs = require('bwip-js');
+const path = require('path');
+const fs = require('fs');
 
 // Obtener todos los cortes parciales
 exports.getCortesParciales = async (req, res) => {
@@ -224,3 +171,100 @@ async function agregarFolioHijoACorteFinal(folioPadre, folioHijo) {
         throw new Error('Error interno al agregar el folio hijo.');
     }
 }
+
+
+// Crear un nuevo corte parcial
+exports.addCorteParcial = async (req, res) => {
+    try {
+        let vendedor = req.body.vendedor;
+        let folioPadre = '';
+        const cortePendiente = await checkCorteUsuarioIniciadoONoFinalizado(vendedor);
+
+        if (cortePendiente) {
+            folioPadre = cortePendiente;
+
+            // Verificación de si el total de ventas en efectivo es >= 2000
+            const esMayorOIgualA2000 = await checkTotalVentasEfectivo(folioPadre);
+
+            if (esMayorOIgualA2000) {
+                console.log('El total de ventas en efectivo es mayor o igual a 2000');
+                
+                // Generar un nuevo folio para el corte parcial
+                const nuevoFolio = await generarFolio();
+
+                // Crear el nuevo corte parcial
+                const nuevoCorteParcial = new CorteParcial({
+                    folio: nuevoFolio,
+                    folioPadre: folioPadre,
+                    ...req.body // Pasar el resto del body
+                });
+
+                await nuevoCorteParcial.save();
+
+                // Generar el código de barras basado en el folio
+                const codigoBarrasGenerado = await generarCodigoDeBarras(nuevoFolio);
+
+                // Agregar el folio hijo (corte parcial) al CorteFinal
+                await agregarFolioHijoACorteFinal(folioPadre, nuevoFolio);
+
+                return res.status(201).json({
+                    message: 'Corte parcial creado exitosamente.',
+                    corteParcial: nuevoCorteParcial,
+                    codigoBarras: codigoBarrasGenerado // Devolver la ruta del código de barras
+                });
+
+            } else {
+                console.log('El total de ventas en efectivo es menor a 2000');
+                return res.status(301).json({
+                    message: 'El total de ventas en efectivo es menor a $2000. No es posible realizar el corte parcial.'
+                });
+            }
+        } else {
+            return res.status(404).json({
+                message: 'No se encontró un corte pendiente para el vendedor.'
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
+// Función para generar el código de barras
+const generarCodigoDeBarras = async (folio) => {
+    try {
+        const nombreArchivo = path.join(__dirname, `../../public/img/archivos/${folio}.png`);
+
+        return new Promise((resolve, reject) => {
+            bwipjs.toBuffer({
+                bcid: 'code128',       // Tipo de código de barras
+                text: folio,           // Texto que irá en el código de barras
+                scale: 3,              // Escala del código de barras
+                height: 10,            // Altura del código de barras
+                includetext: true,     // Incluye el texto en la imagen
+                textxalign: 'center',  // Alinea el texto al centro
+            }, function (err, png) {
+                if (err) {
+                    console.error('Error al generar el código de barras: ', err);
+                    return reject(err);
+                }
+
+                // Guardar la imagen en el sistema de archivos
+                fs.writeFile(nombreArchivo, png, (err) => {
+                    if (err) {
+                        console.error('Error al guardar el archivo: ', err);
+                        return reject(err);
+                    }
+
+                    // Devolver la ruta del archivo generado
+                    resolve(nombreArchivo);
+                });
+            });
+        });
+
+    } catch (error) {
+        console.error('Error en la generación del código de barras:', error);
+        throw error;
+    }
+};
