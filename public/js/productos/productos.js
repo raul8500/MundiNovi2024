@@ -1,7 +1,4 @@
-
-const btnAddProducto = document.getElementById('btnAddProducto')
-const modalAñadirProductos = new mdb.Modal(document.getElementById('añadirProductos'));
-
+const btnCalcularPrecios = document.getElementById('btnCalcularPrecios')
 
 
 $(document).ready(function () {
@@ -65,6 +62,38 @@ $(document).ready(function () {
 });
 
 
-btnAddProducto.addEventListener('click', () => {
-    modalAñadirProductos.show();
+
+
+
+btnCalcularPrecios.addEventListener('click', () => {
+
+    for (let i = 1; i <= 10; i++) {
+        let costo = document.getElementById('costo').value;
+        let porcentaje = document.getElementById('porcentaje-precio-' + i)?.value;
+        let precioInput = document.getElementById('precio-' + i);
+
+        // Si el porcentaje no es nulo, no está vacío y no es igual a 0
+        if (porcentaje !== undefined && porcentaje !== null && porcentaje !== '' && parseFloat(porcentaje) !== 0) {
+            let precio = calcularPrecio(costo, porcentaje);
+
+            if (precioInput !== null) {
+                precioInput.value = precio;
+            }
+        } else {
+            // Si el porcentaje es vacío o igual a 0, vacía el campo de precio
+            if (precioInput !== null) {
+                precioInput.value = 0;
+            }
+        }
+    }
 });
+
+
+
+
+
+function calcularPrecio(costo, porcentaje){
+    let precio = (costo * (1 + (porcentaje / 100)))
+
+    return precio;
+}

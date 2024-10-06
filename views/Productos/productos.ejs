@@ -327,7 +327,7 @@
 
                             <div class="tab-pane fade" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
                                 <h3>Contenido de Datos Financieros</h3>
-                                <form>
+                                <div>
                                     <div class="row mb-3">
                                         <div class="col-md-4">
                                             <label for="tiempo-surtido" class="form-label">Tiempo de surtido:</label>
@@ -397,6 +397,8 @@
                                                 Nota: el botón recalcular precios solo da una vista previa del cambio de precios. Para que se realice el cálculo automático cada vez que cambie el costo del Producto, es necesario seleccionar este checkbox.
                                             </label>
                                         </div>
+                                        <button id="btnCalcularPrecios" class="btn btn-primary btn-rounded"> Calcula precios</button>
+
                                     </div>
                             
                                     <fieldset class="border p-3 mb-4">
@@ -598,7 +600,7 @@
                                             </div>
                                         </div>
                                     </fieldset>
-                                </form>
+                                </div>
                             </div>
 
                             <div class="tab-pane fade" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
@@ -642,24 +644,118 @@
                                 </table>
                             </div>
                             
-                            
-
-
-
-                            
-
-
                             <div class="tab-pane fade" id="ex1-pills-5" role="tabpanel" aria-labelledby="ex1-tab-5">
-                                Contenido de Productos Adicionales
+                                <h5>Buscar productos adicionales</h5>
+                                
+                                <form id="search-provider-form">
+                                    <div class="row mb-3">
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control" id="productsSearch" placeholder="Escribe el nombre del producto...">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="button" class="btn btn-primary" id="addProductBtn">Agregar Producto</button>
+                                        </div>
+                                    </div>                                    
+                                </form>
+                            
+                                <h5 class="mt-4">Productos Seleccionados</h5>
+                                <table class="table table-bordered" id="providerTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Los proveedores agregados aparecerán aquí -->
+                                    </tbody>
+                                </table>
                             </div>
+
+
                             <div class="tab-pane fade" id="ex1-pills-6" role="tabpanel" aria-labelledby="ex1-tab-6">
-                                Contenido de Productos del Kit
+                                <h5>Buscar productos kit</h5>
+                                
+                                <form id="search-provider-form">
+                                    <div class="row mb-3">
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control" id="productsKitSearch" placeholder="Escribe el nombre del producto...">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="button" class="btn btn-primary" id="addProductKitBtn">Agregar Producto</button>
+                                        </div>
+                                    </div>                                    
+                                </form>
+                            
+                                <h5 class="mt-4">Productos Seleccionados Kit</h5>
+                                <table class="table table-bordered" id="providerTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Los proveedores agregados aparecerán aquí -->
+                                    </tbody>
+                                </table>
                             </div>
+
                             <div class="tab-pane fade" id="ex1-pills-7" role="tabpanel" aria-labelledby="ex1-tab-7">
-                                Contenido de Productos del Grupo
+                                <h5>Buscar productos grupo</h5>
+                                
+                                <form id="search-provider-form">
+                                    <div class="row mb-3">
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control" id="productsKitSearch" placeholder="Escribe el nombre del producto...">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="button" class="btn btn-primary" id="addProductKitBtn">Agregar Producto</button>
+                                        </div>
+                                    </div>                                    
+                                </form>
+                            
+                                <h5 class="mt-4">Productos Seleccionados Grupo</h5>
+                                <table class="table table-bordered" id="providerTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Los proveedores agregados aparecerán aquí -->
+                                    </tbody>
+                                </table>
                             </div>
+
+
                             <div class="tab-pane fade" id="ex1-pills-8" role="tabpanel" aria-labelledby="ex1-tab-8">
-                                Contenido de Productos Complementarios
+                                <h5>Buscar productos complementarios</h5>
+                                
+                                <form id="search-provider-form">
+                                    <div class="row mb-3">
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control" id="productsKitSearch" placeholder="Escribe el nombre del producto...">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="button" class="btn btn-primary" id="addProductKitBtn">Agregar Producto</button>
+                                        </div>
+                                    </div>                                    
+                                </form>
+                            
+                                <h5 class="mt-4">Productos Seleccionados Complmentarios</h5>
+                                <table class="table table-bordered" id="providerTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Los proveedores agregados aparecerán aquí -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <!-- Pills content -->
