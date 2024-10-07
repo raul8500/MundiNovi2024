@@ -2,6 +2,8 @@ const btnCargarCortes = document.getElementById('btnCargarCortes')
 const selectOptions = [
     { url: '/api/sucursal', selectId: 'sucursal' },
 ];
+let foliosTotales = []; // Variable global para almacenar los folios
+
 
 let tablaRecoleccionBody = document.getElementById('tablaRecoleccionBody')
 
@@ -63,6 +65,7 @@ btnCargarCortes.addEventListener('click', () => {
         if (response.status === 200) {
             const data = await response.json();
             mostrarEnTabla(data)
+            buscarFolio.focus()
         } else {
             throw new Error('Error inesperado en la respuesta del servidor.');
         }
@@ -103,6 +106,7 @@ function getFormValuesAndBuildUrl() {
 function mostrarEnTabla(cortes) {
     console.log(cortes);
     let resultadosCortes = '';
+    foliosTotales = []; // Limpiar la variable global antes de llenarla nuevamente
     
     cortes.forEach((item) => {
         // Si no existen las fechas, dejarlas en blanco
@@ -111,6 +115,11 @@ function mostrarEnTabla(cortes) {
         const username = item.usuario && item.usuario.username ? item.usuario.username : '';
         const totalVenta = item.total_tarjetas + item.monto_transferencias + (item.totalVentasEfectivoCortes || 0) + (item.totalVentaCorte || 0);
         const totalEfectivo = item.totalVentasEfectivoCortes || 0;
+
+        // Agregar el folio general a la variable global
+        if (item.folio) {
+            foliosTotales.push(item.folio);
+        }
 
         // Agregar la fila del corte final
         resultadosCortes += `
@@ -157,6 +166,11 @@ function mostrarEnTabla(cortes) {
                 const fechaCreacionParcial = corteParcial.fechaCreacion ? new Date(corteParcial.fechaCreacion).toLocaleString() : '';
                 const cantidadParcial = corteParcial.cantidad || '';
 
+                // Agregar el folio parcial a la variable global
+                if (corteParcial.folio) {
+                    foliosTotales.push(corteParcial.folio);
+                }
+
                 resultadosCortes += `
                     <tr>
                         <td class="text-center">${corteParcial.folio || ''}</td>
@@ -181,6 +195,9 @@ function mostrarEnTabla(cortes) {
 
     // Insertar el contenido generado en el cuerpo de la tabla
     tablaRecoleccionBody.innerHTML = resultadosCortes;
+
+    // Mostrar los folios almacenados en la variable global
+    console.log("Folios Totales:", foliosTotales);
 }
 
 on(document, 'click', '.btnRecibir', async e => {
@@ -225,6 +242,89 @@ on(document, 'click', '.btnRecibir', async e => {
         button.style.visibility = 'visible';
     });
 });
+
+document.getElementById('buscarFolio').addEventListener('input', () => {
+    const folioBuscado = document.getElementById('buscarFolio').value.trim();
+
+    if (folioBuscado !== "") {
+        // Buscar la fila correspondiente al folio ingresado
+        const filas = document.querySelectorAll('#tablaRecoleccionBody tr'); // Asegúrate de que este sea el tbody correcto
+
+        let folioEncontrado = false; // Bandera para saber si el folio fue encontrado
+        filas.forEach(fila => {
+            const celdaFolio = fila.querySelector('td:first-child').textContent.trim(); // Obtener el folio de la primera columna
+            
+            if (celdaFolio === folioBuscado) {
+                // Llamar a la lógica de la función si el folio coincide
+                const button = fila.querySelector('.btnRecibir');
+                if (button && button.style.visibility !== 'hidden') {
+                    aplicarLogicaRecibir(button);  // Llama a la función para ocultar el botón y agregar la fila
+                    folioEncontrado = true;
+                }
+            }
+        });
+
+        // Limpiar el campo de entrada solo si el folio fue encontrado
+        if (folioEncontrado) {
+            document.getElementById('buscarFolio').value = ""; // Limpiar el input
+        } else {
+            console.log(`El folio ${folioBuscado} no está en la lista de cortes.`);
+        }
+    }
+});
+
+function aplicarLogicaRecibir(button) {
+    const id = button.getAttribute('id');
+
+    // Obtener la fila que contiene el botón
+    const row = button.closest('tr');
+
+    // Recorrer las celdas de la fila para obtener sus valores
+    const cells = row.querySelectorAll('td');
+    const rowData = Array.from(cells).map(cell => cell.textContent.trim());
+
+    // Obtener el folio
+    const folio = rowData[0]; // El folio es el primer valor en la fila
+    const esParcial = button.classList.contains('corteParcial') ? 'Sí' : 'No'; // Comprobar si el botón tiene la clase corteParcial
+
+    // Verificar si el folio ya está en la tabla de recibir cortes
+    const tablaRecibirCortes = document.getElementById('tablaRecibirCortes');
+    const existeFolioEnTabla = Array.from(tablaRecibirCortes.querySelectorAll('tr td:first-child'))
+                                  .some(td => td.textContent.trim() === folio);
+
+    if (!existeFolioEnTabla) {
+        // Crear una nueva fila en la tabla #tablaRecibirCortes
+        const nuevaFila = document.createElement('tr');
+
+        // Asignar el contenido de la nueva fila
+        nuevaFila.innerHTML = `
+            <td class="text-center">${folio}</td>
+            <td class="text-center">${esParcial}</td>
+            <td class="text-center">
+                <button type="button" class="btn btn-danger btn-sm btnEliminarFila">X</button>
+            </td>
+        `;
+
+        // Insertar la nueva fila en la tabla
+        tablaRecibirCortes.appendChild(nuevaFila);
+
+        // Ocultar el botón "Recibir" utilizando visibility
+        button.style.visibility = 'hidden';
+
+        // Agregar evento para eliminar la fila cuando se haga clic en el botón "X"
+        nuevaFila.querySelector('.btnEliminarFila').addEventListener('click', function() {
+            nuevaFila.remove(); // Elimina la fila
+
+            // Mostrar de nuevo el botón "Recibir"
+            button.style.visibility = 'visible';
+        });
+    } else {
+        console.log(`El folio ${folio} ya ha sido añadido a la tabla de recibir cortes.`);
+    }
+}
+
+
+
 
 
 

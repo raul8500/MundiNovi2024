@@ -150,8 +150,17 @@
                         <div class="card-header">
                             <h5 class="card-title">Cortes a recibir</h5>
                         </div>
-                        <div class="card-body p-0"> <!-- Se eliminó el padding del cuerpo de la tarjeta -->
-                            <table id="tablaReconectar" class="table align-middle mb-0 bg-white table-responsive" style="overflow-x: hidden;">
+                        <div class="card-body p-0">
+                
+                            <!-- Input para buscar folio -->
+                            <div class="input-group p-3">
+                                <input type="text" id="buscarFolio" class="form-control" placeholder="Buscar por folio"
+                                    aria-label="Buscar por folio">
+                            </div>
+                
+                            <!-- Tabla de cortes -->
+                            <table id="tablaReconectar" class="table align-middle mb-0 bg-white table-responsive"
+                                style="overflow-x: hidden;">
                                 <thead class="bg-light">
                                     <tr class="text-center" style="font-size:9.5pt; font-weight:bolder;">
                                         <th>Folio</th>
@@ -163,6 +172,7 @@
                                     <!-- Aquí se agregarán las filas -->
                                 </tbody>
                             </table>
+                
                             <!-- Botón para recibir cortes -->
                             <div class="text-center mt-3">
                                 <button style="margin-bottom: 20px;" id="btnRecibirCortes" class="btn btn-success">Recibir</button>
@@ -170,6 +180,7 @@
                         </div>
                     </div>
                 </div>
+
                 
                 
             </div>
