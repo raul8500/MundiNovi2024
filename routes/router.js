@@ -28,6 +28,7 @@ const materiasPrimas = require('../controllers/materiaPrima/materiaPrimaControll
 const formulasProduccion = require('../controllers/formulas/formulasController')
 const cortesParciales = require('../controllers/cortes/cortesParcialesController')
 const cortesFinales = require('../controllers/cortes/cortesFinalesController')
+const recepcionCortes = require('../controllers/cortes/recepcionCortesController')
 
 
 router.get('/', (req, res) => {    
@@ -272,6 +273,8 @@ router.post('/api/cortesFinales', cortesFinales.addCorteFinal)
 router.put('/api/cortesFinales/:id', cortesFinales.updateCorteFinalById)
 router.delete('/api/cortesFinales/:id', cortesFinales.deleteCorteFinalById)
 
+//Recepcion Cortes
+router.post('/api/recepcion/cortes', recepcionCortes.updateEstadoCortes)
 
 
 const codigosBarras = require('../controllers/codigosBarras/codigosBarrasController')

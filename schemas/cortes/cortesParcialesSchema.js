@@ -21,7 +21,6 @@ const cortesParcialesSchema = new Schema({
     folioPadre: { type: String, required: true },
     fechaCreacion: {type: Date, default: Date.now},
     recibido: {type: Boolean, required : false},
-    recibido: {type: Boolean, required : false},
     vendedor :  { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: false }
 });
 

@@ -107,7 +107,7 @@ function mostrarEnTabla(cortes) {
     console.log(cortes);
     let resultadosCortes = '';
     foliosTotales = []; // Limpiar la variable global antes de llenarla nuevamente
-    
+
     cortes.forEach((item) => {
         // Si no existen las fechas, dejarlas en blanco
         const fechaInicial = item.fecha_inicial ? new Date(item.fecha_inicial).toLocaleString() : '';
@@ -138,12 +138,14 @@ function mostrarEnTabla(cortes) {
                     <td class="text-center">${totalEfectivo}</td>
                     <td class="text-center">0.0</td>                    
                     <td class="text-center">
-                        <button id="${item._id}" type="button" class="btn btn-primary btn-rounded btnRecibir corteFinal">
-                            <i class="fa-solid fa-hand-holding-dollar"></i>
-                        </button>
+                        ${item.recibido ? 
+                            `<i class="fa-solid fa-check" style="color: green;"></i>` : 
+                            `<button id="${item._id}" type="button" class="btn btn-primary btn-rounded btnRecibir corteFinal">
+                                <i class="fa-solid fa-hand-holding-dollar"></i>
+                            </button>`}
                     </td>
                 </tr>`;
-        
+
         // Si el corte tiene cortes parciales, crear una tabla anidada
         if (item.cortesParciales && item.cortesParciales.length > 0) {
             resultadosCortes += `
@@ -178,9 +180,11 @@ function mostrarEnTabla(cortes) {
                         <td class="text-center">${fechaCreacionParcial}</td>
                         <td class="text-center">${cantidadParcial}</td>
                         <td class="text-center">
-                            <button id="${corteParcial._id}" type="button" class="btn btn-primary btn-rounded btnRecibir corteParcial">
-                                <i class="fa-solid fa-hand-holding-dollar"></i>
-                            </button>
+                            ${corteParcial.recibido ? 
+                                `<i class="fa-solid fa-check" style="color: green;"></i>` : 
+                                `<button id="${corteParcial._id}" type="button" class="btn btn-primary btn-rounded btnRecibir corteParcial">
+                                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                                </button>`}
                         </td>
                     </tr>`;
             });
@@ -199,6 +203,7 @@ function mostrarEnTabla(cortes) {
     // Mostrar los folios almacenados en la variable global
     console.log("Folios Totales:", foliosTotales);
 }
+
 
 on(document, 'click', '.btnRecibir', async e => {
     const button = e.target.closest('.btnRecibir');
@@ -323,6 +328,81 @@ function aplicarLogicaRecibir(button) {
         console.log(`El folio ${folio} ya ha sido añadido a la tabla de recibir cortes.`);
     }
 }
+
+
+document.getElementById('btnEnviarCortes').addEventListener('click', async () => {
+    const tablaRecibirCortes = document.getElementById('tablaRecibirCortes');
+    const filas = tablaRecibirCortes.querySelectorAll('tr');
+
+    // Arrays para almacenar los folios generales y parciales
+    const foliosGenerales = [];
+    const foliosParciales = [];
+
+    // Recorrer todas las filas y separar los folios en generales y parciales
+    filas.forEach(fila => {
+        const folio = fila.cells[0].textContent.trim();
+        const esParcial = fila.cells[1].textContent.trim() === 'Sí'; // "Sí" si es parcial, "No" si es general
+
+        if (esParcial) {
+            foliosParciales.push(folio);
+        } else {
+            foliosGenerales.push(folio);
+        }
+    });
+
+    // Confirmación con SweetAlert2
+    const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: `Vas a hacer la recepción de ${foliosGenerales.length} cortes generales y ${foliosParciales.length} cortes parciales.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, continuar',
+        cancelButtonText: 'Cancelar',
+    });
+
+    if (result.isConfirmed) {
+        // Enviar los datos al backend si se confirma
+        try {
+            const response = await fetch('/api/recepcion/cortes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ foliosGenerales, foliosParciales }), // Enviar arrays de folios generales y parciales
+            });
+
+            if (response.ok) {
+                // Mostrar un mensaje de éxito
+                Swal.fire({
+                    title: 'Éxito',
+                    text: 'Los cortes han sido actualizados exitosamente.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+                location.reload();
+            } else {
+                throw new Error('Error al actualizar los cortes.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al actualizar los cortes. Por favor, inténtalo de nuevo.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    } else {
+        Swal.fire({
+            title: 'Cancelado',
+            text: 'La recepción de los cortes ha sido cancelada.',
+            icon: 'info',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+});
+
+
 
 
 
