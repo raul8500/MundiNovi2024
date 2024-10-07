@@ -150,7 +150,6 @@ function getfields() {
     }
 }
 
-
 async function cargarSucursal(id) {
     try {
         const response = await fetch('/api/sucursal/id/' + id);

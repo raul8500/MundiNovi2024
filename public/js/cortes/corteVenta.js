@@ -1,5 +1,4 @@
-
-const btnCorteFinal = document.getElementById('btnCorteFinal')
+const btnCorteFinal = document.getElementById('btnCorteFinal');
 
 btnCorteFinal.addEventListener('click', () => {
     let body = getfields();
@@ -17,7 +16,6 @@ btnCorteFinal.addEventListener('click', () => {
     })
     .then(async response => {
         if (response.status === 200) {
-            // Si se actualizó un corte existente, mostrar éxito
             const data = await response.json();
             Swal.fire({
                 title: 'Éxito',
@@ -25,13 +23,11 @@ btnCorteFinal.addEventListener('click', () => {
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
             }).then(async () => {
-                console.log(data.corte);  // Verifica que los datos son correctos
-                await imprimirTicketCorteParcial(data.corte);  // Pasa la información del corte
-                window.location.reload();
+                console.log(data)
+                await imprimirTicketCorteFinal(data.corte, data.codigoBarras);  // Pasa la información del corte y el código de barras
             });
 
         } else if (response.status === 409) {
-            // Si no hay un corte abierto
             const errorData = await response.json();
             Swal.fire({
                 title: 'Error',
@@ -53,6 +49,37 @@ btnCorteFinal.addEventListener('click', () => {
         });
     });
 });
+
+async function imprimirTicketCorteFinal(corteFinal, codigoBarras) {
+    const { folio, fecha_final, fecha_inicial, totalVentaCorte, monto_transferencias, total_tarjetas } = corteFinal;
+    const sucursalName = await cargarSucursal(infoUser.sucursalId);
+
+    const contenidoTicket = `
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+            <h2 style="text-align: center;">Corte Final</h2>
+            <p><strong>Sucursal:</strong> ${sucursalName}</p>
+            <p><strong>Folio:</strong> ${folio}</p>
+            <p><strong>Usuario:</strong> ${infoUser.username}</p>
+            <p><strong>Fecha apertura:</strong> ${new Date(fecha_inicial).toLocaleString()}</p>
+            <p><strong>Fecha cierre:</strong> ${new Date(fecha_final).toLocaleString()}</p>
+            <p><strong>Monto total:</strong> $${totalVentaCorte.toFixed(2)}</p>
+            <p><strong>Total Tarjetas:</strong> $${total_tarjetas.toFixed(2)}</p>
+            <p><strong>Total Transferencias:</strong> $${monto_transferencias.toFixed(2)}</p>
+            <p><strong>Código de Barras:</strong></p>
+            <img src="img/archivos/${folio}.png" alt="Código de Barras" />
+        </div>
+    `;
+
+    const ventanaTicket = window.open('', '_blank', 'width=320,height=500');
+    ventanaTicket.document.write('<html><head><title>Ticket de Corte Final</title></head><body>');
+    ventanaTicket.document.write(contenidoTicket);
+    ventanaTicket.document.write('</body></html>');
+    ventanaTicket.document.close();
+
+    ventanaTicket.onload = function() {
+        ventanaTicket.print();
+    };
+}
 
 function getfields() {
     const billetes1000 = parseInt(document.getElementById('billetes1000').value) || 0;
@@ -89,50 +116,6 @@ function getfields() {
         });
         return null;
     }
-}
-
-async function imprimirTicketCorteParcial(corteParcial) {
-    console.log("Datos del corte parcial:", corteParcial.corteActualizado);  // Verifica los datos aquí
-
-    const { folio, fecha_final, fecha_inicial, totalVentaCorte, monto_transferencias, total_tarjetas } = corteParcial.corteActualizado;
-    const {observaciones } = corteParcial.corteActualizado.corteFinal;
-    const sucursalName = await cargarSucursal(infoUser.sucursalId);
-
-    // Crear el contenido del ticket
-    const contenidoTicket = `
-        <div style="font-family: Arial, sans-serif; padding: 20px;">
-            <h2 style="text-align: center;">Corte Parcial</h2>
-            <p><strong>Sucursal:</strong> ${sucursalName}</p>
-            <p><strong>Folio:</strong> ${folio}</p>
-            <p><strong>Usuario:</strong> ${infoUser.username}</p>
-            <p><strong>Fecha apertura:</strong> ${new Date(fecha_inicial).toLocaleString()}</p>
-            <p><strong>Fecha cierre:</strong> ${new Date(fecha_final).toLocaleString()}</p>
-            <p><strong>Monto total:</strong> $${totalVentaCorte.toFixed(2)}</p>
-            <p><strong>Observaciones:</strong> ${observaciones}</p>
-            <p><strong>Total Tarjetas:</strong> ${total_tarjetas}</p>
-            <p><strong>Total Transferencias:</strong> ${monto_transferencias}</p>
-        </div>
-    `;
-
-    console.log("Creando ventana para ticket...");
-
-    // Crear una nueva ventana para el ticket
-    const ventanaTicket = window.open('', '_blank', 'width=320,height=500');
-
-    if (!ventanaTicket) {
-        console.error("Error: No se pudo abrir la ventana para el ticket.");
-        return;
-    }
-
-    ventanaTicket.document.write('<html><head><title>Ticket de Corte Parcial</title></head><body>');
-    ventanaTicket.document.write(contenidoTicket);
-    ventanaTicket.document.write('</body></html>');
-    ventanaTicket.document.close();
-
-    // Esperar que la ventana se cargue completamente antes de imprimir
-    ventanaTicket.onload = function() {
-        ventanaTicket.print();
-    };
 }
 
 // Cambiar a async para devolver el nombre de la sucursal

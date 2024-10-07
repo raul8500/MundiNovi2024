@@ -1,5 +1,94 @@
 const CorteParcial = require('../../schemas/cortes/cortesParcialesSchema')
 const CorteFinal = require('../../schemas/cortes/cortesFinalesSchema');
+const bwipjs = require('bwip-js');
+const path = require('path');
+const fs = require('fs');
+
+// Función para generar el código de barras
+const generarCodigoDeBarras = async (folio) => {
+    try {
+        const nombreArchivo = path.join(__dirname, `../../public/img/archivos/${folio}.png`);
+
+        return new Promise((resolve, reject) => {
+            bwipjs.toBuffer({
+                bcid: 'code128',       // Tipo de código de barras
+                text: folio,           // Texto que irá en el código de barras
+                scale: 3,              // Escala del código de barras
+                height: 10,            // Altura del código de barras
+                includetext: true,     // Incluye el texto en la imagen
+                textxalign: 'center',  // Alinea el texto al centro
+            }, function (err, png) {
+                if (err) {
+                    console.error('Error al generar el código de barras: ', err);
+                    return reject(err);
+                }
+
+                // Guardar la imagen en el sistema de archivos
+                fs.writeFile(nombreArchivo, png, (err) => {
+                    if (err) {
+                        console.error('Error al guardar el archivo: ', err);
+                        return reject(err);
+                    }
+
+                    // Devolver la ruta del archivo generado
+                    resolve(nombreArchivo);
+                });
+            });
+        });
+
+    } catch (error) {
+        console.error('Error en la generación del código de barras:', error);
+        throw error;
+    }
+};
+
+// Crear o actualizar el reporte de corte final con código de barras
+exports.addCorteFinal = async (req, res) => {
+    try {
+        const userId = req.body.userId;
+        const body = req.body.cantidad;
+        const observaciones = req.body.observaciones;
+
+        // Verificar si el usuario ya tiene un corte iniciado o no finalizado
+        const corteAbierto = await checkCorteUsuarioIniciadoONoFinalizado(userId);
+
+        if (corteAbierto) {
+            const corteActualizado = await CorteFinal.findOneAndUpdate(
+                { folio: corteAbierto },
+                {
+                    $set: {
+                        'corteFinal': {
+                            cantidad: body,
+                            observaciones: observaciones
+                        },
+                        'fecha_final': new Date()
+                    },
+                    $inc: {
+                        'totalVentasEfectivoCortes': -body,
+                        'totalVentaCorte': body
+                    }
+                },
+                { new: true, upsert: true }
+            );
+
+            // Generar el código de barras
+            const codigoBarras = await generarCodigoDeBarras(corteAbierto);
+
+            return res.status(200).json({
+                message: 'Corte final actualizado exitosamente.',
+                corte: corteActualizado,
+                codigoBarras // Incluir el código de barras en la respuesta
+            });
+        } else {
+            return res.status(409).json({
+                error: 'No se puede hacer un corte final porque no existe un corte abierto.'
+            });
+        }
+    } catch (error) {
+        console.error('Error al crear o actualizar el corte final:', error);
+        return res.status(500).send('Error interno del servidor');
+    }
+};
 
 // Obtener todos los cortes finales por fecha de inicio/fin y sucursal
 exports.getCortesFinales = async (req, res) => {
@@ -60,7 +149,6 @@ exports.getCortesFinales = async (req, res) => {
     }
 };
 
-
 // Obtener un corte final por ID
 exports.getCorteFinalById = async (req, res) => {
     try {
@@ -78,54 +166,6 @@ exports.getCorteFinalById = async (req, res) => {
     }
 };
 
-// Crear reporte
-exports.addCorteFinal = async (req, res) => {
-    try {
-        const userId = req.body.userId;  // Asegúrate de obtener el userId correctamente
-        const body = req.body.cantidad;
-        const observaciones = req.body.observaciones;
-
-        // Verificar si el usuario ya tiene un corte iniciado o no finalizado
-        const corteAbierto = await checkCorteUsuarioIniciadoONoFinalizado(userId);
-
-        if (corteAbierto) {
-            // Si hay un corte abierto, actualizamos el corteFinal y la fecha_final.
-            const corteActualizado = await CorteFinal.findOneAndUpdate(
-                { folio: corteAbierto },
-                {
-                    $set: {
-                        'corteFinal': {
-                            cantidad: body,
-                            observaciones: observaciones
-                        },
-                        'fecha_final': new Date()  // Actualiza la fecha_final con la fecha actual
-                    },
-                    $inc: {
-                        'totalVentasEfectivoCortes': -body,  // Resta el valor de body de totalVentasEfectivoCortes
-                        'totalVentaCorte': body  // Suma el valor de body a totalVentaCorte
-                    }
-                },
-                { new: true, upsert: true }  // upsert asegura que si no existe corteFinal, lo creará
-            );
-
-            // Retorna los datos del corte actualizado
-            return res.status(200).json({
-                message: 'Corte final actualizado exitosamente.',
-                corte: {
-                    corteActualizado
-                }
-            });
-        } else {
-            // Si no existe un corte abierto, devuelve un error 409 Conflict
-            return res.status(409).json({
-                error: 'No se puede hacer un corte final porque no existe un corte abierto.'
-            });
-        }
-    } catch (error) {
-        console.error('Error al crear o actualizar el corte final:', error);
-        return res.status(500).send('Error interno del servidor');
-    }
-};
 
 // Actualizar un corte final por ID
 exports.updateCorteFinalById = async (req, res) => {
