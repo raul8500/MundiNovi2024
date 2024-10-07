@@ -252,9 +252,9 @@ document.getElementById('buscarFolio').addEventListener('input', () => {
 
         let folioEncontrado = false; // Bandera para saber si el folio fue encontrado
         filas.forEach(fila => {
-            const celdaFolio = fila.querySelector('td:first-child').textContent.trim(); // Obtener el folio de la primera columna
+            const celdaFolio = fila.querySelector('td:first-child');
             
-            if (celdaFolio === folioBuscado) {
+            if (celdaFolio && celdaFolio.textContent.trim() === folioBuscado) {
                 // Llamar a la lógica de la función si el folio coincide
                 const button = fila.querySelector('.btnRecibir');
                 if (button && button.style.visibility !== 'hidden') {
@@ -272,6 +272,7 @@ document.getElementById('buscarFolio').addEventListener('input', () => {
         }
     }
 });
+
 
 function aplicarLogicaRecibir(button) {
     const id = button.getAttribute('id');
