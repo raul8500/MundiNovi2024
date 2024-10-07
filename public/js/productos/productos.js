@@ -61,8 +61,6 @@ $(document).ready(function () {
     });
 });
 
-
-
 btnCalcularPrecios.addEventListener('click', () => {
 
     for (let i = 1; i <= 10; i++) {

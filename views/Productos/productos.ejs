@@ -57,24 +57,24 @@
 
          /* Estilo para reducir el tamaño de las sugerencias */
         #suggestions {
-            max-height: 150px;
+            max-height: 200px;
             overflow-y: auto;
-            width: 300px;  /* Tamaño reducido para las sugerencias */
-            position: absolute;
-            z-index: 999;
-            background: white;
-            border: 1px solid #ccc;
-            list-style-type: none;
+            border: 1px solid #ddd;
+            background-color: white;
             padding: 0;
+            list-style-type: none;
         }
+
         #suggestions li {
-            padding: 8px;
+            padding: 10px;
             cursor: pointer;
         }
+
         #suggestions li.active {
             background-color: #007bff;
             color: white;
         }
+
         
     </style>
 </head>
@@ -727,20 +727,21 @@
                             
                             <div class="tab-pane fade" id="ex1-pills-5" role="tabpanel" aria-labelledby="ex1-tab-5">
                                 <h5>Buscar productos adicionales</h5>
-                                
-                                <form id="search-provider-form">
+                            
+                                <form id="search-product-form">
                                     <div class="row mb-3">
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" id="productsSearch" placeholder="Escribe el nombre del producto...">
+                                            <input type="text" class="form-control" id="productsSearch"
+                                                placeholder="Escribe el nombre del producto...">
                                         </div>
                                         <div class="col-md-3">
                                             <button type="button" class="btn btn-primary" id="addProductBtn">Agregar Producto</button>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </form>
                             
                                 <h5 class="mt-4">Productos Seleccionados</h5>
-                                <table class="table table-bordered" id="providerTable">
+                                <table class="table table-bordered" id="providerTableProductAditional">
                                     <thead>
                                         <tr>
                                             <th>Producto</th>
@@ -748,10 +749,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Los proveedores agregados aparecerán aquí -->
+                                        <!-- Los productos agregados aparecerán aquí -->
                                     </tbody>
                                 </table>
                             </div>
+
 
 
                             <div class="tab-pane fade" id="ex1-pills-6" role="tabpanel" aria-labelledby="ex1-tab-6">
@@ -759,6 +761,9 @@
                                 
                                 <form id="search-provider-form">
                                     <div class="row mb-3">
+                                        <div class="col-md-3">
+                                            <input type="number" class="form-control" id="productsKitAmount" value="1">
+                                        </div>
                                         <div class="col-md-3">
                                             <input type="text" class="form-control" id="productsKitSearch" placeholder="Escribe el nombre del producto...">
                                         </div>
@@ -772,7 +777,13 @@
                                 <table class="table table-bordered" id="providerTable">
                                     <thead>
                                         <tr>
-                                            <th>Producto</th>
+                                            <th>Codigo</th>
+                                            <th>Descripción</th>
+                                            <th>Cantidad</th>
+                                            <th>Visible</th>
+                                            <th>Sumable</th>
+                                            <th>Costo</th>
+                                            <th>Costo Total</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -782,22 +793,25 @@
                                 </table>
                             </div>
 
+
+
                             <div class="tab-pane fade" id="ex1-pills-7" role="tabpanel" aria-labelledby="ex1-tab-7">
                                 <h5>Buscar productos grupo</h5>
-                                
-                                <form id="search-provider-form">
+                            
+                                <div>
                                     <div class="row mb-3">
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" id="productsKitSearch" placeholder="Escribe el nombre del producto...">
+                                            <input type="text" class="form-control" id="productsGroupSearch"
+                                                placeholder="Escribe el nombre del producto...">
                                         </div>
                                         <div class="col-md-3">
-                                            <button type="button" class="btn btn-primary" id="addProductKitBtn">Agregar Producto</button>
+                                            <button type="button" class="btn btn-primary" id="addProductGroupBtn">Agregar Producto</button>
                                         </div>
-                                    </div>                                    
-                                </form>
+                                    </div>
+                                </div>
                             
                                 <h5 class="mt-4">Productos Seleccionados Grupo</h5>
-                                <table class="table table-bordered" id="providerTable">
+                                <table class="table table-bordered" id="providerTableGroup">
                                     <thead>
                                         <tr>
                                             <th>Producto</th>
@@ -805,28 +819,27 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Los proveedores agregados aparecerán aquí -->
+                                        <!-- Los productos agregados aparecerán aquí -->
                                     </tbody>
                                 </table>
                             </div>
 
-
                             <div class="tab-pane fade" id="ex1-pills-8" role="tabpanel" aria-labelledby="ex1-tab-8">
                                 <h5>Buscar productos complementarios</h5>
                                 
-                                <form id="search-provider-form">
+                                <div id="search-provider-form">
                                     <div class="row mb-3">
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" id="productsKitSearch" placeholder="Escribe el nombre del producto...">
+                                            <input type="text" class="form-control" id="productsComplement" placeholder="Escribe el nombre del producto...">
                                         </div>
                                         <div class="col-md-3">
-                                            <button type="button" class="btn btn-primary" id="addProductKitBtn">Agregar Producto</button>
+                                            <button type="button" class="btn btn-primary" id="addProductComplementBtn">Agregar Producto</button>
                                         </div>
                                     </div>                                    
-                                </form>
+                                </div>
                             
                                 <h5 class="mt-4">Productos Seleccionados Complmentarios</h5>
-                                <table class="table table-bordered" id="providerTable">
+                                <table class="table table-bordered" id="providerTableComplementProducts">
                                     <thead>
                                         <tr>
                                             <th>Producto</th>
@@ -870,6 +883,9 @@
     <script src="js/productos/productos.js"></script>
     <script  src="js/productos/productosPost.js" ></script>
     <script src="js/productos/productosProveedores.js"></script>
+    <script src="js/productos/productosAdicionales.js" ></script>
+    <script src="js/productos/productosComplementarios.js"></script>
+    <script src="js/productos/productosGrupo.js"></script>
 
 </body>
 

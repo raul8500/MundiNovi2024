@@ -147,10 +147,6 @@ const productSchema = new mongoose.Schema({
     type: Boolean,
     required: false, // Ahora es opcional
   },
-  esVisible: {
-    type: Boolean,
-    required: false, // Ahora es opcional
-  },
   kitProducto: [
     {
       producto: { 
@@ -161,7 +157,15 @@ const productSchema = new mongoose.Schema({
       cantidad: { 
         type: Number, 
         required: false, // Ahora es opcional
-      }
+      },
+       esVisible: {
+        type: Boolean,
+        required: false, // Ahora es opcional
+      },
+      esSumable: {
+        type: Boolean,
+        required: false, // Ahora es opcional
+      },
     }
   ],
   GrupoProducto: [
