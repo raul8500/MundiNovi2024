@@ -172,7 +172,6 @@ async function agregarFolioHijoACorteFinal(folioPadre, folioHijo) {
     }
 }
 
-
 // Crear un nuevo corte parcial
 exports.addCorteParcial = async (req, res) => {
     try {
@@ -268,3 +267,47 @@ const generarCodigoDeBarras = async (folio) => {
         throw error;
     }
 };
+
+// Verificar si hay un corte pendiente para un usuario y si hay más de $2000 en caja
+exports.verificarCortePendiente = async (req, res) => {
+    try {
+        const { userId } = req.params; // Obtenemos el ID del usuario de los parámetros
+
+        // Verificar si el usuario tiene un corte general no finalizado
+        const cortePendiente = await checkCorteUsuarioIniciadoONoFinalizado(userId);
+
+        console.log(`Corte pendiente encontrado: ${cortePendiente}`); // Depuración
+
+        if (cortePendiente) {
+            // Si hay un corte general pendiente, verificar si hay más de $2000 en efectivo
+            const esMayorOIgualA2000 = await checkTotalVentasEfectivo(cortePendiente);
+
+            console.log(`¿El total de ventas en efectivo es mayor o igual a 2000?: ${esMayorOIgualA2000}`); // Depuración
+
+            if (esMayorOIgualA2000) {
+                // Cambiamos el código de estado a 409 (Conflict)
+                return res.status(404).json({
+                    message: 'Hay un corte parcial pendiente y más de $2000 en efectivo.',
+                    folio: cortePendiente
+                });
+            } else {
+                // Si no hay más de $2000 en efectivo, no hay necesidad de un corte parcial
+                return res.status(200).json({
+                    message: 'No hay necesidad de corte parcial. El total de ventas en efectivo es menor a $2000.'
+                });
+            }
+        } else {
+            // Si no hay corte general pendiente
+            return res.status(200).json({
+                message: 'No hay cortes pendientes para este usuario.'
+            });
+        }
+    } catch (error) {
+        console.error('Error al verificar corte pendiente:', error);
+        return res.status(500).json({
+            message: 'Error interno del servidor al verificar corte pendiente.'
+        });
+    }
+};
+
+

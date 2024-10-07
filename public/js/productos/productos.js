@@ -1,6 +1,6 @@
 const btnCalcularPrecios = document.getElementById('btnCalcularPrecios')
 
-
+//Tabla para mostrar datos
 $(document).ready(function () {
     $('#tablaProductos').DataTable({
         ajax: {
@@ -63,8 +63,6 @@ $(document).ready(function () {
 
 
 
-
-
 btnCalcularPrecios.addEventListener('click', () => {
 
     for (let i = 1; i <= 10; i++) {
@@ -88,12 +86,10 @@ btnCalcularPrecios.addEventListener('click', () => {
     }
 });
 
-
-
-
-
 function calcularPrecio(costo, porcentaje){
     let precio = (costo * (1 + (porcentaje / 100)))
 
     return precio;
 }
+
+

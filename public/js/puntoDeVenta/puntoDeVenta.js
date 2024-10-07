@@ -527,6 +527,7 @@ function completarVenta(resumenVenta) {
                 title: 'Venta completada',
                 text: 'La venta se ha registrado exitosamente.'
             });
+            window.location.reload();
         }
     })
     .catch(error => {
@@ -761,6 +762,43 @@ function activarFormaPagoTransferencia() {
 activarCalculoCambio();
 activarBotonesEliminar();
 //activarFormaPagoTransferencia();
+
+
+function verificarCortesPendientes(userId) {
+    fetch(`/api/cortes/verificar/${userId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        console.log(response.status)
+        if (response.status === 404) {
+           window.location.href = '/corteparcial';
+        } else if (response.status === 200) {
+            console.log('No hay cortes pendientes');
+        } else {
+            throw new Error('Error al verificar cortes.');
+        }
+    })
+    .catch(error => {
+        console.error('Error al verificar cortes pendientes:', error);
+        Swal.fire('Error', 'Hubo un problema al verificar los cortes pendientes. Por favor, inténtalo de nuevo.', 'error');
+    });
+}
+
+function verificar() {
+    fetch(verifyToken)
+        .then(response => response.json())
+        .then(data => {
+            verificarCortesPendientes(data._id);
+            console.log(data._id)
+        })
+        .catch(error => console.log(error));
+}
+verificar()
+
+
 
 
 

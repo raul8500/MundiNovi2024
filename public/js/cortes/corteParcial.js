@@ -36,6 +36,7 @@ btnGuardarCorteParcial.addEventListener('click', () => {
                 confirmButtonText: 'Aceptar'
             }).then(async () => {
                 await imprimirTicketCorteParcial(data.corteParcial, data.codigoBarras);
+                window.location.reload();
             });
         } else {
             throw new Error('Error inesperado en la respuesta del servidor.');

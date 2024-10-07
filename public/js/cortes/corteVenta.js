@@ -27,6 +27,7 @@ btnCorteFinal.addEventListener('click', () => {
             }).then(async () => {
                 console.log(data.corte);  // Verifica que los datos son correctos
                 await imprimirTicketCorteParcial(data.corte);  // Pasa la información del corte
+                window.location.reload();
             });
 
         } else if (response.status === 409) {

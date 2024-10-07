@@ -53,6 +53,28 @@
         .total {
             font-weight: bold;
         }
+
+
+         /* Estilo para reducir el tamaño de las sugerencias */
+        #suggestions {
+            max-height: 150px;
+            overflow-y: auto;
+            width: 300px;  /* Tamaño reducido para las sugerencias */
+            position: absolute;
+            z-index: 999;
+            background: white;
+            border: 1px solid #ccc;
+            list-style-type: none;
+            padding: 0;
+        }
+        #suggestions li {
+            padding: 8px;
+            cursor: pointer;
+        }
+        #suggestions li.active {
+            background-color: #007bff;
+            color: white;
+        }
         
     </style>
 </head>
@@ -203,12 +225,12 @@
                                     aria-controls="ex1-pills-5" aria-selected="false">Productos Adicionales</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a data-mdb-pill-init class="nav-link" id="ex1-tab-6" href="#ex1-pills-6" role="tab"
-                                    aria-controls="ex1-pills-6" aria-selected="false">Productos del Kit</a>
+                                <a data-mdb-pill-init class="nav-link" id="ex1-tab-6" href="#ex1-pills-6" role="tab" aria-controls="ex1-pills-6"
+                                    aria-selected="false">Productos del Kit</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a data-mdb-pill-init class="nav-link" id="ex1-tab-7" href="#ex1-pills-7" role="tab"
-                                    aria-controls="ex1-pills-7" aria-selected="false">Productos del Grupo</a>
+                                <a data-mdb-pill-init class="nav-link" id="ex1-tab-7" href="#ex1-pills-7" role="tab" aria-controls="ex1-pills-7"
+                                    aria-selected="false">Productos del Grupo</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a data-mdb-pill-init class="nav-link" id="ex1-tab-8" href="#ex1-pills-8" role="tab"
@@ -221,29 +243,29 @@
                         <div class="tab-content" id="ex1-content">
                             <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
                                 <!-- Datos Generales Content -->
-                                <form>
+                                <div>
                             
                                     <div class="row mb-3">
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control" id="clave" placeholder="Clave del producto">
+                                            <input type="text" class="form-control" id="clave" placeholder="Clave del producto" autocomplete="off">
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control" id="nombre" placeholder="Nombre del producto">
+                                            <input type="text" class="form-control" id="nombre" placeholder="Nombre del producto" autocomplete="off">
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control" id="codigoBarras" placeholder="Código de Barras">
+                                            <input type="text" class="form-control" id="codigoBarras" placeholder="Código de Barras" autocomplete="off">
                                         </div>
                                     </div>
                             
                                     <div class="row mb-3">
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control" id="claveSAT" placeholder="Clave SAT del producto">
+                                            <input type="text" class="form-control" id="claveSAT" placeholder="Clave SAT del producto" autocomplete="off">
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control" id="descripcion" placeholder="Descripción del producto">
+                                            <input type="text" class="form-control" id="descripcion" placeholder="Descripción del producto" autocomplete="off">
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="date" class="form-control" id="fechaAlta">
+                                            <input type="date" class="form-control" id="fechaAlta" autocomplete="off" disabled>
                                         </div>
                                     </div>
                             
@@ -260,14 +282,14 @@
                                             <label class="form-label">Tipo</label>
                                             <br>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="tipoKit">
+                                                <input class="form-check-input" type="checkbox" id="tipoKit" onclick="mostrarOcultarPills()">
                                                 <label class="form-check-label" for="tipoKit">Kit</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="tipoGrupo">
+                                                <input class="form-check-input" type="checkbox" id="tipoGrupo" onclick="mostrarOcultarPills()">
                                                 <label class="form-check-label" for="tipoGrupo">Grupo</label>
                                             </div>
-                                        </div>                            
+                                        </div>
                                     </div>
                             
                                     <div class="row mb-3">
@@ -320,9 +342,9 @@
                                     
                                     <div class="mb-3">
                                         <label for="observaciones" class="form-label">Observaciones</label>
-                                        <textarea class="form-control" id="observaciones" rows="3"></textarea>
+                                        <textarea class="form-control" id="observaciones" rows="3" autocomplete="off"></textarea>
                                     </div>
-                                </form>
+                                </div>
                             </div>
 
                             <div class="tab-pane fade" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
@@ -392,13 +414,14 @@
                                     <div class="mb-3">
                                         <label for="calcular-precio" class="form-label">Calcular precio:</label>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="calcular-precio" name="calcular-precio">
+                                            <input class="form-check-input" type="checkbox" id="calcular-precio" name="calcular-precio"
+                                                onclick="togglePrecios()">
                                             <label class="form-check-label" for="calcular-precio">
-                                                Nota: el botón recalcular precios solo da una vista previa del cambio de precios. Para que se realice el cálculo automático cada vez que cambie el costo del Producto, es necesario seleccionar este checkbox.
+                                                Nota: el botón recalcular precios solo da una vista previa del cambio de precios. Para que se realice el
+                                                cálculo automático cada vez que cambie el costo del Producto, es necesario seleccionar este checkbox.
                                             </label>
                                         </div>
-                                        <button id="btnCalcularPrecios" class="btn btn-primary btn-rounded"> Calcula precios</button>
-
+                                        <button id="btnCalcularPrecios" class="btn btn-primary btn-rounded">Calcula precios</button>
                                     </div>
                             
                                     <fieldset class="border p-3 mb-4">
@@ -600,6 +623,64 @@
                                             </div>
                                         </div>
                                     </fieldset>
+
+                                    <fieldset class="border p-3 mb-4">
+                                        <legend class="w-auto">Monedero</legend>
+                                    
+                                        <div class="row mb-3">
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-monedero-1" class="form-label">Porcentaje 1:</label>
+                                                <input type="number" class="form-control" id="porcentaje-monedero-1" value="0">
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-monedero-2" class="form-label">Porcentaje 2:</label>
+                                                <input type="number" class="form-control" id="porcentaje-monedero-2" value="0">
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-monedero-2" class="form-label">Porcentaje 3:</label>
+                                                <input type="number" class="form-control" id="porcentaje-monedero-2" value="0">
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-monedero-4" class="form-label">Porcentaje 4:</label>
+                                                <input type="number" class="form-control" id="porcentaje-monedero-4" value="0">
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-monedero-5" class="form-label">Porcentaje 5:</label>
+                                                <input type="number" class="form-control" id="porcentaje-monedero-5" value="0">
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-monedero-6" class="form-label">Porcentaje 6:</label>
+                                                <input type="number" class="form-control" id="porcentaje-monedero-6" value="0">
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-monedero-7" class="form-label">Porcentaje 7:</label>
+                                                <input type="number" class="form-control" id="porcentaje-monedero-7"  value="0">
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-monedero-8" class="form-label">Porcentaje 8:</label>
+                                                <input type="number" class="form-control" id="porcentaje-monedero-8" value="0">
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-monedero-9" class="form-label">Porcentaje 9:</label>
+                                                <input type="number" class="form-control" id="porcentaje-monedero-9" value="0">
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <label for="porcentaje-monedero-10" class="form-label">Porcentaje 10:</label>
+                                                <input type="number" class="form-control" id="porcentaje-monedero-10" value="0">
+                                            </div>
+  
+                                        </div>
+                                    
+                                    </fieldset>
                                 </div>
                             </div>
 
@@ -760,10 +841,11 @@
                         </div>
                         <!-- Pills content -->
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-mdb-ripple-init
-                            data-mdb-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-mdb-ripple-init>Save changes</button>
+                            data-mdb-dismiss="modal">Cerrar</button>
+                        <button id="btnGuardarProducto" type="button" class="btn btn-primary" data-mdb-ripple-init>Guardar</button>
                     </div>
                 </div>
             </div>
@@ -786,6 +868,8 @@
     <script src="js/main.js"></script>
 
     <script src="js/productos/productos.js"></script>
+    <script  src="js/productos/productosPost.js" ></script>
+    <script src="js/productos/productosProveedores.js"></script>
 
 </body>
 

@@ -19,6 +19,8 @@ const grupos = require('../controllers/productos/complementos/grupoController')
 const marca = require('../controllers/productos/complementos/marcaController')
 const linea = require('../controllers/productos/complementos/lineaController')
 const departamento = require('../controllers/productos/complementos/departamentoController')
+const unidad = require('../controllers/productos/complementos/unidadController')
+const impuesto = require('../controllers/productos/complementos/impuestoController')
 const clientes = require('../controllers/clientes/clientesController')
 const kardex = require('../controllers/kardex/kardexController')
 const proveedor = require('../controllers/proveedor/proveedorController')
@@ -174,7 +176,18 @@ router.get('/api/productos', productos.getAllProducts)
         router.post('/api/departamento', departamento.createDepartamento)
         router.put('/api/departamento/:id', departamento.updateDepartamento)
         router.delete('/api/departamento/:id', departamento.deleteDepartamento)
-
+        //Impuesto
+        router.get('/api/impuesto', impuesto.getImpuestos)
+        router.get('/api/impuesto/:id', impuesto.getImpuestoById)
+        router.post('/api/impuesto', impuesto.createImpuesto)
+        router.put('/api/impuesto/:id', impuesto.updateImpuesto)
+        router.delete('/api/impuesto/:id', impuesto.deleteImpuesto)
+        //Unidad
+        router.get('/api/unidad', unidad.getUnidades)
+        router.get('/api/unidad/:id', unidad.getUnidadById)
+        router.post('/api/unidad', unidad.createUnidad)
+        router.put('/api/unidad/:id', unidad.updateUnidad)
+        router.delete('/api/unidad/:id', unidad.deleteUnidad)
 
 
         
@@ -238,6 +251,7 @@ router.get('/api/cortesParciales/:id', cortesParciales.getCorteParcialById)
 router.post('/api/cortesParciales', cortesParciales.addCorteParcial)
 router.put('/api/cortesParciales/:id', cortesParciales.updateCorteParcial)
 router.delete('/api/cortesParciales/:id', cortesParciales.deleteCorteParcial)
+router.get('/api/cortes/verificar/:userId', cortesParciales.verificarCortePendiente);
 
 //Cortes Finales
 router.get('/api/cortesFinales', cortesFinales.getCortesFinales)
