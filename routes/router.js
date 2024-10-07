@@ -30,6 +30,10 @@ const cortesParciales = require('../controllers/cortes/cortesParcialesController
 const cortesFinales = require('../controllers/cortes/cortesFinalesController')
 
 
+router.get('/', (req, res) => {    
+    res.render('index');
+});
+
 //Vistas
 router.get('/login', (req, res) => {    
     res.render('login');
@@ -104,6 +108,10 @@ router.get('/listadoCortesVenta', (req, res) => {
 
 router.get('/factura', (req, res) => {    
     res.render('Facturar/factura');
+});
+
+router.get('/monedero', (req, res) => {    
+    res.render('Monedero/monedero');
 });
 
 

@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mundi Novi 2024</title>
+    <link rel="icon" href="img/logoColor.png" type="image/png">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
+</head>
+
+<body>
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+                <!-- Toggle button -->
+                <button data-mdb-collapse-init class="navbar-toggler" type="button"
+                    data-mdb-target="#navbarCenteredExample" aria-controls="navbarCenteredExample" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Collapsible wrapper -->
+                <div class="collapse navbar-collapse justify-content-center" id="navbarCenteredExample">
+                    <!-- Logo centrado -->
+                    <a class="navbar-brand mx-auto" href="/">
+                        <img src="img/logoColor.png" height="70" alt="MDB Logo" loading="lazy" />
+                    </a>
+                </div>
+                <!-- Collapsible wrapper -->
+            </div>
+            <!-- Container wrapper -->
+        </nav>
+        <!-- Navbar -->
+    </header>
+
+    <main style="margin-top: 20px">
+        <div class="container-fluid pt-4" style="width: 70%;">
+    
+            <!-- Formulario de Registro de Cliente -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>Registro de Cliente</h4>
+                </div>
+                <div class="card-body">
+                    <form id="registroClienteForm">
+                        <!-- Información Personal -->
+                        <h5>Información Personal</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="nombreCliente" class="form-label">Nombre Completo</label>
+                                <input type="text" class="form-control" id="nombreCliente" placeholder="Nombre del Cliente"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="emailCliente" class="form-label">Correo Electrónico</label>
+                                <input type="email" class="form-control" id="emailCliente" placeholder="Correo del Cliente"
+                                    required>
+                            </div>
+                        </div>
+    
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="telefonoCliente" class="form-label">Teléfono</label>
+                                <input type="tel" class="form-control" id="telefonoCliente" placeholder="Número Telefónico"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="ocupacionCliente" class="form-label">Ocupación</label>
+                                <input type="text" class="form-control" id="ocupacionCliente"
+                                    placeholder="Ocupación del Cliente">
+                            </div>
+                        </div>
+    
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="estadoCivilCliente" class="form-label">Estado Civil</label>
+                                <select class="form-control" id="estadoCivilCliente" required>
+                                    <option value="" disabled selected>Selecciona un estado civil</option>
+                                    <option value="soltero">Soltero/a</option>
+                                    <option value="casado">Casado/a</option>
+                                    <option value="divorciado">Divorciado/a</option>
+                                    <option value="viudo">Viudo/a</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="generoCliente" class="form-label">Género</label>
+                                <select class="form-control" id="generoCliente" required>
+                                    <option value="" disabled selected>Selecciona un género</option>
+                                    <option value="masculino">Masculino</option>
+                                    <option value="femenino">Femenino</option>
+                                    <option value="otro">Otro</option>
+                                    <option value="prefiereNoDecirlo">Prefiere no decirlo</option>
+                                </select>
+                            </div>
+                        </div>
+    
+                        <!-- Información de la Dirección -->
+                        <h5>Dirección</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="calleCliente" class="form-label">Calle</label>
+                                <input type="text" class="form-control" id="calleCliente" placeholder="Calle y número">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="coloniaCliente" class="form-label">Colonia</label>
+                                <input type="text" class="form-control" id="coloniaCliente" placeholder="Colonia">
+                            </div>
+                        </div>
+    
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="ciudadCliente" class="form-label">Ciudad</label>
+                                <input type="text" class="form-control" id="ciudadCliente" placeholder="Ciudad">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="codigoPostalCliente" class="form-label">Código Postal</label>
+                                <input type="text" class="form-control" id="codigoPostalCliente"
+                                    placeholder="Código Postal">
+                            </div>
+                        </div>
+    
+                        <!-- Información Fiscal (Opcional) -->
+                        <h5>Información Fiscal (Opcional)</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="rfcCliente" class="form-label">R.F.C. (Opcional)</label>
+                                <input type="text" class="form-control" id="rfcCliente" placeholder="RFC del Cliente">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="regimenFiscalCliente" class="form-label">Régimen Fiscal (Opcional)</label>
+                                <select class="form-control" id="regimenFiscalCliente">
+                                    <option value="" disabled selected>Selecciona un régimen fiscal</option>
+                                    <option value="601">601 - General de Ley Personas Morales</option>
+                                    <option value="603">603 - Personas Morales con Fines no Lucrativos</option>
+                                    <option value="605">605 - Sueldos y Salarios e Ingresos Asimilados a Salarios</option>
+                                    <option value="606">606 - Arrendamiento</option>
+                                    <option value="607">607 - Régimen de Enajenación o Adquisición de Bienes</option>
+                                    <option value="608">608 - Demás ingresos</option>
+                                    <option value="609">609 - Consolidación</option>
+                                    <option value="610">610 - Residentes en el Extranjero sin Establecimiento Permanente en
+                                        México</option>
+                                    <option value="611">611 - Ingresos por Dividendos (socios y accionistas)</option>
+                                    <option value="612">612 - Personas Físicas con Actividades Empresariales y Profesionales
+                                    </option>
+                                    <option value="614">614 - Ingresos por Intereses</option>
+                                    <option value="615">615 - Régimen de los Ingresos por Obtención de Premios</option>
+                                    <option value="616">616 - Sin obligaciones fiscales</option>
+                                    <option value="621">621 - Incorporación Fiscal</option>
+                                    <option value="622">622 - Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras
+                                    </option>
+                                    <option value="623">623 - Opcional para Grupos de Sociedades</option>
+                                    <option value="624">624 - Coordinados</option>
+                                    <option value="628">628 - Hidrocarburos</option>
+                                    <option value="629">629 - De los Regímenes Fiscales Preferentes y de las Empresas
+                                        Multinacionales</option>
+                                    <option value="630">630 - Enajenación de acciones en bolsa de valores</option>
+                                </select>
+                            </div>
+                        </div>
+    
+                        <!-- Monedero -->
+                        <h5>Monedero</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="saldoInicialMonedero" class="form-label">Saldo Inicial del Monedero</label>
+                                <input type="number" class="form-control" id="saldoInicialMonedero"
+                                    placeholder="Saldo inicial en $">
+                            </div>
+                        </div>
+    
+                        <!-- Botones -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Registrar Cliente</button>
+                            <button type="reset" class="btn btn-secondary">Limpiar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+    <!-- MDB -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>
