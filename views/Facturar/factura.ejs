@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mundi Novi 2024</title>
+    <link rel="icon" href="img/logoColor.png" type="image/png">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
+</head>
+
+<body>
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+                <!-- Toggle button -->
+                <button data-mdb-collapse-init class="navbar-toggler" type="button"
+                    data-mdb-target="#navbarCenteredExample" aria-controls="navbarCenteredExample" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Collapsible wrapper -->
+                <div class="collapse navbar-collapse justify-content-center" id="navbarCenteredExample">
+                    <!-- Logo centrado -->
+                    <a class="navbar-brand mx-auto" href="/main">
+                        <img src="img/logoColor.png" height="70" alt="MDB Logo" loading="lazy" />
+                    </a>
+                </div>
+                <!-- Collapsible wrapper -->
+            </div>
+            <!-- Container wrapper -->
+        </nav>
+        <!-- Navbar -->
+    </header>
+
+    <main style="margin-top: 20px">
+        <div class="container-fluid pt-4" style="width: 70%;">
+            <!-- Formulario de Facturación -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>Formulario de Facturación</h4>
+                </div>
+                <div class="card-body">
+                    <form id="facturacionForm">
+                        <!-- Datos del Cliente -->
+                        <h5>Datos del Cliente</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="nombreCliente" class="form-label">Nombre o Razón Social</label>
+                                <input type="text" class="form-control" id="nombreCliente"
+                                    placeholder="Universidad Veracruzana" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="rfcCliente" class="form-label">R.F.C. Cliente</label>
+                                <input type="text" class="form-control" id="rfcCliente" placeholder="UVE450101FM9"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="usoCFDICliente" class="form-label">Uso CFDI Cliente</label>
+                                <input type="text" class="form-control" id="usoCFDICliente"
+                                    placeholder="G03-Gastos en general" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="regimenFiscalCliente" class="form-label">Régimen Fiscal</label>
+                                <select class="form-control" id="regimenFiscalCliente" required>
+                                    <option value="" disabled selected>Selecciona un régimen fiscal</option>
+                                    <option value="601">601 - General de Ley Personas Morales</option>
+                                    <option value="603">603 - Personas Morales con Fines no Lucrativos</option>
+                                    <option value="605">605 - Sueldos y Salarios e Ingresos Asimilados a Salarios
+                                    </option>
+                                    <option value="606">606 - Arrendamiento</option>
+                                    <option value="607">607 - Régimen de Enajenación o Adquisición de Bienes</option>
+                                    <option value="608">608 - Demás ingresos</option>
+                                    <option value="609">609 - Consolidación</option>
+                                    <option value="610">610 - Residentes en el Extranjero sin Establecimiento Permanente
+                                        en México</option>
+                                    <option value="611">611 - Ingresos por Dividendos (socios y accionistas)</option>
+                                    <option value="612">612 - Personas Físicas con Actividades Empresariales y
+                                        Profesionales</option>
+                                    <option value="614">614 - Ingresos por Intereses</option>
+                                    <option value="615">615 - Régimen de los Ingresos por Obtención de Premios</option>
+                                    <option value="616">616 - Sin obligaciones fiscales</option>
+                                    <option value="621">621 - Incorporación Fiscal</option>
+                                    <option value="622">622 - Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras
+                                    </option>
+                                    <option value="623">623 - Opcional para Grupos de Sociedades</option>
+                                    <option value="624">624 - Coordinados</option>
+                                    <option value="628">628 - Hidrocarburos</option>
+                                    <option value="629">629 - De los Regímenes Fiscales Preferentes y de las Empresas
+                                        Multinacionales</option>
+                                    <option value="630">630 - Enajenación de acciones en bolsa de valores</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="domicilioFiscalCliente" class="form-label">Domicilio Fiscal</label>
+                                <input type="text" class="form-control" id="domicilioFiscalCliente" placeholder="91000"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="numeroTicket" class="form-label">Número de Ticket</label>
+                                <input type="text" class="form-control" id="numeroTicket" placeholder="Número de Ticket"
+                                    required>
+                            </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Generar Factura</button>
+                            <button type="reset" class="btn btn-secondary">Limpiar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MDB -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>

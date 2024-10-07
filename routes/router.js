@@ -102,6 +102,10 @@ router.get('/listadoCortesVenta', (req, res) => {
     res.render('Cortes/listadoCortesVenta');
 });
 
+router.get('/factura', (req, res) => {    
+    res.render('Facturar/factura');
+});
+
 
 
 
