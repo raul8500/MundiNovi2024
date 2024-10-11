@@ -7,14 +7,14 @@ const nameRol = document.getElementById('name');
 const rol = document.getElementById('rol');
 const options = document.getElementById('options');
 const profilePicture = document.getElementById('profilePicture');
-let infoUser = ''
+let infoUser = '';
 verificarTokenYMostrar();
 
 function verificarTokenYMostrar() {
     fetch(verifyToken)
         .then(response => response.json())
         .then(data => {
-            infoUser = data
+            infoUser = data;
             mostrarRolUsuario(data); // Primero, muestra el rol del usuario
             return data; // Devuelve 'data' para poder usarlo en la siguiente promesa
         })
@@ -35,18 +35,17 @@ function mostrarRolUsuario(data) {
 
         if (estadisticasMain != null) {
             estadisticasMain.style.visibility = 'visible';
-            mostrarInfoPanel()
+            mostrarInfoPanel();
         }
     }
-    
 }
 
 function capitalizeWords(str) {
     return str
-        .toLowerCase() // Asegura que el texto esté en minúsculas
-        .split(' ')    // Divide el texto en palabras
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitaliza la primera letra de cada palabra
-        .join(' ');    // Une las palabras de nuevo en una cadena
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
 }
 
 const on = (element, event, selector, handler) => {
@@ -109,12 +108,28 @@ function funciones(data) {
                 </li>
             `;
         } else {
-            // Si no hay subfunciones, simplemente muestra el enlace
-            resultados += `
-                <li class="nav-item">
-                    <a class="nav-link" href="${item.path}">${item.name}</a>
-                </li>
-            `;
+            // Si no hay subfunciones, verificar si es "Preciador" y mostrar la cantidad de productos
+            if (item.name === 'Preciador') {
+                fetch(`/api/preciador/${infoUser.sucursalId}`)
+                    .then(response => response.json())
+                    .then(preciadorData => {
+                        const cantidadProductos = preciadorData?.productos?.length || 0; // Verificar si 'productos' existe
+                        resultados += `
+                            <li class="nav-item">
+                                <a class="nav-link" href="${item.path}">${item.name}${cantidadProductos > 0 ? ` (${cantidadProductos})` : ''}</a>
+                            </li>
+                        `;
+                        document.getElementById('options').innerHTML = resultados; // Actualizar el HTML después de obtener la cantidad
+                    })
+                    .catch(error => console.log(error));
+            } else {
+                // Mostrar el enlace normalmente
+                resultados += `
+                    <li class="nav-item">
+                        <a class="nav-link" href="${item.path}">${item.name}</a>
+                    </li>
+                `;
+            }
         }
     });
     document.getElementById('options').innerHTML = resultados;
@@ -129,11 +144,9 @@ function mostrarInfoPanel() {
         .catch(error => console.log(error)); // Mover .catch() al final
 }
 
-function cargarInfoPanel(data){
-
-    document.getElementById('ingresosDelDia').textContent = '$'+data.totalDinero;
+function cargarInfoPanel(data) {
+    document.getElementById('ingresosDelDia').textContent = '$' + data.totalDinero;
     document.getElementById('ventasRealizadas').textContent = data.totalVentas;
     document.getElementById('productosVendidos').textContent = data.totalProductos;
     document.getElementById('sucursalMasVenta').textContent = data.sucursalQueVendioMas;
-    
 }

@@ -6,6 +6,8 @@ const request = require('request');
 const xlsx = require('xlsx');
 const fs = require('fs');
 const path = require('path');
+const PDFDocument = require('pdfkit');
+
 
 const Linea = require('../../schemas/productosSchema/complementosSchema/lineaSchema');
 const Departamento = require('../../schemas/productosSchema/complementosSchema/departamentoSchema');
@@ -494,7 +496,6 @@ exports.updateProductPrice = async (req, res) => {
     }
 };
 
-
 exports.getProductById = async (req, res) => {
     try {
         const { id } = req.params; // El _id del producto viene en los parámetros de la URL
@@ -534,8 +535,6 @@ exports.getPreciadorBySucursal = async (req, res) => {
             sucursalesPendientes: sucursalObjectId
         }).populate('productoId');
 
-        console.log("Productos pendientes:", productosPendientes);
-
         if (!productosPendientes.length) {
             return res.status(200).json({ message: 'No hay productos pendientes de impresión para esta sucursal' });
         }
@@ -552,36 +551,92 @@ exports.getPreciadorBySucursal = async (req, res) => {
 
 exports.marcarProductoImpreso = async (req, res) => {
     try {
-        const { productoId, sucursalId } = req.params; // ID del producto y la sucursal vienen en los parámetros
+        const { productos, sucursalId } = req.body; // Productos seleccionados y ID de la sucursal
 
-        // Buscar el registro en Preciador para este producto
-        const preciador = await Preciador.findOne({ productoId });
-
-        if (!preciador) {
-            return res.status(404).json({ error: 'Producto no encontrado en el preciador' });
+        // Validar que se hayan enviado los productos
+        if (!productos || productos.length === 0) {
+            return res.status(400).json({ message: 'El campo "productos" es requerido y debe contener al menos un producto.' });
         }
 
-        // Eliminar el ID de la sucursal del array de pendientes
-        preciador.sucursalesPendientes = preciador.sucursalesPendientes.filter(
-            sucursal => sucursal.toString() !== sucursalId
-        );
+        // Crear el documento PDF con la información de los productos
+        const doc = new PDFDocument({ size: [225, 350], layout: 'landscape' }); // Tamaño de la página más reducido
+        const nombreArchivo = path.join(__dirname, `../../public/img/archivos/precios_productos.pdf`);
+        const nombreArchivoPublico = '/img/archivos/precios_productos.pdf'; // Ruta pública para el archivo generado
+        const writeStream = fs.createWriteStream(nombreArchivo);
+        doc.pipe(writeStream);
 
-        // Si ya no hay sucursales pendientes, eliminar el registro en Preciador
-        if (!preciador.sucursalesPendientes.length) {
-            await Preciador.findByIdAndDelete(preciador._id);
-        } else {
-            // Guardar el preciador actualizado
-            await preciador.save();
+        // Recorrer los productos y obtener la información de cada uno desde la base de datos
+        for (const producto of productos) {
+            const productoDb = await Producto.findById(producto._id); // Obtener el producto de la BD por su ID
+
+            if (!productoDb) {
+                return res.status(404).json({ message: `Producto con ID ${producto._id} no encontrado.` });
+            }
+
+            // Generar una página por cada cantidad de impresión para cada producto
+            for (let i = 0; i < producto.cantidad; i++) {
+                // Añadir una nueva página para cada producto
+                if (i > 0 || productos.indexOf(producto) > 0) {
+                    doc.addPage();
+                }
+                
+                // Ajustar tamaños para que todo quepa en una sola página
+                doc.fontSize(12).text(productoDb.name, { align: 'center' }); // Reducir aún más el tamaño del nombre
+                doc.moveDown(0.5); // Mover hacia abajo ligeramente para dejar espacio entre los textos
+                doc.fontSize(10).text(`Referencia: ${productoDb.reference}`, { align: 'center' }); // Mantener tamaño reducido para la referencia
+                doc.moveDown(0.5);
+                doc.fontSize(16).text(`Precio: $${productoDb.datosFinancieros.precio1}`, { align: 'center' }); // Reducir el tamaño del precio
+            }
+
+            // Marcar el producto como impreso en el preciador para la sucursal
+            const preciador = await Preciador.findOne({ productoId: producto._id });
+
+            if (preciador) {
+                // Eliminar la sucursal de la lista de pendientes
+                preciador.sucursalesPendientes = preciador.sucursalesPendientes.filter(
+                    sucursal => sucursal.toString() !== sucursalId
+                );
+
+                // Si no hay más sucursales pendientes, eliminar el producto del preciador
+                if (!preciador.sucursalesPendientes.length) {
+                    await Preciador.findByIdAndDelete(preciador._id);
+                } else {
+                    // Guardar el preciador actualizado
+                    await preciador.save();
+                }
+            }
         }
 
-        res.status(200).json({
-            message: 'Producto marcado como impreso para la sucursal',
-            productoId
+        // Finalizar el documento PDF
+        doc.end();
+
+        // Escuchar cuando el archivo PDF se haya generado correctamente
+        writeStream.on('finish', () => {
+            res.status(200).json({
+                message: 'PDF generado y productos marcados como impresos.',
+                archivo: nombreArchivoPublico // Ruta pública para el frontend
+            });
         });
+
+        writeStream.on('error', (err) => {
+            console.error('Error al generar el PDF: ', err);
+            res.status(500).json({ message: 'Error al generar el PDF.', error: err });
+        });
+
     } catch (error) {
-        res.status(500).json({ error: 'Error al marcar el producto como impreso' });
+        console.error('Error en la generación del PDF de precios:', error);
+        res.status(500).json({ message: 'Error en la generación del PDF de precios.', error });
     }
 };
+
+
+
+
+
+
+
+
+
 
 
 

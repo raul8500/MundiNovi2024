@@ -132,3 +132,4 @@ exports.generarCodigoDeBarrasProductos = async (req, res) => {
         res.status(500).json({ message: 'Error en la generación del PDF de códigos de barras.', error });
     }
 };
+

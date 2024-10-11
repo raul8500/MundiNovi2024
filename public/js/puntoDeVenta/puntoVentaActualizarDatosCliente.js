@@ -55,4 +55,3 @@ async function guardarNuevaInfoCliente() {
 
 // Asociar la función al evento click
 document.getElementById('guardarNuevaInfoCliente').addEventListener('click', guardarNuevaInfoCliente);
-

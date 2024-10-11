@@ -9,7 +9,6 @@ function verificarTokenYMostrar() {
     fetch(verifyToken)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             idSucursalProductosCambios = data.sucursalId;
             mostrarInfoProductos(idSucursalProductosCambios); // Llamar a la función para mostrar productos
             cargarTodosLosProductos();  // Cargar todos los productos para la búsqueda
@@ -21,7 +20,6 @@ function mostrarInfoProductos(idSucursalProductosCambios) {
     fetch('/api/preciador/' + idSucursalProductosCambios)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             const productos = data.productos; // Asegúrate de que la estructura devuelva 'productos'
             renderizarProductos(productos); // Pasar los productos al renderizador
         })
@@ -146,57 +144,92 @@ function inicializarFuse() {
     function seleccionarProducto(item) {
         document.getElementById('productoSearch').value = item.reference;
         suggestionsDiv.innerHTML = ''; // Limpiar las sugerencias después de seleccionar
+        document.getElementById('cantidadImpresiones').focus(); // Focus en el input de cantidad
     }
 }
 
 // Función para añadir el producto y cantidad a la tabla
 document.getElementById('agregarBtn').addEventListener('click', () => {
     const nombreProducto = document.getElementById('productoSearch').value;
-    const cantidadImpresiones = document.getElementById('cantidadImpresiones').value;
+    const cantidadImpresiones = parseInt(document.getElementById('cantidadImpresiones').value, 10);
 
-    if (nombreProducto && cantidadImpresiones) {
+    if (nombreProducto && cantidadImpresiones > 0) {
         const tablaProductos = document.getElementById('productosSeleccionados').getElementsByTagName('tbody')[0];
         
         // Buscar el _id del producto basado en el nombre
         const productoSeleccionado = todosLosProductos.find(p => p.reference === nombreProducto);
 
         if (!productoSeleccionado) {
-            alert('Producto no encontrado.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Producto no encontrado',
+                text: 'El producto seleccionado no existe.'
+            });
             return;
         }
 
-        // Crear nueva fila
-        const row = tablaProductos.insertRow();
-        row.setAttribute('data-id', productoSeleccionado._id);  // Almacenar el _id en un atributo data-id
+        // Verificar si el producto ya está en la tabla
+        let productoEnTabla = false;
+        const filas = tablaProductos.getElementsByTagName('tr');
         
-        // Crear celdas
-        const cellNombre = row.insertCell(0);
-        const cellCantidad = row.insertCell(1);
-        const cellAcciones = row.insertCell(2);
-        
-        // Añadir contenido a las celdas
-        cellNombre.textContent = nombreProducto;
-        cellCantidad.textContent = cantidadImpresiones;
-        
-        // Botón de eliminar
-        const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = 'Eliminar';
-        deleteBtn.classList.add('btn', 'btn-danger', 'btn-sm');
-        deleteBtn.addEventListener('click', () => row.remove());
-        cellAcciones.appendChild(deleteBtn);
-        
-        // Limpiar los inputs
+        for (let i = 0; i < filas.length; i++) {
+            if (filas[i].getAttribute('data-id') === productoSeleccionado._id) {
+                // Si el producto ya está en la tabla, sumar la cantidad
+                const cantidadActual = parseInt(filas[i].getElementsByTagName('td')[1].textContent, 10);
+                filas[i].getElementsByTagName('td')[1].textContent = cantidadActual + cantidadImpresiones;
+                productoEnTabla = true;
+                break;
+            }
+        }
+
+        // Si el producto no está en la tabla, agregar una nueva fila
+        if (!productoEnTabla) {
+            const row = tablaProductos.insertRow();
+            row.setAttribute('data-id', productoSeleccionado._id);  // Almacenar el _id en un atributo data-id
+            
+            // Crear celdas
+            const cellNombre = row.insertCell(0);
+            const cellCantidad = row.insertCell(1);
+            const cellAcciones = row.insertCell(2);
+            
+            // Añadir contenido a las celdas
+            cellNombre.textContent = nombreProducto;
+            cellCantidad.textContent = cantidadImpresiones;
+            
+            // Botón de eliminar
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Eliminar';
+            deleteBtn.classList.add('btn', 'btn-danger', 'btn-sm');
+            deleteBtn.addEventListener('click', () => row.remove());
+            cellAcciones.appendChild(deleteBtn);
+        }
+
+        // Limpiar los inputs y hacer focus en el input de producto
         document.getElementById('productoSearch').value = '';
         document.getElementById('cantidadImpresiones').value = '';
+        document.getElementById('productoSearch').focus(); // Focus en el input de producto
     } else {
-        alert('Por favor, completa todos los campos.');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campos incompletos',
+            text: 'Por favor, completa todos los campos antes de agregar el producto.'
+        });
     }
 });
 
-// Función para manejar el botón de imprimir
+// Función para manejar el botón de imprimir y marcar como impresos
 document.getElementById('imprimirTablaBtn').addEventListener('click', () => {
     const tablaProductos = document.getElementById('productosSeleccionados').getElementsByTagName('tbody')[0];
     const filas = tablaProductos.getElementsByTagName('tr');
+
+    if (filas.length === 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'No hay productos',
+            text: 'No puedes imprimir sin productos en la tabla.'
+        });
+        return; // Salir si no hay productos en la tabla
+    }
     
     const productosParaImprimir = [];
 
@@ -206,10 +239,50 @@ document.getElementById('imprimirTablaBtn').addEventListener('click', () => {
 
         productosParaImprimir.push({
             _id: idProducto,
-            cantidad: cantidad
+            cantidad: parseInt(cantidad, 10) // Asegúrate de que sea un número
         });
     }
 
-    console.log('Productos a imprimir:', productosParaImprimir);
-    
+    // Enviar la solicitud al backend para generar el PDF y marcar como impresos
+    fetch('/api/preciador', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            productos: productosParaImprimir,
+            sucursalId: idSucursalProductosCambios
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.archivo) {
+            // Abrir el archivo PDF en una nueva pestaña y activar la impresión
+            const printWindow = window.open(data.archivo, '_blank');
+            printWindow.focus(); // Asegurar que la pestaña esté en primer plano
+            printWindow.print();  // Abrir la ventana de impresión
+
+            // Limpiar la tabla después de la impresión
+            document.getElementById('productosSeleccionados').getElementsByTagName('tbody')[0].innerHTML = '';
+
+            // Recargar productos pendientes después de imprimir
+            mostrarInfoProductos(idSucursalProductosCambios);
+
+            location.reload()
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un error al generar el PDF.'
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error al generar el PDF:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al generar el PDF.'
+        });
+    });
 });
