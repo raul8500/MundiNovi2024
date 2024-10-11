@@ -91,9 +91,11 @@
 
     <main style="margin-top: 20px">
         <div class="container pt-4">
+            <h3 class="text-center"><i class="fa-solid fa-dolly"></i> Codigos de barras</h3>
+
             <!-- Input para buscar el producto y cantidad de códigos de barras -->
-            <div class="row">
-                <div class="col-md-6">
+            <div class="row" style="margin-top: 50px;">
+                <div class="col-md-5">
                     <label for="productoSearch" class="form-label">Buscar Producto</label>
                     <input type="text" class="form-control" id="productoSearch"
                         placeholder="Escribe el nombre o referencia del producto">
@@ -103,7 +105,7 @@
                     <label for="cantidadCodigos" class="form-label">Cantidad de códigos de barras</label>
                     <input type="number" class="form-control" id="cantidadCodigos" placeholder="Cantidad">
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
+                <div class="col-md-3 d-flex align-items-end">
                     <button class="btn btn-primary" id="agregarBtn">Agregar</button>
                     <button class="btn btn-secondary ms-2" id="generarCodigosBtn">Generar PDF</button>
                 </div>

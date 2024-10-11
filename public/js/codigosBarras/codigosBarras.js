@@ -21,6 +21,7 @@
         const fuse = new Fuse(todosLosProductos, options);
         const searchInput = document.getElementById('productoSearch');
         const suggestionsDiv = document.getElementById('suggestions');
+        const cantidadInput = document.getElementById('cantidadCodigos'); // Input de cantidad
 
         // Evento de búsqueda al escribir en el input
         searchInput.addEventListener('input', function () {
@@ -68,6 +69,7 @@
             if (e.key === 'Enter') {
                 if (selectedIndex >= 0 && suggestionItems[selectedIndex]) {
                     suggestionItems[selectedIndex].click();
+                    cantidadInput.focus(); // Poner foco en el input de cantidad después de seleccionar el producto
                 }
             }
         });
@@ -95,6 +97,7 @@
         function seleccionarProducto(item) {
             document.getElementById('productoSearch').value = item.reference;
             suggestionsDiv.innerHTML = ''; // Limpiar las sugerencias después de seleccionar
+            cantidadInput.focus(); // Enfocar el input de cantidad después de seleccionar el producto
         }
     }
 
@@ -135,10 +138,16 @@
             deleteBtn.classList.add('btn', 'btn-danger', 'btn-sm');
             deleteBtn.addEventListener('click', () => row.remove());
             cellAcciones.appendChild(deleteBtn);
+
+            // Limpiar los inputs
+            document.getElementById('productoSearch').value = '';
+            document.getElementById('cantidadCodigos').value = '';
+            document.getElementById('productoSearch').focus(); // Poner foco en el input de producto después de agregar
         } else {
             alert('Por favor, completa todos los campos.');
         }
     });
+
 
     // Función para manejar el botón de generar códigos de barras
     document.getElementById('generarCodigosBtn').addEventListener('click', () => {
@@ -176,6 +185,7 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+                location.reload();
             } else {
                 alert('Error al generar el PDF.');
             }
