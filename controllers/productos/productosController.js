@@ -450,22 +450,22 @@ exports.getAllProducts = async (req, res) => {
 };
 
 exports.updateProductPrice = async (req, res) => {
-    console.log(req.body);
-    console.log(req.params);
-
     try {
         const { id } = req.params; // El _id del producto viene en los parámetros de la URL
-        const { newPrice } = req.body; // El nuevo precio viene en el cuerpo de la solicitud
+        const { newPrice, codigoBarra } = req.body; // El nuevo precio y el código de barras vienen en el cuerpo de la solicitud
 
         // Verificar si se recibió el nuevo precio
         if (newPrice === undefined) {
             return res.status(400).json({ error: 'Falta el nuevo precio. Por favor, proporciona el nuevo precio.' });
         }
 
-        // Buscar y actualizar el campo `precio1` dentro de `datosFinancieros`
+        // Actualizar tanto el precio como el código de barras
         const updatedProduct = await Producto.findByIdAndUpdate(
             id, // El _id del producto que deseas actualizar
-            { 'datosFinancieros.precio1': newPrice }, // Actualizar el campo `precio1` dentro de `datosFinancieros`
+            { 
+                'datosFinancieros.precio1': newPrice, // Actualizar el campo `precio1` dentro de `datosFinancieros`
+                codigoBarra: codigoBarra // Actualizar el campo `codigoBarra`
+            }, 
             { new: true } // Para devolver el documento actualizado
         );
 
@@ -486,13 +486,14 @@ exports.updateProductPrice = async (req, res) => {
 
         // Enviar la respuesta con el producto actualizado
         res.status(200).json({
-            message: 'Precio del producto actualizado exitosamente y agregado al preciador',
+            message: 'Precio y código de barras del producto actualizados exitosamente y agregado al preciador',
             product: updatedProduct
         });
     } catch (error) {
-        res.status(500).json({ error: 'Error al actualizar el precio del producto' });
+        res.status(500).json({ error: 'Error al actualizar el producto' });
     }
 };
+
 
 exports.getProductById = async (req, res) => {
     try {

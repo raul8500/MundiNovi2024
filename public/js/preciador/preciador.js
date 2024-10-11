@@ -211,5 +211,5 @@ document.getElementById('imprimirTablaBtn').addEventListener('click', () => {
     }
 
     console.log('Productos a imprimir:', productosParaImprimir);
-    // Aquí puedes implementar la lógica de impresión real usando productosParaImprimir
+    
 });

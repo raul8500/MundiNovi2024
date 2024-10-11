@@ -119,6 +119,10 @@ router.get('/preciador', (req, res) => {
     res.render('Preciador/preciador');
 });
 
+router.get('/codigosBarras', (req, res) => {    
+    res.render('CodigosBarras/codigosBarras');
+});
+
 
 
 
@@ -290,6 +294,7 @@ router.post('/api/recepcion/cortes', recepcionCortes.updateEstadoCortes)
 
 const codigosBarras = require('../controllers/codigosBarras/codigosBarrasController')
 router.post('/api/codigosBarras', codigosBarras.generarCodigoDeBarras)
+router.post('/api/codigosBarras/productos', codigosBarras.generarCodigoDeBarrasProductos) 
 
 
 module.exports = router
