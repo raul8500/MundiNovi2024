@@ -138,7 +138,7 @@ function mostrarEnTabla(cortes) {
                     <td class="text-center">${totalEfectivo}</td>
                     <td class="text-center">0.0</td>                    
                     <td class="text-center">
-                        ${item.recibido ? 
+                        ${item.recepcion ? 
                             `<i class="fa-solid fa-check" style="color: green;"></i>` : 
                             `<button id="${item._id}" type="button" class="btn btn-primary btn-rounded btnRecibir corteFinal">
                                 <i class="fa-solid fa-hand-holding-dollar"></i>
@@ -269,14 +269,12 @@ document.getElementById('buscarFolio').addEventListener('input', () => {
             }
         });
 
-        // Limpiar el campo de entrada solo si el folio fue encontrado
-        if (folioEncontrado) {
-            document.getElementById('buscarFolio').value = ""; // Limpiar el input
-        } else {
-            console.log(`El folio ${folioBuscado} no está en la lista de cortes.`);
-        }
+        // Limpiar el campo de entrada independientemente de si el folio fue encontrado o no
+        document.getElementById('buscarFolio').value = ""; // Limpiar el input
     }
 });
+
+
 
 
 function aplicarLogicaRecibir(button) {
