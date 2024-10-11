@@ -1,4 +1,7 @@
 const Producto = require('../../schemas/productosSchema/productosSchema');
+const Sucursal = require('../../schemas/sucursalSchema/sucursalSchema');
+const Preciador = require('../../schemas/preciador/preciadorSchema');
+const mongoose = require('mongoose');
 const request = require('request');
 const xlsx = require('xlsx');
 const fs = require('fs');
@@ -251,38 +254,24 @@ exports.createProductFromExcel = async (req, res) => {
 
 exports.createProduct = async (req, res) => {
     try {
-        const {
-            name,
-            description,
-            reference,
-            price = [],
-            inventory = {},
-            tax = [],
-            productKey,
-            type,
-        } = req.body;
-
   
         const productoAlegra = {
-            name: name ?? null,
-            description: description ?? null,
-            reference: reference ?? null,
-            price: price.map(p => ({
-                idPriceList: p.idPriceList ?? null,
-                price: p.price ?? null,
-            })),
+            name: req.body.generales.nombre ?? null,
+            description: req.body.generales.descripcion ?? null,
+            reference: req.body.generales.clave ?? null,
+            price: req.body.datosFinancieros.precio1,
             inventory: {
-                unit: inventory.unit ?? null,
+                unit: 'H87'
             },
-            tax: tax.map(t => ({
-                id: t.id ?? null,
-                name: t.name ?? null,
-                percentage: t.percentage ?? null,
-                status: t.status ?? null,
-                type: t.type ?? null,
-            })),
-            productKey: productKey ?? null,
-            type: type ?? null,
+            tax: [{
+                id: "1",
+                name: "IVA",
+                percentage: "16.00",
+                status: "active",
+                type: "general",
+            }],
+            productKey: req.body.generales.claveSAT ?? null,
+            type: 'product'
         };
 
       const options = {
@@ -291,7 +280,7 @@ exports.createProduct = async (req, res) => {
         headers: {
           accept: 'application/json',
           'content-type': 'application/json',
-          authorization: 'Basic bG9wZXpqbzI5OUBnbWFpbC5jb206MDNmZjVkNjMwZjRhNzk2YmZmZjA='
+          authorization: 'Basic eW9zZWxpbmRsZ2FyemFAb3V0bG9vay5jb206ZWU5YmUwNjE4MGNmYWYzOGRkMzQ='
         },
         body: productoAlegra,
         json: true,
@@ -301,11 +290,14 @@ exports.createProduct = async (req, res) => {
         if (error) {
           return res.status(500).json({ error: 'Error al comunicarse con la API de Alegra' });
         }
-        console.log(response.statusCode, body)
-  
+
         if (response.statusCode === 200 || response.statusCode === 201) {
             const idAlegra = body.id;
-  
+
+            console.log(idAlegra)
+        /*
+
+
             const productData = {
                 type: req.body.type ?? null,
                 reference: req.body.reference ?? null,
@@ -409,6 +401,8 @@ exports.createProduct = async (req, res) => {
                 console.log(dbError)
                 res.status(500).json({ error: 'Error al guardar el producto en la base de datos' });
             }
+
+            */
         } else {
           res.status(response.statusCode).json(body);
         }
@@ -454,3 +448,139 @@ exports.getAllProducts = async (req, res) => {
         res.status(500).json({ error: 'Error al obtener los productos de la base de datos' });
     }
 };
+
+exports.updateProductPrice = async (req, res) => {
+    console.log(req.body);
+    console.log(req.params);
+
+    try {
+        const { id } = req.params; // El _id del producto viene en los parámetros de la URL
+        const { newPrice } = req.body; // El nuevo precio viene en el cuerpo de la solicitud
+
+        // Verificar si se recibió el nuevo precio
+        if (newPrice === undefined) {
+            return res.status(400).json({ error: 'Falta el nuevo precio. Por favor, proporciona el nuevo precio.' });
+        }
+
+        // Buscar y actualizar el campo `precio1` dentro de `datosFinancieros`
+        const updatedProduct = await Producto.findByIdAndUpdate(
+            id, // El _id del producto que deseas actualizar
+            { 'datosFinancieros.precio1': newPrice }, // Actualizar el campo `precio1` dentro de `datosFinancieros`
+            { new: true } // Para devolver el documento actualizado
+        );
+
+        // Verificar si el producto fue encontrado y actualizado
+        if (!updatedProduct) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+
+        // Obtener todas las sucursales para añadir al preciador
+        const sucursales = await Sucursal.find(); // Asumimos que tienes una colección de sucursales
+
+        // Crear o actualizar el registro en Preciador para este producto
+        await Preciador.findOneAndUpdate(
+            { productoId: updatedProduct._id }, // Usamos el ID del producto actualizado
+            { sucursalesPendientes: sucursales.map(sucursal => sucursal._id) }, // Todas las sucursales deben imprimir
+            { upsert: true, new: true } // Si no existe el registro, lo crea
+        );
+
+        // Enviar la respuesta con el producto actualizado
+        res.status(200).json({
+            message: 'Precio del producto actualizado exitosamente y agregado al preciador',
+            product: updatedProduct
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al actualizar el precio del producto' });
+    }
+};
+
+exports.getProductById = async (req, res) => {
+    try {
+        const { id } = req.params; // El _id del producto viene en los parámetros de la URL
+
+        // Buscar el producto por su _id
+        const product = await Producto.findById(id);
+
+        // Verificar si el producto fue encontrado
+        if (!product) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+
+        // Convertir el documento del producto a un objeto
+        const productDetails = product.toObject();
+
+        // Enviar respuesta con el producto y sus detalles
+        res.status(200).json({
+            message: 'Producto obtenido exitosamente',
+            product: productDetails
+        });
+    } catch (error) {
+        // Maneja errores y envía una respuesta adecuada
+        res.status(500).json({ error: 'Error al obtener el producto de la base de datos' });
+    }
+};
+
+exports.getPreciadorBySucursal = async (req, res) => {
+    console.log("Sucursal ID:", req.params.sucursalId);
+    try {
+        const { sucursalId } = req.params;
+
+        // Convertir sucursalId a ObjectId usando 'new'
+        const sucursalObjectId = new mongoose.Types.ObjectId(sucursalId);
+
+        // Buscar productos pendientes para esta sucursal
+        const productosPendientes = await Preciador.find({
+            sucursalesPendientes: sucursalObjectId
+        }).populate('productoId');
+
+        console.log("Productos pendientes:", productosPendientes);
+
+        if (!productosPendientes.length) {
+            return res.status(200).json({ message: 'No hay productos pendientes de impresión para esta sucursal' });
+        }
+
+        res.status(200).json({
+            message: 'Productos pendientes obtenidos exitosamente',
+            productos: productosPendientes.map(p => p.productoId)
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Error al obtener los productos pendientes de impresión' });
+    }
+};
+
+exports.marcarProductoImpreso = async (req, res) => {
+    try {
+        const { productoId, sucursalId } = req.params; // ID del producto y la sucursal vienen en los parámetros
+
+        // Buscar el registro en Preciador para este producto
+        const preciador = await Preciador.findOne({ productoId });
+
+        if (!preciador) {
+            return res.status(404).json({ error: 'Producto no encontrado en el preciador' });
+        }
+
+        // Eliminar el ID de la sucursal del array de pendientes
+        preciador.sucursalesPendientes = preciador.sucursalesPendientes.filter(
+            sucursal => sucursal.toString() !== sucursalId
+        );
+
+        // Si ya no hay sucursales pendientes, eliminar el registro en Preciador
+        if (!preciador.sucursalesPendientes.length) {
+            await Preciador.findByIdAndDelete(preciador._id);
+        } else {
+            // Guardar el preciador actualizado
+            await preciador.save();
+        }
+
+        res.status(200).json({
+            message: 'Producto marcado como impreso para la sucursal',
+            productoId
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al marcar el producto como impreso' });
+    }
+};
+
+
+

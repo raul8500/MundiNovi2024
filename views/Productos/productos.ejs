@@ -63,6 +63,7 @@
             background-color: white;
             padding: 0;
             list-style-type: none;
+            width: 300px;
         }
 
         #suggestions li {
@@ -75,6 +76,21 @@
             color: white;
         }
 
+        .suggestions {
+        border: 1px solid #ccc;
+        max-height: 150px;
+        overflow-y: auto;
+        position: absolute;
+        background: #fff;
+        width: 300px;
+        }
+        .suggestion-item {
+        padding: 8px;
+        cursor: pointer;
+        }
+        .suggestion-item:hover, .suggestion-item.selected {
+        background-color: #f0f0f0;
+        }
         
     </style>
 </head>
@@ -211,10 +227,6 @@
                             <li class="nav-item" role="presentation">
                                 <a data-mdb-pill-init class="nav-link" id="ex1-tab-2" href="#ex1-pills-2" role="tab"
                                     aria-controls="ex1-pills-2" aria-selected="false">Datos Financieros</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a data-mdb-pill-init class="nav-link" id="ex1-tab-3" href="#ex1-pills-3" role="tab"
-                                    aria-controls="ex1-pills-3" aria-selected="false">Otros</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a data-mdb-pill-init class="nav-link" id="ex1-tab-4" href="#ex1-pills-4" role="tab"
@@ -640,7 +652,7 @@
 
                                             <div class="col-md-3">
                                                 <label for="porcentaje-monedero-2" class="form-label">Porcentaje 3:</label>
-                                                <input type="number" class="form-control" id="porcentaje-monedero-2" value="0">
+                                                <input type="number" class="form-control" id="porcentaje-monedero-3" value="0">
                                             </div>
                                             
                                             <div class="col-md-3">
@@ -684,23 +696,10 @@
                                 </div>
                             </div>
 
-                            <div class="tab-pane fade" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
-                                <h5>Subir Imagen</h5>
-                                <form>
-                                    <div class="mb-3">
-                                        <label for="imageUpload" class="form-label">Selecciona una imagen:</label>
-                                        <input type="file" class="form-control" id="imageUpload" accept="image/*" onchange="previewImage(event)">
-                                    </div>
-                                    <div class="mb-3">
-                                        <img id="imagePreview" src="#" alt="Vista previa" style="display: none; width: 150px; height: 150px; object-fit: cover; border: 1px solid #ccc;">
-                                    </div>
-                                </form>
-                            </div>
-
                             <div class="tab-pane fade" id="ex1-pills-4" role="tabpanel" aria-labelledby="ex1-tab-4">
                                 <h5>Buscar Proveedores</h5>
                                 
-                                <form id="search-provider-form">
+                                <div id="search-provider-form">
                                     <div class="row mb-3">
                                         <div class="col-md-3">
                                             <input type="text" class="form-control" id="providerSearch" placeholder="Escribe el nombre del proveedor...">
@@ -709,7 +708,9 @@
                                             <button type="button" class="btn btn-primary" id="addProviderBtn">Agregar Proveedor</button>
                                         </div>
                                     </div>                                    
-                                </form>
+                                </div>
+                                <div id="suggestions" class="suggestions"></div>
+
                             
                                 <h5 class="mt-4">Proveedores Seleccionados</h5>
                                 <table class="table table-bordered" id="providerTable">
@@ -754,27 +755,26 @@
                                 </table>
                             </div>
 
-
-
                             <div class="tab-pane fade" id="ex1-pills-6" role="tabpanel" aria-labelledby="ex1-tab-6">
                                 <h5>Buscar productos kit</h5>
-                                
-                                <form id="search-provider-form">
+                            
+                                <div id="search-provider-form">
                                     <div class="row mb-3">
                                         <div class="col-md-3">
                                             <input type="number" class="form-control" id="productsKitAmount" value="1">
                                         </div>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" id="productsKitSearch" placeholder="Escribe el nombre del producto...">
+                                            <input type="text" class="form-control" id="productsKitSearch"
+                                                placeholder="Escribe el nombre del producto...">
                                         </div>
                                         <div class="col-md-3">
                                             <button type="button" class="btn btn-primary" id="addProductKitBtn">Agregar Producto</button>
                                         </div>
-                                    </div>                                    
-                                </form>
+                                    </div>
+                                </div>
                             
                                 <h5 class="mt-4">Productos Seleccionados Kit</h5>
-                                <table class="table table-bordered" id="providerTable">
+                                <table class="table table-bordered" id="providerTableKit">
                                     <thead>
                                         <tr>
                                             <th>Codigo</th>
@@ -788,12 +788,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Los proveedores agregados aparecerán aquí -->
+                                        <!-- Los productos agregados aparecerán aquí -->
                                     </tbody>
                                 </table>
                             </div>
-
-
 
                             <div class="tab-pane fade" id="ex1-pills-7" role="tabpanel" aria-labelledby="ex1-tab-7">
                                 <h5>Buscar productos grupo</h5>
@@ -865,6 +863,32 @@
         </div>
 
 
+        <!-- Modal -->
+        <div class="modal fade" id="precioModal" tabindex="-1" aria-labelledby="precioModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="precioModalLabel">Cambiar Precio 1</h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="precioForm">
+                            <div class="mb-3">
+                                <label for="precio1" class="form-label">Precio 1</label>
+                                <input type="number" class="form-control" id="precio1" placeholder="Ingresa el nuevo precio"
+                                    required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary" id="savePrecio1">Guardar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
 
 
@@ -878,15 +902,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
     <script src="js/main.js"></script>
 
     <script src="js/productos/productos.js"></script>
     <script  src="js/productos/productosPost.js" ></script>
     <script src="js/productos/productosProveedores.js"></script>
+
+
     <script src="js/productos/productosAdicionales.js" ></script>
     <script src="js/productos/productosComplementarios.js"></script>
     <script src="js/productos/productosGrupo.js"></script>
-
+    <script src="js/productos/productosKit.js"></script>
+    <script src="js/productos/productosEdit.js"></script>
 </body>
 
 </html>

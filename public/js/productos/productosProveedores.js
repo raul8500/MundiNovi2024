@@ -1,162 +1,132 @@
-    let proveedores = [];  // Lista de todos los proveedores
-    let proveedoresSeleccionados = []; // Lista de proveedores seleccionados para la tabla
-    let proveedorIndex = -1;  // Índice para la navegación de recomendaciones
+let proveedores = [];
+cargarProductos();
 
-    // Cargar todos los proveedores al inicio
-    function cargarProveedores() {
-        fetch('/api/proveedor')
-            .then(response => response.json())
-            .then(data => {
-                proveedores = data; // Almacenar proveedores para búsquedas
-            })
-            .catch(error => console.error('Error al cargar proveedores:', error));
-    }
+function cargarProductos() {
+    fetch('/api/proveedor')
+        .then(response => response.json())
+        .then(data => {
+            proveedores = data;
+            console.log(proveedores);
+            inicializarFuse();  // Inicializa Fuse después de cargar los datos
+        })
+        .catch(error => console.error('Error al cargar productos:', error));
+}
 
-    cargarProveedores();  // Llamar al cargar la página
+function inicializarFuse() {
+    const options2 = {
+        keys: ['nombre']  // Ajusta según la estructura de tu JSON de proveedores
+    };
 
-    // Buscar proveedores según lo que el usuario escriba en el input
-    document.getElementById('providerSearch').addEventListener('input', function() {
-        const query = this.value.toLowerCase().trim();
+    const fuse = new Fuse(proveedores, options2);
+    const searchInput = document.getElementById('providerSearch');
+    const suggestionsDiv = document.getElementById('suggestions');
+    const selectedTable = document.getElementById('providerTable').getElementsByTagName('tbody')[0];
 
-        // Solo mostrar sugerencias si hay algo en el input
-        if (query.length === 0) {
-            ocultarSugerencias();
-            return;
-        }
+    let selectedIndex = -1; // Para navegar por los resultados
 
-        const resultados = proveedores.filter(proveedor => proveedor.nombre && proveedor.nombre.toLowerCase().includes(query));
-        mostrarSugerencias(resultados);
-    });
+    // Evento de búsqueda al escribir en el input
+    searchInput.addEventListener('input', function () {
+        const query = searchInput.value;
+        const results = fuse.search(query);
 
-    // Mostrar las sugerencias debajo del input
-    function mostrarSugerencias(resultados) {
-        const sugerenciasContainer = document.createElement('ul');
-        sugerenciasContainer.id = 'suggestions';
-        sugerenciasContainer.className = 'list-group';
+        // Limpiar sugerencias anteriores
+        suggestionsDiv.innerHTML = '';
+        selectedIndex = -1;
 
-        // Limpiar las sugerencias anteriores
-        const oldSuggestions = document.getElementById('suggestions');
-        if (oldSuggestions) {
-            oldSuggestions.remove();
-        }
-
-        if (resultados.length === 0) {
-            return; // Si no hay resultados, no mostrar nada
-        }
-
-        resultados.forEach((proveedor, index) => {
-            const li = document.createElement('li');
-            li.className = 'list-group-item';
-            li.textContent = proveedor.nombre;
-            li.setAttribute('data-id', proveedor._id);
-
-            li.addEventListener('click', function() {
-                agregarProveedorAlaTabla(proveedor);
+        // Mostrar sugerencias
+        if (query && results.length > 0) {
+            results.forEach(result => {
+                const item = result.item;
+                const div = document.createElement('div');
+                div.classList.add('suggestion-item');
+                div.textContent = `${item.nombre}`;  // Ajusta según los datos que estás mostrando
+                div.addEventListener('click', () => addToTable(item));
+                suggestionsDiv.appendChild(div);
             });
-
-            sugerenciasContainer.appendChild(li);
-        });
-
-        document.getElementById('search-provider-form').appendChild(sugerenciasContainer);
-    }
-
-    // Función para ocultar las sugerencias
-    function ocultarSugerencias() {
-        const oldSuggestions = document.getElementById('suggestions');
-        if (oldSuggestions) {
-            oldSuggestions.remove();
         }
-        proveedorIndex = -1;  // Reiniciar el índice
-    }
+    });
 
-    // Función para navegar entre sugerencias con el teclado
-    document.getElementById('providerSearch').addEventListener('keydown', function(event) {
-        const sugerencias = document.querySelectorAll('#suggestions li');
-        if (event.key === 'ArrowDown') {
-            proveedorIndex = (proveedorIndex + 1) % sugerencias.length;
-            actualizarSugerenciaActiva(sugerencias);
-        } else if (event.key === 'ArrowUp') {
-            proveedorIndex = (proveedorIndex - 1 + sugerencias.length) % sugerencias.length;
-            actualizarSugerenciaActiva(sugerencias);
-        } else if (event.key === 'Enter') {
-            event.preventDefault();
-            if (proveedorIndex >= 0 && sugerencias.length > 0) {
-                const proveedorId = sugerencias[proveedorIndex].getAttribute('data-id');
-                const proveedor = proveedores.find(p => p._id == proveedorId);
-                if (proveedor) {
-                    agregarProveedorAlaTabla(proveedor);
-                    ocultarSugerencias();  // Eliminar las sugerencias
-                }
+    // Evento para manejar navegación con teclado
+    searchInput.addEventListener('keydown', function (e) {
+        const suggestionItems = document.querySelectorAll('.suggestion-item');
+
+        // Navegar hacia abajo
+        if (e.key === 'ArrowDown') {
+            if (selectedIndex < suggestionItems.length - 1) {
+                selectedIndex++;
+                updateSelection(suggestionItems);
+            }
+        }
+
+        // Navegar hacia arriba
+        if (e.key === 'ArrowUp') {
+            if (selectedIndex > 0) {
+                selectedIndex--;
+                updateSelection(suggestionItems);
+            }
+        }
+
+        // Seleccionar con Enter
+        if (e.key === 'Enter') {
+            if (selectedIndex >= 0 && suggestionItems[selectedIndex]) {
+                suggestionItems[selectedIndex].click();
             }
         }
     });
 
-    function actualizarSugerenciaActiva(sugerencias) {
-        sugerencias.forEach((li, index) => {
-            if (index === proveedorIndex) {
-                li.classList.add('active');
-            } else {
-                li.classList.remove('active');
-            }
+    // Función para actualizar la selección visible
+    function updateSelection(items) {
+        // Quitar la selección anterior
+        items.forEach((item, index) => {
+            item.classList.remove('selected');
         });
-    }
 
-    // Función para agregar proveedor a la tabla
-    function agregarProveedorAlaTabla(proveedor) {
-        // Asegurarse de que el proveedor tenga los datos correctos antes de agregar
-        if (proveedor && proveedor.nombre && proveedor._id) {
-            // Evitar agregar el mismo proveedor dos veces
-            if (!proveedoresSeleccionados.some(p => p._id === proveedor._id)) {
-                proveedoresSeleccionados.push(proveedor);
-                actualizarTabla();
-            }
+        // Aplicar selección actual
+        if (items[selectedIndex]) {
+            items[selectedIndex].classList.add('selected');
 
-            // Limpiar el input después de agregar
-            document.getElementById('providerSearch').value = '';
-            ocultarSugerencias();
-        } else {
-            console.error('Proveedor inválido:', proveedor);
+            // Asegurar que el ítem seleccionado sea visible en el scroll
+            items[selectedIndex].scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
         }
     }
 
-    // Función para eliminar proveedor de la tabla
-    function eliminarProveedorDeTabla(idProveedor) {
-        proveedoresSeleccionados = proveedoresSeleccionados.filter(p => p._id !== idProveedor);
-        actualizarTabla();
+    // Función para añadir el proveedor seleccionado a la tabla
+    function addToTable(item) {
+        // Crear fila
+        const row = selectedTable.insertRow();
+        row.setAttribute('data-id', item._id);  // Almacenar el _id en un atributo data-id
+
+        // Crear celdas para Nombre y Acciones
+        const cell0 = row.insertCell(0);
+        const cell1 = row.insertCell(1);
+
+        cell0.textContent = item.nombre;
+
+        // Botón para eliminar la fila
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Eliminar';
+        deleteBtn.addEventListener('click', () => row.remove());
+        cell1.appendChild(deleteBtn);
+
+        // Limpiar las sugerencias e input después de seleccionar
+        searchInput.value = '';
+        suggestionsDiv.innerHTML = '';
     }
+}
+// Función para obtener los proveedores que están en la tabla
+function obtenerProveedoresSeleccionados() {
+    const filasProveedores = document.querySelectorAll('#providerTable tbody tr');
+    const proveedoresSeleccionados = [];
 
-    // Función para actualizar la tabla
-    function actualizarTabla() {
-        const tbody = document.querySelector('#providerTable tbody');
-        tbody.innerHTML = '';  // Limpiar la tabla
-
-        proveedoresSeleccionados.forEach(proveedor => {
-            if (proveedor && proveedor.nombre && proveedor._id) { // Validación adicional para evitar proveedores inválidos
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${proveedor.nombre}</td>
-                    <td><button class="btn btn-danger btn-sm" onclick="eliminarProveedorDeTabla('${proveedor._id}')">Eliminar</button></td>
-                `;
-                tbody.appendChild(tr);
-            }
-        });
-    }
-
-    // Función para agregar proveedores por ID (para la funcionalidad de editar)
-    function agregarProveedoresPorId(ids) {
-        ids.forEach(id => {
-            const proveedor = proveedores.find(p => p._id === id);
-            if (proveedor) {
-                agregarProveedorAlaTabla(proveedor);
-            }
-        });
-    }
-
-    // Agregar proveedor por botón "Agregar Proveedor"
-    document.getElementById('addProviderBtn').addEventListener('click', function() {
-        const searchValue = document.getElementById('providerSearch').value.toLowerCase().trim();
-        const proveedor = proveedores.find(p => p.nombre.toLowerCase() === searchValue);
-        if (proveedor) {
-            agregarProveedorAlaTabla(proveedor);
+    filasProveedores.forEach(fila => {
+        const proveedorId = fila.getAttribute('data-id');  // Extrae el _id desde el atributo data-id
+        if (proveedorId) {
+            proveedoresSeleccionados.push(proveedorId);
         }
     });
+
+    return proveedoresSeleccionados;
+}

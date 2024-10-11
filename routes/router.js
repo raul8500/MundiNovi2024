@@ -115,14 +115,19 @@ router.get('/monedero', (req, res) => {
     res.render('Monedero/monedero');
 });
 
+router.get('/preciador', (req, res) => {    
+    res.render('Preciador/preciador');
+});
+
+
 
 
 
 //Funciones al API
-
-//Auth
 router.post('/api/auth/register', auth.registerUser)
 router.post('/api/auth/login', auth.login)
+//Auth
+
 router.get('/api/auth/users', auth.getAllUsers)
 router.get('/api/auth/users/:id', auth.getUserById)
 router.get('/api/auth/users/:id', auth.getUserById)
@@ -163,6 +168,12 @@ router.post('/api/loadProductosFromExcelToBDtoAlegra', productos.createProductFr
 
 router.post('/api/productos', productos.createProduct)
 router.get('/api/productos', productos.getAllProducts)
+router.put('/api/productos/:id', productos.updateProductPrice)
+router.get('/api/productos/:id', productos.getProductById)
+
+
+router.get('/api/preciador/:sucursalId', productos.getPreciadorBySucursal)
+router.post('/api/preciador', productos.marcarProductoImpreso)
 
     //Complementos
         //grupos
