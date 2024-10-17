@@ -129,13 +129,13 @@ function mostrarEnTabla(cortes) {
                     <td class="text-center">${fechaFinal}</td>
                     <td class="text-center">${username}</td>
                     <td class="text-center">0.0</td>
+                    <td class="text-center">$${item.T_credito !== undefined ? item.T_credito : 0}</td>
+                    <td class="text-center">$${item.T_debito !== undefined ? item.T_debito : 0}</td>
+                    <td class="text-center">$${item.monto_transferencias !== undefined ? item.monto_transferencias : 0}</td>
+                    <td class="text-center">$${totalVenta}</td>
                     <td class="text-center">0.0</td>
-                    <td class="text-center">0.0</td>
-                    <td class="text-center">0.0</td>
-                    <td class="text-center">${totalVenta}</td>
-                    <td class="text-center">0.0</td>
-                    <td class="text-center">${totalVenta}</td>
-                    <td class="text-center">${totalEfectivo}</td>
+                    <td class="text-center">$${totalVenta}</td>
+                    <td class="text-center">$${totalEfectivo}</td>
                     <td class="text-center">0.0</td>                    
                     <td class="text-center">
                         ${item.recepcion ? 
@@ -178,7 +178,7 @@ function mostrarEnTabla(cortes) {
                         <td class="text-center">${corteParcial.folio || ''}</td>
                         <td class="text-center">${item.folio || ''}</td>
                         <td class="text-center">${fechaCreacionParcial}</td>
-                        <td class="text-center">${cantidadParcial}</td>
+                        <td class="text-center">$${cantidadParcial}</td>
                         <td class="text-center">
                             ${corteParcial.recibido ? 
                                 `<i class="fa-solid fa-check" style="color: green;"></i>` : 
