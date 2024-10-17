@@ -5,7 +5,9 @@ const Client = require('../../schemas/clientesSchema/clientesSchema');
 const CorteGeneral = require('../../schemas/cortes/cortesFinalesSchema');
 const CorteFinal = require('../../schemas/cortes/cortesFinalesSchema');
 
+
 const mongoose = require('mongoose');
+const request = require('request');
 
 exports.getVentasPorSucursalYFechas = async (req, res) => {
   try {
@@ -177,8 +179,10 @@ exports.createVenta = async (req, res) => {
             });
         }
 
-        // Continuar con la creación de la venta
-
+        if(req.body.resumenVenta.cliente.esfactura){
+            crearFactura(req)
+        }
+        
         const productos = req.body.venta.productos;
         const tipoVenta = req.body.resumenVenta.esFactura;
         const cliente = req.body.resumenVenta.cliente
@@ -324,6 +328,85 @@ exports.createVenta = async (req, res) => {
         res.status(500).json({ error: 'Error general en la creación de la venta' });
     }
 };
+
+async function crearFactura(req) {
+    // Construir los productos (items) obteniendo su id de Alegra desde MongoDB
+    const items = await Promise.all(
+        req.body.venta.productos.map(async (producto) => {
+            try {
+                // Buscar el producto en la base de datos MongoDB usando su _id
+                const productoEncontrado = await Producto.findById(producto._id);
+
+                if (!productoEncontrado) {
+                    throw new Error(`Producto no encontrado: ${producto._id}`);
+                }
+
+                return {
+                    tax: [{ id: 1 }], // ID de impuesto siempre es 1
+                    id: productoEncontrado.idAlegra, // ID recuperado de la base de datos (idAlegra)
+                    name: productoEncontrado.name, // Nombre del producto
+                    price: producto.precio, // Precio del producto (lo que viene de la venta)
+                    quantity: producto.cantidad // Cantidad del producto
+                };
+            } catch (error) {
+                console.error('Error al obtener el producto:', error);
+                throw new Error('Error al obtener el producto de MongoDB');
+            }
+        })
+    );
+
+    // Construir los pagos (payments)
+    const payments = req.body.resumenVenta.formasDePago.map((formaDePago) => {
+        let amount = formaDePago.importe;
+
+        // Si el método de pago es "cash", restar el cambio al importe
+        if (formaDePago.tipo === 'cash') {
+            const cambio = parseFloat(req.body.resumenVenta.cambio) || 0;
+            amount -= cambio;
+        }
+
+        return {
+            account: { id: 1 }, // ID de cuenta siempre es 1
+            date: Date.now(), // Fecha actual
+            amount: amount, // Importe ajustado si es "cash"
+            paymentMethod: formaDePago.tipo // Tipo de pago
+        };
+    });
+
+    // Construir el cuerpo (body) para la factura
+    const body = {
+        client: { id: req.body.resumenVenta.cliente.clientData.id },
+        stamp: { generateStamp: true },
+        paymentMethod: req.body.resumenVenta.formasDePago[0].tipo,
+        cfdiUse: req.body.resumenVenta.cfdiSeleccionado,
+        paymentType: 'PUE',
+        regimeClient: req.body.resumenVenta.cliente.clientData.regimeObject[0],
+        status: 'open',
+        items: items, // Los productos construidos
+        payments: payments, // Los pagos construidos
+        date: Date.now(),
+        dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 1 mes después
+    };
+
+    // Opciones para la petición
+    const options = {
+        method: 'POST',
+        url: 'https://api.alegra.com/api/v1/invoices',
+        headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            authorization: 'Basic eW9zZWxpbmRsZ2FyemFAb3V0bG9vay5jb206ZWU5YmUwNjE4MGNmYWYzOGRkMzQ='
+        },
+        body: body,
+        json: true
+    };
+
+    // Realizar la petición
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+        console.log(body);
+    });
+}
 
 const generateFolio = () => {
   return String(Math.floor(1000000 + Math.random() * 9000000)); // Genera un número aleatorio de 7 dígitos

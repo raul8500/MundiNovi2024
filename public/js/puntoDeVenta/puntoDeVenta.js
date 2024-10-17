@@ -43,7 +43,6 @@ function cargarProductos() {
 // Inicializar carga de productos
 cargarProductos();
 
-
 // Seleccionar un producto de la lista de sugerencias
 function seleccionarProducto(producto) {
     document.getElementById('producto').value = producto.nombre;
@@ -51,6 +50,8 @@ function seleccionarProducto(producto) {
     document.getElementById('producto').focus(); // Regresar al input de búsqueda
     indexSugerencia = -1; // Reiniciar el índice de sugerencia
 }
+
+// Manejo del input de búsqueda de productos
 
 // Manejo del input de búsqueda de productos
 document.getElementById('producto').addEventListener('input', function () {
@@ -69,16 +70,26 @@ document.getElementById('producto').addEventListener('input', function () {
         return;
     }
 
+    // Buscar productos que coincidan con el nombre, referencia o código de barras
     const listaFiltrada = productos.filter(producto => {
-        // Verifica y convierte `producto.nombre` y `producto.clave` a minúsculas si son cadenas
         const nombre = typeof producto.name === 'string' ? producto.name.toLowerCase() : '';
         const clave = typeof producto.reference === 'string' ? producto.reference.toLowerCase() : '';
+        const codigoBarra = typeof producto.codigoBarra === 'string' ? producto.codigoBarra.toLowerCase() : '';
 
-        return nombre.includes(valorInput) || clave.includes(valorInput);
+        return nombre.includes(valorInput) || clave.includes(valorInput) || codigoBarra.includes(valorInput);
     });
 
     contenedorSugerencias.innerHTML = '';
 
+    // Si hay una coincidencia exacta con el código de barras, agregar el producto automáticamente
+    const productoCoincidencia = productos.find(producto => producto.codigoBarra === valorInput);
+    if (productoCoincidencia) {
+        seleccionarProducto(productoCoincidencia);
+        agregarProducto();
+        return; // Salir ya que el producto se ha agregado
+    }
+
+    // Mostrar las sugerencias si no hay coincidencia exacta con el código de barras
     listaFiltrada.forEach((producto, index) => {
         const elementoSugerencia = document.createElement('div');
         elementoSugerencia.classList.add('sugerencia');
@@ -91,6 +102,7 @@ document.getElementById('producto').addEventListener('input', function () {
         contenedorSugerencias.appendChild(elementoSugerencia);
     });
 });
+
 
 // Manejo de teclas en el input de búsqueda
 document.getElementById('producto').addEventListener('keydown', function (event) {
@@ -246,6 +258,8 @@ function agregarProducto() {
     inputCantidad.value = '';
     inputCantidad.focus(); // Regresar al input de búsqueda
 }
+
+
 // Actualizar el resumen de la venta
 function actualizarResumenVenta() {
     const filas = document.querySelectorAll('#productos tr');
@@ -374,43 +388,7 @@ function confirmarCancelarVenta() {
         cancelButtonText: 'No, continuar'
     }).then(result => {
         if (result.isConfirmed) {
-            
-            // Limpiar la tabla y el resumen
-            document.getElementById('productos').innerHTML = '';
-            document.getElementById('totalProductos').textContent = '0';
-            document.getElementById('totalVenta').textContent = '0.00';
-            document.getElementById('ventaCliente').textContent = '';
-            document.getElementById('ventaCliente').style.color = 'black';
-            document.getElementById('btnCancelarCliente').style.visibility = 'hidden';
-            document.getElementById('btnCancelarFactura').style.visibility = 'hidden';
-            document.getElementById('monederoCliente').textContent = '';
-
-            if (esFactura == true) {
-                facturarVenta();
-            }
-
-            limpiarCliente();
-            clienteSeleccionado = [];
-
-            // Limpiar los campos de producto y cantidad
-            document.getElementById('producto').value = '';
-            let inputCantidad = document.getElementById('cantidad');
-            inputCantidad.value = '';
-            inputCantidad.focus();
-
-            // Limpiar las formas de pago adicionales (exceptuando la default)
-            const formasDePago = document.querySelectorAll('.formaDePago');
-            formasDePago.forEach((formaDePago, index) => {
-                if (index > 0) { // No elimina la primera forma de pago
-                    formaDePago.remove();
-                }
-            });
-
-            // Reiniciar los valores de la forma de pago principal (si es necesario)
-            document.getElementsByClassName('importePago')[0].value = 0;
-            document.getElementsByClassName('cambio')[0].value = 0;
-
-            inputCantidad.focus();  // Volver a enfocar el campo de cantidad
+            location.reload()
         }
     });
 }
@@ -656,10 +634,10 @@ document.getElementById('btnAgregarFormaPago').addEventListener('click', functio
         <div class="col-md-5">
         <label for="formaPago" class="form-label">Forma de Pago</label>
         <select class="form-select formaPago">
-            <option value="efectivo">Efectivo</option>
-            <option value="tarjeta credito">Tarjeta credito</option>
-            <option value="tarjeta debito">Tarjeta debito</option>
-            <option value="transferencia">Transferencia</option>
+            <option value="cash">Efectivo</option>
+            <option value="credit-card">Tarjeta credito</option>
+            <option value="debit-card">Tarjeta debito</option>
+            <option value="transfer">Transferencia</option>
             <option value="monedero">Monedero</option>
         </select>
         </div>
@@ -797,7 +775,6 @@ function verificar() {
         .catch(error => console.log(error));
 }
 verificar()
-
 
 
 

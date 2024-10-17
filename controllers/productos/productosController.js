@@ -7,6 +7,7 @@ const xlsx = require('xlsx');
 const fs = require('fs');
 const path = require('path');
 const PDFDocument = require('pdfkit');
+const bwipjs = require('bwip-js');
 
 
 const Linea = require('../../schemas/productosSchema/complementosSchema/lineaSchema');
@@ -558,14 +559,14 @@ exports.marcarProductoImpreso = async (req, res) => {
             return res.status(400).json({ message: 'El campo "productos" es requerido y debe contener al menos un producto.' });
         }
 
-        // Crear el documento PDF con la información de los productos
-        const doc = new PDFDocument({ size: [225, 350], layout: 'landscape' }); // Tamaño de la página más reducido
+        // Crear el documento PDF con un margen superior reducido
+        const doc = new PDFDocument({ size: [230, 330], layout: 'landscape', margins: { top: 30, left: 65, right: 60, bottom: 20 } }); // Tamaño de la página y ajuste de márgenes
         const nombreArchivo = path.join(__dirname, `../../public/img/archivos/precios_productos.pdf`);
         const nombreArchivoPublico = '/img/archivos/precios_productos.pdf'; // Ruta pública para el archivo generado
         const writeStream = fs.createWriteStream(nombreArchivo);
         doc.pipe(writeStream);
 
-        // Recorrer los productos y obtener la información de cada uno desde la base de datos
+        // Iterar sobre los productos
         for (const producto of productos) {
             const productoDb = await Producto.findById(producto._id); // Obtener el producto de la BD por su ID
 
@@ -575,33 +576,61 @@ exports.marcarProductoImpreso = async (req, res) => {
 
             // Generar una página por cada cantidad de impresión para cada producto
             for (let i = 0; i < producto.cantidad; i++) {
-                // Añadir una nueva página para cada producto
                 if (i > 0 || productos.indexOf(producto) > 0) {
                     doc.addPage();
                 }
-                
-                // Ajustar tamaños para que todo quepa en una sola página
-                doc.fontSize(12).text(productoDb.name, { align: 'center' }); // Reducir aún más el tamaño del nombre
-                doc.moveDown(0.5); // Mover hacia abajo ligeramente para dejar espacio entre los textos
-                doc.fontSize(10).text(`Referencia: ${productoDb.reference}`, { align: 'center' }); // Mantener tamaño reducido para la referencia
-                doc.moveDown(0.5);
-                doc.fontSize(16).text(`Precio: $${productoDb.datosFinancieros.precio1}`, { align: 'center' }); // Reducir el tamaño del precio
+
+                // Nombre del producto centrado
+                doc.fontSize(16).text(productoDb.name, {
+                    align: 'center'
+                });
+
+                // Referencia del producto centrado
+                doc.fontSize(10).text(`Referencia: ${productoDb.reference}`, {
+                    align: 'center'
+                });
+
+                // Precio centrado
+                doc.fontSize(10).text(`Precio: $${productoDb.datosFinancieros.precio1}`, {
+                    align: 'center'
+                });
+
+                // Promoción centrada
+                doc.fontSize(18).text(`Promoción +2:`, {
+                    align: 'center'
+                });
+
+                // Precio de promoción centrado
+                doc.fontSize(24).text(`$${productoDb.datosFinancieros.precio2} c/u`, {
+                    align: 'center'
+                });
+
+                // Generar el código de barras basado en la referencia del producto
+                const barcodeBuffer = await bwipjs.toBuffer({
+                    bcid: 'code128',
+                    text: productoDb.reference,
+                    scale: 3,
+                    height: 10,
+                });
+
+                // Añadir el código de barras centrado en el PDF
+                doc.image(barcodeBuffer, {
+                    fit: [200, 50],
+                    align: 'center', // Centrando el código de barras
+                    valign: 'center' // Alineación vertical
+                });
             }
 
             // Marcar el producto como impreso en el preciador para la sucursal
             const preciador = await Preciador.findOne({ productoId: producto._id });
 
             if (preciador) {
-                // Eliminar la sucursal de la lista de pendientes
                 preciador.sucursalesPendientes = preciador.sucursalesPendientes.filter(
                     sucursal => sucursal.toString() !== sucursalId
                 );
-
-                // Si no hay más sucursales pendientes, eliminar el producto del preciador
                 if (!preciador.sucursalesPendientes.length) {
                     await Preciador.findByIdAndDelete(preciador._id);
                 } else {
-                    // Guardar el preciador actualizado
                     await preciador.save();
                 }
             }
@@ -610,11 +639,11 @@ exports.marcarProductoImpreso = async (req, res) => {
         // Finalizar el documento PDF
         doc.end();
 
-        // Escuchar cuando el archivo PDF se haya generado correctamente
+        // Enviar respuesta al frontend
         writeStream.on('finish', () => {
             res.status(200).json({
                 message: 'PDF generado y productos marcados como impresos.',
-                archivo: nombreArchivoPublico // Ruta pública para el frontend
+                archivo: nombreArchivoPublico
             });
         });
 
@@ -622,12 +651,25 @@ exports.marcarProductoImpreso = async (req, res) => {
             console.error('Error al generar el PDF: ', err);
             res.status(500).json({ message: 'Error al generar el PDF.', error: err });
         });
-
     } catch (error) {
         console.error('Error en la generación del PDF de precios:', error);
         res.status(500).json({ message: 'Error en la generación del PDF de precios.', error });
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
