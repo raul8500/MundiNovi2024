@@ -493,7 +493,7 @@ function completarVenta(resumenVenta) {
     .then(data => {
         if (data) {
             // Venta completada con éxito
-            imprimirTicket(venta);
+            imprimirTicket(venta,resumenVenta);
             venta = '';
             productosEnVenta = '';
             resumenVenta = '';
@@ -515,7 +515,8 @@ function completarVenta(resumenVenta) {
 }
 
 
-function imprimirTicket(venta) {
+function imprimirTicket(venta, resumenVenta) {
+    console.log(resumenVenta)
     const ticketWidth = 32; // Ancho máximo del ticket en caracteres
     const separator = '-'.repeat(ticketWidth);
 
@@ -548,17 +549,23 @@ function imprimirTicket(venta) {
         `;
     }
 
+    // Calcular el cambio
+    const totalAPagar = parseFloat(resumenVenta.totalAPagar);
+    const totalPagado = parseFloat(resumenVenta.totalPagado);
+    const cambio = totalPagado - totalAPagar;
+
     const ticketContent = `
         <div style="width: 55mm; padding: 10px; font-size: 12px;">
-            <h2>Mundi Novi</h2>
-            <p>JESUS MARIA AGUIRRE VEGA</p>
-            <p>REGIMEN ACTIVIDAD EMPRESARIAL</p>
-            <p>AUVJ750221RB8</p>
-            <Br>
-            <p>Venta No: ${Math.floor(Math.random() * 90000) + 10000}</p>
-            <p>Fecha: ${new Date(venta.fecha).toLocaleDateString()}</p>
-            <p>Sucursal: ${sucursalInfo.nombre}</p>
-            <p>Dirección: ${wrapText(venta.direccion, ticketWidth).join('<br>')}</p>
+            <img id="logo" src="/img/logoColor.png" style="width: 90px; height: 80px; display: block; margin: 0 auto;">
+            <h2 style="text-align: center;">Mundi Novi</h2>
+            <p style="text-align: center; margin: 2px 0;">JESUS MARIA AGUIRRE VEGA</p>
+            <p style="text-align: center; margin: 2px 0;">REGIMEN ACTIVIDAD EMPRESARIAL</p>
+            <p style="text-align: center; margin: 2px 0;">RFC: AUVJ750221RB8</p>
+            <p style="text-align: center; margin: 2px 0;">Dirección: ${wrapText(venta.direccion, ticketWidth).join('<br>')}</p>
+            <hr style="border: 1px solid black;">
+            <p style="margin: 2px 0;">Venta No: ${Math.floor(Math.random() * 90000) + 10000}</p>
+            <p style="margin: 2px 0;">Fecha: ${new Date(venta.fecha).toLocaleDateString()}</p>
+            <p style="margin: 2px 0;">Sucursal: ${sucursalInfo.nombre}</p>
             <hr style="border: 1px solid black;">
             Productos:
             ${formatProductos(venta.productos)}
@@ -566,7 +573,11 @@ function imprimirTicket(venta) {
             <p>Total productos: ${formatLine(venta.totalProductos.toString(), ticketWidth, true)}</p>
             <p>Total venta: ${formatLine(`$${venta.totalVenta.toFixed(2)}`, ticketWidth, true)}</p>
             <hr style="border: 1px solid black;">
-            <p>¡Gracias por su compra!</p>
+            <p>Pago: ${formatLine(`$${totalPagado.toFixed(2)}`, ticketWidth, true)}</p>
+            <p>Cambio: ${formatLine(`$${cambio.toFixed(2)}`, ticketWidth, true)}</p>
+            <hr style="border: 1px solid black;">
+            <p style="text-align: center;">Este no es un comprobante fiscal</p>
+            <p style="text-align: center;">¡Gracias por su compra!</p>
         </div>
     `;
 
@@ -579,9 +590,14 @@ function imprimirTicket(venta) {
 
     printWindow.document.close();
     printWindow.focus();
-    printWindow.print();
-    printWindow.close();
+
+    // Espera a que la imagen se cargue antes de imprimir
+    printWindow.document.getElementById('logo').onload = function() {
+        printWindow.print();
+        printWindow.close();
+    };
 }
+
 
 function facturarVenta() {
     var btnFacturar = document.getElementById('btnFacturar');
