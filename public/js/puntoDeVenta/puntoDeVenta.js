@@ -158,7 +158,6 @@ function seleccionarProducto(producto) {
 
 let productosEnVenta = []; // Arreglo para almacenar productos seleccionados
 
-
 function agregarProducto() {
     const inputProducto = document.getElementById('producto');
     const inputCantidad = document.getElementById('cantidad');
@@ -187,16 +186,28 @@ function agregarProducto() {
             const nuevaCantidad = cantidadActual + cantidad;
             fila.querySelector('.cantidad').value = nuevaCantidad;
 
+            // Recalcular el precio basado en la nueva cantidad total
+            let nuevoPrecio = productoSeleccionado.datosFinancieros.precio1;
+            for (let i = 1; i <= 10; i++) {
+                const rangoInicial = productoSeleccionado.datosFinancieros[`rangoInicial${i}`];
+                const rangoFinal = productoSeleccionado.datosFinancieros[`rangoFinal${i}`];
+                if (nuevaCantidad >= rangoInicial && nuevaCantidad <= rangoFinal) {
+                    nuevoPrecio = productoSeleccionado.datosFinancieros[`precio${i}`] || nuevoPrecio;
+                    break;
+                }
+            }
+
             // Actualizar el total de la fila
-            const precio = parseFloat(fila.querySelector('.precio').value);
-            const total = nuevaCantidad * precio;
-            fila.querySelector('.total').textContent = `$${total.toFixed(2)}`;
+            const nuevoTotal = nuevaCantidad * nuevoPrecio;
+            fila.querySelector('.precio').value = nuevoPrecio.toFixed(2);
+            fila.querySelector('.total').textContent = `$${nuevoTotal.toFixed(2)}`;
 
             // Actualizar el objeto en el arreglo productosEnVenta
-            const index = productosEnVenta.findIndex(p => p.name === productoSeleccionado.name);
+            const index = productosEnVenta.findIndex(p => p.nombre === productoSeleccionado.name);
             if (index !== -1) {
                 productosEnVenta[index].cantidad = nuevaCantidad;
-                productosEnVenta[index].total = total;
+                productosEnVenta[index].precio = nuevoPrecio;
+                productosEnVenta[index].total = nuevoTotal;
             }
 
             productoExistente = true;
@@ -205,8 +216,7 @@ function agregarProducto() {
 
     // Si el producto no existe en la tabla, agregar una nueva fila
     if (!productoExistente) {
-        // Seleccionar el precio basado en la cantidad
-        let precio = parseFloat(productoSeleccionado.datosFinancieros.precio1); // Precio predeterminado para 1 artículo
+        let precio = parseFloat(productoSeleccionado.datosFinancieros.precio1); // Precio predeterminado
 
         for (let i = 1; i <= 10; i++) {
             const rangoInicial = productoSeleccionado.datosFinancieros[`rangoInicial${i}`];
@@ -256,8 +266,11 @@ function agregarProducto() {
     // Limpiar el input de búsqueda y la cantidad
     inputProducto.value = '';
     inputCantidad.value = '';
-    inputCantidad.focus(); // Regresar al input de búsqueda
+    inputCantidad.focus();
 }
+
+
+
 
 
 // Actualizar el resumen de la venta
@@ -791,7 +804,6 @@ function verificar() {
         .catch(error => console.log(error));
 }
 verificar()
-
 
 
 

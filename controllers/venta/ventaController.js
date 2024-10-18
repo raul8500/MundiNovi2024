@@ -44,7 +44,6 @@ exports.getVentasPorSucursalYFechas = async (req, res) => {
       .populate('productos.productoId')
       .sort({ fecha: -1 });
 
-    console.log(ventas);
     res.status(200).json({ data: ventas });
   } catch (error) {
     console.error(error);
@@ -149,6 +148,8 @@ exports.getVentaPorId = async (req, res) => {
 exports.createVenta = async (req, res) => {
     let vendedor = req.body.venta.usuario._id;
     const sucursal = req.body.venta.sucursalId;
+
+    console.log(req.body)
 
     try {
         let corteFolio = '';
@@ -485,7 +486,6 @@ async function checkCorteUsuarioIniciadoConVentas(userId) {
         });
 
         if (corte) {
-            console.log(corte)
             // Verificar si el total de ventas en efectivo supera los $2000
             const totalVentasEfectivo = corte.totalVentasEfectivoCortes || 0; // Asegurar que totalVentasEfectivo exista
             

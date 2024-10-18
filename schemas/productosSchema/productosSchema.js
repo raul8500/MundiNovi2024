@@ -97,6 +97,16 @@ const productSchema = new mongoose.Schema({
     rangoFinal8: { type: Number, required: false }, // Ahora es opcional
     rangoFinal9: { type: Number, required: false }, // Ahora es opcional
     rangoFinal10: { type: Number, required: false }, // Ahora es opcional
+    porcentajeMonedero1: { type: Number, required: false }, // Ahora es opcional
+    porcentajeMonedero2: { type: Number, required: false }, // Ahora es opcional
+    porcentajeMonedero3: { type: Number, required: false }, // Ahora es opcional
+    porcentajeMonedero4: { type: Number, required: false }, // Ahora es opcional
+    porcentajeMonedero5: { type: Number, required: false }, // Ahora es opcional
+    porcentajeMonedero6: { type: Number, required: false }, // Ahora es opcional
+    porcentajeMonedero7: { type: Number, required: false }, // Ahora es opcional
+    porcentajeMonedero8: { type: Number, required: false }, // Ahora es opcional
+    porcentajeMoneder9: { type: Number, required: false }, // Ahora es opcional
+    porcentajeMonedero10: { type: Number, required: false }, // Ahora es opcional
   },
   price: [
     {
