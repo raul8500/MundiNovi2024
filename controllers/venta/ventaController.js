@@ -396,7 +396,7 @@ async function crearFactura(req) {
         headers: {
             accept: 'application/json',
             'content-type': 'application/json',
-            authorization: 'Basic eW9zZWxpbmRsZ2FyemFAb3V0bG9vay5jb206ZWU5YmUwNjE4MGNmYWYzOGRkMzQ='
+            authorization: 'Basic ZmFjdHVyYWxpbXBpb3NAaG90bWFpbC5jb206YWI0MTQ2YzQyZjhkMzY3ZjA1MmQ='        
         },
         body: body,
         json: true

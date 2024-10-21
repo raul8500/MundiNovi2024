@@ -560,7 +560,7 @@ exports.marcarProductoImpreso = async (req, res) => {
         }
 
         // Crear el documento PDF con un margen superior reducido
-        const doc = new PDFDocument({ size: [230, 330], layout: 'landscape', margins: { top: 30, left: 65, right: 60, bottom: 20 } }); // Tamaño de la página y ajuste de márgenes
+        const doc = new PDFDocument({ size: [230, 330], layout: 'landscape', margins: { top: 30, left: 30, right: 30, bottom: 10 } }); // Tamaño de la página y ajuste de márgenes
         const nombreArchivo = path.join(__dirname, `../../public/img/archivos/precios_productos.pdf`);
         const nombreArchivoPublico = '/img/archivos/precios_productos.pdf'; // Ruta pública para el archivo generado
         const writeStream = fs.createWriteStream(nombreArchivo);
@@ -581,44 +581,92 @@ exports.marcarProductoImpreso = async (req, res) => {
                 }
 
                 // Nombre del producto centrado
-                doc.fontSize(16).text(productoDb.name, {
+                doc.fontSize(14).text(productoDb.name, {
                     align: 'center'
                 });
 
                 // Referencia del producto centrado
-                doc.fontSize(10).text(`Referencia: ${productoDb.reference}`, {
-                    align: 'center'
-                });
+                doc.fontSize(10).text(`${productoDb.reference}  `, { align: 'center', continued: true })
+                    .fontSize(7).text(`   $   `, { continued: true })  // Agregamos un espacio después del símbolo de dólar
+                    .fontSize(12).text(`${productoDb.datosFinancieros.precio1}`, { continued: false }); // Continuamos con el precio
 
-                // Precio centrado
-                doc.fontSize(10).text(`Precio: $${productoDb.datosFinancieros.precio1}`, {
-                    align: 'center'
-                });
+
 
                 // Promoción centrada
-                doc.fontSize(18).text(`Promoción +2:`, {
-                    align: 'center'
+                doc.fontSize(18).text(`Promoción x 2:`, {
+                    align: 'center',
                 });
 
-                // Precio de promoción centrado
-                doc.fontSize(24).text(`$${productoDb.datosFinancieros.precio2} c/u`, {
-                    align: 'center'
-                });
+                            // Comprobamos que los datos financieros existan y sean válidos
+                if (!productoDb.datosFinancieros || !productoDb.datosFinancieros.precio3) {
+                    throw new Error('El precio del producto no está disponible.');
+                }
+
+                // Obtenemos el precio2 y nos aseguramos de que tenga siempre dos decimales
+                let precio2 = parseFloat(productoDb.datosFinancieros.precio2).toFixed(2);  // Aseguramos que el precio tiene dos decimales
+                const [precioEntero, precioDecimal] = precio2.split('.');  // Separamos los enteros de los decimales
+
+                // Obtener el ancho del texto para centrar manualmente
+                const textWidthDollar = doc.fontSize(10).widthOfString('$ ');
+                const textWidthPrice = doc.fontSize(32).widthOfString(precioEntero);
+                const textWidthDecimals = doc.fontSize(14).widthOfString(`.${precioDecimal}`);
+                const textWidthCu = doc.fontSize(14).widthOfString(' c/u');
+
+                // Verificamos que ninguno de los anchos sea NaN
+                if (isNaN(textWidthDollar) || isNaN(textWidthPrice) || isNaN(textWidthDecimals) || isNaN(textWidthCu)) {
+                    throw new Error('Error en el cálculo de los anchos del texto.');
+                }
+
+                // Sumar el ancho total del texto
+                const totalTextWidth = textWidthDollar + textWidthPrice + textWidthDecimals + textWidthCu;
+
+                // Comprobamos que la página tiene un ancho definido y realizamos el cálculo de centrado
+                const pageWidth = (doc.page && doc.page.width) ? doc.page.width - doc.page.margins.left - doc.page.margins.right : 230; // Si no existe, usar un valor por defecto
+                const xPosition = (pageWidth - totalTextWidth) / 2;
+
+                // Dibujar el texto centrándolo manualmente
+                doc.fontSize(10).text('            $ ', xPosition, doc.y, { continued: true })  // Símbolo de dólar más pequeño
+                    .fontSize(34).text(precioEntero, { continued: true })  // Precio en tamaño grande (parte entera)
+                    .fontSize(14).text(`.${precioDecimal}`, { continued: true })  // Decimales más pequeños
+                    .fontSize(14).text(' c/u', { continued: false });  // Texto "c/u" más pequeño
+
+
+                doc.moveDown(.5); // Ajusta el número si deseas más espacio, 1 es el predeterminado
+
+
 
                 // Generar el código de barras basado en la referencia del producto
                 const barcodeBuffer = await bwipjs.toBuffer({
                     bcid: 'code128',
                     text: productoDb.reference,
-                    scale: 3,
-                    height: 10,
+                    scale: 4,
+                    height: 12,
                 });
 
                 // Añadir el código de barras centrado en el PDF
                 doc.image(barcodeBuffer, {
-                    fit: [200, 50],
+                    fit: [135, 65],
                     align: 'center', // Centrando el código de barras
                     valign: 'center' // Alineación vertical
                 });
+
+                                
+                // Espacio después del código de barras
+                doc.moveDown(4);
+
+                // Obtener el ancho total del texto del nombre del producto para alinear los rangos con él
+                const textWidthProductName = doc.fontSize(14).widthOfString(productoDb.name);
+
+                // Calculamos la posición x basada en el centrado del nombre del producto
+                const xPositionRangos = (pageWidth - textWidthProductName) / 2;  // Usamos la misma variable pageWidth previamente declarada
+
+                // Dibujar los 4 rangos en una sola línea con fuente pequeña, alineados con el nombre del producto
+                doc.fontSize(6).text(`            ${productoDb.datosFinancieros.rangoInicial1} - ${productoDb.datosFinancieros.rangoFinal1} = $${productoDb.datosFinancieros.precio1} `, { continued: true });
+                doc.fontSize(6).text(`      ${productoDb.datosFinancieros.rangoInicial2} - ${productoDb.datosFinancieros.rangoFinal2} = $${productoDb.datosFinancieros.precio2} `, { continued: false });
+                doc.fontSize(6).text(`       ${productoDb.datosFinancieros.rangoInicial3} - ${productoDb.datosFinancieros.rangoFinal3} = $${productoDb.datosFinancieros.precio3} `, { continued: true });
+                doc.fontSize(6).text(`      ${productoDb.datosFinancieros.rangoInicial4} - ${productoDb.datosFinancieros.rangoFinal4} = $${productoDb.datosFinancieros.precio4} `, { continued: false });
+
+
             }
 
             // Marcar el producto como impreso en el preciador para la sucursal
