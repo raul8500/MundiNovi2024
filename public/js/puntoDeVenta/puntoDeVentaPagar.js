@@ -157,9 +157,6 @@ function generarResumenVentaJSON() {
     completarVenta(resumenVenta);
 }
 
-
-
-
 function pagarVenta() {
     // Paso 1: Obtener el importe total a pagar
     const totalAPagar = parseFloat(document.getElementById('totalAPagar').value) || 0;
@@ -185,3 +182,18 @@ function pagarVenta() {
 document.getElementById('btnPagar').addEventListener('click', () => {
     pagarVenta();
 });
+
+document.getElementById('selectFormaPago').addEventListener('change', function() {
+    const formaPago = this.value;
+    const importeInput = document.querySelector('.importePago');
+
+    // Si se selecciona un método de pago válido, habilitar el campo de importe
+    if (formaPago) {
+        importeInput.disabled = false; // Habilitar el campo de importe
+        importeInput.focus(); // Hacer foco en el campo de importe
+    } else {
+        importeInput.disabled = true; // Deshabilitar el campo si no se selecciona un método
+        importeInput.value = ''; // Limpiar el valor del campo importe si se desactiva
+    }
+});
+

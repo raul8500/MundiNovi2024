@@ -116,7 +116,10 @@ function funciones(data) {
                         const cantidadProductos = preciadorData?.productos?.length || 0; // Verificar si 'productos' existe
                         resultados += `
                             <li class="nav-item">
-                                <a class="nav-link" href="${item.path}">${item.name}${cantidadProductos > 0 ? ` (${cantidadProductos})` : ''}</a>
+                                <a class="nav-link" href="${item.path}">
+                                    ${item.name} 
+                                    ${cantidadProductos > 0 ? `<span class="text-danger">(${cantidadProductos})</span> <i class="fas fa-exclamation-circle text-danger"></i>` : ''}
+                                </a>
                             </li>
                         `;
                         document.getElementById('options').innerHTML = resultados; // Actualizar el HTML después de obtener la cantidad

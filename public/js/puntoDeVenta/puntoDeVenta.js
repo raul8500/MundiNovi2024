@@ -13,9 +13,10 @@ let esFactura = false;
 
 //focus en el input de cantidad al inciar la pagina
 document.addEventListener('DOMContentLoaded', () => {
+    let producto = document.getElementById('producto')
     let inputCantidad = document.getElementById('cantidad');
-    inputCantidad.value = '';
-    inputCantidad.focus();
+    inputCantidad.value = 1;
+    producto.focus();
 });
 
 // Cargar la información de la sucursal
@@ -265,8 +266,8 @@ function agregarProducto() {
 
     // Limpiar el input de búsqueda y la cantidad
     inputProducto.value = '';
-    inputCantidad.value = '';
-    inputCantidad.focus();
+    inputCantidad.value = 1;
+    inputProducto.focus();
 }
 
 
@@ -314,11 +315,15 @@ document.addEventListener('keydown', (event) => {
 
 // Manejo del clic en el botón de completar venta
 document.getElementById('completarVenta').addEventListener('click', () => {
-    let totalVenta = parseFloat(document.getElementById('totalVenta').textContent)
-    document.getElementById('totalAPagar').value = totalVenta
-    verificarFactura()
-    modalPago.show()
+    let totalVenta = parseFloat(document.getElementById('totalVenta').textContent);
+    document.getElementById('totalAPagar').value = totalVenta;
+    verificarFactura();
+    modalPago.show();
+    
 });
+
+
+
 
 // Manejo de cambios en precios y cantidades
 document.getElementById('productos').addEventListener('input', (event) => {
@@ -663,6 +668,7 @@ document.getElementById('btnAgregarFormaPago').addEventListener('click', functio
         <div class="col-md-5">
         <label for="formaPago" class="form-label">Forma de Pago</label>
         <select class="form-select formaPago">
+            <option value="">Selecciona un metodo de pago</option>
             <option value="cash">Efectivo</option>
             <option value="credit-card">Tarjeta credito</option>
             <option value="debit-card">Tarjeta debito</option>
