@@ -104,13 +104,13 @@ function getfields() {
     const monedas50c = parseFloat(document.getElementById('monedas50c').value) || 0;
     const observaciones = document.getElementById('observacionesCorte').value || '';
 
-
     const total = (billetes1000 * 1000) + (billetes500 * 500) + (billetes200 * 200) + 
                   (billetes100 * 100) + (billetes50 * 50) + (billetes20 * 20) +
                   (monedas20 * 20) + (monedas10 * 10) + (monedas5 * 5) +
                   (monedas2 * 2) + (monedas1 * 1) + (monedas50c * 0.5);
 
-    if (total === 2000) {
+    // Se permiten cortes de más de 2000
+    if (total >= 2000) {
         const fields = {
             billetes_1000: billetes1000,
             billetes_500: billetes500,
@@ -132,23 +132,17 @@ function getfields() {
 
         return fields;
 
-    } else if (total < 2000) {
+    // Si el total es menor a 2000, no se permite el corte
+    } else {
         Swal.fire({
             icon: 'warning',
             title: 'Advertencia',
             text: `El total es menor que $2000. Actualmente es $${total.toFixed(2)}.`
         });
-        return null
-
-    } else {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Advertencia',
-            text: `El total es mayor que $2000. Actualmente es $${total.toFixed(2)}.`
-        });
-        return null
+        return null;
     }
 }
+
 
 async function cargarSucursal(id) {
     try {

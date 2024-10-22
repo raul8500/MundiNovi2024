@@ -124,7 +124,7 @@ async function generarFolio() {
     }
 }
 
-async function agregarFolioHijoACorteFinal(folioPadre, folioHijo) {
+async function agregarFolioHijoACorteFinal(folioPadre, folioHijo, cantidadCorte) {
     try {
         // Buscar el CorteFinal por el folio del padre
         const corteFinal = await CorteGeneral.findOne({ folio: folioPadre });
@@ -144,10 +144,10 @@ async function agregarFolioHijoACorteFinal(folioPadre, folioHijo) {
         // Verificar si el folio hijo ya está presente en el arreglo de cortes
         if (!corteFinal.cortes.includes(folioHijo)) {
             // Restar 2000 de totalVentasEfectivoCortes
-            corteFinal.totalVentasEfectivoCortes -= 2000;
+            corteFinal.totalVentasEfectivoCortes -= cantidadCorte;
 
             // Sumar 2000 a totalVentaCorte
-            corteFinal.totalVentaCorte = (corteFinal.totalVentaCorte || 0) + 2000;
+            corteFinal.totalVentaCorte = (corteFinal.totalVentaCorte || 0) + cantidadCorte;
 
             // Agregar el folio hijo al arreglo de cortes
             corteFinal.cortes.push(folioHijo);
@@ -175,6 +175,7 @@ async function agregarFolioHijoACorteFinal(folioPadre, folioHijo) {
 // Crear un nuevo corte parcial
 exports.addCorteParcial = async (req, res) => {
     try {
+        let cantidadCorte = req.body.cantidad
         let vendedor = req.body.vendedor;
         let folioPadre = '';
         const cortePendiente = await checkCorteUsuarioIniciadoONoFinalizado(vendedor);
@@ -204,7 +205,7 @@ exports.addCorteParcial = async (req, res) => {
                 const codigoBarrasGenerado = await generarCodigoDeBarras(nuevoFolio);
 
                 // Agregar el folio hijo (corte parcial) al CorteFinal
-                await agregarFolioHijoACorteFinal(folioPadre, nuevoFolio);
+                await agregarFolioHijoACorteFinal(folioPadre, nuevoFolio, cantidadCorte);
 
                 return res.status(201).json({
                     message: 'Corte parcial creado exitosamente.',
