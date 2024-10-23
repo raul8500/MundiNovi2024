@@ -166,7 +166,6 @@ exports.getCorteFinalById = async (req, res) => {
     }
 };
 
-
 // Actualizar un corte final por ID
 exports.updateCorteFinalById = async (req, res) => {
     try {
@@ -225,3 +224,29 @@ async function checkCorteUsuarioIniciadoONoFinalizado(userId) {
         throw new Error('Error interno del servidor');
     }
 }
+
+exports.getResumenCorte = async (req, res) => {
+    try {
+        // Asegúrate de obtener el userId correctamente desde el req
+        const userId = req.params.userId; // Ajusta según tu lógica
+
+        // Verifica si hay un corte abierto para el usuario
+        const corteAbierto = await checkCorteUsuarioIniciadoONoFinalizado(userId);
+
+        let corte;
+        if (corteAbierto != null) {
+            // Encuentra el corte final no finalizado o según tus criterios
+            corte = await CorteFinal.findOne({ folio: corteAbierto});
+        }
+
+        // Responde con el corte encontrado o con un mensaje adecuado si no hay corte
+        if (corte) {
+            return res.status(200).json({ success: true, data: corte });
+        } else {
+            return res.status(404).json({ success: false, message: 'No se encontró un corte abierto para el usuario' });
+        }
+    } catch (error) {
+        console.error('Error al buscar corte:', error);
+        return res.status(500).json({ success: false, message: 'Error interno del servidor' });
+    }
+};

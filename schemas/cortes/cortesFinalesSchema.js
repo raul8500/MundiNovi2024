@@ -10,22 +10,22 @@ const corteFinalSchema = new Schema({
     recepcion: { type: Boolean, required: false },  
     usuario_recepcion: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: false }, 
     fecha_recepcion: { type: Date, required: false },  
-    T_cobranzas: { type: Number, required: false },  
-    monto_doc_cobrar: { type: Number, required: false }, 
-    venta_efectivo: { type: Number, required: false }, 
-    T_credito: { type: Number, required: false }, 
-    T_debito: { type: Number, required: false }, 
-    total_tarjetas: { type: Number, required: false }, 
-    transferencias: { type: Boolean, required: false }, 
-    monto_transferencias: { type: Number, required: false }, 
-    devolucion_ventas: { type: Number, required: false },  
+    T_cobranzas: { type: Number, required: false, default: 0 },  
+    monto_doc_cobrar: { type: Number, required: false, default: 0  }, 
+    venta_efectivo: { type: Number, required: false, default: 0  }, 
+    T_credito: { type: Number, required: false, default: 0  }, 
+    T_debito: { type: Number, required: false, default: 0  }, 
+    total_tarjetas: { type: Number, required: false, default: 0  }, 
+    transferencias: { type: Boolean, required: false, default: 0  }, 
+    monto_transferencias: { type: Number, required: false, default: 0  }, 
+    devolucion_ventas: { type: Number, required: false, default: 0  },  
     cortes: [ { type: String, required: false } ],
     salidas: { type: Number, required: false },  
     ind_ventas: { type: Number, required: false },  
-    total_ventas: { type: Number, required: false },  
-    corte_total: { type: Number, required: false },
-    totalVentasEfectivoCortes: { type: Number, required: false },
-    totalVentaCorte: { type: Number, required: false },
+    total_ventas: { type: Number, required: false, default: 0  },  
+    corte_total: { type: Number, required: false, default: 0  },
+    totalVentasEfectivoCortes: { type: Number, required: false, default: 0  },
+    totalVentaCorte: { type: Number, required: false, default: 0  },
     ventas: [ 
         {
             venta: { type: mongoose.Schema.Types.ObjectId, ref: 'Ventas', required: false },
@@ -41,4 +41,5 @@ const corteFinalSchema = new Schema({
 });
 
 module.exports = mongoose.model('CorteFinal', corteFinalSchema);
+
 

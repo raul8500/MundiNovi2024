@@ -288,6 +288,10 @@ router.post('/api/cortesFinales', cortesFinales.addCorteFinal)
 router.put('/api/cortesFinales/:id', cortesFinales.updateCorteFinalById)
 router.delete('/api/cortesFinales/:id', cortesFinales.deleteCorteFinalById)
 
+router.get('/api/cortesFinalesUser/:userId', cortesFinales.getResumenCorte)
+
+
+
 //Recepcion Cortes
 router.post('/api/recepcion/cortes', recepcionCortes.updateEstadoCortes)
 
