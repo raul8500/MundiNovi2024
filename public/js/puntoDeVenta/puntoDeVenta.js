@@ -198,6 +198,9 @@ function agregarProducto() {
                 }
             }
 
+            // Calcular el total con el precio normal (precio1)
+            const totalSinRangos = nuevaCantidad * productoSeleccionado.datosFinancieros.precio1;
+
             // Actualizar el total de la fila
             const nuevoTotal = nuevaCantidad * nuevoPrecio;
             fila.querySelector('.precio').value = nuevoPrecio.toFixed(2);
@@ -209,6 +212,7 @@ function agregarProducto() {
                 productosEnVenta[index].cantidad = nuevaCantidad;
                 productosEnVenta[index].precio = nuevoPrecio;
                 productosEnVenta[index].total = nuevoTotal;
+                productosEnVenta[index].totalSinRangos = totalSinRangos;
             }
 
             productoExistente = true;
@@ -229,6 +233,8 @@ function agregarProducto() {
         }
 
         const total = cantidad * precio;
+        const totalSinRangos = cantidad * productoSeleccionado.datosFinancieros.precio1; // Calculo con precio1
+
         const nuevaFila = document.createElement('tr');
         nuevaFila.innerHTML = `
             <td>${productoSeleccionado.name}</td>
@@ -257,7 +263,8 @@ function agregarProducto() {
             nombre: productoSeleccionado.name,
             cantidad,
             precio,
-            total
+            total,
+            totalSinRangos // Se agrega el total calculado con precio1
         });
     }
 
@@ -270,8 +277,53 @@ function agregarProducto() {
     inputProducto.focus();
 }
 
+// Manejo de cambios en precios y cantidades
+document.getElementById('productos').addEventListener('input', (event) => {
+    if (event.target.classList.contains('cantidad') || event.target.classList.contains('precio')) {
+        const fila = event.target.closest('tr');
+        const cantidad = parseInt(fila.querySelector('.cantidad').value) || 0;
+        const precioInput = fila.querySelector('.precio');
+        let precio = parseFloat(precioInput.value) || 0;
 
+        // Obtener el nombre del producto y buscar el producto en el arreglo
+        const productoNombre = fila.children[0].textContent;
+        const producto = productos.find(p => p.name === productoNombre);
 
+        if (producto) {
+            // Actualizar el precio basado en el rango de la cantidad
+            if (event.target.classList.contains('cantidad')) {
+                for (let i = 1; i <= 10; i++) {
+                    const rangoInicial = producto.datosFinancieros[`rangoInicial${i}`];
+                    const rangoFinal = producto.datosFinancieros[`rangoFinal${i}`];
+                    if (cantidad >= rangoInicial && cantidad <= rangoFinal) {
+                        precio = parseFloat(producto.datosFinancieros[`precio${i}`]) || precio;
+                        break;
+                    }
+                }
+                precioInput.value = precio.toFixed(2);
+            }
+
+            // Calcular el total de la fila basado en la cantidad y el precio actualizado
+            const total = cantidad * precio;
+            const totalSinRangos = cantidad * producto.datosFinancieros.precio1; // Total con precio1
+            fila.querySelector('.total').textContent = `$${total.toFixed(2)}`;
+
+            const index = productosEnVenta.findIndex(p => p.nombre === productoNombre);
+            if (index !== -1) {
+                productosEnVenta[index] = {
+                    ...productosEnVenta[index],
+                    cantidad,
+                    precio,
+                    total,
+                    totalSinRangos // Actualizar el totalSinRangos
+                };
+            }
+        }
+
+        // Actualizar el resumen de la venta
+        actualizarResumenVenta();
+    }
+});
 
 
 // Actualizar el resumen de la venta
@@ -322,54 +374,6 @@ document.getElementById('completarVenta').addEventListener('click', () => {
     
 });
 
-
-
-
-// Manejo de cambios en precios y cantidades
-document.getElementById('productos').addEventListener('input', (event) => {
-    if (event.target.classList.contains('cantidad') || event.target.classList.contains('precio')) {
-        const fila = event.target.closest('tr');
-        const cantidad = parseInt(fila.querySelector('.cantidad').value) || 0;
-        const precioInput = fila.querySelector('.precio');
-        let precio = parseFloat(precioInput.value) || 0;
-
-        // Obtener el nombre del producto y buscar el producto en el arreglo
-        const productoNombre = fila.children[0].textContent;
-        const producto = productos.find(p => p.name === productoNombre);
-
-        if (producto) {
-            // Actualizar el precio basado en el rango de la cantidad
-            if (event.target.classList.contains('cantidad')) {
-                for (let i = 1; i <= 10; i++) {
-                    const rangoInicial = producto.datosFinancieros[`rangoInicial${i}`];
-                    const rangoFinal = producto.datosFinancieros[`rangoFinal${i}`];
-                    if (cantidad >= rangoInicial && cantidad <= rangoFinal) {
-                        precio = parseFloat(producto.datosFinancieros[`precio${i}`]) || precio;
-                        break;
-                    }
-                }
-                precioInput.value = precio.toFixed(2);
-            }
-
-            // Calcular el total de la fila basado en la cantidad y el precio actualizado
-            const total = cantidad * precio;
-            fila.querySelector('.total').textContent = `$${total.toFixed(2)}`;
-            const index = productosEnVenta.findIndex(p => p.nombre === productoNombre);
-            console.log(index)
-            if (index !== -1) {
-                productosEnVenta[index] = {
-                    ...productosEnVenta[index],
-                    cantidad,
-                    precio,
-                    total
-                };
-            }
-        }
-
-        // Actualizar el resumen de la venta
-        actualizarResumenVenta();
-    }
-});
 
 
 // Manejo del clic en el botón de eliminar producto
@@ -535,12 +539,13 @@ function completarVenta(resumenVenta, metodoEnvio, email = null) {
 
     })
     .catch(error => {
+        console.log(error)
         Swal.fire('Error', 'Hubo un problema al completar la venta. Por favor, inténtalo de nuevo.', 'error');
     });
 }
 
 function imprimirTicket(venta, resumenVenta) {
-    console.log(resumenVenta);
+    console.log(venta);
     const ticketWidth = 32; // Ancho máximo del ticket en caracteres
     const separator = '-'.repeat(ticketWidth);
 
@@ -594,13 +599,28 @@ function imprimirTicket(venta, resumenVenta) {
                 tipoPago = fp.tipo; // Default por si acaso
             }
 
+            // Aseguramos que fp.cambio sea un número antes de usar toFixed
+            const cambioTexto = typeof fp.cambio === 'number' ? `$${fp.cambio.toFixed(2)}` : `$${cambio.toFixed(2)}`;
+
             // Solo muestra el cambio si es pago en efectivo
             return `
                 <p style="margin: 2px 0;">Pago con ${tipoPago}: ${formatLine(`$${fp.importe.toFixed(2)}`, ticketWidth, true)}</p>
-                ${fp.tipo === 'cash' ? `<p style="margin: 2px 0;">Cambio: ${formatLine(`$${fp.cambio ? fp.cambio.toFixed(2) : cambio.toFixed(2)}`, ticketWidth, true)}</p>` : ''}
+                ${fp.tipo === 'cash' ? `<p style="margin: 2px 0;">Cambio: ${formatLine(cambioTexto, ticketWidth, true)}</p>` : ''}
             `;
         }).join('');
     }
+
+    // Calcular el total de ahorro sumando la diferencia entre total y totalSinRangos para cada producto
+    function calcularAhorro(productos) {
+        return productos.reduce((ahorro, producto) => {
+            const totalSinRangos = producto.totalSinRangos || 0;
+            const totalConDescuento = producto.total || 0;
+            const diferencia = totalSinRangos - totalConDescuento;
+            return ahorro + diferencia;
+        }, 0);
+    }
+
+    const totalAhorro = calcularAhorro(venta.productos); // Calcular el ahorro total del cliente
 
     const ticketContent = `
         <div style="width: 55mm; padding: 10px; font-size: 12px;">
@@ -621,11 +641,12 @@ function imprimirTicket(venta, resumenVenta) {
             ${formatProductos(venta.productos)}
             <hr style="border: 1px solid black;">
             <p style="margin: 2px 0;">Total productos: ${formatLine(venta.totalProductos.toString(), ticketWidth, true)}</p>
-            <p style="margin: 2px 0;">Total venta: ${formatLine(`$${venta.totalVenta.toFixed(2)}`, ticketWidth, true)}</p>
+            <p style="margin: 2px 0; font-weight: bold;">Total venta: ${formatLine(`$${venta.totalVenta.toFixed(2)}`, ticketWidth, true)}</p>
 
             ${formatFormasDePago(resumenVenta.formasDePago)}
             
             <hr style="border: 1px solid black;">
+            <p style="text-align: center;">Usted ahorró: ${formatLine(`$${totalAhorro.toFixed(2)}`, ticketWidth, true)}</p>
             <p style="text-align: center;">Este no es un comprobante fiscal</p>
             <p style="text-align: center;">¡Super limpios a super precio!</p>
         </div>
@@ -647,6 +668,8 @@ function imprimirTicket(venta, resumenVenta) {
         printWindow.close();
     };
 }
+
+
 
 
 function facturarVenta() {

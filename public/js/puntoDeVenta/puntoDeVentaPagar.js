@@ -91,7 +91,7 @@ function generarResumenVentaJSON() {
                 saldoMonedero -= importePago;
             }
 
-            if (tipoPago === 'efectivo') {
+            if (tipoPago === 'cash') {
                 if (importePago > restanteAPagar) {
                     cambio = importePago - restanteAPagar;
                     formasDePagoUtilizadas.push({
