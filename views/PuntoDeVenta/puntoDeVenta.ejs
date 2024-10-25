@@ -276,8 +276,8 @@
                             <h5 class="modal-title" id="selectUserModalLabel">Seleccionar Usuario</h5>
                             <!-- Contenedor del botón con `inert` -->
                             <div id="modalContainer" inert>
-                                <button type="button" class="btn-close" data-mdb-dismiss="modal"
-                                    aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+
                             </div>
 
                         </div>
@@ -437,8 +437,8 @@
                             <h5 class="modal-title" id="modalPagoLabel">Realizar Pago</h5>
                             <!-- Contenedor del botón con `inert` -->
                             <div id="modalContainer" inert>
-                                <button type="button" class="btn-close" data-mdb-dismiss="modal"
-                                    aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+
                             </div>
 
                         </div>
@@ -492,10 +492,10 @@
                                         <label class="form-label">Forma de Pago</label>
                                         <select id="selectFormaPago" class="form-select formaPago">
                                             <option value="">Selecciona un metodo de pago</option>
-                                            <option value="efectivo">Efectivo</option>
-                                            <option value="tarjeta credito">Tarjeta credito</option>
-                                            <option value="tarjeta debito">Tarjeta debito</option>
-                                            <option value="transferencia">Transferencia</option>
+                                            <option value="cash">Efectivo</option>
+                                            <option value="credit-card">Tarjeta credito</option>
+                                            <option value="debit-card">Tarjeta debito</option>
+                                            <option value="transfer">Transferencia</option>
                                             <option value="monedero">Monedero</option>
                                         </select>
                                     </div>
@@ -535,6 +535,47 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Modal para preguntar cómo desea recibir el ticket -->
+            <div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-labelledby="ticketModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ticketModalLabel">¿Cómo desea recibir su ticket?</h5>
+                            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Seleccione si desea recibir el ticket impreso o por correo electrónico.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="ticketImpreso">Imprimir</button>
+                            <button type="button" class="btn btn-primary" id="ticketCorreo">Correo electrónico</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal para ingresar el correo -->
+            <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="emailModalLabel">Ingrese su correo electrónico</h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="email" class="form-control" id="emailInput" placeholder="Ingrese su correo aquí">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="enviarCorreo">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
 
 
 

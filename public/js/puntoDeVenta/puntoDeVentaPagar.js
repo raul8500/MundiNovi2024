@@ -42,14 +42,14 @@ function generarResumenVentaJSON() {
     const formasDePagoUtilizadas = [];
     let saldoMonedero = 0;
     let cambio = 0;
-    let restanteAPagar = totalAPagar; // Variable para llevar un seguimiento del total que aún queda por pagar
+    let restanteAPagar = totalAPagar;
 
     // Verificar si hay cliente seleccionado
     if (clienteSeleccionado && typeof clienteSeleccionado.monedero === 'number') {
         saldoMonedero = clienteSeleccionado.monedero;
     }
 
-    // Obtener todas las formas de pago adicionales (incluye la default)
+    // Obtener todas las formas de pago adicionales
     const formasDePago = document.querySelectorAll('.formaDePago');
 
     for (const forma of formasDePago) {
@@ -88,27 +88,25 @@ function generarResumenVentaJSON() {
                     return;
                 }
 
-                saldoMonedero -= importePago; // Actualiza el saldo después de aceptar el pago
+                saldoMonedero -= importePago;
             }
 
-            // Si el tipo de pago es efectivo, y supera lo que queda por pagar, calculamos el cambio
             if (tipoPago === 'efectivo') {
                 if (importePago > restanteAPagar) {
-                    cambio = importePago - restanteAPagar; // Calculamos el cambio
+                    cambio = importePago - restanteAPagar;
                     formasDePagoUtilizadas.push({
                         tipo: tipoPago,
-                        importe: importePago, // El importe completo que el cliente dio
-                        cambio: cambio.toFixed(2) // Se agrega el cambio que se devolvió
+                        importe: importePago,
+                        cambio: cambio.toFixed(2)
                     });
                 } else {
                     formasDePagoUtilizadas.push({
                         tipo: tipoPago,
                         importe: importePago,
-                        cambio: 0 // No hay cambio
+                        cambio: 0
                     });
                 }
             } else {
-                // Otros tipos de pago no generan cambio
                 if (importePago > restanteAPagar) {
                     Swal.fire({
                         icon: 'error',
@@ -126,11 +124,10 @@ function generarResumenVentaJSON() {
             }
 
             totalPagado += importePago;
-            restanteAPagar -= importePago; // Reducimos lo que queda por pagar
+            restanteAPagar -= importePago;
         }
     }
 
-    // Verificar si el total pagado cubre el total a pagar
     if (totalPagado < totalAPagar) {
         Swal.fire({
             icon: "error",
@@ -141,21 +138,51 @@ function generarResumenVentaJSON() {
         return;
     }
 
-    // Crear el resumen de la venta en formato JSON
     const facturaResumenVenta = document.getElementById('facturaResumenVenta')?.textContent.trim() || '';
     const cfdiSelect = document.getElementById('usoCFDI');
 
     const resumenVenta = {
-        cliente: clienteSeleccionado || '', // Asigna clienteSeleccionado o una cadena vacía si es nulo o indefinido
+        cliente: clienteSeleccionado || '',
         totalAPagar: totalAPagar.toFixed(2),
         totalPagado: totalPagado.toFixed(2),
         formasDePago: formasDePagoUtilizadas,
-        esFactura: facturaResumenVenta !== '', // Determina si es una venta facturada
-        cfdiSeleccionado: cfdiSelect ? cfdiSelect.value : '' // CFDI seleccionado
+        esFactura: facturaResumenVenta !== '',
+        cfdiSeleccionado: cfdiSelect ? cfdiSelect.value : ''
     };
 
-    completarVenta(resumenVenta);
+    // Mostrar el modal para elegir entre imprimir o correo
+    $('#ticketModal').modal('show');
+
+    // Si elige imprimir
+    document.getElementById('ticketImpreso').addEventListener('click', function() {
+        $('#ticketModal').modal('hide'); // Oculta el primer modal
+        completarVenta(resumenVenta, 'impreso'); // Llama a la función para imprimir el ticket
+    });
+
+    // Si elige correo electrónico
+    document.getElementById('ticketCorreo').addEventListener('click', function() {
+        $('#ticketModal').modal('hide'); // Oculta el primer modal
+        $('#emailModal').modal('show');  // Muestra el segundo modal para ingresar el correo
+    });
+
+    // Enviar el correo con el ticket
+    document.getElementById('enviarCorreo').addEventListener('click', function() {
+        const email = document.getElementById('emailInput').value;
+        if (validateEmail(email)) {
+            $('#emailModal').modal('hide'); // Oculta el modal de correo
+            completarVenta(resumenVenta, 'correo', email); // Llama a la función para enviar el ticket por correo
+        } else {
+            alert('Por favor, ingrese un correo válido.'); // Valida el correo
+        }
+    });
 }
+
+// Función para validar el correo
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+}
+
 
 function pagarVenta() {
     // Paso 1: Obtener el importe total a pagar

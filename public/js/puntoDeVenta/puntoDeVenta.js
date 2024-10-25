@@ -451,7 +451,7 @@ function limpiarVenta(){
 }
 
 
-function completarVenta(resumenVenta) {
+function completarVenta(resumenVenta, metodoEnvio, email = null) {
     const filas = document.querySelectorAll('#productos tr');
     if (filas.length === 0) {
         Swal.fire({
@@ -475,10 +475,12 @@ function completarVenta(resumenVenta) {
     const ventaYResumen = {
         venta,
         resumenVenta,
-        infoUser
+        infoUser,
+        metodoEnvio, // 'impreso' o 'correo'
+        email // correo si se proporcionó
     };
 
-    // Llamada para realizar la venta y verificar si se necesita corte parcial automáticamente
+    // Aquí haces la llamada para completar la venta
     fetch('/api/ventas', {
         method: 'POST',
         headers: {
@@ -488,7 +490,6 @@ function completarVenta(resumenVenta) {
     })
     .then(response => {
         if (response.status === 304) {
-            // Si el backend devuelve un código 304, mostrar la alerta de corte parcial
             Swal.fire({
                 icon: 'warning',
                 title: 'Corte parcial necesario',
@@ -502,7 +503,6 @@ function completarVenta(resumenVenta) {
                 }
             });
         } else if (response.status === 201) {
-            // Si la venta fue creada correctamente
             return response.json();
         } else {
             throw new Error('Error en la respuesta del servidor.');
@@ -511,30 +511,36 @@ function completarVenta(resumenVenta) {
     .then(data => {
         if (data) {
             // Venta completada con éxito
-            imprimirTicket(venta,resumenVenta);
-            venta = '';
-            productosEnVenta = '';
-            resumenVenta = '';
-            modalPago.hide();
-            limpiarVenta();
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Venta completada',
-                text: 'La venta se ha registrado exitosamente.'
-            });
-            window.location.reload();
+            if (metodoEnvio === 'impreso') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Venta completada',
+                    text: 'La venta se ha registrado exitosamente.'
+                });
+                imprimirTicket(venta, resumenVenta);
+                window.location.reload();
+            } else if (metodoEnvio === 'correo' && email) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Venta completada',
+                    text: 'La venta se ha registrado exitosamente y enviado al correo electrónico.'
+                });
+                
+                // Esperar 1.5 segundos antes de recargar la página
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500); // 1500 ms = 1.5 segundos
+            }
         }
+
     })
     .catch(error => {
-        console.error('Error al guardar la venta:', error);
         Swal.fire('Error', 'Hubo un problema al completar la venta. Por favor, inténtalo de nuevo.', 'error');
     });
 }
 
-
 function imprimirTicket(venta, resumenVenta) {
-    console.log(resumenVenta)
+    console.log(resumenVenta);
     const ticketWidth = 32; // Ancho máximo del ticket en caracteres
     const separator = '-'.repeat(ticketWidth);
 
@@ -560,7 +566,7 @@ function imprimirTicket(venta, resumenVenta) {
             <ul style="list-style: none; padding: 0; margin: 0;">
                 ${productos.map(p => `
                     <li style="word-break: break-word; padding-bottom: 5px;">
-                        ${p.nombre || 'Nombre no disponible'} - Cantidad: ${p.cantidad} - Precio: ${p.precio} - Importe: $${p.total.toFixed(2)}
+                        - ${p.nombre || 'Nombre no disponible'} - ${p.cantidad} x ${p.precio.toFixed(2)} = $${p.total.toFixed(2)}
                     </li>
                 `).join('')}
             </ul>
@@ -571,6 +577,30 @@ function imprimirTicket(venta, resumenVenta) {
     const totalAPagar = parseFloat(resumenVenta.totalAPagar);
     const totalPagado = parseFloat(resumenVenta.totalPagado);
     const cambio = totalPagado - totalAPagar;
+
+    // Formatear las formas de pago con condiciones para los valores
+    function formatFormasDePago(formasDePago) {
+        return formasDePago.map(fp => {
+            let tipoPago = '';
+            if (fp.tipo === 'cash') {
+                tipoPago = 'Efectivo';
+            } else if (fp.tipo === 'credit-card') {
+                tipoPago = 'Tarjeta crédito';
+            } else if (fp.tipo === 'debit-card') {
+                tipoPago = 'Tarjeta débito';
+            } else if (fp.tipo === 'transfer') {
+                tipoPago = 'Transferencia';
+            } else {
+                tipoPago = fp.tipo; // Default por si acaso
+            }
+
+            // Solo muestra el cambio si es pago en efectivo
+            return `
+                <p style="margin: 2px 0;">Pago con ${tipoPago}: ${formatLine(`$${fp.importe.toFixed(2)}`, ticketWidth, true)}</p>
+                ${fp.tipo === 'cash' ? `<p style="margin: 2px 0;">Cambio: ${formatLine(`$${fp.cambio ? fp.cambio.toFixed(2) : cambio.toFixed(2)}`, ticketWidth, true)}</p>` : ''}
+            `;
+        }).join('');
+    }
 
     const ticketContent = `
         <div style="width: 55mm; padding: 10px; font-size: 12px;">
@@ -583,19 +613,21 @@ function imprimirTicket(venta, resumenVenta) {
             <hr style="border: 1px solid black;">
             <p style="margin: 2px 0;">Venta No: ${Math.floor(Math.random() * 90000) + 10000}</p>
             <p style="margin: 2px 0;">Fecha: ${new Date(venta.fecha).toLocaleDateString()}</p>
-            <p style="margin: 2px 0;">Sucursal: ${sucursalInfo.nombre}</p>
+            <p style="margin: 2px 0;">Cajero: ${infoUser.name}</p>
+            <p style="margin: 2px 0;">Sucursal: ${sucursalInfo.datosTicket.direccion}</p>
             <hr style="border: 1px solid black;">
             Productos:
+            
             ${formatProductos(venta.productos)}
             <hr style="border: 1px solid black;">
-            <p>Total productos: ${formatLine(venta.totalProductos.toString(), ticketWidth, true)}</p>
-            <p>Total venta: ${formatLine(`$${venta.totalVenta.toFixed(2)}`, ticketWidth, true)}</p>
-            <hr style="border: 1px solid black;">
-            <p>Pago: ${formatLine(`$${totalPagado.toFixed(2)}`, ticketWidth, true)}</p>
-            <p>Cambio: ${formatLine(`$${cambio.toFixed(2)}`, ticketWidth, true)}</p>
+            <p style="margin: 2px 0;">Total productos: ${formatLine(venta.totalProductos.toString(), ticketWidth, true)}</p>
+            <p style="margin: 2px 0;">Total venta: ${formatLine(`$${venta.totalVenta.toFixed(2)}`, ticketWidth, true)}</p>
+
+            ${formatFormasDePago(resumenVenta.formasDePago)}
+            
             <hr style="border: 1px solid black;">
             <p style="text-align: center;">Este no es un comprobante fiscal</p>
-            <p style="text-align: center;">¡Gracias por su compra!</p>
+            <p style="text-align: center;">¡Super limpios a super precio!</p>
         </div>
     `;
 
