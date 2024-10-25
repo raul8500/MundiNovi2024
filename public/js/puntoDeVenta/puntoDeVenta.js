@@ -629,12 +629,12 @@ function imprimirTicket(venta, resumenVenta) {
             <p style="text-align: center; margin: 2px 0;">JESUS MARIA AGUIRRE VEGA</p>
             <p style="text-align: center; margin: 2px 0;">REGIMEN ACTIVIDAD EMPRESARIAL</p>
             <p style="text-align: center; margin: 2px 0;">RFC: AUVJ750221RB8</p>
-            <p style="text-align: center; margin: 2px 0;">Dirección: ${wrapText(venta.direccion, ticketWidth).join('<br>')}</p>
+            <p style="text-align: center; margin: 2px 0;">Dirección: Sur Norte 14 BC y CD, Central de Abastos, 91637, Ejido FDO Gutierrez, Ver.</p>
             <hr style="border: 1px solid black;">
             <p style="margin: 2px 0;">Venta No: ${Math.floor(Math.random() * 90000) + 10000}</p>
             <p style="margin: 2px 0;">Fecha: ${new Date(venta.fecha).toLocaleDateString()}</p>
             <p style="margin: 2px 0;">Cajero: ${infoUser.name}</p>
-            <p style="margin: 2px 0;">Sucursal: ${sucursalInfo.datosTicket.direccion}</p>
+            <p style="margin: 2px 0;">Expedido en: ${sucursalInfo.datosTicket.direccion}</p>
             <hr style="border: 1px solid black;">
             Productos:
             
