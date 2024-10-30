@@ -545,12 +545,10 @@ function completarVenta(resumenVenta, metodoEnvio, email = null) {
 }
 
 function imprimirTicket(venta, resumenVenta) {
-    console.log(venta);
     const ticketWidth = 32; // Ancho máximo del ticket en caracteres
     const separator = '-'.repeat(ticketWidth);
 
     function formatLine(text, width, rightAlign = false) {
-        // Ajustar el texto con alineación a la izquierda o derecha
         if (rightAlign) {
             return text.padStart(width);
         } else {
@@ -558,34 +556,45 @@ function imprimirTicket(venta, resumenVenta) {
         }
     }
 
-    function wrapText(text, width) {
-        const lines = [];
-        for (let i = 0; i < text.length; i += width) {
-            lines.push(text.substring(i, i + width));
-        }
-        return lines;
-    }
-
     function formatProductos(productos) {
         return `
-            <ul style="list-style: none; padding: 0; margin: 0;">
-                ${productos.map(p => `
-                    <li style="word-break: break-word; padding-bottom: 5px;">
-                        - ${p.nombre || 'Nombre no disponible'} - ${p.cantidad} x ${p.precio.toFixed(2)} = $${p.total.toFixed(2)}
-                    </li>
-                `).join('')}
+            <ul style="list-style: none; padding: 0; margin: 0; font-size: 9px;">
+                <li>
+                    <span style="display: inline-block; width: 30px; text-align: left;">Cant.</span>
+                    <span style="display: inline-block; width: 90px; text-align: left;">Artículo</span>
+                    <span style="display: inline-block; width: 40px; text-align: right;">Precio</span>
+                    <span style="display: inline-block; width: 40px; text-align: right;">Total</span>
+                </li>
+                ${productos.map(p => {
+                    const nombreDividido = p.nombre.split(" ");
+                    let nombreHtml = "";
+                    let lineaActual = "";
+
+                    nombreDividido.forEach((palabra) => {
+                        if ((lineaActual + palabra).length > 15) {
+                            nombreHtml += `<div>${lineaActual.trim()}</div>`;
+                            lineaActual = palabra + " ";
+                        } else {
+                            lineaActual += palabra + " ";
+                        }
+                    });
+                    nombreHtml += `<div>${lineaActual.trim()}</div>`;
+
+                    return `
+                        <li style="word-break: break-word; margin-bottom: 5px;">
+                            <span style="display: inline-block; width: 30px; text-align: left; vertical-align: middle;">${p.cantidad}</span>
+                            <span style="display: inline-block; width: 90px; text-align: left;">${nombreHtml}</span>
+                            <span style="display: inline-block; width: 40px; text-align: right;">$${p.precio.toFixed(2)}</span>
+                            <span style="display: inline-block; width: 40px; text-align: right;">$${p.total.toFixed(2)}</span>
+                        </li>
+                    `;
+                }).join('')}
             </ul>
         `;
     }
 
-    // Calcular el cambio
-    const totalAPagar = parseFloat(resumenVenta.totalAPagar);
-    const totalPagado = parseFloat(resumenVenta.totalPagado);
-    const cambio = totalPagado - totalAPagar;
-
-    // Formatear las formas de pago con condiciones para los valores
     function formatFormasDePago(formasDePago) {
-        return formasDePago.map(fp => {
+        let formasDePagoHtml = formasDePago.map(fp => {
             let tipoPago = '';
             if (fp.tipo === 'cash') {
                 tipoPago = 'Efectivo';
@@ -596,21 +605,24 @@ function imprimirTicket(venta, resumenVenta) {
             } else if (fp.tipo === 'transfer') {
                 tipoPago = 'Transferencia';
             } else {
-                tipoPago = fp.tipo; // Default por si acaso
+                tipoPago = fp.tipo;
             }
 
-            // Aseguramos que fp.cambio sea un número antes de usar toFixed
-            const cambioTexto = typeof fp.cambio === 'number' ? `$${fp.cambio.toFixed(2)}` : `$${cambio.toFixed(2)}`;
-
-            // Solo muestra el cambio si es pago en efectivo
             return `
                 <p style="margin: 2px 0;">Pago con ${tipoPago}: ${formatLine(`$${fp.importe.toFixed(2)}`, ticketWidth, true)}</p>
-                ${fp.tipo === 'cash' ? `<p style="margin: 2px 0;">Cambio: ${formatLine(cambioTexto, ticketWidth, true)}</p>` : ''}
             `;
         }).join('');
+
+        // Añadir el cambio al final
+        const cambioTexto = typeof formasDePago.find(fp => fp.tipo === 'cash')?.cambio === 'number'
+            ? `$${formasDePago.find(fp => fp.tipo === 'cash').cambio.toFixed(2)}`
+            : `$${(parseFloat(resumenVenta.totalPagado) - parseFloat(resumenVenta.totalAPagar)).toFixed(2)}`;
+
+        formasDePagoHtml += `<p style="margin: 2px 0;">Cambio: ${formatLine(cambioTexto, ticketWidth, true)}</p>`;
+        
+        return formasDePagoHtml;
     }
 
-    // Calcular el total de ahorro sumando la diferencia entre total y totalSinRangos para cada producto
     function calcularAhorro(productos) {
         return productos.reduce((ahorro, producto) => {
             const totalSinRangos = producto.totalSinRangos || 0;
@@ -620,10 +632,10 @@ function imprimirTicket(venta, resumenVenta) {
         }, 0);
     }
 
-    const totalAhorro = calcularAhorro(venta.productos); // Calcular el ahorro total del cliente
+    const totalAhorro = calcularAhorro(venta.productos);
 
     const ticketContent = `
-        <div style="width: 55mm; padding: 10px; font-size: 12px;">
+        <div style="width: 55mm; padding: 10px; font-size: 10px;">
             <img id="logo" src="/img/logoColor.png" style="width: 90px; height: 80px; display: block; margin: 0 auto;">
             <h2 style="text-align: center;">Mundi Novi</h2>
             <p style="text-align: center; margin: 2px 0;">JESUS MARIA AGUIRRE VEGA</p>
@@ -631,20 +643,18 @@ function imprimirTicket(venta, resumenVenta) {
             <p style="text-align: center; margin: 2px 0;">RFC: AUVJ750221RB8</p>
             <p style="text-align: center; margin: 2px 0;">Dirección: Sur Norte 14 BC y CD, Central de Abastos, 91637, Ejido FDO Gutierrez, Ver.</p>
             <hr style="border: 1px solid black;">
-            <p style="margin: 2px 0;">Venta No: ${Math.floor(Math.random() * 90000) + 10000}</p>
-            <p style="margin: 2px 0;">Fecha: ${new Date(venta.fecha).toLocaleDateString()}</p>
+            <p style="margin: 2px 0;">Folio: ${Math.floor(Math.random() * 90000) + 10000}</p>
+            <p style="margin: 2px 0;">Fecha: ${new Date(venta.fecha).toLocaleString()}</p>
             <p style="margin: 2px 0;">Cajero: ${infoUser.name}</p>
             <p style="margin: 2px 0;">Expedido en: ${sucursalInfo.datosTicket.direccion}</p>
             <hr style="border: 1px solid black;">
-            Productos:
-            
             ${formatProductos(venta.productos)}
             <hr style="border: 1px solid black;">
-            <p style="margin: 2px 0;">Total productos: ${formatLine(venta.totalProductos.toString(), ticketWidth, true)}</p>
-            <p style="margin: 2px 0; font-weight: bold;">Total venta: ${formatLine(`$${venta.totalVenta.toFixed(2)}`, ticketWidth, true)}</p>
-
-            ${formatFormasDePago(resumenVenta.formasDePago)}
-            
+            <p style="text-align: right; margin: 2px 0; font-weight: bold;">Total venta: $${venta.totalVenta.toFixed(2)}</p>
+            <p style="text-align: right; margin: 2px 0;">Total productos: ${venta.totalProductos}</p>
+            <div style="text-align: right;">
+                ${formatFormasDePago(resumenVenta.formasDePago)}
+            </div>
             <hr style="border: 1px solid black;">
             <p style="text-align: center;">Usted ahorró: ${formatLine(`$${totalAhorro.toFixed(2)}`, ticketWidth, true)}</p>
             <p style="text-align: center;">Este no es un comprobante fiscal</p>
@@ -668,9 +678,6 @@ function imprimirTicket(venta, resumenVenta) {
         printWindow.close();
     };
 }
-
-
-
 
 function facturarVenta() {
     var btnFacturar = document.getElementById('btnFacturar');
