@@ -652,7 +652,7 @@ exports.marcarProductoImpreso = async (req, res) => {
 
                                 
                 // Espacio después del código de barras
-                doc.moveDown(4);
+                doc.moveDown(3.5);
 
                 // Obtener el ancho total del texto del nombre del producto para alinear los rangos con él
                 const textWidthProductName = doc.fontSize(14).widthOfString(productoDb.name);
@@ -661,10 +661,8 @@ exports.marcarProductoImpreso = async (req, res) => {
                 const xPositionRangos = (pageWidth - textWidthProductName) / 2;  // Usamos la misma variable pageWidth previamente declarada
 
                 // Dibujar los 4 rangos en una sola línea con fuente pequeña, alineados con el nombre del producto
-                doc.fontSize(6).text(`            ${productoDb.datosFinancieros.rangoInicial1} - ${productoDb.datosFinancieros.rangoFinal1} = $${productoDb.datosFinancieros.precio1} `, { continued: true });
-                doc.fontSize(6).text(`      ${productoDb.datosFinancieros.rangoInicial2} - ${productoDb.datosFinancieros.rangoFinal2} = $${productoDb.datosFinancieros.precio2} `, { continued: false });
-                doc.fontSize(6).text(`       ${productoDb.datosFinancieros.rangoInicial3} - ${productoDb.datosFinancieros.rangoFinal3} = $${productoDb.datosFinancieros.precio3} `, { continued: true });
-                doc.fontSize(6).text(`      ${productoDb.datosFinancieros.rangoInicial4} - ${productoDb.datosFinancieros.rangoFinal4} = $${productoDb.datosFinancieros.precio4} `, { continued: false });
+                doc.fontSize(6).text(`                       ${productoDb.datosFinancieros.rangoInicial3}.${productoDb.datosFinancieros.precio3} `, { continued: true });
+                doc.fontSize(6).text(`             ${productoDb.datosFinancieros.rangoInicial4}.${productoDb.datosFinancieros.precio4} `, { continued: false });
 
 
             }
