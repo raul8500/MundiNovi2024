@@ -37,18 +37,42 @@ function renderizarProductos(productos) {
     }
 
     productos.forEach(producto => {
-        const card = `
-            <div class="col-6 col-sm-4 col-md-2 mb-1">
-                <div class="card bg-warning text-center text-dark" style="padding: 5px;">
-                    <div class="card-body p-1">
-                        <h6 class="card-title mb-0" style="font-size: 0.85rem;">${producto.reference}</h6>
-                    </div>
+        const card = document.createElement('div');
+        card.classList.add('col-6', 'col-sm-4', 'col-md-2', 'mb-1');
+        card.innerHTML = `
+            <div class="card bg-warning text-center text-dark" style="padding: 3px; cursor: pointer; font-size: 0.75rem;">
+                <div class="card-body p-1" style="padding: 3px;">
+                    <h6 class="card-title mb-0" style="font-size: 0.75rem;">${producto.reference}</h6>
                 </div>
             </div>
         `;
-        productosLista.innerHTML += card;
+
+        // Evento para seleccionar el producto y colocarlo en el input
+        card.addEventListener('click', () => {
+            seleccionarProductoInput(producto.reference);
+        });
+
+        productosLista.appendChild(card);
     });
 }
+
+
+function seleccionarProductoInput(reference) {
+    const searchInput = document.getElementById('productoSearch');
+    
+    // Actualizar el campo de búsqueda con el producto seleccionado
+    searchInput.value = reference;
+
+    // Limpiar las sugerencias si ya hay un producto en el input
+    const suggestionsDiv = document.getElementById('suggestions');
+    suggestionsDiv.innerHTML = '';
+
+    // Mover el enfoque al campo de cantidad
+    document.getElementById('cantidadImpresiones').focus();
+}
+
+
+
 
 // Cargar todos los productos para la búsqueda
 function cargarTodosLosProductos() {
