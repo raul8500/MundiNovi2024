@@ -4,6 +4,7 @@ const Producto = require('../../schemas/productosSchema/productosSchema');
 const Client = require('../../schemas/clientesSchema/clientesSchema');
 const CorteGeneral = require('../../schemas/cortes/cortesFinalesSchema');
 const CorteFinal = require('../../schemas/cortes/cortesFinalesSchema');
+const Email = require('../../schemas/venta/emailSchema');
 
 
 const mongoose = require('mongoose');
@@ -279,9 +280,16 @@ exports.createVenta = async (req, res) => {
     }
 };
 
-function sendTicketEmail(email, venta, sucursalInfo) {
+async function sendTicketEmail(email, venta, sucursalInfo) {
     return new Promise(async (resolve, reject) => {
         try {
+            // Verificar si el correo ya existe
+            const correoExistente = await Email.findOne({ email });
+            if (!correoExistente) {
+                // Guardar el correo si no existe
+                await Email.create({ email });
+            }
+
             // Generar contenido del ticket
             let ticketContent = `
                 <h1>Ticket de Venta</h1>
