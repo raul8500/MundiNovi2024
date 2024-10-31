@@ -175,65 +175,59 @@ function agregarProducto() {
         return;
     }
 
-    // Verificar si el producto ya está en la tabla
     const filas = document.querySelectorAll('#productos tr');
     let productoExistente = false;
 
     filas.forEach(fila => {
         const nombreProducto = fila.children[0].textContent;
         if (nombreProducto === productoSeleccionado.name) {
-            // Producto ya está en la tabla, actualizar cantidad
             const cantidadActual = parseInt(fila.querySelector('.cantidad').value);
             const nuevaCantidad = cantidadActual + cantidad;
             fila.querySelector('.cantidad').value = nuevaCantidad;
 
-            // Recalcular el precio basado en la nueva cantidad total
-            let nuevoPrecio = productoSeleccionado.datosFinancieros.precio1;
+            let precioNormal = productoSeleccionado.datosFinancieros.precio1;
+            let precioParaArreglo = precioNormal / 1.16;
+
             for (let i = 1; i <= 10; i++) {
                 const rangoInicial = productoSeleccionado.datosFinancieros[`rangoInicial${i}`];
                 const rangoFinal = productoSeleccionado.datosFinancieros[`rangoFinal${i}`];
                 if (nuevaCantidad >= rangoInicial && nuevaCantidad <= rangoFinal) {
-                    nuevoPrecio = productoSeleccionado.datosFinancieros[`precio${i}`] || nuevoPrecio;
+                    precioNormal = productoSeleccionado.datosFinancieros[`precio${i}`] || precioNormal;
+                    precioParaArreglo = precioNormal / 1.16;
                     break;
                 }
             }
 
-            // Calcular el total con el precio normal (precio1)
-            const totalSinRangos = nuevaCantidad * productoSeleccionado.datosFinancieros.precio1;
-
-            // Actualizar el total de la fila
-            const nuevoTotal = nuevaCantidad * nuevoPrecio;
-            fila.querySelector('.precio').value = nuevoPrecio.toFixed(2);
+            const nuevoTotal = nuevaCantidad * precioNormal;
+            fila.querySelector('.precio').value = precioNormal.toFixed(2);
             fila.querySelector('.total').textContent = `$${nuevoTotal.toFixed(2)}`;
 
-            // Actualizar el objeto en el arreglo productosEnVenta
             const index = productosEnVenta.findIndex(p => p.nombre === productoSeleccionado.name);
             if (index !== -1) {
                 productosEnVenta[index].cantidad = nuevaCantidad;
-                productosEnVenta[index].precio = nuevoPrecio;
-                productosEnVenta[index].total = nuevoTotal;
-                productosEnVenta[index].totalSinRangos = totalSinRangos;
+                productosEnVenta[index].precio = precioParaArreglo; // Precio para el backend
+                productosEnVenta[index].total = nuevaCantidad * precioParaArreglo; // Total con el precio ajustado
             }
 
             productoExistente = true;
         }
     });
 
-    // Si el producto no existe en la tabla, agregar una nueva fila
     if (!productoExistente) {
-        let precio = parseFloat(productoSeleccionado.datosFinancieros.precio1); // Precio predeterminado
+        let precioNormal = parseFloat(productoSeleccionado.datosFinancieros.precio1); // Precio mostrado
+        let precioParaArreglo = precioNormal / 1.16; // Precio para el arreglo (para el backend)
 
         for (let i = 1; i <= 10; i++) {
             const rangoInicial = productoSeleccionado.datosFinancieros[`rangoInicial${i}`];
             const rangoFinal = productoSeleccionado.datosFinancieros[`rangoFinal${i}`];
             if (cantidad >= rangoInicial && cantidad <= rangoFinal) {
-                precio = parseFloat(productoSeleccionado.datosFinancieros[`precio${i}`]) || precio;
+                precioNormal = parseFloat(productoSeleccionado.datosFinancieros[`precio${i}`]) || precioNormal;
+                precioParaArreglo = precioNormal / 1.16;
                 break;
             }
         }
 
-        const total = cantidad * precio;
-        const totalSinRangos = cantidad * productoSeleccionado.datosFinancieros.precio1; // Calculo con precio1
+        const total = cantidad * precioNormal;
 
         const nuevaFila = document.createElement('tr');
         nuevaFila.innerHTML = `
@@ -249,7 +243,7 @@ function agregarProducto() {
                         ` : ''}`).join('')}
                 </div>
             </td>
-            <td><input type="number" class="form-control precio" value="${precio.toFixed(2)}" step="0.01"></td>
+            <td><input type="number" class="form-control precio" value="${precioNormal.toFixed(2)}" step="0.01"></td>
             <td><input type="number" class="form-control cantidad" value="${cantidad}" step="1"></td>
             <td class="total">$${total.toFixed(2)}</td>
             <td><button class="btn btn-warning btn-sm eliminarProducto">Eliminar</button></td>
@@ -257,55 +251,46 @@ function agregarProducto() {
 
         document.getElementById('productos').appendChild(nuevaFila);
 
-        // Agregar producto al arreglo productosEnVenta
         productosEnVenta.push({
             _id: productoSeleccionado._id,
             nombre: productoSeleccionado.name,
             cantidad,
-            precio,
-            total,
-            totalSinRangos // Se agrega el total calculado con precio1
+            precio: precioParaArreglo, // Precio dividido para el backend
+            total: cantidad * precioParaArreglo // Total calculado para el backend
         });
     }
 
-    // Actualizar el total de productos y el total de la venta
     actualizarResumenVenta();
 
-    // Limpiar el input de búsqueda y la cantidad
     inputProducto.value = '';
     inputCantidad.value = 1;
     inputProducto.focus();
 }
 
-// Manejo de cambios en precios y cantidades
 document.getElementById('productos').addEventListener('input', (event) => {
     if (event.target.classList.contains('cantidad') || event.target.classList.contains('precio')) {
         const fila = event.target.closest('tr');
         const cantidad = parseInt(fila.querySelector('.cantidad').value) || 0;
         const precioInput = fila.querySelector('.precio');
-        let precio = parseFloat(precioInput.value) || 0;
+        let precioNormal = parseFloat(precioInput.value) || 0;
 
-        // Obtener el nombre del producto y buscar el producto en el arreglo
         const productoNombre = fila.children[0].textContent;
         const producto = productos.find(p => p.name === productoNombre);
 
         if (producto) {
-            // Actualizar el precio basado en el rango de la cantidad
             if (event.target.classList.contains('cantidad')) {
                 for (let i = 1; i <= 10; i++) {
                     const rangoInicial = producto.datosFinancieros[`rangoInicial${i}`];
                     const rangoFinal = producto.datosFinancieros[`rangoFinal${i}`];
                     if (cantidad >= rangoInicial && cantidad <= rangoFinal) {
-                        precio = parseFloat(producto.datosFinancieros[`precio${i}`]) || precio;
+                        precioNormal = parseFloat(producto.datosFinancieros[`precio${i}`]) || precioNormal;
                         break;
                     }
                 }
-                precioInput.value = precio.toFixed(2);
+                precioInput.value = precioNormal.toFixed(2);
             }
 
-            // Calcular el total de la fila basado en la cantidad y el precio actualizado
-            const total = cantidad * precio;
-            const totalSinRangos = cantidad * producto.datosFinancieros.precio1; // Total con precio1
+            const total = cantidad * precioNormal;
             fila.querySelector('.total').textContent = `$${total.toFixed(2)}`;
 
             const index = productosEnVenta.findIndex(p => p.nombre === productoNombre);
@@ -313,17 +298,17 @@ document.getElementById('productos').addEventListener('input', (event) => {
                 productosEnVenta[index] = {
                     ...productosEnVenta[index],
                     cantidad,
-                    precio,
-                    total,
-                    totalSinRangos // Actualizar el totalSinRangos
+                    precio: precioNormal / 1.16, // Precio dividido solo para el backend
+                    total: cantidad * (precioNormal / 1.16) // Total con precio ajustado para el backend
                 };
             }
         }
 
-        // Actualizar el resumen de la venta
         actualizarResumenVenta();
     }
 });
+
+
 
 
 // Actualizar el resumen de la venta

@@ -6,11 +6,10 @@ const CorteGeneral = require('../../schemas/cortes/cortesFinalesSchema');
 const CorteFinal = require('../../schemas/cortes/cortesFinalesSchema');
 const Email = require('../../schemas/venta/emailSchema');
 
-
 const mongoose = require('mongoose');
 const request = require('request');
 const nodemailer = require('nodemailer');
-
+const http = require('https');
 
 exports.getVentasPorSucursalYFechas = async (req, res) => {
   try {
@@ -156,130 +155,6 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-exports.createVenta = async (req, res) => {
-    let vendedor = req.body.venta.usuario._id;
-    const sucursal = req.body.venta.sucursalId;
-
-    try {
-        let corteFolio = '';
-        
-        // Verificar si hay un corte pendiente
-        const cortePendiente = await checkCorteUsuarioIniciadoONoFinalizado(vendedor);
-        corteFolio = cortePendiente ? cortePendiente : await crearCorteFinal(vendedor, sucursal);
-
-        // Verificar si es necesario hacer un corte parcial
-        const resultado = await checkCorteUsuarioIniciadoConVentas(vendedor);
-        if (resultado.codigo == 1) {
-            return res.status(304).json({
-                message: 'Es necesario realizar un corte parcial antes de proceder con la venta.',
-                totalEfectivo: resultado.totalVentasEfectivo
-            });
-        } else if (resultado.codigo == -1) {
-            return res.status(404).json({ message: 'No se encontró un corte pendiente.' });
-        }
-
-        // Facturación si aplica
-        if (req.body.resumenVenta.cliente.esfactura) {
-            crearFactura(req);
-        }
-
-        const productos = req.body.venta.productos;
-        const tipoVenta = req.body.resumenVenta.esFactura;
-        const cliente = req.body.resumenVenta.cliente ? req.body.resumenVenta.cliente._id : null;
-        const totalAPagar = req.body.venta.totalVenta;
-        const formasDePago = req.body.resumenVenta.formasDePago;
-
-        let totalVenta = 0;
-        let totalProductos = 0;
-        const productosConKardex = [];
-
-        for (const producto of productos) {
-            const { _id, cantidad, precio } = producto;
-            const productoEncontrado = await Producto.findById(_id);
-            if (!productoEncontrado) {
-                return res.status(404).json({ error: 'Producto no encontrado' });
-            }
-
-            const totalProducto = cantidad * precio;
-            totalVenta += totalProducto;
-            totalProductos += cantidad;
-
-            const ultimoKardex = await Kardex.findOne({ reference: productoEncontrado.reference }).sort({ fecha: -1 });
-            const nuevaExistencia = ultimoKardex ? ultimoKardex.existencia - cantidad : -cantidad;
-
-            const folio = generateFolio();
-            const nuevoKardex = await Kardex.create({
-                fecha: new Date(),
-                folio,
-                usuario: req.body.infoUser._id,
-                movimiento: 'Venta',
-                sucursal,
-                reference: productoEncontrado.reference,
-                nombre: productoEncontrado.name,
-                cantidad: -cantidad,
-                costoUnitario: precio,
-                existencia: nuevaExistencia,
-            });
-
-            await Producto.updateOne({ _id }, { $set: { controlAlmacen: nuevaExistencia } });
-            productosConKardex.push({
-                nombre: productoEncontrado.name,
-                productoId: _id,
-                cantidad,
-                precio,
-                kardexId: nuevoKardex._id,
-                kardexFolio: folio,
-            });
-        }
-
-        const nuevaVenta = new Venta({
-            noVenta: generateFolio(),
-            sucursal,
-            tipoVenta,
-            cliente,
-            totalVenta,
-            totalProductos,
-            productos: productosConKardex,
-            formasDePago,
-        });
-
-        const ventaGuardada = await nuevaVenta.save();
-        const corteFinal = await CorteFinal.findOne({ folio: corteFolio });
-
-        let totalEfectivoVenta = 0, totalTarjetas = 0, montoTransferencias = 0;
-
-        ventaGuardada.formasDePago.forEach(forma => {
-            if (forma.tipo === 'efectivo') totalEfectivoVenta += forma.importe - forma.cambio;
-            else if (forma.tipo === 'tarjeta credito') corteFinal.T_credito = (corteFinal.T_credito || 0) + forma.importe;
-            else if (forma.tipo === 'tarjeta debito') corteFinal.T_debito = (corteFinal.T_debito || 0) + forma.importe;
-            else if (forma.tipo === 'transferencia') {
-                corteFinal.transferencias = true;
-                montoTransferencias += forma.importe;
-            }
-        });
-
-        corteFinal.total_tarjetas = (corteFinal.total_tarjetas || 0) + totalTarjetas;
-        corteFinal.monto_transferencias = (corteFinal.monto_transferencias || 0) + montoTransferencias;
-        corteFinal.ventas.push({ venta: ventaGuardada._id, contada: false });
-        if (totalEfectivoVenta > 0) corteFinal.totalVentasEfectivoCortes = (corteFinal.totalVentasEfectivoCortes || 0) + totalEfectivoVenta;
-
-        await corteFinal.save();
-
-        // Enviar ticket por correo (de forma asíncrona)
-        if (req.body.metodoEnvio === 'correo') {
-            console.log('adios')
-            let email = req.body.email;
-            sendTicketEmail(email, nuevaVenta, sucursal)
-                .then(() => console.log('Correo enviado correctamente'))
-                .catch(err => console.error('Error al enviar el correo:', err)); // Manejo de errores en segundo plano
-        }
-
-        res.status(201).json({ message: 'Venta creada correctamente', data: ventaGuardada });
-    } catch (error) {
-        res.status(500).json({ error: 'Error general en la creación de la venta' });
-    }
-};
-
 async function sendTicketEmail(email, venta, sucursalInfo) {
     return new Promise(async (resolve, reject) => {
         try {
@@ -317,84 +192,241 @@ async function sendTicketEmail(email, venta, sucursalInfo) {
     });
 }
 
-async function crearFactura(req) {
-    // Construir los productos (items) obteniendo su id de Alegra desde MongoDB
-    const items = await Promise.all(
-        req.body.venta.productos.map(async (producto) => {
-            try {
-                // Buscar el producto en la base de datos MongoDB usando su _id
-                const productoEncontrado = await Producto.findById(producto._id);
+exports.createVenta = async (req, res) => {
+    let vendedor = req.body.venta.usuario._id;
+    const sucursal = req.body.venta.sucursalId;
 
-                if (!productoEncontrado) {
-                    throw new Error(`Producto no encontrado: ${producto._id}`);
-                }
+    try {
+        console.log("Iniciando proceso de creación de venta");
 
-                return {
-                    tax: [{ id: 1 }], // ID de impuesto siempre es 1
-                    id: productoEncontrado.idAlegra, // ID recuperado de la base de datos (idAlegra)
-                    name: productoEncontrado.name, // Nombre del producto
-                    price: producto.precio, // Precio del producto (lo que viene de la venta)
-                    quantity: producto.cantidad // Cantidad del producto
-                };
-            } catch (error) {
-                console.error('Error al obtener el producto:', error);
-                throw new Error('Error al obtener el producto de MongoDB');
-            }
-        })
-    );
+        let corteFolio = '';
+        const cortePendiente = await checkCorteUsuarioIniciadoONoFinalizado(vendedor);
+        corteFolio = cortePendiente ? cortePendiente : await crearCorteFinal(vendedor, sucursal);
 
-    // Construir los pagos (payments)
-    const payments = req.body.resumenVenta.formasDePago.map((formaDePago) => {
-        let amount = formaDePago.importe;
+        console.log("Corte pendiente verificado, folio:", corteFolio);
 
-        // Si el método de pago es "cash", restar el cambio al importe
-        if (formaDePago.tipo === 'cash') {
-            const cambio = parseFloat(req.body.resumenVenta.cambio) || 0;
-            amount -= cambio;
+        const resultado = await checkCorteUsuarioIniciadoConVentas(vendedor);
+        if (resultado.codigo == 1) {
+            console.log("Corte parcial necesario");
+            return res.status(304).json({
+                message: 'Es necesario realizar un corte parcial antes de proceder con la venta.',
+                totalEfectivo: resultado.totalVentasEfectivo
+            });
+        } else if (resultado.codigo == -1) {
+            console.log("No se encontró corte pendiente");
+            return res.status(404).json({ message: 'No se encontró un corte pendiente.' });
         }
 
-        return {
-            account: { id: 1 }, // ID de cuenta siempre es 1
-            date: Date.now(), // Fecha actual
-            amount: amount, // Importe ajustado si es "cash"
-            paymentMethod: formaDePago.tipo // Tipo de pago
+        // Verificación de facturación
+        if (req.body.resumenVenta.cliente.esfactura) {
+            console.log("Creando factura...");
+            const facturaResultado = await crearFactura(req);
+            if (!facturaResultado.success) {
+                console.log("Error al crear la factura:", facturaResultado.message);
+                return res.status(400).json({ message: facturaResultado.message });
+            }
+            console.log("Factura creada exitosamente");
+        }
+
+        const productos = req.body.venta.productos;
+        const tipoVenta = req.body.resumenVenta.esFactura;
+        const cliente = req.body.resumenVenta.cliente ? req.body.resumenVenta.cliente._id : null;
+        const totalAPagar = req.body.venta.totalVenta;
+        const formasDePago = req.body.resumenVenta.formasDePago;
+
+        let totalVenta = 0;
+        let totalProductos = 0;
+        const productosConKardex = [];
+
+        for (const producto of productos) {
+            const { _id, cantidad, precio } = producto;
+            const productoEncontrado = await Producto.findById(_id);
+            if (!productoEncontrado) {
+                console.log("Producto no encontrado:", _id);
+                return res.status(404).json({ error: 'Producto no encontrado' });
+            }
+
+            const totalProducto = cantidad * precio;
+            totalVenta += totalProducto;
+            totalProductos += cantidad;
+
+            const ultimoKardex = await Kardex.findOne({ reference: productoEncontrado.reference }).sort({ fecha: -1 });
+            const nuevaExistencia = ultimoKardex ? ultimoKardex.existencia - cantidad : -cantidad;
+
+            const folio = generateFolio();
+            const nuevoKardex = await Kardex.create({
+                fecha: new Date(),
+                folio,
+                usuario: req.body.infoUser._id,
+                movimiento: 'Venta',
+                sucursal,
+                reference: productoEncontrado.reference,
+                nombre: productoEncontrado.name,
+                cantidad: -cantidad,
+                costoUnitario: precio,
+                existencia: nuevaExistencia,
+            });
+
+            console.log("Kardex actualizado para producto:", productoEncontrado.name);
+
+            await Producto.updateOne({ _id }, { $set: { controlAlmacen: nuevaExistencia } });
+            productosConKardex.push({
+                nombre: productoEncontrado.name,
+                productoId: _id,
+                cantidad,
+                precio,
+                kardexId: nuevoKardex._id,
+                kardexFolio: folio,
+            });
+        }
+
+        const nuevaVenta = new Venta({
+            noVenta: generateFolio(),
+            sucursal,
+            tipoVenta,
+            cliente,
+            totalVenta,
+            totalProductos,
+            productos: productosConKardex,
+            formasDePago,
+        });
+
+        const ventaGuardada = await nuevaVenta.save();
+        console.log("Venta guardada correctamente:", ventaGuardada._id);
+        res.status(201).json({ message: 'Venta creada correctamente', data: ventaGuardada });
+    } catch (error) {
+        console.error("Error en createVenta:", error);
+        res.status(500).json({ error: 'Error general en la creación de la venta' });
+    }
+};
+
+async function crearFactura(req) {
+    try {
+        const items = await Promise.all(
+            req.body.venta.productos.map(async (producto) => {
+                try {
+                    // Buscar el producto en MongoDB usando su _id
+                    const productoEncontrado = await Producto.findById(producto._id);
+
+                    if (!productoEncontrado) {
+                        throw new Error(`Producto no encontrado: ${producto._id}`);
+                    }
+
+                    return {
+                        tax: [{ id: 1 }], // ID de impuesto
+                        id: productoEncontrado.idAlegra, // ID de Alegra desde MongoDB
+                        name: productoEncontrado.name, // Nombre del producto
+                        price: producto.precio, // Precio del producto
+                        quantity: producto.cantidad // Cantidad de venta
+                    };
+                } catch (error) {
+                    console.error('Error al obtener el producto:', error);
+                    throw new Error('Error al obtener el producto de MongoDB');
+                }
+            })
+        );
+
+        const payments = req.body.resumenVenta.formasDePago.map(forma => ({
+            account: { id: 1 },
+            date: new Date().toISOString(),
+            amount: forma.importe - forma.cambio,
+            paymentMethod: forma.tipo
+        }));
+
+        const options = {
+            method: 'POST',
+            url: 'https://api.alegra.com/api/v1/invoices',
+            headers: {
+                accept: 'application/json',
+                'content-type': 'application/json',
+                authorization: 'Basic ZmFjdHVyYWxpbXBpb3NAaG90bWFpbC5jb206YWI0MTQ2YzQyZjhkMzY3ZjA1MmQ='
+            },
+            body: {
+                client: 4986,
+                stamp: { generateStamp: true },
+                paymentMethod: req.body.resumenVenta.formasDePago[0].tipo,
+                cfdiUse: req.body.resumenVenta.cfdiSeleccionado,
+                paymentType: 'PUE',
+                regimeClient: 'Personas Físicas con Actividades Empresariales y Profesionales',
+                status: 'open',
+                items, // Usar el arreglo de items creado arriba
+                payments,
+                date: new Date().toISOString(),
+                dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+            },
+            json: true
         };
-    });
 
-    // Construir el cuerpo (body) para la factura
-    const body = {
-        client: { id: req.body.resumenVenta.cliente.clientData.id },
-        stamp: { generateStamp: true },
-        paymentMethod: req.body.resumenVenta.formasDePago[0].tipo,
-        cfdiUse: req.body.resumenVenta.cfdiSeleccionado,
-        paymentType: 'PUE',
-        regimeClient: req.body.resumenVenta.cliente.clientData.regimeObject[0],
-        status: 'open',
-        items: items, // Los productos construidos
-        payments: payments, // Los pagos construidos
-        date: Date.now(),
-        dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 1 mes después
-    };
+        console.log("Request de factura:", options.body);
 
-    // Opciones para la petición
-    const options = {
-        method: 'POST',
-        url: 'https://api.alegra.com/api/v1/invoices',
-        headers: {
-            accept: 'application/json',
-            'content-type': 'application/json',
-            authorization: 'Basic ZmFjdHVyYWxpbXBpb3NAaG90bWFpbC5jb206YWI0MTQ2YzQyZjhkMzY3ZjA1MmQ='        
-        },
-        body: body,
-        json: true
-    };
+        return new Promise((resolve, reject) => {
+            request(options, async function (error, response, body) {
+                if (error) {
+                    console.error("Error en la petición de creación de factura:", error);
+                    return reject({ success: false, message: 'Error en la creación de la factura' });
+                }
 
-    // Realizar la petición
-    request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-        console.log(body);
+                console.log("Respuesta de Alegra:", body);
+
+                if (body.invoice && body.invoice.id) {
+                    const invoiceId = body.invoice.id;
+                    const emailEnviado = await enviarFacturaPorCorreo(invoiceId, body.invoice.client.email);
+
+                    if (emailEnviado) {
+                        resolve({ success: true, message: 'Factura creada y enviada por correo con éxito' });
+                    } else {
+                        resolve({ success: false, message: 'Factura creada, pero no se pudo enviar el correo' });
+                    }
+                } else {
+                    reject({ success: false, message: `Error al crear la factura: ${body.error ? body.error.message : 'Error desconocido'}` });
+                }
+            });
+        });
+    } catch (error) {
+        console.error("Error en crearFactura:", error);
+        throw new Error('Error en la creación de la factura');
+    }
+}
+
+
+function enviarFacturaPorCorreo(invoiceId, email) {
+    return new Promise((resolve) => {
+        const options = {
+            method: 'POST',
+            hostname: 'api.alegra.com',
+            path: `/api/v1/invoices/${invoiceId}/email`,
+            headers: {
+                accept: 'application/json',
+                'content-type': 'application/json',
+                authorization: 'Basic ZmFjdHVyYWxpbXBpb3NAaG90bWFpbC5jb206YWI0MTQ2YzQyZjhkMzY3ZjA1MmQ='
+            }
+        };
+
+        const req = http.request(options, function (res) {
+            if (res.statusCode === 200) {
+                console.log("Correo enviado exitosamente");
+                resolve(true);
+            } else {
+                console.error("Error al enviar correo, código de estado:", res.statusCode);
+                resolve(false);
+            }
+        });
+
+        req.write(JSON.stringify({ emails: [email], sendCopyToUser: true }));
+        req.end();
+
+        req.on('error', (err) => {
+            console.error("Error en la petición de correo:", err);
+            resolve(false);
+        });
     });
 }
+
+
+
+
+
+
 
 const generateFolio = () => {
   return String(Math.floor(1000000 + Math.random() * 9000000)); // Genera un número aleatorio de 7 dígitos
