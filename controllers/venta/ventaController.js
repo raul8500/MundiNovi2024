@@ -156,84 +156,75 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendTicketEmail(email, venta, sucursalInfo) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            // Verificar si el correo ya existe
-            const correoExistente = await Email.findOne({ email });
-            if (!correoExistente) {
-                // Guardar el correo si no existe
-                await Email.create({ email });
-            }
-
-            // Generar contenido del ticket
-            let ticketContent = `
-                <h1>Ticket de Venta</h1>
-                <p>Sucursal: ${sucursalInfo.nombre}</p>
-                <p>Total de venta: $${venta.totalVenta}</p>
-                <ul>
-                ${venta.productos.map(p => `<li>${p.nombre} - ${p.cantidad} unidades a $${p.precio}</li>`).join('')}
-                </ul>
-            `;
-
-            // Opciones del correo
-            let mailOptions = {
-                from: 'mundinovi.dev@gmail.com',
-                to: email,
-                subject: 'Ticket de tu compra',
-                html: ticketContent,
-            };
-
-            console.log('Enviando correo...');
-            await transporter.sendMail(mailOptions);
-            resolve(); // Correo enviado correctamente
-        } catch (error) {
-            reject(error); // Error al enviar el correo
+    try {
+        const correoExistente = await Email.findOne({ email });
+        if (!correoExistente) {
+            await Email.create({ email });
         }
-    });
+
+        let ticketContent = `
+            <h1>Ticket de Venta</h1>
+            <p>Sucursal: ${sucursalInfo.nombre}</p>
+            <p>Total de venta: $${venta.venta.totalVenta}</p>
+            <ul>
+            ${venta.venta.productos.map(p => `<li>${p.nombre} - ${p.cantidad} unidades a $${p.precio}</li>`).join('')}
+            </ul>
+        `;
+
+        let mailOptions = {
+            from: 'mundinovi.dev@gmail.com',
+            to: email,
+            subject: 'Ticket de tu compra',
+            html: ticketContent,
+        };
+
+        console.log('Enviando correo...');
+        await transporter.sendMail(mailOptions);
+        return { success: true, message: 'Correo enviado correctamente' };
+    } catch (error) {
+        console.error("Error al enviar el correo:", error);
+        return { success: false, message: 'Error al enviar el correo' };
+    }
 }
 
 exports.createVenta = async (req, res) => {
-    let vendedor = req.body.venta.usuario._id;
-    const sucursal = req.body.venta.sucursalId;
+    const responseStatus = {
+        ventaCreada: false
+    };
 
     try {
         console.log("Iniciando proceso de creación de venta");
 
+        const vendedor = req.body.venta.usuario._id;
+        const sucursal = req.body.venta.sucursalId;
+        
         let corteFolio = '';
         const cortePendiente = await checkCorteUsuarioIniciadoONoFinalizado(vendedor);
         corteFolio = cortePendiente ? cortePendiente : await crearCorteFinal(vendedor, sucursal);
 
-        console.log("Corte pendiente verificado, folio:", corteFolio);
-
         const resultado = await checkCorteUsuarioIniciadoConVentas(vendedor);
-        if (resultado.codigo == 1) {
-            console.log("Corte parcial necesario");
-            return res.status(304).json({
-                message: 'Es necesario realizar un corte parcial antes de proceder con la venta.',
-                totalEfectivo: resultado.totalVentasEfectivo
-            });
-        } else if (resultado.codigo == -1) {
-            console.log("No se encontró corte pendiente");
-            return res.status(404).json({ message: 'No se encontró un corte pendiente.' });
+        if (resultado.codigo === 1) {
+            responseStatus.message = 'Es necesario realizar un corte parcial antes de proceder con la venta.';
+            responseStatus.totalEfectivo = resultado.totalVentasEfectivo;
+            return res.status(304).json(responseStatus);
+        } else if (resultado.codigo === -1) {
+            responseStatus.message = 'No se encontró un corte pendiente.';
+            return res.status(404).json(responseStatus);
         }
 
-        // Verificación de facturación
         if (req.body.resumenVenta.cliente.esfactura) {
             console.log("Creando factura...");
             const facturaResultado = await crearFactura(req);
-            if (!facturaResultado.success) {
+            responseStatus.facturaCreada = facturaResultado.success;
+            if (facturaResultado.success) {
+                responseStatus.facturaEnviada = facturaResultado.enviada;
+                console.log("Factura creada correctamente");
+            } else {
                 console.log("Error al crear la factura:", facturaResultado.message);
-                return res.status(400).json({ message: facturaResultado.message });
             }
-            console.log("Factura creada exitosamente");
         }
 
         const productos = req.body.venta.productos;
-        const tipoVenta = req.body.resumenVenta.esFactura;
-        const cliente = req.body.resumenVenta.cliente ? req.body.resumenVenta.cliente._id : null;
-        const totalAPagar = req.body.venta.totalVenta;
-        const formasDePago = req.body.resumenVenta.formasDePago;
-
         let totalVenta = 0;
         let totalProductos = 0;
         const productosConKardex = [];
@@ -242,8 +233,8 @@ exports.createVenta = async (req, res) => {
             const { _id, cantidad, precio } = producto;
             const productoEncontrado = await Producto.findById(_id);
             if (!productoEncontrado) {
-                console.log("Producto no encontrado:", _id);
-                return res.status(404).json({ error: 'Producto no encontrado' });
+                responseStatus.message = `Producto no encontrado: ${_id}`;
+                return res.status(404).json(responseStatus);
             }
 
             const totalProducto = cantidad * precio;
@@ -283,20 +274,33 @@ exports.createVenta = async (req, res) => {
         const nuevaVenta = new Venta({
             noVenta: generateFolio(),
             sucursal,
-            tipoVenta,
-            cliente,
+            tipoVenta: req.body.resumenVenta.esFactura,
+            cliente: req.body.resumenVenta.cliente ? req.body.resumenVenta.cliente._id : null,
             totalVenta,
             totalProductos,
             productos: productosConKardex,
-            formasDePago,
+            formasDePago: req.body.resumenVenta.formasDePago,
         });
 
         const ventaGuardada = await nuevaVenta.save();
+        responseStatus.ventaCreada = true;
         console.log("Venta guardada correctamente:", ventaGuardada._id);
-        res.status(201).json({ message: 'Venta creada correctamente', data: ventaGuardada });
+
+        if (req.body.metodoEnvio === 'correo') {
+            const emailResult = await sendTicketEmail(req.body.email, req.body, sucursal);
+            responseStatus.correoEnviado = emailResult.success;
+            if (!emailResult.success) {
+                console.log(emailResult.message);
+            }
+        }
+
+        responseStatus.message = 'Proceso de creación de venta completado.';
+        res.status(201).json(responseStatus);
+
     } catch (error) {
         console.error("Error en createVenta:", error);
-        res.status(500).json({ error: 'Error general en la creación de la venta' });
+        responseStatus.message = 'Error general en la creación de la venta';
+        res.status(500).json(responseStatus);
     }
 };
 
@@ -304,25 +308,16 @@ async function crearFactura(req) {
     try {
         const items = await Promise.all(
             req.body.venta.productos.map(async (producto) => {
-                try {
-                    // Buscar el producto en MongoDB usando su _id
-                    const productoEncontrado = await Producto.findById(producto._id);
-
-                    if (!productoEncontrado) {
-                        throw new Error(`Producto no encontrado: ${producto._id}`);
-                    }
-
-                    return {
-                        tax: [{ id: 1 }], // ID de impuesto
-                        id: productoEncontrado.idAlegra, // ID de Alegra desde MongoDB
-                        name: productoEncontrado.name, // Nombre del producto
-                        price: producto.precio, // Precio del producto
-                        quantity: producto.cantidad // Cantidad de venta
-                    };
-                } catch (error) {
-                    console.error('Error al obtener el producto:', error);
-                    throw new Error('Error al obtener el producto de MongoDB');
-                }
+                const productoEncontrado = await Producto.findById(producto._id);
+                if (!productoEncontrado) throw new Error(`Producto no encontrado: ${producto._id}`);
+                
+                return {
+                    tax: [{ id: 1 }],
+                    id: productoEncontrado.idAlegra,
+                    name: productoEncontrado.name,
+                    price: producto.precio,
+                    quantity: producto.cantidad
+                };
             })
         );
 
@@ -349,7 +344,7 @@ async function crearFactura(req) {
                 paymentType: 'PUE',
                 regimeClient: 'Personas Físicas con Actividades Empresariales y Profesionales',
                 status: 'open',
-                items, // Usar el arreglo de items creado arriba
+                items,
                 payments,
                 date: new Date().toISOString(),
                 dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
@@ -357,37 +352,24 @@ async function crearFactura(req) {
             json: true
         };
 
-        console.log("Request de factura:", options.body);
-
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             request(options, async function (error, response, body) {
-                if (error) {
-                    console.error("Error en la petición de creación de factura:", error);
-                    return reject({ success: false, message: 'Error en la creación de la factura' });
-                }
-
-                console.log("Respuesta de Alegra:", body);
+                if (error) return resolve({ success: false, message: 'Error en la creación de la factura' });
 
                 if (body.invoice && body.invoice.id) {
                     const invoiceId = body.invoice.id;
                     const emailEnviado = await enviarFacturaPorCorreo(invoiceId, body.invoice.client.email);
-
-                    if (emailEnviado) {
-                        resolve({ success: true, message: 'Factura creada y enviada por correo con éxito' });
-                    } else {
-                        resolve({ success: false, message: 'Factura creada, pero no se pudo enviar el correo' });
-                    }
+                    resolve({ success: true, enviada: emailEnviado });
                 } else {
-                    reject({ success: false, message: `Error al crear la factura: ${body.error ? body.error.message : 'Error desconocido'}` });
+                    resolve({ success: false, message: `Error al crear la factura: ${body.error ? body.error.message : 'Error desconocido'}` });
                 }
             });
         });
     } catch (error) {
         console.error("Error en crearFactura:", error);
-        throw new Error('Error en la creación de la factura');
+        return { success: false, message: 'Error en la creación de la factura' };
     }
 }
-
 
 function enviarFacturaPorCorreo(invoiceId, email) {
     return new Promise((resolve) => {
@@ -421,11 +403,6 @@ function enviarFacturaPorCorreo(invoiceId, email) {
         });
     });
 }
-
-
-
-
-
 
 
 const generateFolio = () => {

@@ -187,6 +187,9 @@ function agregarProducto() {
 
             let precioNormal = productoSeleccionado.datosFinancieros.precio1;
             let precioParaArreglo = precioNormal / 1.16;
+            let precioConIVA = precioNormal;
+            let monedero = 0;
+            const totalSinRango = productoSeleccionado.datosFinancieros.precio1 * nuevaCantidad; // Total sin rango
 
             for (let i = 1; i <= 10; i++) {
                 const rangoInicial = productoSeleccionado.datosFinancieros[`rangoInicial${i}`];
@@ -194,19 +197,28 @@ function agregarProducto() {
                 if (nuevaCantidad >= rangoInicial && nuevaCantidad <= rangoFinal) {
                     precioNormal = productoSeleccionado.datosFinancieros[`precio${i}`] || precioNormal;
                     precioParaArreglo = precioNormal / 1.16;
+                    precioConIVA = precioNormal;
+                    const porcentajeMonedero = productoSeleccionado.datosFinancieros[`porcentajeMonedero${i}`] || 0;
+                    monedero = (nuevaCantidad * precioNormal) * (porcentajeMonedero / 100);
                     break;
                 }
             }
 
             const nuevoTotal = nuevaCantidad * precioNormal;
+            const totalConIVA = nuevoTotal;
+
             fila.querySelector('.precio').value = precioNormal.toFixed(2);
             fila.querySelector('.total').textContent = `$${nuevoTotal.toFixed(2)}`;
 
             const index = productosEnVenta.findIndex(p => p.nombre === productoSeleccionado.name);
             if (index !== -1) {
                 productosEnVenta[index].cantidad = nuevaCantidad;
-                productosEnVenta[index].precio = precioParaArreglo; // Precio para el backend
-                productosEnVenta[index].total = nuevaCantidad * precioParaArreglo; // Total con el precio ajustado
+                productosEnVenta[index].precio = precioParaArreglo;
+                productosEnVenta[index].precioConIVA = precioConIVA; // Precio con IVA
+                productosEnVenta[index].total = nuevaCantidad * precioParaArreglo;
+                productosEnVenta[index].monedero = monedero;
+                productosEnVenta[index].totalConIVA = totalConIVA;
+                productosEnVenta[index].totalSinRango = totalSinRango; // Total sin rango
             }
 
             productoExistente = true;
@@ -214,8 +226,11 @@ function agregarProducto() {
     });
 
     if (!productoExistente) {
-        let precioNormal = parseFloat(productoSeleccionado.datosFinancieros.precio1); // Precio mostrado
-        let precioParaArreglo = precioNormal / 1.16; // Precio para el arreglo (para el backend)
+        let precioNormal = parseFloat(productoSeleccionado.datosFinancieros.precio1);
+        let precioParaArreglo = precioNormal / 1.16;
+        let precioConIVA = precioNormal;
+        let monedero = 0;
+        const totalSinRango = precioNormal * cantidad; // Total sin rango
 
         for (let i = 1; i <= 10; i++) {
             const rangoInicial = productoSeleccionado.datosFinancieros[`rangoInicial${i}`];
@@ -223,11 +238,15 @@ function agregarProducto() {
             if (cantidad >= rangoInicial && cantidad <= rangoFinal) {
                 precioNormal = parseFloat(productoSeleccionado.datosFinancieros[`precio${i}`]) || precioNormal;
                 precioParaArreglo = precioNormal / 1.16;
+                precioConIVA = precioNormal;
+                const porcentajeMonedero = productoSeleccionado.datosFinancieros[`porcentajeMonedero${i}`] || 0;
+                monedero = (cantidad * precioNormal) * (porcentajeMonedero / 100);
                 break;
             }
         }
 
         const total = cantidad * precioNormal;
+        const totalConIVA = total;
 
         const nuevaFila = document.createElement('tr');
         nuevaFila.innerHTML = `
@@ -255,8 +274,12 @@ function agregarProducto() {
             _id: productoSeleccionado._id,
             nombre: productoSeleccionado.name,
             cantidad,
-            precio: precioParaArreglo, // Precio dividido para el backend
-            total: cantidad * precioParaArreglo // Total calculado para el backend
+            precio: precioParaArreglo,
+            precioConIVA, // Precio con IVA
+            total: cantidad * precioParaArreglo,
+            monedero,
+            totalConIVA,
+            totalSinRango // Total sin rango
         });
     }
 
@@ -265,6 +288,7 @@ function agregarProducto() {
     inputProducto.value = '';
     inputCantidad.value = 1;
     inputProducto.focus();
+    console.log(productosEnVenta);
 }
 
 document.getElementById('productos').addEventListener('input', (event) => {
@@ -278,12 +302,18 @@ document.getElementById('productos').addEventListener('input', (event) => {
         const producto = productos.find(p => p.name === productoNombre);
 
         if (producto) {
+            let monedero = 0;
+            let precioConIVA = precioNormal;
+            const totalSinRango = producto.datosFinancieros.precio1 * cantidad; // Total sin rango
             if (event.target.classList.contains('cantidad')) {
                 for (let i = 1; i <= 10; i++) {
                     const rangoInicial = producto.datosFinancieros[`rangoInicial${i}`];
                     const rangoFinal = producto.datosFinancieros[`rangoFinal${i}`];
                     if (cantidad >= rangoInicial && cantidad <= rangoFinal) {
                         precioNormal = parseFloat(producto.datosFinancieros[`precio${i}`]) || precioNormal;
+                        precioConIVA = precioNormal;
+                        const porcentajeMonedero = producto.datosFinancieros[`porcentajeMonedero${i}`] || 0;
+                        monedero = (cantidad * precioNormal) * (porcentajeMonedero / 100);
                         break;
                     }
                 }
@@ -291,6 +321,8 @@ document.getElementById('productos').addEventListener('input', (event) => {
             }
 
             const total = cantidad * precioNormal;
+            const totalConIVA = total;
+
             fila.querySelector('.total').textContent = `$${total.toFixed(2)}`;
 
             const index = productosEnVenta.findIndex(p => p.nombre === productoNombre);
@@ -298,17 +330,20 @@ document.getElementById('productos').addEventListener('input', (event) => {
                 productosEnVenta[index] = {
                     ...productosEnVenta[index],
                     cantidad,
-                    precio: precioNormal / 1.16, // Precio dividido solo para el backend
-                    total: cantidad * (precioNormal / 1.16) // Total con precio ajustado para el backend
+                    precio: precioNormal / 1.16,
+                    precioConIVA, // Precio con IVA
+                    total: cantidad * (precioNormal / 1.16),
+                    monedero,
+                    totalConIVA,
+                    totalSinRango // Total sin rango
                 };
             }
+            console.log(productosEnVenta);
         }
 
         actualizarResumenVenta();
     }
 });
-
-
 
 
 // Actualizar el resumen de la venta
@@ -478,6 +513,7 @@ function completarVenta(resumenVenta, metodoEnvio, email = null) {
         body: JSON.stringify(ventaYResumen)
     })
     .then(response => {
+        console.log(response.status)
         if (response.status === 304) {
             Swal.fire({
                 icon: 'warning',
@@ -498,30 +534,50 @@ function completarVenta(resumenVenta, metodoEnvio, email = null) {
         }
     })
     .then(data => {
-        if (data) {
-            // Venta completada con éxito
-            if (metodoEnvio === 'impreso') {
+        console.log(data)
+        if(data.ventaCreada == true){
+            if(resumenVenta.cliente.esfactura == true){
+                if(data.facturaCreada == true){
+                    if(data.facturaEnviada == true){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Venta completada',
+                            text: 'La venta registrada, la factura fue creada y enviada exitosamente.'
+                        });
+                    }else{
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Venta completada',
+                            text: 'La venta registrada, la factura fue creada pero no fue enviada porque no pudeo ser timbrada por el SAT.'
+                        });
+                    }
+                }
+            }
+            if(metodoEnvio == 'impreso'){
                 Swal.fire({
                     icon: 'success',
                     title: 'Venta completada',
                     text: 'La venta se ha registrado exitosamente.'
                 });
                 imprimirTicket(venta, resumenVenta);
-                window.location.reload();
-            } else if (metodoEnvio === 'correo' && email) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Venta completada',
-                    text: 'La venta se ha registrado exitosamente y enviado al correo electrónico.'
-                });
                 
-                // Esperar 1.5 segundos antes de recargar la página
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500); // 1500 ms = 1.5 segundos
+                //window.location.reload();
+            }
+            if(metodoEnvio == 'correo'){
+                if(data.correoEnviado == true){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Venta completada y enviada al correo electronico',
+                        text: 'La venta se ha registrado exitosamente.'
+                    });
+                    /*
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                    */
+                }
             }
         }
-
     })
     .catch(error => {
         console.log(error)
@@ -530,15 +586,13 @@ function completarVenta(resumenVenta, metodoEnvio, email = null) {
 }
 
 function imprimirTicket(venta, resumenVenta) {
+        console.log(venta.productos)
+
     const ticketWidth = 32; // Ancho máximo del ticket en caracteres
     const separator = '-'.repeat(ticketWidth);
 
     function formatLine(text, width, rightAlign = false) {
-        if (rightAlign) {
-            return text.padStart(width);
-        } else {
-            return text.padEnd(width);
-        }
+        return rightAlign ? text.padStart(width) : text.padEnd(width);
     }
 
     function formatProductos(productos) {
@@ -569,8 +623,8 @@ function imprimirTicket(venta, resumenVenta) {
                         <li style="word-break: break-word; margin-bottom: 5px;">
                             <span style="display: inline-block; width: 30px; text-align: left; vertical-align: middle;">${p.cantidad}</span>
                             <span style="display: inline-block; width: 90px; text-align: left;">${nombreHtml}</span>
-                            <span style="display: inline-block; width: 40px; text-align: right;">$${p.precio.toFixed(2)}</span>
-                            <span style="display: inline-block; width: 40px; text-align: right;">$${p.total.toFixed(2)}</span>
+                            <span style="display: inline-block; width: 40px; text-align: right;">$${p.precioConIVA.toFixed(2)}</span>
+                            <span style="display: inline-block; width: 40px; text-align: right;">$${p.totalConIVA.toFixed(2)}</span>
                         </li>
                     `;
                 }).join('')}
@@ -580,25 +634,16 @@ function imprimirTicket(venta, resumenVenta) {
 
     function formatFormasDePago(formasDePago) {
         let formasDePagoHtml = formasDePago.map(fp => {
-            let tipoPago = '';
-            if (fp.tipo === 'cash') {
-                tipoPago = 'Efectivo';
-            } else if (fp.tipo === 'credit-card') {
-                tipoPago = 'Tarjeta crédito';
-            } else if (fp.tipo === 'debit-card') {
-                tipoPago = 'Tarjeta débito';
-            } else if (fp.tipo === 'transfer') {
-                tipoPago = 'Transferencia';
-            } else {
-                tipoPago = fp.tipo;
-            }
+            let tipoPago = {
+                'cash': 'Efectivo',
+                'credit-card': 'Tarjeta crédito',
+                'debit-card': 'Tarjeta débito',
+                'transfer': 'Transferencia'
+            }[fp.tipo] || fp.tipo;
 
-            return `
-                <p style="margin: 2px 0;">Pago con ${tipoPago}: ${formatLine(`$${fp.importe.toFixed(2)}`, ticketWidth, true)}</p>
-            `;
+            return `<p style="margin: 2px 0;">Pago con ${tipoPago}: ${formatLine(`$${fp.importe.toFixed(2)}`, ticketWidth, true)}</p>`;
         }).join('');
 
-        // Añadir el cambio al final
         const cambioTexto = typeof formasDePago.find(fp => fp.tipo === 'cash')?.cambio === 'number'
             ? `$${formasDePago.find(fp => fp.tipo === 'cash').cambio.toFixed(2)}`
             : `$${(parseFloat(resumenVenta.totalPagado) - parseFloat(resumenVenta.totalAPagar)).toFixed(2)}`;
@@ -610,12 +655,12 @@ function imprimirTicket(venta, resumenVenta) {
 
     function calcularAhorro(productos) {
         return productos.reduce((ahorro, producto) => {
-            const totalSinRangos = producto.totalSinRangos || 0;
-            const totalConDescuento = producto.total || 0;
-            const diferencia = totalSinRangos - totalConDescuento;
-            return ahorro + diferencia;
+            const totalSinRango = producto.totalSinRango || 0;  // Propiedad totalSinRango debe estar correctamente calculada
+            const totalConIVA = producto.totalConIVA || 0;      // totalConIVA debe corresponder al total con descuento
+            return ahorro + Math.max(0, totalSinRango - totalConIVA); // Aseguramos no restar más de lo que hay
         }, 0);
     }
+
 
     const totalAhorro = calcularAhorro(venta.productos);
 
@@ -648,20 +693,29 @@ function imprimirTicket(venta, resumenVenta) {
     `;
 
     const printWindow = window.open('', '', 'width=320,height=500');
-    printWindow.document.write('<html><head><title>Impresión de Venta</title>');
-    printWindow.document.write('<style>body { font-family: Arial, sans-serif; }</style>');
-    printWindow.document.write('</head><body>');
-    printWindow.document.write(ticketContent);
-    printWindow.document.write('</body></html>');
+    if (printWindow) {
+        printWindow.document.write('<style>body { font-family: Arial, sans-serif; }</style>');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(ticketContent);
+        printWindow.document.write('</body></html>');
 
-    printWindow.document.close();
-    printWindow.focus();
+        printWindow.document.close();
+        printWindow.focus();
 
-    // Espera a que la imagen se cargue antes de imprimir
-    printWindow.document.getElementById('logo').onload = function() {
-        printWindow.print();
-        printWindow.close();
-    };
+        const logoImage = printWindow.document.getElementById('logo');
+        if (logoImage) {
+            logoImage.onload = function() {
+                printWindow.print();
+                printWindow.close();
+            };
+        } else {
+            printWindow.print();
+            printWindow.close();
+        }
+    } else {
+        console.error("Error al abrir la ventana de impresión.");
+        Swal.fire('Error', 'No se pudo abrir la ventana de impresión. Asegúrate de permitir ventanas emergentes.', 'error');
+    }
 }
 
 function facturarVenta() {
