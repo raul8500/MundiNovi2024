@@ -188,6 +188,7 @@ async function sendTicketEmail(email, venta, sucursalInfo) {
 }
 
 exports.createVenta = async (req, res) => {
+
     const responseStatus = {
         ventaCreada: false
     };
@@ -212,7 +213,7 @@ exports.createVenta = async (req, res) => {
             return res.status(404).json(responseStatus);
         }
 
-        if (req.body.resumenVenta.cliente.esfactura) {
+        if (req.body.esFactura && req.body.resumenVenta.cliente.esfactura) {
             console.log("Creando factura...");
             const facturaResultado = await crearFactura(req);
             responseStatus.facturaCreada = facturaResultado.success;
@@ -223,6 +224,18 @@ exports.createVenta = async (req, res) => {
                 console.log("Error al crear la factura:", facturaResultado.message);
             }
         }
+        
+        if (req.body.resumenVenta.cliente) {
+            console.log("Sumando al monedero...");
+            const monederoResultado = await sumarAlMonedero(req);
+            responseStatus.monederoActualizado = monederoResultado.success;
+            if (monederoResultado.success) {
+                console.log("Monedero actualizado correctamente");
+            } else {
+                console.log("Error al actualizar el monedero:", monederoResultado.message);
+            }
+        }
+
 
         const productos = req.body.venta.productos;
         let totalVenta = 0;
@@ -402,6 +415,34 @@ function enviarFacturaPorCorreo(invoiceId, email) {
             resolve(false);
         });
     });
+}
+
+async function sumarAlMonedero(req) {
+    try {
+        const clienteId = req.body.resumenVenta.cliente._id;
+        console.log(req.body.venta.productos)
+        // Asegurarse de que productos es un array y calcular el total de monedero sumando cada producto
+        const productos = req.body.venta.productos || [];
+        const totalMonedero = productos.reduce((acc, producto) => acc + (producto.monedero || 0), 0);
+
+        // Encuentra el cliente por su ID
+        const cliente = await Client.findById(clienteId);
+        
+        if (!cliente) {
+            throw new Error('Cliente no encontrado');
+        }
+
+        // Sumar el total del monedero calculado al monedero actual del cliente
+        cliente.monedero = (cliente.monedero || 0) + totalMonedero;
+
+        // Guardar los cambios en la base de datos
+        const resultado = await cliente.save();
+
+        return { success: true, cliente: resultado };
+    } catch (error) {
+        console.error("Error al sumar al monedero:", error.message);
+        return { success: false, message: error.message };
+    }
 }
 
 

@@ -70,7 +70,7 @@ function seleccionarCliente(cliente) {
     document.getElementById('estadoCiente').value = cliente.clientData.address.state || '';
     document.getElementById('codigoPostalCliente').value = cliente.clientData.address.zipCode || '';
     document.getElementById('correoCliente').value = cliente.clientData.email || '';
-    document.getElementById('monederoCliente').textContent = cliente.monedero || '0.0';
+    document.getElementById('monederoCliente').textContent = (cliente.monedero ? cliente.monedero.toFixed(2) : '0.00');
     document.getElementById('guardarNuevaInfoCliente').disabled = false;
 
     console.log('Cliente seleccionado:', clienteSeleccionado);

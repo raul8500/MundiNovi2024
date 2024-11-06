@@ -501,7 +501,8 @@ function completarVenta(resumenVenta, metodoEnvio, email = null) {
         resumenVenta,
         infoUser,
         metodoEnvio, // 'impreso' o 'correo'
-        email // correo si se proporcionó
+        email, // correo si se proporcionó
+        esFactura
     };
 
     // Aquí haces la llamada para completar la venta
@@ -677,6 +678,7 @@ function imprimirTicket(venta, resumenVenta) {
             <p style="margin: 2px 0;">Fecha: ${new Date(venta.fecha).toLocaleString()}</p>
             <p style="margin: 2px 0;">Cajero: ${infoUser.name}</p>
             <p style="margin: 2px 0;">Expedido en: ${sucursalInfo.datosTicket.direccion}</p>
+            <p style="margin: 2px 0;">Cliente: ${resumenVenta.cliente?.clientData?.name || 'Venta en general'}</p>
             <hr style="border: 1px solid black;">
             ${formatProductos(venta.productos)}
             <hr style="border: 1px solid black;">
