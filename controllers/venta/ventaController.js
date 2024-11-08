@@ -213,6 +213,31 @@ exports.createVenta = async (req, res) => {
             return res.status(404).json(responseStatus);
         }
 
+        // Verificación de factura y monedero
+        let totalVenta = 0;
+
+        const cliente = await Client.findById(req.body.resumenVenta.cliente._id);
+        const pagoConMonedero = req.body.resumenVenta.formasDePago.find(
+            (forma) => forma.tipo === 'monedero'
+        );
+
+        if (cliente && pagoConMonedero) {
+            const monederoDisponible = cliente.monedero;
+            const montoUsadoMonedero = pagoConMonedero.importe;
+
+            // Aseguramos que el monto usado no exceda el saldo de monedero disponible
+            const nuevoSaldoMonedero = Math.max(0, monederoDisponible - montoUsadoMonedero);
+
+            // Actualizamos el saldo del monedero del cliente en la base de datos
+            await Client.updateOne(
+                { _id: cliente._id },
+                { $set: { monedero: nuevoSaldoMonedero } }
+            );
+
+            responseStatus.monederoActualizado = true;
+            console.log(`Monedero actualizado. Monto usado: ${montoUsadoMonedero}, Nuevo saldo: ${nuevoSaldoMonedero}`);
+        }
+
         if (req.body.esFactura && req.body.resumenVenta.cliente.esfactura) {
             console.log("Creando factura...");
             const facturaResultado = await crearFactura(req);
@@ -223,22 +248,12 @@ exports.createVenta = async (req, res) => {
             } else {
                 console.log("Error al crear la factura:", facturaResultado.message);
             }
-        }
-        
-        if (req.body.resumenVenta.cliente) {
-            console.log("Sumando al monedero...");
-            const monederoResultado = await sumarAlMonedero(req);
-            responseStatus.monederoActualizado = monederoResultado.success;
-            if (monederoResultado.success) {
-                console.log("Monedero actualizado correctamente");
-            } else {
-                console.log("Error al actualizar el monedero:", monederoResultado.message);
-            }
+        } else {
+            console.log("No es una venta con factura, continuando con el proceso de venta sin factura...");
         }
 
 
         const productos = req.body.venta.productos;
-        let totalVenta = 0;
         let totalProductos = 0;
         const productosConKardex = [];
 
@@ -319,28 +334,83 @@ exports.createVenta = async (req, res) => {
 
 async function crearFactura(req) {
     try {
-        const items = await Promise.all(
-            req.body.venta.productos.map(async (producto) => {
+        const productos = req.body.venta.productos;
+        const formasDePago = req.body.resumenVenta.formasDePago;
+
+        // Total inicial de la venta y pago con monedero
+        const totalVenta = req.body.resumenVenta.totalPagado;
+        const pagoConMonedero = formasDePago.find(forma => forma.tipo === 'monedero');
+        const montoMonedero = pagoConMonedero ? pagoConMonedero.importe : 0;
+
+        // Calculo inicial del porcentaje de descuento con un solo decimal
+        let descuentoPorcentaje = parseFloat(((montoMonedero * 100) / totalVenta).toFixed(1));
+        let descuentoTotal = 0;
+        let items = [];
+
+        // Función para calcular el descuento total con el porcentaje dado
+        function calcularDescuentoTotal(porcentaje) {
+            return productos.reduce((total, producto) => {
+                const precioFinal = parseFloat((producto.precio * producto.cantidad * 1.16).toFixed(6)); // 6 decimales
+                const descuentoAplicado = parseFloat(((precioFinal * porcentaje) / 100).toFixed(1)); // 2 decimales
+                return total + descuentoAplicado;
+            }, 0);
+        }
+
+        // Límite de iteraciones para evitar bucle infinito
+        const maxIteraciones = 100;
+        let iteracion = 0;
+
+        // Ajustar el porcentaje hasta que el descuento total se acerque al montoMonedero o hasta alcanzar el límite de iteraciones
+        while (Math.round(descuentoTotal * 100) / 100 !== montoMonedero && iteracion < maxIteraciones) {
+            descuentoTotal = calcularDescuentoTotal(descuentoPorcentaje);
+
+            if (descuentoTotal < montoMonedero) {
+                descuentoPorcentaje = parseFloat((descuentoPorcentaje + 0.1).toFixed(1)); // Incrementar porcentaje si falta
+            } else if (descuentoTotal > montoMonedero) {
+                descuentoPorcentaje = parseFloat((descuentoPorcentaje - 0.1).toFixed(1)); // Reducir porcentaje si excede
+            }
+
+            iteracion++;
+        }
+
+        // Aplicar el porcentaje final a cada producto
+        items = await Promise.all(
+            productos.map(async (producto, index) => {
                 const productoEncontrado = await Producto.findById(producto._id);
                 if (!productoEncontrado) throw new Error(`Producto no encontrado: ${producto._id}`);
-                
+
+                const precioFinal = parseFloat((producto.precio * producto.cantidad * 1.16).toFixed(6)); // 6 decimales
+                const descuentoAplicado = parseFloat(((precioFinal * descuentoPorcentaje) / 100).toFixed(2));
+
                 return {
                     tax: [{ id: 1 }],
                     id: productoEncontrado.idAlegra,
                     name: productoEncontrado.name,
                     price: producto.precio,
-                    quantity: producto.cantidad
+                    quantity: producto.cantidad,
+                    discount: descuentoPorcentaje, // Aplicamos el porcentaje final
+                    descuentoAplicado
                 };
             })
         );
 
-        const payments = req.body.resumenVenta.formasDePago.map(forma => ({
-            account: { id: 1 },
-            date: new Date().toISOString(),
-            amount: forma.importe - forma.cambio,
-            paymentMethod: forma.tipo
-        }));
+        // Ajuste final en el último producto si falta o sobra un centavo
+        const diferencia = montoMonedero - Math.round(descuentoTotal * 100) / 100;
+        if (Math.abs(diferencia) > 0) {
+            items[items.length - 1].descuentoAplicado += diferencia;
+        }
 
+        // Configuración de los pagos, excluyendo el monedero ya aplicado
+        const payments = formasDePago
+            .filter(forma => forma.tipo !== 'monedero')
+            .map(forma => ({
+                account: { id: 1 },
+                date: new Date().toISOString(),
+                amount: forma.importe - forma.cambio,
+                paymentMethod: forma.tipo
+            }));
+
+        // Configuración de la solicitud de creación de la factura
         const options = {
             method: 'POST',
             url: 'https://api.alegra.com/api/v1/invoices',
@@ -352,7 +422,7 @@ async function crearFactura(req) {
             body: {
                 client: 4986,
                 stamp: { generateStamp: true },
-                paymentMethod: req.body.resumenVenta.formasDePago[0].tipo,
+                paymentMethod: formasDePago[0].tipo,
                 cfdiUse: req.body.resumenVenta.cfdiSeleccionado,
                 paymentType: 'PUE',
                 regimeClient: 'Personas Físicas con Actividades Empresariales y Profesionales',
@@ -365,8 +435,10 @@ async function crearFactura(req) {
             json: true
         };
 
+        // Enviamos la solicitud de factura
         return new Promise((resolve) => {
             request(options, async function (error, response, body) {
+                console.log(body);
                 if (error) return resolve({ success: false, message: 'Error en la creación de la factura' });
 
                 if (body.invoice && body.invoice.id) {
@@ -383,6 +455,7 @@ async function crearFactura(req) {
         return { success: false, message: 'Error en la creación de la factura' };
     }
 }
+
 
 function enviarFacturaPorCorreo(invoiceId, email) {
     return new Promise((resolve) => {

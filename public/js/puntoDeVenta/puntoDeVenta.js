@@ -504,6 +504,7 @@ function completarVenta(resumenVenta, metodoEnvio, email = null) {
         email, // correo si se proporcionó
         esFactura
     };
+    console.log(ventaYResumen)
 
     // Aquí haces la llamada para completar la venta
     fetch('/api/ventas', {
