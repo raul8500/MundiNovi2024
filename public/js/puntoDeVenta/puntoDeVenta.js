@@ -563,7 +563,7 @@ function completarVenta(resumenVenta, metodoEnvio, email = null) {
                 });
                 imprimirTicket(venta, resumenVenta);
                 
-                //window.location.reload();
+                window.location.reload();
             }
             if(metodoEnvio == 'correo'){
                 if(data.correoEnviado == true){
@@ -572,11 +572,11 @@ function completarVenta(resumenVenta, metodoEnvio, email = null) {
                         title: 'Venta completada y enviada al correo electronico',
                         text: 'La venta se ha registrado exitosamente.'
                     });
-                    /*
+                    
                     setTimeout(() => {
                         window.location.reload();
                     }, 1500);
-                    */
+                    
                 }
             }
         }

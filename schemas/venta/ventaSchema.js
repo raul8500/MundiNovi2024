@@ -24,6 +24,14 @@ const ventaSchema = new mongoose.Schema({
             importe: { type: Number, required: true }
         }
     ],
+    factura: 
+        {
+            estado: { type: String, required: false, default : 'sin factura' },
+            idAlegraFacura: { type: String, required: false },
+            pdfUrl: { type: String, required: false },
+            xmlUrl: { type: String, required: false },
+        }
+        ,
     fecha: { type: Date, default: Date.now }
 });
 

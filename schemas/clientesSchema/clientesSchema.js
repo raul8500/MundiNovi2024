@@ -83,13 +83,18 @@ const clientDataSchema = new mongoose.Schema({
     accounting: { type: accountingSchema, default: null },
 }, { _id: false });
 
+const loginSchema = new mongoose.Schema({
+        password: { type: String, default: null },
+}, { _id: false }); 
+
 // Esquema principal que incluye _id, factura y estado
 const clientSchema = new mongoose.Schema({
     _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
     esfactura: { type: Boolean, default: null },
     estado: { type: String, default: null },
     clientData: { type: clientDataSchema, default: null },
-    monedero: { type: Number, default: null }
+    monedero: { type: Number, default: null },
+    login: { type: loginSchema, default: null },
 }, { timestamps: true });
 
 // Exportar el esquema

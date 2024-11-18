@@ -164,7 +164,7 @@ exports.createContact = async (req, res) => {
       headers: {
         accept: 'application/json',
         'content-type': 'application/json',
-        authorization: 'Basic bG9wZXpqbzI5OUBnbWFpbC5jb206MDNmZjVkNjMwZjRhNzk2YmZmZjA='
+        authorization: 'Basic ZmFjdHVyYWxpbXBpb3NAaG90bWFpbC5jb206YWI0MTQ2YzQyZjhkMzY3ZjA1MmQ='
       },
       body,
       json: true
@@ -172,6 +172,7 @@ exports.createContact = async (req, res) => {
 
     // Hacer la solicitud a Alegra
     request(options, async function (error, response, alegraBody) {
+      console.log(alegraBody)
       if (error) {
         return res.status(500).json({ error: 'Error al comunicarse con la API de Alegra' });
       }

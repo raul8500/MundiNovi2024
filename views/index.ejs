@@ -1,98 +1,563 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-
-    <link rel="stylesheet" href="index/fonts/icomoon/style.css">
-
-    <link rel="stylesheet" href="index/css/owl.carousel.min.css">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="index/css/bootstrap.min.css">
-
-    <!-- Style -->
-    <link rel="stylesheet" href="index/css/style.css">
+    <title>Mundi Novi- Súper limpios a súper precio</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
 
     <link rel="icon" href="img/logoColor.png" type="image/png">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
-    <!-- MDB -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css" rel="stylesheet" />
 
-    <title>Mundi Novi:  Super limpios a super precio</title>
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:slnt,wght@-10..0,100..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link rel="stylesheet" href="lib/animate/animate.min.css" />
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
 
-
-    <div class="site-mobile-menu">
-        <div class="site-mobile-menu-header">
-            <div class="site-mobile-menu-close mt-3">
-                <span class="icon-close2 js-menu-toggle"></span>
-            </div>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
         </div>
-        <div class="site-mobile-menu-body"></div>
     </div>
+    <!-- Spinner End -->
 
-    <header class="site-navbar" role="banner">
-
+    <!-- Topbar Start -->
+    <div class="container-fluid topbar px-0 px-lg-4 bg-light py-2 d-none d-lg-block">
         <div class="container">
-            <div class="row align-items-center">
+            <div class="row gx-0 align-items-center">
+                <div class="col-lg-8 text-center text-lg-start mb-lg-0">
+                </div>
+                <div class="col-lg-4 text-center text-lg-end">
+                    <div class="d-flex justify-content-end">
+                        <div class="d-flex border-end border-primary pe-3">
+                            <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-twitter"></i></a>
+                            <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-instagram"></i></a>
+                            <a class="btn p-0 text-primary me-0" href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
 
-                <div class="col-11 col-xl-2 d-flex align-items-center">
-                    <img src="img/logoColor.png" style="width: 90px; height: 75px; margin-right: 10px;">
-                    
+    <!-- Navbar & Hero Start -->
+    <div class="container-fluid nav-bar px-0 px-lg-4 py-lg-0">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a href="#" class="navbar-brand p-0">
+                    <img src="img/logoColor.png" alt="Logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="fa fa-bars"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav mx-0 mx-lg-auto">
+                        <a href="" class="nav-item nav-link active">Inicio</a>
+                        <a href="" class="nav-item nav-link">Sucursales</a>
+                        <!--<a href="service.html" class="nav-item nav-link"></a>-->
+                        <a href="" class="nav-item nav-link">Facturación</a>
+                        <a href="" class="nav-item nav-link">Contactanos</a>
+                        <div class="nav-btn px-3">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="d-none d-xl-flex flex-shrink-0 ps-4">
+                    <!-- Botón para Registrarse con ícono -->
+                    <a href="/registro" class="btn btn-light btn-md rounded-pill me-2 d-flex align-items-center">
+                        <i class="fa fa-user-plus me-2"></i> Registrarse
+                    </a>
+
+                    <!-- Botón para Loguearse con ícono -->
+                    <a href="/login" class="btn btn-primary btn-md rounded-pill d-flex align-items-center">
+                        <i class="fa fa-sign-in-alt me-2"></i> Loguearse
+                    </a>
                 </div>
 
-                <div class="col-12 col-md-10 d-none d-xl-block">
-                    <nav class="site-navigation position-relative text-right" role="navigation">
 
-                        <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
-                            <li class="active"><a href="index.html"><span>Inicio</span></a></li>
-                            <li><a><span>Productos</span></a></li>
-                            <li><a><span>Sobre nosotros</span></a></li>
-                            <li><a><span>Contacto</span></a></li>
-                            <li><a href="/factura"><span>Facturar</span></a></li>
-                            <li><a href="/monedero"><span>Monedero</span></a></li>
-                        </ul>
-                    </nav>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar & Hero End -->
+
+    <!-- Carousel Start -->
+    <div class="header-carousel owl-carousel">
+        <div class="header-carousel-item" style="background-color: rgb(1, 12, 88);">
+            <div class="carousel-caption">
+                <div class="container">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-lg-7 animated fadeInLeft">
+                            <div class="text-sm-center text-md-start">
+                                <h4 class="text-white text-uppercase fw-bold mb-4">Bienvenido a Mundi Novi</h4>
+                                <h1 class="display-1 text-white mb-4">Súper limpios a súper precio!</h1>
+                                <p class="mb-5 fs-5">Con productos de limpieza efectivos y seguros, garantizamos que
+                                    cada espacio esté libre de bacterias y virus.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 animated fadeInRight">
+                            <div class="calrousel-img" style="object-fit: cover;">
+                                <img src="img/c1.png" class="img-fluid w-100" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--OTRO CAROUSEL-->
+    </div>
+    <!-- Carousel End -->
+
+    <!-- Feature Start -->
+    <div class="container-fluid feature bg-light py-5">
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                <h1 class="display-4 mb-4">Mundi Novi te proporciona una mejor higiene</h1>
+                <p class="mb-0">Escuchar y entender las necesidades de nuestros clientes es clave para nosotros. Nuestro
+                    equipo de atención
+                    personalizada está siempre disponible para ofrecer soporte y garantizar que cada experiencia con
+                    Mundi Novi sea
+                    satisfactoria y confiable.
+                </p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="feature-item p-4 pt-0">
+                        <div class="feature-icon p-4 mb-4">
+                            <i class="far fa-handshake fa-3x"></i>
+                        </div>
+                        <h4 class="mb-4">Empreza 100% confiable</h4>
+                        <p class="mb-4">La confianza es nuestra base. Ofrecemos productos de calidad con un servicio
+                            honesto y transparente,
+                            garantizando satisfacción y seguridad en cada compra.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="feature-item p-4 pt-0">
+                        <div class="feature-icon p-4 mb-4">
+                            <i class="fa fa-dollar-sign fa-3x"></i>
+                        </div>
+                        <h4 class="mb-4">Devolución de dinero en cualquier momento</h4>
+                        <p class="mb-4">Estamos comprometidos con tu satisfacción. Si no estás completamente satisfecho,
+                            te ofrecemos una
+                            devolución rápida y sin complicaciones en cualquier momento.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.6s">
+                    <div class="feature-item p-4 pt-0">
+                        <div class="feature-icon p-4 mb-4">
+                            <i class="fa fa-bullseye fa-3x"></i>
+                        </div>
+                        <h4 class="mb-4">Precios de productos accesibles</h4>
+                        <p class="mb-4">Creemos que la calidad no tiene que ser costosa. Ofrecemos precios justos y
+                            accesibles para que todos puedan disfrutar
+                            de productos de limpieza de alta calidad
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
+                    <div class="feature-item p-4 pt-0">
+                        <div class="feature-icon p-4 mb-4">
+                            <i class="fa fa-headphones fa-3x"></i>
+                        </div>
+                        <h4 class="mb-4">Soporte tecnico rápido</h4>
+                        <p class="mb-4">Estamos aquí para ayudarte cuando lo necesites. Nuestro equipo de soporte
+                            técnico está disponible para resolver tus
+                            dudas de manera rápida y eficaz.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Feature End -->
+
+    <!-- About Start -->
+    <div class="container-fluid bg-light about pb-5">
+        <div class="container pb-5">
+            <div class="row g-5">
+                <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">
+                    <div class="about-item-content bg-white rounded p-5 h-100">
+                        <h1 class="display-4 mb-4">Súper limpios a súper precio!</h1>
+                        <p>En Mundi Novi, la confianza es nuestro pilar fundamental. Nos esforzamos cada día por ofrecer
+                            productos de alta calidad
+                            respaldados por un servicio transparente y comprometido. Desde la selección de materias
+                            primas hasta la entrega de cada
+                            pedido, operamos con integridad, asegurando que nuestros clientes reciban exactamente lo que
+                            necesitan, con la
+                            tranquilidad de contar con una empresa que respeta y cumple sus promesas.
+                        <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Fórmulas de alta calidad y
+                            efectividad</p>
+                        <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Atención personalizada para
+                            cada cliente</p>
+                        <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Descuentos exclusivos para
+                            clientes frecuentes</p>
+                        <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Precios competitivos y
+                            accesibles</p>
+                        <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Entrega rápida y segura</p>
+                        <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Compromiso con la satisfacción
+                            del cliente</p>
+                        <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Variedad de productos para
+                            cada necesidad
+                        </p>
+
+                    </div>
+                </div>
+                <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="bg-white rounded p-5 h-100">
+                        <div class="row g-4 justify-content-center">
+                            <div class="col-12">
+                                <div class="rounded bg-light">
+                                    <img src="img/mundi.png" class="img-fluid rounded w-100" alt="">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="counter-item bg-light rounded p-3 h-100">
+                                    <div class="counter-counting">
+                                        <span class="text-primary fs-2 fw-bold" data-toggle="counter-up">3000</span>
+                                        <span class="h1 fw-bold text-primary">+</span>
+                                    </div>
+                                    <h4 class="mb-0 text-dark">Clientes frecuentes</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="counter-item bg-light rounded p-3 h-100">
+                                    <div class="counter-counting">
+                                        <span class="text-primary fs-2 fw-bold" data-toggle="counter-up">30</span>
+                                        <span class="h1 fw-bold text-primary">+</span>
+                                    </div>
+                                    <h4 class="mb-0 text-dark">Años ofreciendo nuestros servicios</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="counter-item bg-light rounded p-3 h-100">
+                                    <div class="counter-counting">
+                                        <span class="text-primary fs-2 fw-bold" data-toggle="counter-up">13</span>
+                                        <span class="h1 fw-bold text-primary">+</span>
+                                    </div>
+                                    <h4 class="mb-0 text-dark">Sucursales</h4>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="counter-item bg-light rounded p-3 h-100">
+                                    <div class="counter-counting">
+                                        <span class="text-primary fs-2 fw-bold" data-toggle="counter-up">55</span>
+                                        <span class="h1 fw-bold text-primary">+</span>
+                                    </div>
+                                    <h4 class="mb-0 text-dark">Provedores diferentes</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+    <!-- Service Start -->
+    <div class="container-fluid service py-5">
+        <div class="container py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
+                <h1 class="display-4 mb-4">Brindamos los mejores productos</h1>
+            </div>
+            <div class="row g-4 justify-content-center">
+
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            <img src="img/auto.png" class="img-fluid rounded-top w-100" alt="">
+                            <div class="service-icon p-3">
+                                <i class="fa-solid fa-car fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="service-content p-4">
+                            <div class="service-content-inner">
+                                <a href="#" class="d-inline-block h4 mb-4">Autos</a>
+                                <p class="mb-4">Cuida tu auto como un profesional. Desde limpieza interior hasta brillo
+                                    exterior, nuestros productos hacen que tu vehículo luzca impecable en cada viaje.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            <img src="img/piso.png" class="img-fluid rounded-top w-100" alt="">
+                            <div class="service-icon p-3">
+                                <i class="fa-solid fa-broom fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="service-content p-4">
+                            <div class="service-content-inner">
+                                <a href="#" class="d-inline-block h4 mb-4">Pisos</a>
+                                <p class="mb-4">Luce tus pisos como nuevos. Nuestros productos están diseñados para una
+                                    limpieza profunda y un brillo duradero, cuidando
+                                    cada tipo de superficie.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
 
-                <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;"><a
-                        href="#" class="site-menu-toggle js-menu-toggle text-white"><span
-                            class="icon-menu h3"></span></a></div>
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.6s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            <img src="img/cocina.png" class="img-fluid rounded-top w-100" alt="">
+                            <div class="service-icon p-3">
+                                <i class="fa-solid fa-sink fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="service-content p-4">
+                            <div class="service-content-inner">
+                                <a href="#" class="d-inline-block h4 mb-4">Cocina</a>
+                                <p class="mb-4">Mantén tu cocina impecable y libre de grasa. Con nuestros productos,
+                                    limpiar es fácil y rápido, dejando cada superficie
+                                    brillante y segura para toda la familia.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            <img src="img/baño.png" class="img-fluid rounded-top w-100" alt="">
+                            <div class="service-icon p-3">
+                                <i class="fa-solid fa-toilet fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="service-content p-4">
+                            <div class="service-content-inner">
+                                <a href="#" class="d-inline-block h4 mb-4">Baño</a>
+                                <p class="mb-4">Consigue un baño fresco y reluciente. Nuestros productos eliminan
+                                    manchas y desinfectan, dejando tu espacio impecable y
+                                    con un aroma duradero.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="1.0s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            <img src="img/ropa.png" class="img-fluid rounded-top w-100" alt="">
+                            <div class="service-icon p-3">
+                                <i class="fa-solid fa-socks fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="service-content p-4">
+                            <div class="service-content-inner">
+                                <a href="#" class="d-inline-block h4 mb-4">Ropa</a>
+                                <p class="mb-4">
+                                    Cuida y refresca tus prendas con nuestra línea especializada. Limpieza profunda,
+                                    protección de colores y suavidad en
+                                    cada lavado.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="1.2s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            <img src="img/jardin.png" class="img-fluid rounded-top w-100" alt="">
+                            <div class="service-icon p-3">
+                                <i class="fa-brands fa-pagelines fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="service-content p-4">
+                            <div class="service-content-inner">
+                                <a href="#" class="d-inline-block h4 mb-4">Jardín</a>
+                                <p class="mb-4">Mantén tus espacios exteriores impecables. Nuestros productos son
+                                    ideales para limpiar terrazas, muebles de jardín y
+                                    todo tipo de superficies al aire libre.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="1.4s">
+                    <div class="service-item">
+                        <div class="service-img">
+                            <img src="img/ymas.png" class="img-fluid rounded-top w-100" alt="">
+                            <div class="service-icon p-3">
+                                <i class="fa-solid fa-ellipsis fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="service-content p-4">
+                            <div class="service-content-inner">
+                                <a href="#" class="d-inline-block h4 mb-4">Y mas...</a>
+                                <p class="mb-4">Descubre nuestra variedad de productos para cubrir todas tus necesidades
+                                    de limpieza. En Mundi Novi, tenemos soluciones
+                                    para cada rincón de tu hogar.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
-
         </div>
+    </div>
+    <!-- Service End -->
+
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-xl-12">
+                    <div class="mb-5">
+                        <div class="row g-4">
+                            <div class="col-md-6 col-lg-6 col-xl-5">
+                                <div class="footer-item">
+                                    <a href="index.html" class="p-0">
+                                        <h3 class="text-white"></i> Mundi Novi</h3>
+                                        <!-- <img src="img/logo.png" alt="Logo"> -->
+                                    </a>
+                                    <p class="text-white mb-4">No olvides seguirnos en nuestras redes sociales!</p>
+                                    <div class="footer-btn d-flex">
+                                        <a class="btn btn-md-square rounded-circle me-3" href="#"><i
+                                                class="fab fa-facebook-f"></i></a>
+                                        <a class="btn btn-md-square rounded-circle me-3" href="#"><i
+                                                class="fab fa-twitter"></i></a>
+                                        <a class="btn btn-md-square rounded-circle me-3" href="#"><i
+                                                class="fab fa-instagram"></i></a>
+                                        <a class="btn btn-md-square rounded-circle me-0" href="#"><i
+                                                class="fab fa-linkedin-in"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-5" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
+                        <div class="row g-0">
+                            <div class="col-12">
+                                <div class="row g-4">
+                                    <div class="col-lg-6 col-xl-4">
+                                        <div class="d-flex">
+                                            <a href="https://maps.app.goo.gl/p9qZmM7vr3qCPYFS9" target="_blank">
+                                                <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
+                                                    <i class="fas fa-map-marker-alt fa-2x"></i>
+                                                </div>
+                                            </a>
+
+                                            <div>
+                                                <h4 class="text-white">Dirección</h4>
+                                                <p class="mb-0">Central de Abastos Nave C, Xalapa, Ver.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6 col-xl-4">
+                                        <div class="d-flex">
+                                            <a href="mailto:mundinovi@gmail.com"
+                                                class="btn-xl-square bg-primary text-white rounded p-4 me-4">
+                                                <i class="fas fa-envelope fa-2x"></i>
+                                            </a>
+                                            <div>
+                                                <h4 class="text-white">Correo</h4>
+                                                <p class="mb-0">
+                                                    <a href="mailto:mundinovi@gmail.com"
+                                                        class="text-white">mundinovi@gmail.com</a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-lg-6 col-xl-4">
+                                        <div class="d-flex">
+                                            <a href="tel:+522283532568"
+                                                class="btn-xl-square bg-primary text-white rounded p-4 me-4">
+                                                <i class="fa fa-phone-alt fa-2x"></i>
+                                            </a>
+                                            <div>
+                                                <h4 class="text-white">Teléfono</h4>
+                                                <p class="mb-0">
+                                                    <a href="tel:+522283532568" class="text-white">+52 228 353 2568</a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
+    </div>
+    <!-- Footer End -->
 
-    </header>
+    <!-- Copyright Start -->
+    <div class="container-fluid copyright py-4">
+        <div class="container">
+            <div class="row g-4 align-items-center">
+                <div class="col-md-8 text-center text-md-end mb-md-0">
+                    <span class="text-body"><a href="#" class="border-bottom text-white"><i
+                                class="fas fa-copyright text-light me-2"></i>Mundi Novi </a>, Todos los derechos
+                        reservados.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Copyright End -->
 
 
-    <main>
-    </main>
-
-        <!-- MDB -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary btn-lg-square rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
 
 
-    <script src="index/js/jquery-3.3.1.min.js"></script>
-    <script src="index/js/popper.min.js"></script>
-    <script src="index/js/bootstrap.min.js"></script>
-    <script src="index/js/jquery.sticky.js"></script>
-    <script src="index/js/main.js"></script>
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+
+    <!-- Template Javascript -->
+    <script src="js/mainIndex.js"></script>
 </body>
 
 </html>

@@ -53,12 +53,15 @@ function loadRegimenOptions() {
     if (rfcValue.length === 12) {
         // Opciones para RFC con 12 caracteres (Personas Morales)
         const opciones12 = [
+            { value: 'NO_REGIME', text: 'Sin régimen' },
             { value: 'GENERAL_REGIME_OF_MORAL_PEOPLE_LAW', text: 'Régimen General de Ley Personas Morales' },
             { value: 'REGIME_OF_MORAL_PEOPLE_NOT_PROFIT', text: 'Personas Morales con Fines no Lucrativos' },
-            { value: 'REGIME_OF_THE_COORDINATED', text: 'Régimen de los Coordinados' },
-            { value: 'REGIME_FOR_MORAL_GROUPS', text: 'Régimen de Grupos de Sociedades' },
-            { value: 'REGIME_FOR_MORAL_GROUPS_COVERED', text: 'Régimen de Sociedades Controladas' },
-            { value: 'OPTIONAL_REGIME_FOR_GROUP_OF_SOCIALS', text: 'Régimen Opcional para Grupos de Sociedades' }
+            { value: 'PRIMARY_SECTOR_REGIME', text: 'Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras (AGAPES)' },
+            { value: 'REGIME_OF_THE_COORDINATED', text: 'Coordinados' },
+            { value: 'REGIME_OF_COOPERATIVE_PRODUCTION_SOCIETIES', text: 'Sociedades Cooperativas de Producción que optan por diferir sus ingresos' },
+            { value: 'REGIME_OF_TRUST', text: 'Regimen simplificado de confianza (RESICO)' },
+            { value: 'SIMPLIFIED_REGIME', text: 'Sin obligaciones fiscales' },
+            { value: 'SOCIETIES_OPTIONAL_REGIME', text: 'Opcional para Grupos de Sociedades' }
         ];
 
         opciones12.forEach(opcion => {
@@ -70,13 +73,15 @@ function loadRegimenOptions() {
     } else if (rfcValue.length === 13) {
         // Opciones para RFC con 13 caracteres (Personas Físicas)
         const opciones13 = [
-            { value: 'SIMPLIFIED_REGIME', text: 'Régimen Simplificado de Confianza' },
-            { value: 'NO_REGIME', text: 'Sin Obligaciones Fiscales' },
-            { value: 'GENERAL_PHYSICAL_REGIME', text: 'Régimen General de Ley de Personas Físicas' },
-            { value: 'REGIME_OF_BUSINESS_ACTIVITIES', text: 'Régimen de Actividades Empresariales y Profesionales' },
-            { value: 'FISCAL_INCORPORATION_REGIME', text: 'Régimen de Incorporación Fiscal' },
-            { value: 'AGRICULTURAL_REGIME', text: 'Régimen de Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras' },
-            { value: 'SALARIES_AND_WAGES_REGIME', text: 'Régimen de Sueldos y Salarios e Ingresos Asimilados a Salarios' }
+            { value: 'NO_REGIME', text: 'Sin régimen' },
+            { value: 'BUSINESS_ACTIVITIES_REGIME', text: 'Personas Físicas con Actividades Empresariales y Profesionales' },
+            { value: 'FISCAL_INCORPORATION_REGIME', text: 'Incorporación Fiscal' },
+            { value: 'LEASEHOLD_REGIME', text: 'Arrendamiento' },
+            { value: 'REGIME_OF_THE_TECHNOLOGICAL_PLATFORMS_INCOME_ACTIVITIES', text: 'Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas' },
+            { value: 'SALARIED_REGIME', text: 'Sueldos y Salarios e Ingresos Asimilados a Salarios' },
+            { value: 'REGIME_OF_TRUST', text: 'Regimen simplificado de confianza (RESICO)' },
+            { value: 'SIMPLIFIED_REGIME', text: 'Sin obligaciones fiscales' },
+            { value: 'DIVIDEND_INCOME', text: 'Ingresos por Dividendos (socios y accionistas)' },
         ];
 
         opciones13.forEach(opcion => {

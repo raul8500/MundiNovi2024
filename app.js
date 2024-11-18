@@ -104,10 +104,6 @@ io.on('connection', (socket) => {
 });
 
 
-
-
-
-
 // Limpieza de mensajes antiguos
 setInterval(() => {
   Message.deleteMany({ date: { $lt: new Date(Date.now() - 24*60*60*1000) } })

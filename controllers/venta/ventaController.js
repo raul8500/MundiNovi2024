@@ -322,6 +322,8 @@ exports.createVenta = async (req, res) => {
             }
         }
 
+       await sumarAlMonedero(req)
+
         responseStatus.message = 'Proceso de creación de venta completado.';
         res.status(201).json(responseStatus);
 
@@ -420,15 +422,14 @@ async function crearFactura(req) {
                 authorization: 'Basic ZmFjdHVyYWxpbXBpb3NAaG90bWFpbC5jb206YWI0MTQ2YzQyZjhkMzY3ZjA1MmQ='
             },
             body: {
-                client: 4986,
+                client: 3846,
                 stamp: { generateStamp: true },
                 paymentMethod: formasDePago[0].tipo,
                 cfdiUse: req.body.resumenVenta.cfdiSeleccionado,
                 paymentType: 'PUE',
-                regimeClient: 'Personas Físicas con Actividades Empresariales y Profesionales',
+                regimeClient: 'BUSINESS_ACTIVITIES_REGIME',
                 status: 'open',
                 items,
-                payments,
                 date: new Date().toISOString(),
                 dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
             },
@@ -439,23 +440,42 @@ async function crearFactura(req) {
         return new Promise((resolve) => {
             request(options, async function (error, response, body) {
                 console.log(body);
-                if (error) return resolve({ success: false, message: 'Error en la creación de la factura' });
 
-                if (body.invoice && body.invoice.id) {
-                    const invoiceId = body.invoice.id;
-                    const emailEnviado = await enviarFacturaPorCorreo(invoiceId, body.invoice.client.email);
-                    resolve({ success: true, enviada: emailEnviado });
-                } else {
-                    resolve({ success: false, message: `Error al crear la factura: ${body.error ? body.error.message : 'Error desconocido'}` });
+                if (error) {
+                    return resolve({ success: false, message: 'Error en la creación de la factura' });
                 }
+
+                // Parsear la respuesta en JSON
+                const responseBody = JSON.parse(body);
+
+                // Validar si la factura está en borrador (con error)
+                if (responseBody.error && responseBody.invoice && responseBody.invoice.status === 'draft') {
+                    return resolve({ 
+                        success: false, 
+                        message: `Error al crear la factura en borrador: ${responseBody.error.message || 'Error desconocido'}`
+                    });
+                }
+
+                // Si la factura se creó correctamente y no está en borrador
+                if (responseBody.id && responseBody.status === 'open') {
+                    const invoiceId = responseBody.id;
+                    const emailEnviado = await enviarFacturaPorCorreo(invoiceId, /*responseBody.client.email ||*/ 'lopezjo299@gmail.com');
+                    return resolve({ success: true, enviada: emailEnviado });
+                }
+
+                // Manejo de otros casos de error no especificados
+                return resolve({ 
+                    success: false, 
+                    message: `Error al crear la factura: ${responseBody.error ? responseBody.error.message : 'Error desconocido'}` 
+                });
             });
         });
+
     } catch (error) {
         console.error("Error en crearFactura:", error);
         return { success: false, message: 'Error en la creación de la factura' };
     }
 }
-
 
 function enviarFacturaPorCorreo(invoiceId, email) {
     return new Promise((resolve) => {

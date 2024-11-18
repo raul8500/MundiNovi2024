@@ -29,7 +29,7 @@ const formulasProduccion = require('../controllers/formulas/formulasController')
 const cortesParciales = require('../controllers/cortes/cortesParcialesController')
 const cortesFinales = require('../controllers/cortes/cortesFinalesController')
 const recepcionCortes = require('../controllers/cortes/recepcionCortesController')
-
+const asistencia = require('../controllers/asistencia/asistenciaController')
 
 router.get('/', (req, res) => {    
     res.render('index');
@@ -122,6 +122,32 @@ router.get('/preciador', (req, res) => {
 router.get('/codigosBarras', (req, res) => {    
     res.render('CodigosBarras/codigosBarras');
 });
+
+router.get('/asistencias', (req, res) => {    
+    res.render('Asistencias/asistenciaAdmin');
+});
+
+router.get('/asistenciaUsuario', (req, res) => {    
+    res.render('Asistencias/asistencia');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -300,5 +326,15 @@ const codigosBarras = require('../controllers/codigosBarras/codigosBarrasControl
 router.post('/api/codigosBarras', codigosBarras.generarCodigoDeBarras)
 router.post('/api/codigosBarras/productos', codigosBarras.generarCodigoDeBarrasProductos) 
 
+
+
+
+//Asistencia
+router.post('/api/registrarEntrada', asistencia.registrarEntrada) 
+router.post('/api/registrarSalidaComer', asistencia.registrarSalidaComer) 
+router.post('/api/registrarRegresoComer', asistencia.registrarRegresoComer) 
+router.post('/api/registrarTerminoJornada', asistencia.registrarTerminoJornada) 
+router.get('/api/getAllAsistencias', asistencia.getAllAsistencias) 
+router.get('/api/getAsistenciaByUsuarioForToday/:usuarioId', asistencia.getAsistenciaByUsuarioForToday) 
 
 module.exports = router
