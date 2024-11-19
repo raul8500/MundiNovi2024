@@ -30,6 +30,9 @@ const cortesParciales = require('../controllers/cortes/cortesParcialesController
 const cortesFinales = require('../controllers/cortes/cortesFinalesController')
 const recepcionCortes = require('../controllers/cortes/recepcionCortesController')
 const asistencia = require('../controllers/asistencia/asistenciaController')
+const produccion = require('../controllers/produccion/produccion')
+
+
 
 router.get('/', (req, res) => {    
     res.render('index');
@@ -75,6 +78,11 @@ router.get('/clientes', (req, res) => {
 router.get('/kardex', (req, res) => {    
     res.render('Kardex/kardex');
 });
+
+router.get('/kardexMateriasPrimas', (req, res) => {    
+    res.render('Kardex/kardexMeteriaPrima.ejs');
+});
+
 router.get('/ventas', (req, res) => {    
     res.render('Ventas/ventas');
 });
@@ -131,6 +139,10 @@ router.get('/asistenciaUsuario', (req, res) => {
     res.render('Asistencias/asistencia');
 });
 
+
+router.get('/fabricarFormula', (req, res) => {    
+    res.render('Produccion/fabricarFormulas');
+});
 
 
 
@@ -281,6 +293,7 @@ router.get('/api/ventasMainInfo', venta.getVentasDelDia);
 
 //Kardex
 router.post('/api/kardex', kardex.createKardex)
+router.post('/api/kardexSinCosto', kardex.createKardexSinCosto)
 router.get('/api/kardex', kardex.getAllKardex)
 router.delete('/api/kardex/:id', kardex.deleteKardexById)
 
@@ -336,5 +349,11 @@ router.post('/api/registrarRegresoComer', asistencia.registrarRegresoComer)
 router.post('/api/registrarTerminoJornada', asistencia.registrarTerminoJornada) 
 router.get('/api/getAllAsistencias', asistencia.getAllAsistencias) 
 router.get('/api/getAsistenciaByUsuarioForToday/:usuarioId', asistencia.getAsistenciaByUsuarioForToday) 
+
+
+//Produccion
+router.get('/api/formulasPorProducir', produccion.getFormulasProduccion) 
+router.get('/api/formulasPorProducir/:id', produccion.getFormulaProduccionById)
+router.post('/api/producirFormula', produccion.registrarProduccion)
 
 module.exports = router

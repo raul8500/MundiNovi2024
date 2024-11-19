@@ -115,7 +115,7 @@ function cargarKardex() {
         sucursal: document.getElementById('sucursal').value,
         fechaInicio: fechaInicioISO,
         fechaFinal: fechaFinalISO,
-        reference: productoSeleccionado.reference
+        reference: productoSeleccionado.clave
     };
 
     const queryString = construirQueryString(parametros);
@@ -178,7 +178,7 @@ function printTable() {
     const sucursal = sucursalSelect.options[sucursalSelect.selectedIndex].text;
     const fechaInicio = document.getElementById('fechaInicial').value;
     const fechaFinal = document.getElementById('fechaFinal').value;
-    const codigoProducto = productoSeleccionado.reference
+    const codigoProducto = productoSeleccionado.clave
 
     // Crear la ventana emergente para la impresión
     const printWindow = window.open('', '', 'height=600,width=800');

@@ -81,24 +81,17 @@
     </header>
     <main style="margin-top: 10px">
         <div class="container pt-4">
-            <h3 class="text-center">Asistencias</h3>
+            <h3 class="text-center">Producir formulas</h3>
             <div class="tab-content" id="pills-tabContent2">
-                <div class="d-flex justify-content-end " style="margin-top: 20px;">
-
-
-
-                </div>
                 <div class="table-responsive pt-3">
-                    <table id="tablaAsistencias" class="table align-middle mb-0 bg-white">
+                    <table id="tablaProduccion" class="table align-middle mb-0 bg-white">
                         <thead class="bg-light">
                             <tr class="text-center">
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Usuario</th>
-                                <th scope="col">Sucursal</th>
-                                <th scope="col">Entrada</th>
-                                <th scope="col">Salida comida</th>
-                                <th scope="col">Regreso comida </th>
-                                <th scope="col">Termino jornada</th>
+                                <th scope="col">Clave</th>
+                                <th scope="col">Existencia fisica</th>
+                                <th scope="col">Stock máximo</th>
+                                <th scope="col">Stock mínimo</th>
+                                <th scope="col">Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="table-group-divider">
@@ -106,10 +99,80 @@
                         </tbody>
                     </table>
                 </div>
-
-
-
             </div>
+
+
+
+            <div class="modal fade" id="ModalProducir" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                                <i class="fa-regular fa-address-card" style="color: #000000;"></i>
+                                Producir formula
+                            </h5>
+                            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+
+                                <div class="col-md-4">
+                                    <label for="claveProducto" class="form-label">Clave del producto a fabricar</label>
+                                    <input type="text" class="form-control" id="claveProducto" autocomplete="off" disabled>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="nombreFormula" class="form-label">Formula utilizada</label>
+                                    <input type="text" class="form-control" id="nombreFormula" autocomplete="off" disabled>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <label for="observacionesInput" class="form-label">Observaciones</label>
+                                    <textarea class="form-control" id="observacionesInput" rows="1" disabled></textarea>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="cantidadBase" class="form-label">Cantidad base de la fórmula</label>
+                                    <input type="text" class="form-control" id="cantidadBase" autocomplete="off" disabled>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="cantidadSugerida" class="form-label">Cantidad sugerida</label>
+                                    <input type="text" class="form-control" id="cantidadSugerida" autocomplete="off">
+                                </div>
+                                
+                                <hr style="margin: 20px;">
+
+                                <h5>Elementos que se usarán</h5>
+
+                                <div class="table-responsive">
+                                    <table class="table mt-2">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>Clave</th>
+                                                <th>Porción original</th>
+                                                <th>Proporción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="materiasPrimasTable"></tbody>
+                                    </table>
+                                </div>
+                                
+            
+            
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cancelar</button>
+                                    <button id="btnProducir" type="submit" class="btn btn-primary">Producir</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
     </main>
 
 
@@ -124,8 +187,8 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/main.js"></script>
     <script src="https://cdn.datatables.net/2.1.6/js/dataTables.js"></script>
-    <script src="js/asistencias/asistenciasAdmin.js"></script>
 
+    <script src="js/produccion/produccion.js"></script>
 </body>
 
 </html>

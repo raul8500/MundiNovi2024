@@ -12,7 +12,11 @@ $(document).ready(function () {
                 data: 'acciones.entrada',
                 render: function (data) {
                     return data 
-                        ? new Date(data).toISOString().replace('T', ' ').slice(0, 16) 
+                        ? new Intl.DateTimeFormat('es-MX', {
+                            dateStyle: 'short',
+                            timeStyle: 'short',
+                            timeZone: 'America/Mexico_City'
+                        }).format(new Date(data))
                         : '<span class="badge bg-warning text-dark">Sin registrar</span>';
                 }
             },
@@ -20,7 +24,11 @@ $(document).ready(function () {
                 data: 'acciones.salidaComer',
                 render: function (data) {
                     return data 
-                        ? new Date(data).toISOString().replace('T', ' ').slice(0, 16) 
+                        ? new Intl.DateTimeFormat('es-MX', {
+                            dateStyle: 'short',
+                            timeStyle: 'short',
+                            timeZone: 'America/Mexico_City'
+                        }).format(new Date(data))
                         : '<span class="badge bg-warning text-dark">Sin registrar</span>';
                 }
             },
@@ -28,7 +36,11 @@ $(document).ready(function () {
                 data: 'acciones.regresoComer',
                 render: function (data) {
                     return data 
-                        ? new Date(data).toISOString().replace('T', ' ').slice(0, 16) 
+                        ? new Intl.DateTimeFormat('es-MX', {
+                            dateStyle: 'short',
+                            timeStyle: 'short',
+                            timeZone: 'America/Mexico_City'
+                        }).format(new Date(data))
                         : '<span class="badge bg-warning text-dark">Sin registrar</span>';
                 }
             },
@@ -36,7 +48,11 @@ $(document).ready(function () {
                 data: 'acciones.terminoJornada',
                 render: function (data) {
                     return data 
-                        ? new Date(data).toISOString().replace('T', ' ').slice(0, 16) 
+                        ? new Intl.DateTimeFormat('es-MX', {
+                            dateStyle: 'short',
+                            timeStyle: 'short',
+                            timeZone: 'America/Mexico_City'
+                        }).format(new Date(data))
                         : '<span class="badge bg-warning text-dark">Sin registrar</span>';
                 }
             }
