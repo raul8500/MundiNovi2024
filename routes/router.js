@@ -144,6 +144,10 @@ router.get('/fabricarFormula', (req, res) => {
     res.render('Produccion/fabricarFormulas');
 });
 
+router.get('/producciones', (req, res) => {    
+    res.render('Produccion/produccionAdmin');
+});
+
 
 
 
@@ -355,5 +359,12 @@ router.get('/api/getAsistenciaByUsuarioForToday/:usuarioId', asistencia.getAsist
 router.get('/api/formulasPorProducir', produccion.getFormulasProduccion) 
 router.get('/api/formulasPorProducir/:id', produccion.getFormulaProduccionById)
 router.post('/api/producirFormula', produccion.registrarProduccion)
+router.get('/api/recuperarProducciones', produccion.getAllProducciones)
+router.get('/api/recuperarProducciones/:id', produccion.getProduccionById)
+
+router.put('/api/cancelarProduccion/:id', produccion.cancelarProduccion)
+router.put('/api/confirmarProduccion/:produccionId', produccion.confirmarProduccion) 
+
+router.delete('/api/eliminarProduccion/:id', produccion.eliminarProduccion) 
 
 module.exports = router

@@ -5,7 +5,15 @@ const ProduccionSchema = new mongoose.Schema({
         type: Date,
         default: Date.now, // Fecha y hora actuales por defecto
     },
+    Estado: {
+        type: Number,
+        default: 1, // Fecha y hora actuales por defecto
+    },
     nombreProducto: {
+        type: String,
+        trim: true, // Elimina espacios en blanco adicionales
+    },
+    claveProducto: {
         type: String,
         trim: true, // Elimina espacios en blanco adicionales
     },

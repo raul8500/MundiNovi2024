@@ -219,6 +219,7 @@ exports.registrarProduccion = async (req, res) => {
         // Construir el objeto de producción
         const produccion = new Produccion({
             fechaHora: fechaActual,
+            claveProducto,
             nombreProducto,
             cantidad: cantidadSugerida,
             folio: nuevoFolio.toString(),
@@ -240,3 +241,159 @@ exports.registrarProduccion = async (req, res) => {
         res.status(500).json({ error: error.message || 'Error interno del servidor.' });
     }
 };
+
+exports.confirmarProduccion = async (req, res) => {
+    try {
+        const { produccionId } = req.params;
+
+        // Validar que el ID de producción esté presente
+        if (!produccionId) {
+            return res.status(400).json({ error: 'El ID de producción es obligatorio.' });
+        }
+
+        // Obtener la producción por ID
+        const produccion = await Produccion.findById(produccionId).populate('usuario');
+        if (!produccion) {
+            return res.status(404).json({ error: 'Producción no encontrada.' });
+        }
+
+        if (produccion.Estado === 2) {
+            return res.status(400).json({ error: 'La producción ya fue confirmada.' });
+        }
+
+        // Obtener el último movimiento del producto en el Kardex
+        const ultimoMovimiento = await Kardex.findOne({ reference: produccion.claveProducto })
+            .sort({ fecha: -1 });
+
+        const nuevaExistencia = ultimoMovimiento
+            ? ultimoMovimiento.existencia + produccion.cantidad
+            : produccion.cantidad;
+
+        // Crear un nuevo movimiento en el Kardex
+        const nuevoMovimiento = new Kardex({
+            reference: produccion.claveProducto,
+            nombre: produccion.nombreProducto,
+            movimiento: 'Entrada Producción',
+            folio: produccion.folio,
+            cantidad: produccion.cantidad,
+            existencia: nuevaExistencia,
+            descripcion: `Confirmación de producción - Lote ${produccion.numeroLote}`,
+            fecha: new Date(),
+            sucursal: '66e1b4986dca15c1b8653494', // ID de la sucursal "Nave C"
+            usuario: produccion.usuario._id,
+            costoUnitario: ultimoMovimiento?.costoUnitario || 0,
+        });
+
+        // Guardar el movimiento en el Kardex
+        await nuevoMovimiento.save();
+
+        // Actualizar el estado de la producción a "Producido"
+        produccion.Estado = 2; // Estado: Producido
+        await produccion.save();
+
+        res.status(201).json({
+            message: 'Producción confirmada exitosamente y Kardex actualizado.',
+            produccion,
+        });
+    } catch (error) {
+        console.error('Error al confirmar la producción:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+};
+
+
+exports.cancelarProduccion = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Buscar la producción por ID
+        const produccion = await Produccion.findById(id);
+        if (!produccion) {
+            return res.status(404).json({ error: 'Producción no encontrada.' });
+        }
+
+        if (produccion.Estado === 2) {
+            return res.status(400).json({ error: 'Esta producción ya fue cancelada previamente.' });
+        }
+
+        // Eliminar los movimientos en Kardex relacionados con las materias primas
+        await Promise.all(
+            produccion.materiasPrimas.map(async (materiaPrima) => {
+                const { folio } = materiaPrima;
+
+                // Buscar y eliminar el movimiento en Kardex por su folio
+                const movimientoEliminado = await Kardex.findOneAndDelete({ folio });
+                if (!movimientoEliminado) {
+                    console.warn(`Movimiento no encontrado en Kardex para el folio "${folio}".`);
+                }
+            })
+        );
+
+        // Actualizar el estado de la producción a "cancelado"
+        produccion.Estado = 3; // Estado: Cancelado
+        await produccion.save();
+
+        res.status(200).json({ message: 'Producción cancelada y movimientos eliminados del Kardex exitosamente.' });
+    } catch (error) {
+        console.error('Error al cancelar la producción:', error);
+        res.status(500).json({ error: error.message || 'Error interno del servidor.' });
+    }
+};
+
+
+exports.getAllProducciones = async (req, res) => {
+    try {
+        // Obtener todas las producciones
+        const producciones = await Produccion.find()
+            .populate('usuario', 'name username') // Poblamos usuario para ver detalles del usuario
+            .populate('materiasPrimas', 'clave nombre cantidad folio') // Poblamos las materias primas
+            .sort({ fechaHora: -1 }); // Ordenar por fecha descendente
+
+        if (!producciones || producciones.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron producciones registradas.' });
+        }
+
+        res.status(200).json(producciones);
+    } catch (error) {
+        console.error('Error al obtener todas las producciones:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+};
+
+exports.getProduccionById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Buscar la producción por su ID
+        const produccion = await Produccion.findById(id)
+            .populate('usuario', 'name username') // Poblamos usuario para ver detalles del usuario
+            .populate('materiasPrimas', 'clave nombre cantidad folio'); // Poblamos las materias primas
+
+        if (!produccion) {
+            return res.status(404).json({ message: 'Producción no encontrada.' });
+        }
+
+        res.status(200).json(produccion);
+    } catch (error) {
+        console.error('Error al obtener la producción por ID:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+};
+
+exports.eliminarProduccion = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Buscar y eliminar la producción
+        const produccionEliminada = await Produccion.findByIdAndDelete(id);
+        if (!produccionEliminada) {
+            return res.status(404).json({ error: 'Producción no encontrada.' });
+        }
+
+        res.status(200).json({ message: 'Producción eliminada definitivamente.', produccion: produccionEliminada });
+    } catch (error) {
+        console.error('Error al eliminar la producción:', error);
+        res.status(500).json({ error: error.message || 'Error interno del servidor.' });
+    }
+};
+
