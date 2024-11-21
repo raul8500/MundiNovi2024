@@ -1,0 +1,238 @@
+const Actividad = require('../../schemas/actividadesSchema/actividadesSchema');
+const mongoose = require('mongoose');
+
+exports.crearActividad = async (req, res) => {
+  try {
+    const {
+      titulo,
+      descripcion,
+      esPeriodica,
+      periodicidad,
+      diasSemana,
+      diaMes,
+      fechaDesignada,
+      horaInicio,
+      horaFinal,
+      usuariosAsignados
+    } = req.body;
+
+    // Validaciones adicionales si es necesario
+    if (esPeriodica && !periodicidad) {
+      return res.status(400).json({ message: 'Debe especificar la periodicidad si la actividad es periódica.' });
+    }
+
+    const nuevaActividad = new Actividad({
+      titulo,
+      descripcion,
+      esPeriodica,
+      periodicidad,
+      diasSemana,
+      diaMes,
+      fechaDesignada,
+      horaInicio,
+      horaFinal,
+      usuariosAsignados,
+      finalizada: false
+    });
+
+    const actividadGuardada = await nuevaActividad.save();
+    res.status(201).json({ message: 'Actividad creada con éxito.', actividad: actividadGuardada });
+  } catch (error) {
+    console.error('Error al crear actividad:', error);
+    res.status(500).json({ message: 'Error al crear actividad.', error });
+  }
+};
+
+exports.obtenerActividadesPorUsuario = async (req, res) => {
+  try {
+    const { usuarioId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(usuarioId)) {
+      return res.status(400).json({ message: 'ID de usuario inválido.' });
+    }
+
+    const actividades = await Actividad.find({ usuariosAsignados: usuarioId })
+      .populate({
+        path: 'usuariosAsignados',
+        populate: {
+          path: 'sucursalId',
+          select: 'nombre' // Incluye campos de la sucursal
+        }
+      });
+
+    res.status(200).json({ actividades });
+  } catch (error) {
+    console.error('Error al obtener actividades por usuario:', error);
+    res.status(500).json({ message: 'Error al obtener actividades.', error });
+  }
+};
+
+exports.obtenerActividadPorId = async (req, res) => {
+  try {
+    const { actividadId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(actividadId)) {
+      return res.status(400).json({ message: 'ID de actividad inválido.' });
+    }
+
+    const actividad = await Actividad.findById(actividadId)
+      .populate({
+        path: 'usuariosAsignados',
+        populate: {
+          path: 'sucursalId',
+          select: 'nombre' // Incluye campos de la sucursal
+        }
+      });
+
+    if (!actividad) {
+      return res.status(404).json({ message: 'Actividad no encontrada.' });
+    }
+
+    res.status(200).json({ actividad });
+  } catch (error) {
+    console.error('Error al obtener actividad:', error);
+    res.status(500).json({ message: 'Error al obtener actividad.', error });
+  }
+};
+
+exports.obtenerTodasLasActividades = async (req, res) => {
+  try {
+    const actividades = await Actividad.find({})
+      .populate({
+        path: 'usuariosAsignados',
+        populate: {
+          path: 'sucursalId',
+          select: 'nombre' // Incluye campos de la sucursal
+        }
+      });
+
+    res.status(200).json({ actividades });
+  } catch (error) {
+    console.error('Error al obtener todas las actividades:', error);
+    res.status(500).json({ message: 'Error al obtener actividades.', error });
+  }
+};
+
+exports.marcarComoFinalizada = async (req, res) => {
+  try {
+    const { actividadId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(actividadId)) {
+      return res.status(400).json({ message: 'ID de actividad inválido.' });
+    }
+
+    const actividad = await Actividad.findByIdAndUpdate(
+      actividadId,
+      { finalizada: true },
+      { new: true } // Devuelve el documento actualizado
+    );
+
+    if (!actividad) {
+      return res.status(404).json({ message: 'Actividad no encontrada.' });
+    }
+
+    res.status(200).json({ message: 'Actividad marcada como finalizada.', actividad });
+  } catch (error) {
+    console.error('Error al marcar actividad como finalizada:', error);
+    res.status(500).json({ message: 'Error al marcar actividad como finalizada.', error });
+  }
+};
+
+exports.eliminarActividad = async (req, res) => {
+  try {
+    const { actividadId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(actividadId)) {
+      return res.status(400).json({ message: 'ID de actividad inválido.' });
+    }
+
+    const actividadEliminada = await Actividad.findByIdAndDelete(actividadId);
+
+    if (!actividadEliminada) {
+      return res.status(404).json({ message: 'Actividad no encontrada.' });
+    }
+
+    res.status(200).json({ message: 'Actividad eliminada con éxito.', actividad: actividadEliminada });
+  } catch (error) {
+    console.error('Error al eliminar actividad:', error);
+    res.status(500).json({ message: 'Error al eliminar actividad.', error });
+  }
+};
+
+exports.excluirDiaEspecifico = async (req, res) => {
+  try {
+    const { actividadId } = req.params;
+    const { fecha } = req.body; // Fecha en formato YYYY-MM-DD
+
+    if (!mongoose.Types.ObjectId.isValid(actividadId)) {
+      return res.status(400).json({ message: 'ID de actividad inválido.' });
+    }
+
+    if (!fecha) {
+      return res.status(400).json({ message: 'Se requiere una fecha para excluir.' });
+    }
+
+    const actividad = await Actividad.findById(actividadId);
+
+    if (!actividad) {
+      return res.status(404).json({ message: 'Actividad no encontrada.' });
+    }
+
+    if (!actividad.esPeriodica) {
+      return res.status(400).json({ message: 'La actividad no es periódica. No se pueden excluir fechas.' });
+    }
+
+    // Validar si la fecha ya está en las excepciones
+    const fechaISO = new Date(fecha).toISOString().split('T')[0];
+    const excepcionesISO = actividad.excepciones.map(exc => exc.toISOString().split('T')[0]);
+
+    if (excepcionesISO.includes(fechaISO)) {
+      return res.status(400).json({ message: 'La fecha ya está en las excepciones.' });
+    }
+
+    // Agregar la fecha a las excepciones
+    actividad.excepciones.push(fecha);
+    await actividad.save();
+
+    res.status(200).json({ message: 'Fecha excluida con éxito.', excepciones: actividad.excepciones });
+  } catch (error) {
+    console.error('Error al excluir fecha:', error);
+    res.status(500).json({ message: 'Error al excluir fecha.', error });
+  }
+};
+
+exports.marcarEstadoPorFecha = async (req, res) => {
+    try {
+        const { actividadId } = req.params;
+        const { fecha, estado } = req.body; // Fecha: YYYY-MM-DD, Estado: true/false
+
+        if (!mongoose.Types.ObjectId.isValid(actividadId)) {
+            return res.status(400).json({ message: 'ID de actividad inválido.' });
+        }
+
+        if (!fecha || typeof estado !== 'boolean') {
+            return res.status(400).json({ message: 'Fecha y estado son requeridos.' });
+        }
+
+        const actividad = await Actividad.findById(actividadId);
+
+        if (!actividad) {
+            return res.status(404).json({ message: 'Actividad no encontrada.' });
+        }
+
+        // Actualizar el estado para la fecha específica
+        actividad.estadosPorFecha.set(fecha, estado);
+        await actividad.save();
+
+        res.status(200).json({ message: 'Estado actualizado con éxito.', actividad });
+    } catch (error) {
+        console.error('Error al actualizar el estado:', error);
+        res.status(500).json({ message: 'Error al actualizar el estado.', error });
+    }
+};
+
+
+
+
+
+

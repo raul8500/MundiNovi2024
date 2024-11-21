@@ -31,8 +31,9 @@ const cortesFinales = require('../controllers/cortes/cortesFinalesController')
 const recepcionCortes = require('../controllers/cortes/recepcionCortesController')
 const asistencia = require('../controllers/asistencia/asistenciaController')
 const produccion = require('../controllers/produccion/produccion')
-
-
+const actividades = require('../controllers/actividades/actividadesController')
+const multer = require('../middlewares/multer'); // Configuración de Multer
+const capacitacionController = require('../controllers/capacitacion/capacitacionController');
 
 router.get('/', (req, res) => {    
     res.render('index');
@@ -148,6 +149,10 @@ router.get('/producciones', (req, res) => {
     res.render('Produccion/produccionAdmin');
 });
 
+
+router.get('/actividadesAdmin', (req, res) => {    
+    res.render('Actividades/actividadesAdmin');
+});
 
 
 
@@ -361,10 +366,26 @@ router.get('/api/formulasPorProducir/:id', produccion.getFormulaProduccionById)
 router.post('/api/producirFormula', produccion.registrarProduccion)
 router.get('/api/recuperarProducciones', produccion.getAllProducciones)
 router.get('/api/recuperarProducciones/:id', produccion.getProduccionById)
-
 router.put('/api/cancelarProduccion/:id', produccion.cancelarProduccion)
 router.put('/api/confirmarProduccion/:produccionId', produccion.confirmarProduccion) 
-
 router.delete('/api/eliminarProduccion/:id', produccion.eliminarProduccion) 
+
+
+//actividades
+router.post('/api/crearActividad', actividades.crearActividad)
+router.get('/api/obtenerActividadesPorUsuario/:usuarioId', actividades.obtenerActividadesPorUsuario)
+router.get('/api/obtenerActividadPorId/:actividadId', actividades.obtenerActividadPorId)
+router.get('/api/obtenerTodasLasActividades', actividades.obtenerTodasLasActividades)
+router.put('/api/marcarComoFinalizada/:actividadId', actividades.marcarComoFinalizada)
+router.delete('/api/eliminarActividad/:actividadId', actividades.eliminarActividad)
+router.put('/api/excluirDiaEspecifico/:actividadId', actividades.excluirDiaEspecifico)
+router.post('/api/marcarEstadoPorFecha/:actividadId', actividades.marcarEstadoPorFecha)
+
+
+
+//Capacitacion
+router.post('/api/capacitaciones', multer.single('archivo'), capacitacionController.crearCapacitacion);
+router.post('/api/crearCapacitacionSinArchivo', capacitacionController.crearCapacitacionSinArchivo);
+
 
 module.exports = router
