@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const calendarEl = document.getElementById('calendar');
     const ModalActividades = new mdb.Modal(document.getElementById('ModalActividades'));
+    const ModalCrearActividades = new mdb.Modal(document.getElementById('ModalCrearActividad'));
 
     // Función para generar fechas periódicas en un rango específico
     function generarFechasPeriodicas(actividad, start, end) {
@@ -155,10 +156,54 @@ document.addEventListener('DOMContentLoaded', function () {
     calendar.render();
 
     document.getElementById('createActivityBtn').addEventListener('click', () => {
-        Swal.fire({
-            title: 'Crear Actividad',
-            text: 'Esta función estará disponible pronto.',
-            icon: 'info'
-        });
+        ModalCrearActividades.show()
     });
+
+
+    const esPeriodica = document.getElementById('esPeriodica');
+    const periodicidadOptions = document.getElementById('periodicidadOptions');
+    const tipoPeriodicidad = document.getElementById('tipoPeriodicidad');
+    const opcionesPeriodicas = document.getElementById('opcionesPeriodicas');
+    const opcionSemanal = document.getElementById('opcionSemanal');
+    const opcionMensual = document.getElementById('opcionMensual');
+    const fechaEspecifica = document.getElementById('fechaEspecifica');
+    const diaMesSelect = document.getElementById('diaMes');
+
+    // Generar opciones para días del mes (1-31)
+    const generarDiasDelMes = () => {
+        diaMesSelect.innerHTML = '<option value="" selected>Selecciona el día</option>';
+        for (let i = 1; i <= 31; i++) {
+            diaMesSelect.innerHTML += `<option value="${i}">${i}</option>`;
+        }
+    };
+
+   // Mostrar/ocultar opciones según si es periódica
+    esPeriodica.addEventListener('change', () => {
+        if (esPeriodica.checked) {
+            periodicidadOptions.style.display = 'block'; // Mostrar opciones de periodicidad
+            fechaEspecifica.style.display = 'none'; // Ocultar fecha específica
+        } else {
+            periodicidadOptions.style.display = 'none'; // Ocultar opciones de periodicidad
+            opcionesPeriodicas.style.display = 'none'; // Ocultar subopciones
+            opcionSemanal.style.display = 'none'; // Ocultar días de la semana
+            opcionMensual.style.display = 'none'; // Ocultar días del mes
+            fechaEspecifica.style.display = 'block'; // Mostrar fecha específica
+        }
+    });
+
+    // Cambiar comportamiento según el tipo de periodicidad seleccionada
+    tipoPeriodicidad.addEventListener('change', () => {
+        opcionesPeriodicas.style.display = 'block'; // Mostrar el contenedor de opciones
+        opcionSemanal.style.display = tipoPeriodicidad.value === 'semanal' ? 'block' : 'none';
+        opcionMensual.style.display = tipoPeriodicidad.value === 'mensual' ? 'block' : 'none';
+
+        // Si es diaria, no despliega nada adicional
+        if (tipoPeriodicidad.value === 'diaria') {
+            opcionesPeriodicas.style.display = 'none';
+        }
+    });
+
+    // Inicializar el select de días del mes
+    generarDiasDelMes();
+
 });

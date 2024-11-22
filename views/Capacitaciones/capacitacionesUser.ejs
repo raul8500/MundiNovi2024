@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mundi Novi 2024</title>
+    <link rel="icon" href="img/logoColor.png" type="image/png">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.dataTables.css" />
+
+</head>
+
+<body>
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+                <!-- Toggle button -->
+                <button data-mdb-collapse-init class="navbar-toggler" type="button"
+                    data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Collapsible wrapper -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Navbar brand -->
+                    <a class="navbar-brand mt-2 mt-lg-0" href="/main">
+                        <img src="img/logoColor.png" height="45" alt="MDB Logo" loading="lazy" />
+                    </a>
+                    <!-- Left links -->
+                    <ul id="options" class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    </ul>
+                    <!-- Left links -->
+                </div>
+                <!-- Collapsible wrapper -->
+
+                <!-- Right elements -->
+                <div class="d-flex align-items-center">
+                    <!-- Avatar -->
+
+                    <div class="info"
+                        style="display: flex; flex-direction: column; align-items: flex-end; margin-right: 10px;">
+                        <span id="name" class="name" style="margin-bottom: -5px; font-weight: 600;">Jesus Aguirre</span>
+                        <span id="rol" class="job" style="margin-top: 0px;">GGeneral</span>
+                    </div>
+
+                    <div class="dropdown">
+                        <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow"
+                            href="#" id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
+                            <img id="profilePicture" src="" class="rounded-circle" height="35"
+                                alt="Black and White Portrait of a Man" loading="lazy" />
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                            <li>
+                                <a class="dropdown-item" href="#">Perfil</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Configuraciones</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/logout">Cerrar sesión</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Right elements -->
+            </div>
+            <!-- Container wrapper -->
+        </nav>
+        <!-- Navbar -->
+    </header>
+    <main style="margin-top: 10px">
+        <div class="container pt-4">
+            <h3 class="text-center mb-4">Capacitaciones</h3>
+            <div class="row text-center">
+                <!-- Card: Exámenes -->
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <i class="fas fa-file-alt fa-3x mb-3 text-primary"></i>
+                            <h5 class="card-title">Exámenes</h5>
+                            <p class="card-text">Consulta y realiza exámenes de capacitación.</p>
+                            <button class="btn btn-primary" onclick="window.location.href='/examenes'">Ver</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card: Videos -->
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <i class="fas fa-video fa-3x mb-3 text-danger"></i>
+                            <h5 class="card-title">Videos</h5>
+                            <p class="card-text">Accede a tutoriales en video para mejorar tus habilidades.</p>
+                            <button class="btn btn-primary" onclick="window.location.href='/videos'">Ver</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card: Páginas -->
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <i class="fas fa-globe fa-3x mb-3 text-success"></i>
+                            <h5 class="card-title">Páginas</h5>
+                            <p class="card-text">Visita páginas web con información de capacitación.</p>
+                            <button class="btn btn-primary" onclick="window.location.href='/paginas'">Ver</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card: Documentos -->
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <i class="fas fa-file-pdf fa-3x mb-3 text-warning"></i>
+                            <h5 class="card-title">Documentos</h5>
+                            <p class="card-text">Descarga y consulta documentos relacionados con la capacitación.</p>
+                            <button class="btn btn-primary"
+                                onclick="window.location.href='/documentos'">Ver</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+    <!-- MDB -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/main.js"></script>
+    <script src="https://cdn.datatables.net/2.1.6/js/dataTables.js"></script>
+
+
+</body>
+
+</html>

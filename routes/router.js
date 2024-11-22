@@ -140,7 +140,6 @@ router.get('/asistenciaUsuario', (req, res) => {
     res.render('Asistencias/asistencia');
 });
 
-
 router.get('/fabricarFormula', (req, res) => {    
     res.render('Produccion/fabricarFormulas');
 });
@@ -149,9 +148,45 @@ router.get('/producciones', (req, res) => {
     res.render('Produccion/produccionAdmin');
 });
 
-
 router.get('/actividadesAdmin', (req, res) => {    
     res.render('Actividades/actividadesAdmin');
+});
+
+router.get('/capacitacionesAdmin', (req, res) => {    
+    res.render('Capacitaciones/capacitacionesAdmin');
+});
+
+router.get('/capacitaciones', (req, res) => {    
+    res.render('Capacitaciones/capacitacionesUser');
+});
+
+router.get('/examenesAdmin', (req, res) => {    
+    res.render('Capacitaciones/Admin/examenesAdmin');
+});
+
+router.get('/examenes', (req, res) => {    
+    res.render('Capacitaciones/User/examenes');
+});
+
+router.get('/documentosAdmin', (req, res) => {    
+    res.render('Capacitaciones/Admin/documentosAdmin');
+});
+router.get('/documentos', (req, res) => {    
+    res.render('Capacitaciones/User/documentos');
+});
+
+router.get('/paginasAdmin', (req, res) => {    
+    res.render('Capacitaciones/Admin/paginasAdmin');
+});
+router.get('/paginas', (req, res) => {    
+    res.render('Capacitaciones/User/paginas');
+});
+
+router.get('/videosAdmin', (req, res) => {    
+    res.render('Capacitaciones/Admin/videosAdmin');
+});
+router.get('/videos', (req, res) => {    
+    res.render('Capacitaciones/User/videos');
 });
 
 
@@ -386,6 +421,9 @@ router.post('/api/marcarEstadoPorFecha/:actividadId', actividades.marcarEstadoPo
 //Capacitacion
 router.post('/api/capacitaciones', multer.single('archivo'), capacitacionController.crearCapacitacion);
 router.post('/api/crearCapacitacionSinArchivo', capacitacionController.crearCapacitacionSinArchivo);
-
+router.get('/api/obtenerCapacitaciones', capacitacionController.obtenerCapacitaciones);
+router.get('/api/capacitaciones/:id/descargar', capacitacionController.descargarArchivo);
+router.delete('/api/capacitaciones/:id', capacitacionController.eliminarCapacitacion);
 
 module.exports = router
+
