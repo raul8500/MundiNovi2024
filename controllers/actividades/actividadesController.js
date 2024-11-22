@@ -220,8 +220,14 @@ exports.marcarEstadoPorFecha = async (req, res) => {
             return res.status(404).json({ message: 'Actividad no encontrada.' });
         }
 
-        // Actualizar el estado para la fecha específica
-        actividad.estadosPorFecha.set(fecha, estado);
+        // Si la fecha ya está marcada como finalizada y se intenta finalizar nuevamente, eliminarla
+        if (actividad.estadosPorFecha.get(fecha) === true && estado === true) {
+            actividad.estadosPorFecha.delete(fecha); // Eliminar la fecha del estado
+        } else {
+            // De lo contrario, actualizar o agregar el estado para la fecha específica
+            actividad.estadosPorFecha.set(fecha, estado);
+        }
+
         await actividad.save();
 
         res.status(200).json({ message: 'Estado actualizado con éxito.', actividad });
@@ -230,6 +236,7 @@ exports.marcarEstadoPorFecha = async (req, res) => {
         res.status(500).json({ message: 'Error al actualizar el estado.', error });
     }
 };
+
 
 
 

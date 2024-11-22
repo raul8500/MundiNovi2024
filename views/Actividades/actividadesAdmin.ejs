@@ -144,8 +144,8 @@
                     
                     
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger">Eliminar</button>
-                            <button type="button" class="btn btn-success">Finalizar</button>
+                            <button id="btnEliminarActividad" type="button" class="btn btn-danger">Eliminar</button>
+                            <button id="btnFinalizarActividad" type="button" class="btn btn-success">Finalizar</button>
                         </div>
                     </div>
                 </div>
@@ -167,24 +167,24 @@
                         <!-- Título -->
                         <div class="mb-3">
                             <label for="titulo" class="form-label">Título</label>
-                            <input type="text" class="form-control" id="titulo" placeholder="Título de la actividad"
+                            <input type="text" class="form-control" id="tituloCrear" placeholder="Título de la actividad"
                                 required>
                         </div>
                         <!-- Descripción -->
                         <div class="mb-3">
                             <label for="descripcion" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="descripcion" rows="3"
+                            <textarea class="form-control" id="descripcionCrear" rows="3"
                                 placeholder="Descripción de la actividad"></textarea>
                         </div>
                         <!-- Hora de inicio -->
                         <div class="mb-3">
                             <label for="horaInicio" class="form-label">Hora de inicio</label>
-                            <input type="time" class="form-control" id="horaInicio" required>
+                            <input type="time" class="form-control" id="horaInicioCrear" required>
                         </div>
                         <!-- Hora de finalización -->
                         <div class="mb-3">
                             <label for="horaFinal" class="form-label">Hora de finalización</label>
-                            <input type="time" class="form-control" id="horaFinal" required>
+                            <input type="time" class="form-control" id="horaFinalCrear" required>
                         </div>
                         <!-- ¿Es periódica? -->
                         <div class="mb-3">
@@ -236,11 +236,14 @@
                             <input type="date" class="form-control" id="fecha">
                         </div>
                         <!-- Buscar usuarios -->
-                        <div class="mb-3">
+                        <div class="mb-3 position-relative">
                             <label for="buscarUsuario" class="form-label">Buscar usuario</label>
-                            <input type="text" class="form-control" id="buscarUsuario"
-                                placeholder="Escribe para buscar usuarios...">
+                            <input type="text" class="form-control" id="buscarUsuario" placeholder="Escribe para buscar usuarios...">
+                            <ul id="sugerenciasUsuarios" class="list-group position-absolute w-100 mt-1" style="z-index: 1000; display: none; background-color: white;">
+                                <!-- Las sugerencias aparecerán aquí -->
+                            </ul>
                         </div>
+
                         <!-- Tabla de usuarios -->
                         <div class="table-responsive">
                             <table class="table mt-2">
@@ -252,9 +255,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tablaUsuariosSeleccionados">
-                                    <tr>
-                                        <td colspan="3" class="text-center">No hay usuarios seleccionados</td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
