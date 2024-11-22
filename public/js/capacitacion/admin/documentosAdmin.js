@@ -117,11 +117,51 @@ async function eliminarCapacitacion(id) {
 
 const documentoModal = new mdb.Modal(document.getElementById('ModalDocumentos'));
 
+// Validar campos vacíos
+function validarCampos(form) {
+    let valido = true;
+    const campos = form.querySelectorAll('input, textarea, select');
+
+    campos.forEach(campo => {
+        if (campo.required && !campo.value.trim()) {
+            valido = false;
+            campo.classList.add('is-invalid'); // Agregar clase de error
+        } else {
+            campo.classList.remove('is-invalid'); // Quitar clase de error si está correcto
+        }
+    });
+
+    return valido;
+}
+
+// Limpiar el formulario
+function limpiarFormulario(form) {
+    form.reset(); // Reiniciar valores del formulario
+    const campos = form.querySelectorAll('input, textarea, select');
+    campos.forEach(campo => campo.classList.remove('is-invalid')); // Quitar clases de error
+}
+
+// Manejar el cierre del modal
+document.getElementById('ModalDocumentos').addEventListener('hidden.bs.modal', () => {
+    const form = document.getElementById('formDocumentos');
+    limpiarFormulario(form);
+});
+
+// Guardar documento
 document.getElementById('guardarDocumento').addEventListener('click', async () => {
     const form = document.getElementById('formDocumentos');
-    const formData = new FormData(form);
 
-    // Agregar el tipo de capacitación al formulario
+    if (!validarCampos(form)) {
+        Swal.fire({
+            title: 'Campos incompletos',
+            text: 'Por favor, completa todos los campos obligatorios.',
+            icon: 'warning',
+            confirmButtonText: 'Aceptar'
+        });
+        return;
+    }
+
+    const formData = new FormData(form);
     formData.append('tipo', 'documento');
 
     try {
@@ -142,6 +182,7 @@ document.getElementById('guardarDocumento').addEventListener('click', async () =
                 // Ocultar el modal y recargar la tabla
                 documentoModal.hide();
                 $('#tablaDocumentos').DataTable().ajax.reload();
+                location.reload(); // Recargar la página
             });
         } else {
             const error = await response.json();

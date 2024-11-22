@@ -121,10 +121,52 @@ async function eliminarCapacitacion(id) {
         });
     }
 }
-
 const videoModal = new mdb.Modal(document.getElementById('ModalVideos'));
 
+// Validar campos vacíos
+function validarCampos(form) {
+    let valido = true;
+    const campos = form.querySelectorAll('input, textarea');
+
+    campos.forEach(campo => {
+        if (campo.required && !campo.value.trim()) {
+            valido = false;
+            campo.classList.add('is-invalid'); // Agregar clase de error
+        } else {
+            campo.classList.remove('is-invalid'); // Quitar clase de error si está correcto
+        }
+    });
+
+    return valido;
+}
+
+// Limpiar el formulario
+function limpiarFormulario(form) {
+    form.reset(); // Reiniciar valores del formulario
+    const campos = form.querySelectorAll('input, textarea');
+    campos.forEach(campo => campo.classList.remove('is-invalid')); // Quitar clases de error
+}
+
+// Manejar el cierre del modal
+document.getElementById('ModalVideos').addEventListener('hidden.bs.modal', () => {
+    const form = document.getElementById('formVideos');
+    limpiarFormulario(form);
+});
+
+// Guardar video
 document.getElementById('guardarVideo').addEventListener('click', async () => {
+    const form = document.getElementById('formVideos');
+
+    if (!validarCampos(form)) {
+        Swal.fire({
+            title: 'Campos incompletos',
+            text: 'Por favor, completa todos los campos obligatorios.',
+            icon: 'warning',
+            confirmButtonText: 'Aceptar'
+        });
+        return;
+    }
+
     const nombre = document.getElementById('nombreVideo').value;
     const descripcion = document.getElementById('descripcionVideo').value;
     const link = document.getElementById('linkVideo').value;
@@ -158,6 +200,7 @@ document.getElementById('guardarVideo').addEventListener('click', async () => {
                 // Ocultar el modal y recargar la tabla
                 videoModal.hide();
                 $('#tablaVideos').DataTable().ajax.reload();
+                location.reload(); // Recargar la página
             });
         } else {
             const error = await response.json();
@@ -183,6 +226,5 @@ document.getElementById('guardarVideo').addEventListener('click', async () => {
 document.getElementById('btnAñadirVideo').addEventListener('click', () => {
     videoModal.show();
 });
-
 
 
