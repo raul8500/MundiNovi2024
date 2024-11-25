@@ -424,6 +424,14 @@ router.post('/api/crearCapacitacionSinArchivo', capacitacionController.crearCapa
 router.get('/api/obtenerCapacitaciones', capacitacionController.obtenerCapacitaciones);
 router.get('/api/capacitaciones/:id/descargar', capacitacionController.descargarArchivo);
 router.delete('/api/capacitaciones/:id', capacitacionController.eliminarCapacitacion);
+    //examnes
+router.post('/api/examenes', capacitacionController.crearExamen); // Listar todos los exámenes
+router.get('/api/examenes', capacitacionController.listarExamenes); // Listar todos los exámenes
+router.get('/api/examenes/usuario/:tipoUsuario/:usuarioId', capacitacionController.listarExamenesPorUsuario); // Listar exámenes por tipo de usuario
+router.post('/api/examenes/:examenId/responder', capacitacionController.responderExamen); // Responder un examen
+router.get('/api/respuestas/:examenId', capacitacionController.listarRespuestas); // Listar respuestas por usuario
+router.patch('/api/examenes/:examenId/estado', capacitacionController.cambiarEstadoExamen); // Activar/Desactivar examen
+
 
 module.exports = router
 
