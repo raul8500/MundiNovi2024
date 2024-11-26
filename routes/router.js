@@ -431,7 +431,9 @@ router.get('/api/examenes/usuario/:tipoUsuario/:usuarioId', capacitacionControll
 router.post('/api/examenes/:examenId/responder', capacitacionController.responderExamen); // Responder un examen
 router.get('/api/respuestas/:examenId', capacitacionController.listarRespuestas); // Listar respuestas por usuario
 router.patch('/api/examenes/:examenId/estado', capacitacionController.cambiarEstadoExamen); // Activar/Desactivar examen
-
+router.delete('/api/examenes/:id', capacitacionController.eliminarExamen); // Eliminar todos los exámenes
+router.get('/api/examenes/:id', capacitacionController.obtenerExamenPorId); //get por id
+router.put('/api/examenes/:id', capacitacionController.actualizarExamen); //get por id
 
 module.exports = router
 

@@ -204,8 +204,7 @@ exports.listarExamenes = async (req, res) => {
 
 exports.listarExamenesPorUsuario = async (req, res) => {
   try {
-    const { tipoUsuario } = req.params; // Obtener tipo de usuario de los parámetros
-    const { usuarioId } = req.params; // Obtener usuarioId de los query params
+    const { tipoUsuario, usuarioId } = req.params; // Obtener tipoUsuario y usuarioId de los parámetros
 
     // Validar que se envíen los datos necesarios
     if (!tipoUsuario) {
@@ -227,7 +226,7 @@ exports.listarExamenesPorUsuario = async (req, res) => {
       return res.status(404).json({ message: "No se encontraron exámenes para este tipo de usuario." });
     }
 
-    // Verificar si el usuario ya respondió cada examen
+    // Verificar si el usuario ya respondió cada examen y agregar calificación
     const exámenesConEstado = await Promise.all(
       exámenes.map(async (examen) => {
         const respuesta = await Respuesta.findOne({
@@ -236,7 +235,8 @@ exports.listarExamenesPorUsuario = async (req, res) => {
         });
         return {
           ...examen.toObject(),
-          respondido: !!respuesta // true si ya respondió, false si no
+          respondido: !!respuesta, // true si ya respondió, false si no
+          calificacion: respuesta ? respuesta.calificacion : null // Incluir calificación si ya respondió
         };
       })
     );
@@ -302,11 +302,12 @@ exports.responderExamen = async (req, res) => {
 // Listar respuestas por examen (con usuario populado)
 exports.listarRespuestas = async (req, res) => {
   try {
-    const { examenId } = req.params; // Usaremos el examenId como parámetro para filtrar
+    const { examenId } = req.params; // Usamos el examenId como parámetro para filtrar
 
-    // Obtener todas las respuestas de un examen, incluyendo datos del usuario
+    // Obtener todas las respuestas de un examen, incluyendo datos del usuario y del examen
     const respuestas = await Respuesta.find({ examenId })
-      .populate('usuarioId'); // Populate para incluir nombre y email del usuario
+      .populate('usuarioId') // Incluye solo el nombre y el username del usuario
+      .populate('examenId'); // Incluye solo el título y la descripción del examen
 
     if (!respuestas.length) {
       return res.status(404).json({ message: "No se encontraron respuestas para este examen." });
@@ -317,6 +318,7 @@ exports.listarRespuestas = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 exports.cambiarEstadoExamen = async (req, res) => {
   try {
@@ -335,4 +337,67 @@ exports.cambiarEstadoExamen = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+// Eliminar examen
+exports.eliminarExamen = async (req, res) => {
+  try {
+    const { id } = req.params; // ID del examen a eliminar
+
+    // Verificar si el examen existe
+    const examen = await Examen.findById(id);
+    if (!examen) {
+      return res.status(404).json({ message: 'Examen no encontrado.' });
+    }
+
+    // Eliminar respuestas asociadas al examen
+    await Respuesta.deleteMany({ examenId: id });
+
+    // Eliminar el examen
+    await Examen.findByIdAndDelete(id);
+
+    res.status(200).json({ message: 'Examen y respuestas asociadas eliminados correctamente.' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Obtener examen por ID
+exports.obtenerExamenPorId = async (req, res) => {
+  try {
+    const { id } = req.params; // Obtener el ID del examen desde los parámetros
+
+    // Buscar el examen por ID
+    const examen = await Examen.findById(id);
+
+    // Validar si el examen existe
+    if (!examen) {
+      return res.status(404).json({ message: 'Examen no encontrado.' });
+    }
+
+    res.status(200).json(examen);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.actualizarExamen = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { titulo, descripcion, preguntas, tiposPermitidos } = req.body;
+
+        const examen = await Examen.findByIdAndUpdate(
+            id,
+            { titulo, descripcion, preguntas, tiposPermitidos },
+            { new: true }
+        );
+
+        if (!examen) {
+            return res.status(404).json({ message: 'Examen no encontrado.' });
+        }
+
+        res.status(200).json({ message: 'Examen actualizado correctamente.', examen });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };

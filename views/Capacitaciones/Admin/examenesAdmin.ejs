@@ -99,6 +99,7 @@
                             <tr class="text-center">
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Descripcion</th>
+                                <th scope="col">Estado</th>
                                 <th scope="col">Acciones</th>
                             </tr>
                         </thead>
@@ -113,32 +114,86 @@
         </div>
 
         <div class="modal fade" id="ModalExamenes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">
                             <i class="fa-regular fa-address-card" style="color: #000000;"></i>
-                            Subir Examen
+                            Crear Examen
                         </h5>
                         <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="formExamenes" enctype="multipart/form-data">
-                            <div class="mb-3">
+                        <form id="formExamenes" class="row">
+                            <!-- Nombre del Examen -->
+                            <div class="col-md-6">
                                 <label for="nombreExamen" class="form-label">Nombre del Examen</label>
-                                <input type="text" class="form-control" id="nombreExamen" name="nombre"
+                                <input type="text" class="form-control" id="nombreExamen" name="titulo"
                                     placeholder="Nombre del examen" required>
                             </div>
-                            <div class="mb-3">
+                            <!-- Tipo de Usuario -->
+                            <div class="col-md-6">
+                                <label for="tiposPermitidos" class="form-label">Tipos de Usuarios Permitidos</label>
+                                <select class="form-control" id="tiposPermitidos" name="tiposPermitidos" required multiple>
+                                    <option value="">Seleccionar</option>
+                                    <option value="1">GerenteGeneral</option>
+                                    <option value="2">Cajero</option>
+                                    <option value="3">Produccion</option>
+                                </select>
+                            </div>
+
+                            <!-- Descripción -->
+                            <div class="col-md-12">
                                 <label for="descripcionExamen" class="form-label">Descripción</label>
-                                <textarea class="form-control" id="descripcionExamen" name="descripcion" rows="3"
+                                <textarea class="form-control" id="descripcionExamen" name="descripcion" rows="2"
                                     placeholder="Descripción breve del examen" required></textarea>
                             </div>
-                            <div class="mb-3">
-                                <label for="archivoExamen" class="form-label">Subir Archivo</label>
-                                <input type="file" class="form-control" id="archivoExamen" name="archivo"
-                                    accept=".pdf,.doc,.docx" required>
+
+                            <hr style="margin: 10px;">
+                            <!-- Pregunta y Opciones -->
+                            <div id="preguntaForm">
+                                <h6>Agregar Pregunta</h6>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="preguntaTexto"
+                                        placeholder="Escribe la pregunta aquí" required>
+                                </div>
+                                <div class="row">
+                                    <label>Opciones:</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control mb-1 opcion" placeholder="Opción 1" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control mb-1 opcion" placeholder="Opción 2" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control mb-1 opcion" placeholder="Opción 3" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control mb-1 opcion" placeholder="Opción 4" required>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <label for="respuestaCorrecta" class="form-label">Respuesta Correcta</label>
+                                    <div class="col-md-4">
+                                        <select class="form-control" id="respuestaCorrecta" required>
+                                            <option value="0">Opción 1</option>
+                                            <option value="1">Opción 2</option>
+                                            <option value="2">Opción 3</option>
+                                            <option value="3">Opción 4</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 d-flex justify-content-center align-items-center flex-column">
+                                        <button type="button" class="btn btn-primary btn-sm" id="agregarPregunta">Agregar Pregunta</button>
+                                    </div>
+                                </div>
                             </div>
+                            <!-- Lista de Preguntas Agregadas -->
+                            <div id="listaPreguntas" class="mt-4">
+                                <h6>Preguntas Agregadas</h6>
+                                <ul class="list-group" id="preguntasAgregadas"></ul>
+                            </div>
+
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -148,6 +203,34 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="ModalRespuestas" tabindex="-1" aria-labelledby="respuestasModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="respuestasModalLabel">Respuestas del Examen</h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="usuarioSelect" class="form-label">Seleccionar Usuario</label>
+                                <select id="usuarioSelect" class="form-control">
+                                    <!-- Opciones cargadas dinámicamente -->
+                                </select>
+                            </div>
+                            <div id="detalleRespuestas">
+                                <!-- Respuestas del usuario seleccionadas se mostrarán aquí -->
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
 
 
