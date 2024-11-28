@@ -34,6 +34,9 @@ const produccion = require('../controllers/produccion/produccion')
 const actividades = require('../controllers/actividades/actividadesController')
 const multer = require('../middlewares/multer'); // Configuración de Multer
 const capacitacionController = require('../controllers/capacitacion/capacitacionController');
+const stocksController = require('../controllers/stocks/stocksController');
+
+
 
 router.get('/', (req, res) => {    
     res.render('index');
@@ -150,6 +153,10 @@ router.get('/producciones', (req, res) => {
 
 router.get('/actividadesAdmin', (req, res) => {    
     res.render('Actividades/actividadesAdmin');
+});
+
+router.get('/actividades', (req, res) => {    
+    res.render('Actividades/actividadesUser');
 });
 
 router.get('/capacitacionesAdmin', (req, res) => {    
@@ -415,6 +422,8 @@ router.put('/api/marcarComoFinalizada/:actividadId', actividades.marcarComoFinal
 router.delete('/api/eliminarActividad/:actividadId', actividades.eliminarActividad)
 router.put('/api/excluirDiaEspecifico/:actividadId', actividades.excluirDiaEspecifico)
 router.post('/api/marcarEstadoPorFecha/:actividadId', actividades.marcarEstadoPorFecha)
+router.post('/api/reagendar/:id', actividades.reagendarActividad )
+
 
 
 
@@ -434,6 +443,17 @@ router.patch('/api/examenes/:examenId/estado', capacitacionController.cambiarEst
 router.delete('/api/examenes/:id', capacitacionController.eliminarExamen); // Eliminar todos los exámenes
 router.get('/api/examenes/:id', capacitacionController.obtenerExamenPorId); //get por id
 router.put('/api/examenes/:id', capacitacionController.actualizarExamen); //get por id
+
+router.get('/api/exportarProductos', productos.exportarProductosAExcel);
+
+
+const multerw = require('multer');
+
+const upload = multerw({ dest: 'uploads/' }); // Carpeta temporal para archivos
+//stocks
+router.get('/api/reporte/:sucursalId',stocksController.generarReporteStocks);
+router.post('/api/actualizar/:sucursalId', upload.single('file'), stocksController.actualizarStocks);
+
 
 module.exports = router
 

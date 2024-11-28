@@ -497,6 +497,7 @@ exports.updateProductPrice = async (req, res) => {
     }
 };
 
+
 exports.getProductById = async (req, res) => {
     try {
         const { id } = req.params; // El _id del producto viene en los parámetros de la URL
@@ -703,6 +704,105 @@ exports.marcarProductoImpreso = async (req, res) => {
     }
 };
 
+
+exports.exportarProductosAExcel = async (req, res) => {
+    try {
+        // Obtener todos los productos desde la base de datos
+        const productos = await Producto.find().lean();
+
+        if (!productos || productos.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron productos para exportar.' });
+        }
+
+        // Crear una matriz con los datos formateados para el Excel
+        const datosExcel = productos.map(producto => ({
+            Tipo: producto.type || '',
+            Referencia: producto.reference || '',
+            Activo: producto.esActivo ? 'Sí' : 'No',
+            'Código de Barra': producto.codigoBarra || '',
+            Nombre: producto.name || '',
+            'Clave del Producto': producto.productKey || '',
+            Descripción: producto.description || '',
+            'Unidad de Inventario': producto.inventory?.unit || '',
+            'Tiempo de Surtido': producto.tiempoSurtido || '',
+            'Control de Almacén': producto.controlAlmacen || '',
+            Volumen: producto.volumen || '',
+            Peso: producto.peso || '',
+            'Costo': producto.datosFinancieros?.costo || '',
+            'Último Costo': producto.datosFinancieros?.ultimoCosto || '',
+            'Costo Promedio': producto.datosFinancieros?.costoPromedio || '',
+            'Unidad de Empaque': producto.datosFinancieros?.unidadEmpaque || '',
+            Precio1: producto.datosFinancieros?.precio1 || '',
+            Precio2: producto.datosFinancieros?.precio2 || '',
+            Precio3: producto.datosFinancieros?.precio3 || '',
+            Precio4: producto.datosFinancieros?.precio4 || '',
+            Precio5: producto.datosFinancieros?.precio5 || '',
+            Precio6: producto.datosFinancieros?.precio6 || '',
+            Precio7: producto.datosFinancieros?.precio7 || '',
+            Precio8: producto.datosFinancieros?.precio8 || '',
+            Precio9: producto.datosFinancieros?.precio9 || '',
+            Precio10: producto.datosFinancieros?.precio10 || '',
+            'Porcentaje Precio 1': producto.datosFinancieros?.porcentajePrecio1 || '',
+            'Porcentaje Precio 2': producto.datosFinancieros?.porcentajePrecio2 || '',
+            'Porcentaje Precio 3': producto.datosFinancieros?.porcentajePrecio3 || '',
+            'Porcentaje Precio 4': producto.datosFinancieros?.porcentajePrecio4 || '',
+            'Porcentaje Precio 5': producto.datosFinancieros?.porcentajePrecio5 || '',
+            'Porcentaje Precio 6': producto.datosFinancieros?.porcentajePrecio6 || '',
+            'Porcentaje Precio 7': producto.datosFinancieros?.porcentajePrecio7 || '',
+            'Porcentaje Precio 8': producto.datosFinancieros?.porcentajePrecio8 || '',
+            'Porcentaje Precio 9': producto.datosFinancieros?.porcentajePrecio9 || '',
+            'Porcentaje Precio 10': producto.datosFinancieros?.porcentajePrecio10 || '',
+            'Rango Inicial 1': producto.datosFinancieros?.rangoInicial1 || '',
+            'Rango Final 1': producto.datosFinancieros?.rangoFinal1 || '',
+            'Rango Inicial 2': producto.datosFinancieros?.rangoInicial2 || '',
+            'Rango Final 2': producto.datosFinancieros?.rangoFinal2 || '',
+            'Rango Inicial 3': producto.datosFinancieros?.rangoInicial3 || '',
+            'Rango Final 3': producto.datosFinancieros?.rangoFinal3 || '',
+            'Porcentaje Monedero 1': producto.datosFinancieros?.porcentajeMonedero1 || '',
+            'Porcentaje Monedero 2': producto.datosFinancieros?.porcentajeMonedero2 || '',
+            'Porcentaje Monedero 3': producto.datosFinancieros?.porcentajeMonedero3 || '',
+            'Porcentaje Monedero 4': producto.datosFinancieros?.porcentajeMonedero4 || '',
+            'Porcentaje Monedero 5': producto.datosFinancieros?.porcentajeMonedero5 || '',
+            'Porcentaje Monedero 6': producto.datosFinancieros?.porcentajeMonedero6 || '',
+            'Porcentaje Monedero 7': producto.datosFinancieros?.porcentajeMonedero7 || '',
+            'Porcentaje Monedero 8': producto.datosFinancieros?.porcentajeMonedero8 || '',
+            'Porcentaje Monedero 9': producto.datosFinancieros?.porcentajeMonedero9 || '',
+            'Porcentaje Monedero 10': producto.datosFinancieros?.porcentajeMonedero10 || '',
+            Línea: producto.linea?.toString() || '',
+            Departamento: producto.departamento?.toString() || '',
+            Marca: producto.marca?.toString() || '',
+            Grupo: producto.grupo?.toString() || '',
+            'ID Alegra': producto.idAlegra || '',
+            'Es Kit': producto.esKit ? 'Sí' : 'No',
+            'Es Grupo de Productos': producto.esGrupoProductos ? 'Sí' : 'No',
+        }));
+
+        // Crear un libro y una hoja de Excel
+        const libro = xlsx.utils.book_new();
+        const hoja = xlsx.utils.json_to_sheet(datosExcel);
+
+        // Agregar la hoja al libro
+        xlsx.utils.book_append_sheet(libro, hoja, 'Productos');
+
+        // Generar el archivo Excel
+        const nombreArchivo = path.join(__dirname, '../../archivos', 'productos.xlsx');
+        xlsx.writeFile(libro, nombreArchivo);
+
+        // Enviar el archivo al cliente
+        res.download(nombreArchivo, 'productos.xlsx', (err) => {
+            if (err) {
+                console.error('Error al enviar el archivo:', err);
+                return res.status(500).json({ message: 'Error al generar o enviar el archivo Excel.' });
+            }
+
+            // Eliminar el archivo después de enviarlo
+            fs.unlinkSync(nombreArchivo);
+        });
+    } catch (error) {
+        console.error('Error al exportar los productos:', error);
+        res.status(500).json({ message: 'Error al exportar los productos a Excel.' });
+    }
+};
 
 
 

@@ -237,6 +237,52 @@ exports.marcarEstadoPorFecha = async (req, res) => {
     }
 };
 
+exports.reagendarActividad = async (req, res) => {
+    const { id } = req.params;
+    const { nuevaFecha, horaInicio, horaFinal, fechaOriginal } = req.body;
+
+    try {
+        // Validar datos de entrada
+        if (!nuevaFecha || !horaInicio || !horaFinal || !fechaOriginal) {
+            return res.status(400).json({ error: 'Faltan datos para reagendar la actividad.' });
+        }
+
+        // Buscar la actividad original
+        const actividadOriginal = await Actividad.findById(id);
+        if (!actividadOriginal) {
+            return res.status(404).json({ error: 'Actividad original no encontrada.' });
+        }
+
+        // Crear una copia de la actividad
+        const nuevaActividad = new Actividad({
+            titulo: `${actividadOriginal.titulo} (Reagendada)`,
+            descripcion: `${actividadOriginal.descripcion || ''} (Reagendada desde: ${fechaOriginal})`,
+            esPeriodica: false, // Siempre será no periódica
+            periodicidad: null, // Sin periodicidad
+            diasSemana: [], // No aplica
+            diaMes: null, // No aplica
+            fechaDesignada: new Date(nuevaFecha),
+            horaInicio,
+            horaFinal,
+            usuariosAsignados: actividadOriginal.usuariosAsignados,
+            finalizada: false, // Nueva actividad siempre inicia sin finalizar
+            excepciones: [], // No aplica
+            estadosPorFecha: {} // Vacío para actividades no periódicas
+        });
+
+        // Guardar la nueva actividad en la base de datos
+        await nuevaActividad.save();
+
+        res.status(201).json({
+            message: 'Actividad reagendada exitosamente.',
+            actividad: nuevaActividad
+        });
+    } catch (error) {
+        console.error('Error al reagendar actividad:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+};
+
 
 
 

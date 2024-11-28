@@ -107,6 +107,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
 
             const eventos = [];
+            const rangoInicio = new Date(start).toISOString().split('T')[0];
+            const rangoFin = new Date(end).toISOString().split('T')[0];
+
             data.actividades.forEach(actividad => {
                 if (actividad.esPeriodica) {
                     const fechas = generarFechasPeriodicas(actividad, start, end);
@@ -123,18 +126,20 @@ document.addEventListener('DOMContentLoaded', function () {
                             description: actividad.descripcion,
                             extendedProps: {
                                 estado,
-                                esPeriodica: actividad.esPeriodica, // Asegúrate de incluir esto
+                                esPeriodica: actividad.esPeriodica,
                                 usuarios: actividad.usuariosAsignados,
                             },
                             color: estado ? '#28A745' : '#FF5733',
                         });
                     });
                 } else {
+                    // Normalizar la fecha de la actividad
                     const fechaActividad = new Date(actividad.fechaDesignada).toISOString().split('T')[0];
-                    if (new Date(fechaActividad) >= new Date(start) && new Date(fechaActividad) <= new Date(end)) {
-                        if (actividad.excepciones.map(e => e.split('T')[0]).includes(fechaActividad)) return;
 
+                    // Verificar que la fecha esté dentro del rango
+                    if (fechaActividad >= rangoInicio && fechaActividad <= rangoFin) {
                         const estado = actividad.estadosPorFecha?.[fechaActividad] || actividad.finalizada;
+
                         eventos.push({
                             id: actividad._id,
                             title: actividad.titulo,
@@ -143,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             description: actividad.descripcion,
                             extendedProps: {
                                 estado,
-                                esPeriodica: actividad.esPeriodica, // Asegúrate de incluir esto
+                                esPeriodica: actividad.esPeriodica,
                                 usuarios: actividad.usuariosAsignados,
                             },
                             color: estado ? '#28A745' : '#FF5733',
@@ -152,12 +157,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
+            // Limpiar y agregar los eventos al calendario
             calendar.removeAllEvents();
             calendar.addEventSource(eventos);
         } catch (error) {
             console.error('Error al recuperar actividades:', error);
         }
     }
+
 
 
     // Renderizar el calendario
