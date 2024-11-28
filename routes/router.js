@@ -35,12 +35,21 @@ const actividades = require('../controllers/actividades/actividadesController')
 const multer = require('../middlewares/multer'); // Configuración de Multer
 const capacitacionController = require('../controllers/capacitacion/capacitacionController');
 const stocksController = require('../controllers/stocks/stocksController');
+const codigosBarras = require('../controllers/codigosBarras/codigosBarrasController')
+const arqueoEfectivo = require('../controllers/arqueos/efectivo/arqueoEfectivoController')
+
+
+const multerw = require('multer');
+const upload = multerw({ dest: 'uploads/' }); // Carpeta temporal para archivos
+
+
 
 
 
 router.get('/', (req, res) => {    
     res.render('index');
 });
+
 
 //Vistas
 router.get('/login', (req, res) => {    
@@ -195,6 +204,11 @@ router.get('/videosAdmin', (req, res) => {
 router.get('/videos', (req, res) => {    
     res.render('Capacitaciones/User/videos');
 });
+
+router.get('/arqueoEfectivo', (req, res) => {    
+    res.render('Arqueos/efectivo/arqueoEfectivo');
+});
+
 
 
 
@@ -385,8 +399,6 @@ router.get('/api/cortesFinalesUser/:userId', cortesFinales.getResumenCorte)
 //Recepcion Cortes
 router.post('/api/recepcion/cortes', recepcionCortes.updateEstadoCortes)
 
-
-const codigosBarras = require('../controllers/codigosBarras/codigosBarrasController')
 router.post('/api/codigosBarras', codigosBarras.generarCodigoDeBarras)
 router.post('/api/codigosBarras/productos', codigosBarras.generarCodigoDeBarrasProductos) 
 
@@ -444,16 +456,29 @@ router.delete('/api/examenes/:id', capacitacionController.eliminarExamen); // El
 router.get('/api/examenes/:id', capacitacionController.obtenerExamenPorId); //get por id
 router.put('/api/examenes/:id', capacitacionController.actualizarExamen); //get por id
 
+
+//Exportar a excel productos 
 router.get('/api/exportarProductos', productos.exportarProductosAExcel);
 
-
-const multerw = require('multer');
-
-const upload = multerw({ dest: 'uploads/' }); // Carpeta temporal para archivos
 //stocks
 router.get('/api/reporte/:sucursalId',stocksController.generarReporteStocks);
 router.post('/api/actualizar/:sucursalId', upload.single('file'), stocksController.actualizarStocks);
 
+
+//arqueo efectivo
+
+router.post('/api/arqueo', arqueoEfectivo.crearArqueo);
+router.get('/api/arqueo', arqueoEfectivo.getAllArqueos);
+router.get('/api/arqueo/:id', arqueoEfectivo.getArqueoById);
+router.delete('/api/arqueo/:id', arqueoEfectivo.deleteArqueo);
+
+
+router.use((req, res, next) => {
+    res.status(404).render('404', {
+        title: 'Página no encontrada',
+        message: 'Lo sentimos, la página que buscas no existe.'
+    });
+});
 
 module.exports = router
 

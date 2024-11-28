@@ -71,7 +71,7 @@ function obtenerNombreRol(rol) {
         case 6:
             return "Produccion";
         case 7:
-            return "Usuario invitado";
+            return "Supervisor";
         case 8:
             return "Visitante";
         default:
