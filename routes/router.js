@@ -37,6 +37,7 @@ const capacitacionController = require('../controllers/capacitacion/capacitacion
 const stocksController = require('../controllers/stocks/stocksController');
 const codigosBarras = require('../controllers/codigosBarras/codigosBarrasController')
 const arqueoEfectivo = require('../controllers/arqueos/efectivo/arqueoEfectivoController')
+const evaluaciones = require('../controllers/evaluaciones/evaluacionesController')
 
 
 const multerw = require('multer');
@@ -207,6 +208,18 @@ router.get('/videos', (req, res) => {
 
 router.get('/arqueoEfectivo', (req, res) => {    
     res.render('Arqueos/efectivo/arqueoEfectivo');
+});
+
+router.get('/arqueosEfectivo', (req, res) => {    
+    res.render('Arqueos/efectivo/arqueoEfectivoAdmin');
+});
+
+router.get('/evaluacionSucursal', (req, res) => {    
+    res.render('Evaluaciones/evaluacionesSucursal');
+});
+
+router.get('/evaluacionAdmin', (req, res) => {    
+    res.render('Evaluaciones/evaluacionesAdmin');
 });
 
 
@@ -471,6 +484,15 @@ router.post('/api/arqueo', arqueoEfectivo.crearArqueo);
 router.get('/api/arqueo', arqueoEfectivo.getAllArqueos);
 router.get('/api/arqueo/:id', arqueoEfectivo.getArqueoById);
 router.delete('/api/arqueo/:id', arqueoEfectivo.deleteArqueo);
+
+//evaluaciones
+
+router.post('/api/evaluaciones', evaluaciones.addEvaluacion);
+router.get('/api/evaluaciones', evaluaciones.getAllEvaluaciones);
+router.get('/api/evaluaciones/:id', evaluaciones.getEvaluacionById);
+router.put('/api/evaluaciones/:id', evaluaciones.updateEvaluacion);
+router.delete('/api/evaluaciones/:id', evaluaciones.deleteEvaluacion);
+
 
 
 router.use((req, res, next) => {
