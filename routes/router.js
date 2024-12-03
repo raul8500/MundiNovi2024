@@ -38,6 +38,8 @@ const stocksController = require('../controllers/stocks/stocksController');
 const codigosBarras = require('../controllers/codigosBarras/codigosBarrasController')
 const arqueoEfectivo = require('../controllers/arqueos/efectivo/arqueoEfectivoController')
 const evaluaciones = require('../controllers/evaluaciones/evaluacionesController')
+const actaController = require('../controllers/actaAdministrativa/actasController');
+const tipoActaController = require('../controllers/actaAdministrativa/tipoActaController');
 
 
 const multerw = require('multer');
@@ -222,9 +224,17 @@ router.get('/evaluacionAdmin', (req, res) => {
     res.render('Evaluaciones/evaluacionesAdmin');
 });
 
+router.get('/actasAdministrativas', (req, res) => {    
+    res.render('Actas/actasAdministrativas');
+});
 
+router.get('/importaciones', (req, res) => {    
+    res.render('Importaciones/importaciones');
+});
 
-
+router.get('/importacionesStock', (req, res) => {    
+    res.render('Importaciones/stoc/stoc');
+});
 
 
 
@@ -493,6 +503,20 @@ router.get('/api/evaluaciones/:id', evaluaciones.getEvaluacionById);
 router.put('/api/evaluaciones/:id', evaluaciones.updateEvaluacion);
 router.delete('/api/evaluaciones/:id', evaluaciones.deleteEvaluacion);
 
+
+//actas ADministrativas
+
+router.post('/api/actas', actaController.crearActa);
+router.get('/api/actas/:id', actaController.getActaById);
+router.get('/api/actas', actaController.getAllActas);
+router.delete('/api/actas/:id', actaController.deleteActaById);
+
+//tipos Actas controller.
+router.post('/api/tipos-actas', tipoActaController.createTipoActa);
+router.get('/api/tipos-actas', tipoActaController.getAllTiposActas);
+router.put('/api/tipos-actas/:id', tipoActaController.updateTipoActa);
+router.delete('/api/tipos-actas/:id', tipoActaController.deleteTipoActa);
+router.get('/api/tipos-actas/:id', tipoActaController.getTipoActaById);
 
 
 router.use((req, res, next) => {

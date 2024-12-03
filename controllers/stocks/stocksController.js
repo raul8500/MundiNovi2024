@@ -20,9 +20,19 @@ exports.generarReporteStocks = async (req, res) => {
         }
 
         // Obtener el stock de la sucursal
-        const stockSucursal = await Stock.findOne({ sucursalId });
+        let stockSucursal = await Stock.findOne({ sucursalId });
+
+        // Si no hay registros de stock para esta sucursal, crearlos con valores en 0
         if (!stockSucursal) {
-            return res.status(404).send('No se encontraron registros de stock para esta sucursal.');
+            stockSucursal = new Stock({
+                sucursalId,
+                productos: productos.map((producto) => ({
+                    reference: producto.reference,
+                    stockMinimo: 0,
+                    stockMaximo: 0,
+                })),
+            });
+            await stockSucursal.save();
         }
 
         // Crear un arreglo para el reporte
@@ -53,13 +63,14 @@ exports.generarReporteStocks = async (req, res) => {
             }
 
             // Eliminar el archivo después de enviarlo
-            //fs.unlinkSync(filePath);
+            // fs.unlinkSync(filePath);
         });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error interno del servidor');
     }
 };
+
 
 // Actualizar stocks por sucursal desde un archivo CSV
 exports.actualizarStocks = async (req, res) => {
