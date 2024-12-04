@@ -46,86 +46,122 @@ async function loadSelectOptions(options) {
 
 loadSelectOptions(selectOptions);
 
+const apiParametrosUrl = '/api/parametros'; // Endpoint para obtener los parámetros activos
+
+async function cargarParametros() {
+    try {
+        // Realizar solicitud para obtener los parámetros
+        const response = await fetch(apiParametrosUrl);
+        if (!response.ok) {
+            throw new Error('Error al obtener los parámetros');
+        }
+
+        const parametros = await response.json();
+        const contenedorParametros = document.getElementById('parametrosEvaluacion');
+        contenedorParametros.innerHTML = ''; // Limpiar cualquier contenido anterior
+
+        // Generar dinámicamente los campos de calificación para cada parámetro
+        parametros.forEach(parametro => {
+            const row = document.createElement('div');
+            row.classList.add('row', 'mb-3');
+            row.innerHTML = `
+                <div class="col-md-6">
+                    <label for="${parametro.nombre}" class="form-label">${parametro.nombre}</label>
+                    <select id="${parametro.nombre}" class="form-select" data-parametro="${parametro.nombre}">
+                        <option value="0" selected>0</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+            `;
+            contenedorParametros.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error al cargar los parámetros:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudieron cargar los parámetros. Intente más tarde.',
+        });
+    }
+}
+
+// Llamar a la función para cargar parámetros al iniciar
+cargarParametros();
+
 
 function validarFormulario() {
-        const sucursalId = document.getElementById('sucursalSelect').value;
+    const sucursalId = document.getElementById('sucursalSelect').value;
 
-        if (!sucursalId) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Falta información',
-                text: 'Por favor, seleccione un ID de sucursal.'
-            });
-            return false;
-        }
-
-        return true; // Validación exitosa
+    if (!sucursalId) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Falta información',
+            text: 'Por favor, seleccione un ID de sucursal.'
+        });
+        return false;
     }
 
-    document.getElementById('submitEvaluacion').addEventListener('click', async () => {
-        // Validar formulario antes de enviar
-        if (!validarFormulario()) {
-            return;
-        }
+    return true; // Validación exitosa
+}
 
-        // Obtener los valores del formulario
-        const data = {
-            sucursalId: document.getElementById('sucursalSelect').value,
-            evaluadorId: infoUser._id,
-            fechaHora: new Date().toISOString(),
-            ordenPisoVenta: parseInt(document.getElementById('ordenPisoVenta').value),
-            limpiezaPisoVenta: parseInt(document.getElementById('limpiezaPisoVenta').value),
-            ordenLimpiezaBodega: parseInt(document.getElementById('ordenLimpiezaBodega').value),
-            ordenLimpiezaBaño: parseInt(document.getElementById('ordenLimpiezaBaño').value),
-            ordenLimpiezaMostrador: parseInt(document.getElementById('ordenLimpiezaMostrador').value),
-            limpiezaExterior: parseInt(document.getElementById('limpiezaExterior').value),
-            frenteoMercancia: parseInt(document.getElementById('frenteoMercancia').value),
-            limpiezaTambosGarrafas: parseInt(document.getElementById('limpiezaTambosGarrafas').value),
-            uniformePresentacion: parseInt(document.getElementById('uniformePresentacion').value),
-            musicaPantallas: parseInt(document.getElementById('musicaPantallas').value),
-            capturaRecepcionFaltantes: parseInt(document.getElementById('capturaRecepcionFaltantes').value),
-            etiquetadoBaston: parseInt(document.getElementById('etiquetadoBaston').value),
-            quimicosBuenasCondicionesPreparado: parseInt(document.getElementById('quimicosBuenasCondicionesPreparado').value),
-            preciadoresPromocionales: parseInt(document.getElementById('preciadoresPromocionales').value),
-            codigosBarras: parseInt(document.getElementById('codigosBarras').value),
-            peps: parseInt(document.getElementById('peps').value),
-            segmentosPtsCalientesTorres: parseInt(document.getElementById('segmentosPtsCalientesTorres').value),
-            boteEscobas: parseInt(document.getElementById('boteEscobas').value),
-            arqueoMercancia: parseInt(document.getElementById('arqueoMercancia').value),
-            arqueoEfectivo: parseInt(document.getElementById('arqueoEfectivo').value),
-            asignarActividades: parseInt(document.getElementById('asignarActividades').value),
-            recepcionCortes: parseInt(document.getElementById('recepcionCortes').value)
-        };
+document.getElementById('submitEvaluacion').addEventListener('click', async () => {
+    // Validar formulario antes de enviar
+    if (!validarFormulario()) {
+        return;
+    }
 
-        try {
-            // Realizar la solicitud POST al backend
-            const response = await fetch('/api/evaluaciones', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+    // Obtener los valores del formulario
+    const sucursalId = document.getElementById('sucursalSelect').value;
+    const evaluadorId = infoUser._id; // Suponiendo que tienes infoUser con el evaluador logueado
+
+    // Construir el array de calificaciones dinámicamente
+    const calificaciones = [];
+    document.querySelectorAll('#parametrosEvaluacion select').forEach(select => {
+        calificaciones.push({
+            titulo: select.dataset.parametro, // Usar el atributo data-parametro para obtener el nombre
+            calificacion: parseInt(select.value)
+        });
+    });
+
+    // Crear el objeto de evaluación
+    const data = {
+        sucursalId,
+        evaluadorId,
+        fechaHora: new Date().toISOString(),
+        calificaciones
+    };
+
+    try {
+        // Realizar la solicitud POST al backend
+        const response = await fetch('/api/evaluaciones', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: 'Evaluación guardada exitosamente.'
             });
-
-            if (response.ok) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Éxito',
-                    text: 'Evaluación guardada exitosamente.'
-                });
-                document.getElementById('evaluacionForm').reset(); // Limpiar el formulario
-            } else {
-                const error = await response.json();
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error al guardar',
-                    text: error.message || 'Hubo un problema al guardar la evaluación.'
-                });
-            }
-        } catch (error) {
-            console.error('Error:', error);
+            document.getElementById('evaluacionForm').reset(); // Limpiar el formulario
+            cargarParametros(); // Recargar los parámetros si es necesario
+        } else {
+            const error = await response.json();
             Swal.fire({
                 icon: 'error',
-                title: 'Error de conexión',
-                text: 'No se pudo conectar con el servidor. Intente nuevamente más tarde.'
+                title: 'Error al guardar',
+                text: error.message || 'Hubo un problema al guardar la evaluación.'
             });
         }
-    });
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error de conexión',
+            text: 'No se pudo conectar con el servidor. Intente nuevamente más tarde.'
+        });
+    }
+});

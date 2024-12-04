@@ -1,22 +1,32 @@
+const Parametro = require('../../schemas/evaluacionesSchema/parametrosSchema');
 const Evaluacion = require('../../schemas/evaluacionesSchema/evaluacionesSchema');
 
-// Crear una nueva evaluación
 exports.addEvaluacion = async (req, res) => {
     try {
-        const body = req.body;
-        const nuevaEvaluacion = await Evaluacion.create(body);
+        const { calificaciones, ...body } = req.body;
+
+        // Validar títulos de los parámetros
+        const parametrosValidos = await Parametro.find({ activo: true });
+        const titulosValidos = parametrosValidos.map(p => p.nombre);
+
+        const calificacionesValidas = calificaciones.every(c => titulosValidos.includes(c.titulo));
+        if (!calificacionesValidas) {
+            return res.status(400).send('Uno o más parámetros no son válidos.');
+        }
+
+        const nuevaEvaluacion = await Evaluacion.create({ ...body, calificaciones });
         res.status(201).send(nuevaEvaluacion);
     } catch (error) {
         console.error(error);
         res.status(500).send('Error interno del servidor');
     }
 };
-// Obtener todas las evaluaciones con populate
+
 exports.getAllEvaluaciones = async (req, res) => {
     try {
         const evaluaciones = await Evaluacion.find()
-            .populate('sucursalId') // Popula sucursalId con los campos deseados
-            .populate('evaluadorId'); // Popula evaluadorId con los campos deseados
+            .populate('sucursalId') // Ajusta para incluir solo los campos necesarios
+            .populate('evaluadorId'); // Ajusta para incluir solo los campos necesarios
 
         res.status(200).send(evaluaciones);
     } catch (error) {
@@ -25,13 +35,12 @@ exports.getAllEvaluaciones = async (req, res) => {
     }
 };
 
-// Obtener una evaluación por ID con populate
 exports.getEvaluacionById = async (req, res) => {
     try {
         const id = req.params.id;
         const evaluacion = await Evaluacion.findById(id)
-            .populate('sucursalId') // Popula sucursalId con los campos deseados
-            .populate('evaluadorId'); // Popula evaluadorId con los campos deseados
+            .populate('sucursalId') // Ajusta para incluir solo los campos necesarios
+            .populate('evaluadorId'); // Ajusta para incluir solo los campos necesarios
 
         if (!evaluacion) {
             return res.status(404).send('Evaluación no encontrada');
@@ -43,13 +52,28 @@ exports.getEvaluacionById = async (req, res) => {
     }
 };
 
-
-// Actualizar una evaluación por ID
 exports.updateEvaluacion = async (req, res) => {
     try {
         const id = req.params.id;
-        const body = req.body;
-        const evaluacionActualizada = await Evaluacion.findByIdAndUpdate(id, body, { new: true });
+        const { calificaciones, ...rest } = req.body;
+
+        // Validar títulos de parámetros si se actualizan las calificaciones
+        if (calificaciones) {
+            const parametrosValidos = await Parametro.find({ activo: true });
+            const titulosValidos = parametrosValidos.map(p => p.nombre);
+
+            const calificacionesValidas = calificaciones.every(c => titulosValidos.includes(c.titulo));
+            if (!calificacionesValidas) {
+                return res.status(400).send('Uno o más parámetros no son válidos.');
+            }
+        }
+
+        const evaluacionActualizada = await Evaluacion.findByIdAndUpdate(
+            id,
+            { ...rest, calificaciones },
+            { new: true }
+        );
+
         if (!evaluacionActualizada) {
             return res.status(404).send('Evaluación no encontrada');
         }
@@ -60,7 +84,6 @@ exports.updateEvaluacion = async (req, res) => {
     }
 };
 
-// Eliminar una evaluación por ID
 exports.deleteEvaluacion = async (req, res) => {
     try {
         const id = req.params.id;

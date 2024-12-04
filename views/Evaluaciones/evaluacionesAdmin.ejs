@@ -81,11 +81,13 @@
     </header>
     <main style="margin-top: 10px">
         <div class="container pt-4">
-            <h3 class="text-center mb-4">
-                Evaluación de sucursal
-            </h3>
-
-
+            <h3 class="text-center mb-4">Evaluación de sucursal</h3>
+    
+            <!-- Botón para gestionar parámetros -->
+            <div class="d-flex justify-content-end mb-2">
+                <button id="gestionarParametrosBtn" class="btn btn-primary">Gestionar Parámetros</button>
+            </div>
+    
             <div class="table-responsive pt-3">
                 <table id="tablaEvaluaciones" class="table align-middle mb-0 bg-white">
                     <thead class="bg-light">
@@ -94,19 +96,62 @@
                             <th scope="col">Evaluador</th>
                             <th scope="col">Fecha y hora</th>
                             <th scope="col">Acciones</th>
-            
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
-                        <!-- Aquí se cargarán las sucursales -->
+                        <!-- Aquí se cargarán las evaluaciones -->
                     </tbody>
                 </table>
             </div>
         </div>
+    
+        <!-- Modal para gestionar parámetros -->
+        <div class="modal fade" id="modalGestionParametros" tabindex="-1" aria-labelledby="modalGestionParametrosLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalGestionParametrosLabel">Gestionar Parámetros de Evaluación</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Formulario para crear o editar parámetros -->
+                        <form id="parametroForm">
+                            <input type="hidden" id="parametroId" />
+                            <div class="mb-3">
+                                <label for="nombreParametro" class="form-label">Nombre del Parámetro</label>
+                                <input type="text" id="nombreParametro" class="form-control"
+                                    placeholder="Ejemplo: Orden del Piso de Venta" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="descripcionParametro" class="form-label">Descripción</label>
+                                <textarea id="descripcionParametro" class="form-control"
+                                    placeholder="Breve descripción del parámetro"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                        </form>
+    
+                        <hr />
+    
+                        <!-- Tabla de parámetros dentro del modal -->
+                        <table id="tablaParametros" class="table align-middle mb-0 bg-white">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
 
-
-
-
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Modal para mostrar la evaluación -->
         <div class="modal fade" id="modalVerEvaluacion" tabindex="-1" aria-labelledby="modalVerEvaluacionLabel"
@@ -118,15 +163,16 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Contenedor para los datos de la evaluación -->
+                        <!-- Información de la evaluación -->
                         <div id="evaluacionDetalles">
-                            <p><strong>Sucursal:</strong> <span id="modalSucursal"></span></p>
-                            <p><strong>Evaluador:</strong> <span id="modalEvaluador"></span></p>
-                            <p><strong>Fecha y Hora:</strong> <span id="modalFechaHora"></span></p>
+                            <p><strong>Sucursal:</strong> <span id="modalSucursal">Cargando...</span></p>
+                            <p><strong>Evaluador:</strong> <span id="modalEvaluador">Cargando...</span></p>
+                            <p><strong>Fecha y Hora:</strong> <span id="modalFechaHora">Cargando...</span></p>
                             <hr>
                             <h6>Parámetros de Evaluación</h6>
                             <ul id="modalParametros">
-                                <!-- Se llenará dinámicamente con los datos -->
+                                <!-- Aquí se llenarán dinámicamente los parámetros -->
+                                <li>Cargando parámetros...</li>
                             </ul>
                         </div>
                     </div>
@@ -138,6 +184,7 @@
         </div>
 
     </main>
+
 
 
 

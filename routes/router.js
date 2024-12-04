@@ -40,6 +40,7 @@ const arqueoEfectivo = require('../controllers/arqueos/efectivo/arqueoEfectivoCo
 const evaluaciones = require('../controllers/evaluaciones/evaluacionesController')
 const actaController = require('../controllers/actaAdministrativa/actasController');
 const tipoActaController = require('../controllers/actaAdministrativa/tipoActaController');
+const parametros = require('../controllers/evaluaciones/parametrosController');
 
 
 const multerw = require('multer');
@@ -503,6 +504,12 @@ router.get('/api/evaluaciones/:id', evaluaciones.getEvaluacionById);
 router.put('/api/evaluaciones/:id', evaluaciones.updateEvaluacion);
 router.delete('/api/evaluaciones/:id', evaluaciones.deleteEvaluacion);
 
+//parametros
+router.post('/api/parametros', parametros.addParametro);
+router.get('/api/parametros', parametros.getParametros);
+router.get('/api/parametros/:id', parametros.getParametroById);
+router.put('/api/parametros/:id', parametros.updateParametro);
+router.delete('/api/parametros/:id', parametros.deleteParametro);
 
 //actas ADministrativas
 

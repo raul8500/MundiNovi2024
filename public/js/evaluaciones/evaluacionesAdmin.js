@@ -125,6 +125,8 @@ const parametrosNombres = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+
+
     document.body.addEventListener('click', async (event) => {
         if (event.target.closest('.btn-ver')) {
             const button = event.target.closest('.btn-ver');
@@ -137,17 +139,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const evaluacion = await response.json();
 
+                console.log(evaluacion)
+
                 // Llenar el modal con los datos de la evaluación
-                document.getElementById('modalSucursal').textContent = evaluacion.sucursalId.nombre || 'Sin nombre';
-                document.getElementById('modalEvaluador').textContent = evaluacion.evaluadorId.nombre || 'Sin nombre';
+                document.getElementById('modalSucursal').textContent = evaluacion.sucursalId?.nombre || 'Sin nombre';
+                document.getElementById('modalEvaluador').textContent = evaluacion.evaluadorId?.name || 'Sin nombre';
                 document.getElementById('modalFechaHora').textContent = new Date(evaluacion.fechaHora).toLocaleString();
 
-                // Generar la lista de parámetros con nombres correctos
-                const parametros = Object.entries(evaluacion)
-                    .filter(([key]) => parametrosNombres[key]) // Filtrar solo los parámetros válidos
-                    .map(([key, value]) => `<li><strong>${parametrosNombres[key]}:</strong> ${value}</li>`)
+                // Generar la lista de parámetros con títulos y calificaciones
+                const parametros = evaluacion.calificaciones
+                    .map(calificacion => `<li><strong>${calificacion.titulo}:</strong> ${calificacion.calificacion}</li>`)
                     .join('');
 
+                // Actualizar el contenido del modal con los parámetros
                 document.getElementById('modalParametros').innerHTML = parametros;
 
                 // Mostrar el modal
@@ -163,4 +167,154 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+
+
 });
+
+
+const apiParametrosUrl = '/api/parametros'; // Endpoint para parámetros
+
+// Inicializar DataTable para parámetros
+const tablaParametros = $('#tablaParametros').DataTable({
+    ajax: {
+        url: apiParametrosUrl,
+        dataSrc: ''
+    },
+    columns: [
+        { data: 'nombre', title: 'Nombre' },
+        { data: 'descripcion', title: 'Descripción', defaultContent: '-' },
+        {
+            data: null,
+            title: 'Acciones',
+            render: function (data, type, row) {
+                return `
+                    <button class="btn btn-warning btn-sm btn-editar" data-id="${row._id}" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm btn-eliminar-parametros" data-id="${row._id}" title="Eliminar">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                `;
+            }
+        }
+    ],
+    language: {
+        "sProcessing": "Procesando...",
+        "sLengthMenu": "Mostrar _MENU_ registros",
+        "sZeroRecords": "No se encontraron resultados",
+        "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando 0 a 0 de 0 registros",
+        "sInfoFiltered": "(filtrado de _MAX_ registros totales)",
+        "sSearch": "Buscar:",
+        "sLoadingRecords": "Cargando...",
+        "oPaginate": {
+            "sFirst": "Primera",
+            "sLast": "Última",
+            "sNext": "Siguiente",
+            "sPrevious": "Anterior"
+        }
+    }
+});
+
+// Manejar el formulario de creación/edición
+$('#parametroForm').on('submit', async (e) => {
+    e.preventDefault();
+
+    const parametroId = $('#parametroId').val();
+    const nombre = $('#nombreParametro').val().trim();
+    const descripcion = $('#descripcionParametro').val().trim();
+
+    if (!nombre) {
+        Swal.fire('Error', 'El nombre del parámetro es obligatorio.', 'error');
+        return;
+    }
+
+    const parametro = { nombre, descripcion };
+
+    try {
+        let response;
+        if (parametroId) {
+            // Actualizar
+            response = await fetch(`${apiParametrosUrl}/${parametroId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(parametro),
+            });
+        } else {
+            // Crear
+            response = await fetch(apiParametrosUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(parametro),
+            });
+        }
+
+        if (!response.ok) throw new Error('Error al guardar el parámetro.');
+
+        await Swal.fire('¡Éxito!', 'Parámetro guardado exitosamente.', 'success');
+        $('#parametroForm')[0].reset();
+        $('#parametroId').val('');
+        tablaParametros.ajax.reload(); // Recargar la tabla
+    } catch (error) {
+        console.error('Error al guardar el parámetro:', error);
+        Swal.fire('Error', 'Hubo un problema al guardar el parámetro.', 'error');
+    }
+});
+
+// Manejar la edición de parámetros
+$('#tablaParametros').on('click', '.btn-editar', async (e) => {
+    const id = $(e.currentTarget).data('id');
+
+    try {
+        const response = await fetch(`${apiParametrosUrl}/${id}`);
+        if (!response.ok) throw new Error('Error al obtener el parámetro.');
+
+        const parametro = await response.json();
+        $('#parametroId').val(parametro._id);
+        $('#nombreParametro').val(parametro.nombre);
+        $('#descripcionParametro').val(parametro.descripcion);
+    } catch (error) {
+        console.error('Error al cargar el parámetro:', error);
+        Swal.fire('Error', 'Hubo un problema al cargar el parámetro.', 'error');
+    }
+});
+
+// Manejar la eliminación de parámetros
+$('#tablaParametros').on('click', '.btn-eliminar-parametros', async (e) => {
+    const id = $(e.currentTarget).data('id');
+
+    const confirmacion = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'No podrás revertir esta acción.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+    });
+
+    if (!confirmacion.isConfirmed) return;
+
+    try {
+        const response = await fetch(`${apiParametrosUrl}/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Error al eliminar el parámetro.');
+
+        await Swal.fire('¡Eliminado!', 'Parámetro eliminado exitosamente.', 'success');
+        tablaParametros.ajax.reload(); // Recargar la tabla
+    } catch (error) {
+        console.error('Error al eliminar el parámetro:', error);
+        Swal.fire('Error', 'Hubo un problema al eliminar el parámetro.', 'error');
+    }
+});
+
+// Abrir el modal para gestionar parámetros
+$('#gestionarParametrosBtn').on('click', () => {
+    $('#parametroForm')[0].reset();
+    $('#parametroId').val('');
+    tablaParametros.ajax.reload(); // Recargar los datos en el modal
+    $('#modalGestionParametros').modal('show');
+});
+
+
