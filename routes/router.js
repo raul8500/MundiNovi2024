@@ -41,6 +41,7 @@ const evaluaciones = require('../controllers/evaluaciones/evaluacionesController
 const actaController = require('../controllers/actaAdministrativa/actasController');
 const tipoActaController = require('../controllers/actaAdministrativa/tipoActaController');
 const parametros = require('../controllers/evaluaciones/parametrosController');
+const inventario = require('../controllers/inventarios/inventariosController');
 
 
 const multerw = require('multer');
@@ -235,6 +236,11 @@ router.get('/importaciones', (req, res) => {
 
 router.get('/importacionesStock', (req, res) => {    
     res.render('Importaciones/stoc/stoc');
+});
+
+
+router.get('/listadoInventarios', (req, res) => {    
+    res.render('Inventarios/inventariosAdmin');
 });
 
 
@@ -524,6 +530,14 @@ router.get('/api/tipos-actas', tipoActaController.getAllTiposActas);
 router.put('/api/tipos-actas/:id', tipoActaController.updateTipoActa);
 router.delete('/api/tipos-actas/:id', tipoActaController.deleteTipoActa);
 router.get('/api/tipos-actas/:id', tipoActaController.getTipoActaById);
+
+//inventario controller 
+router.post('/api/inventario', inventario.crearOActualizarInventario);
+router.get('/api/inventario', inventario.getAllInventarios);
+router.get('/api/inventario/:id', inventario.getInventarioById);
+router.put('/api/inventario/:id', inventario.cambiarEstadoInventario );
+router.delete('/api/inventario/:id', inventario.deleteInventario);
+
 
 
 router.use((req, res, next) => {
