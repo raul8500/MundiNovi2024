@@ -51,6 +51,9 @@ $('#tablaInventarios').DataTable({
                 if (!row.estado) {
                     // Si el estado es 'Iniciado'
                     return `
+                        <button class="btn btn-primary btn-sm btn-detalles" data-id="${row._id}" title="Detalles">
+                            <i class="fas fa-info-circle"></i> Detalles
+                        </button>
                         <button class="btn btn-danger btn-sm btn-finalizar" data-id="${row._id}" title="Finalizar">
                             <i class="fas fa-times"></i> Finalizar
                         </button>
@@ -203,6 +206,90 @@ document.body.addEventListener('click', async (event) => {
         }
     }
 });
+
+document.body.addEventListener('click', async (event) => {
+    if (event.target.closest('.btn-finalizar')) {
+        const button = event.target.closest('.btn-finalizar');
+        const inventarioId = button.getAttribute('data-id');
+
+        // Confirmación antes de finalizar el inventario
+        const confirmacion = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Una vez finalizado, no podrás editar este inventario.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, finalizar',
+            cancelButtonText: 'Cancelar',
+        });
+
+        if (!confirmacion.isConfirmed) return;
+
+        try {
+            // Enviar solicitud para finalizar el inventario
+            const response = await fetch(`/api/inventario/${inventarioId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ estado: true }) // Cambiar estado a "finalizado"
+            });
+
+            if (response.ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Inventario Finalizado',
+                    text: 'El inventario se ha finalizado correctamente.',
+                });
+                $('#tablaInventarios').DataTable().ajax.reload(); // Recargar tabla
+            } else {
+                const error = await response.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message || 'No se pudo finalizar el inventario.',
+                });
+            }
+        } catch (error) {
+            console.error('Error al finalizar el inventario:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo finalizar el inventario. Intenta nuevamente.',
+            });
+        }
+    }
+});
+
+document.body.addEventListener('click', async (event) => {
+    if (event.target.closest('.btn-descargar')) {
+        const button = event.target.closest('.btn-descargar');
+        const inventarioId = button.getAttribute('data-id');
+
+        try {
+            const response = await fetch(`/api/inventarioDescargar/${inventarioId}`, {
+                method: 'GET',
+            });
+
+            if (!response.ok) throw new Error('Error al descargar el archivo.');
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Inventario_${inventarioId}.xlsx`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Error al descargar el archivo:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo descargar el archivo.',
+            });
+        }
+    }
+});
+
 
 
 // Filtrar productos en las pestañas del modal

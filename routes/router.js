@@ -243,6 +243,10 @@ router.get('/listadoInventarios', (req, res) => {
     res.render('Inventarios/inventariosAdmin');
 });
 
+router.get('/arqueoSupervisor', (req, res) => {    
+    res.render('Arqueos/productos/arqueoSupervisor');
+});
+
 
 
 
@@ -537,6 +541,7 @@ router.get('/api/inventario', inventario.getAllInventarios);
 router.get('/api/inventario/:id', inventario.getInventarioById);
 router.put('/api/inventario/:id', inventario.cambiarEstadoInventario );
 router.delete('/api/inventario/:id', inventario.deleteInventario);
+router.get('/api/inventarioDescargar/:id', inventario.descargarInventario);
 
 
 

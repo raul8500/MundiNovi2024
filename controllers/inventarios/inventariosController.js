@@ -3,6 +3,8 @@ const Kardex = require('../../schemas/kardexSchema/kardexSchema');
 const Product = require('../../schemas/productosSchema/productosSchema');
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
+const ExcelJS = require('exceljs');
+
 
 const getNextFolio = async () => {
     const lastInventario = await Inventario.findOne().sort({ folio: -1 }).select('folio');
@@ -29,7 +31,13 @@ exports.crearOActualizarInventario = async (req, res) => {
             ? new mongoose.Types.ObjectId(sucursal)
             : sucursal;
 
+        // Buscar inventario abierto
         let inventario = await Inventario.findOne({ sucursal: sucursalId, estado: false });
+
+        // Si existe un inventario abierto pero el encargado es diferente, crear un nuevo inventario
+        if (inventario && inventario.encargado.toString() !== encargado) {
+            inventario = null; // Forzar la creación de un nuevo inventario
+        }
 
         const todosLosProductos = await Product.find({ esActivo: true });
 
@@ -81,11 +89,9 @@ exports.crearOActualizarInventario = async (req, res) => {
                 const index = inventario.productos.findIndex(p => p.referencia === producto.referencia);
 
                 if (index !== -1) {
-                    // Si el producto ya existe en productos, actualizarlo
                     inventario.productos[index].existenciaFisica = producto.existenciaFisica;
                     inventario.productos[index].existenciaContable = mapaExistencias[producto.referencia] || 0;
                 } else {
-                    // Si el producto no existe en productos, agregarlo
                     inventario.productos.push({
                         referencia: producto.referencia,
                         descripcion: producto.descripcion,
@@ -99,15 +105,12 @@ exports.crearOActualizarInventario = async (req, res) => {
                 const index = inventario.productosConMovimiento?.findIndex(p => p.referencia === productoMov.referencia);
 
                 if (index !== -1) {
-                    // Si el producto ya existe en productosConMovimiento, actualizarlo
                     inventario.productosConMovimiento[index] = productoMov;
                 } else {
-                    // Si el producto no existe en productosConMovimiento, agregarlo
                     inventario.productosConMovimiento.push(productoMov);
                 }
             });
 
-            // Guardar los cambios
             await inventario.save();
 
             return res.status(200).send({
@@ -235,6 +238,69 @@ exports.cambiarEstadoInventario = async (req, res) => {
         });
     } catch (error) {
         console.error('Error al cambiar el estado del inventario:', error);
+        res.status(500).send({ message: 'Error interno del servidor.' });
+    }
+};
+
+exports.descargarInventario = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const inventario = await Inventario.findById(id)
+            .populate('sucursal')
+            .populate('encargado');
+        if (!inventario) {
+            return res.status(404).send({ message: 'Inventario no encontrado.' });
+        }
+
+        // Crear un nuevo workbook y hoja
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Inventario Movimiento');
+
+        // Agregar encabezados del inventario
+        worksheet.addRow(['Sucursal:', inventario.sucursal?.nombre || 'N/A']);
+        worksheet.addRow(['Encargado:', inventario.encargado?.name || 'N/A']);
+        worksheet.addRow(['Fecha de Finalización:', inventario.updatedAt.toLocaleString()]);
+        worksheet.addRow([]);
+        worksheet.addRow([
+            'Referencia',
+            'Descripción',
+            'Existencia Física',
+            'Existencia Contable',
+            'Diferencia',
+            'Costo',
+            'Importe',
+        ]);
+
+        // Agregar los productos con movimiento
+        inventario.productosConMovimiento.forEach((producto) => {
+            const diferencia = producto.existenciaFisica - producto.existenciaContable;
+            const importe = diferencia * producto.costo;
+            worksheet.addRow([
+                producto.referencia,
+                producto.descripcion,
+                producto.existenciaFisica,
+                producto.existenciaContable,
+                diferencia,
+                producto.costo,
+                importe,
+            ]);
+        });
+
+        // Estilo para la hoja
+        worksheet.columns.forEach((column) => {
+            column.width = 20; // Ajustar ancho de las columnas
+        });
+        worksheet.getRow(1).font = { bold: true }; // Encabezados en negrita
+
+        // Enviar el archivo al cliente
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename=Inventario_${inventario.folio}.xlsx`);
+
+        await workbook.xlsx.write(res);
+        res.end();
+    } catch (error) {
+        console.error('Error al generar el Excel:', error);
         res.status(500).send({ message: 'Error interno del servidor.' });
     }
 };
