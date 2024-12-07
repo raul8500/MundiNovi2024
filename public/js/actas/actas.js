@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (confirmacion.isConfirmed) {
                 try {
-                    const response = await fetch(`/api/tipos-actas/${actaId}`, {
+                    const response = await fetch(`/api/actas/${actaId}`, {
                         method: 'DELETE'
                     });
 
