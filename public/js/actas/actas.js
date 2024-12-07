@@ -373,7 +373,7 @@ document.getElementById('btnGenerarActa').addEventListener('click', generarActa)
                         <button class="btn btn-warning btn-sm btn-editar" data-id="${row._id}" title="Editar">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger btn-sm btn-eliminar" data-id="${row._id}" title="Eliminar">
+                        <button class="btn btn-danger btn-sm btn-eliminar-tipo" data-id="${row._id}" title="Eliminar">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     `;
