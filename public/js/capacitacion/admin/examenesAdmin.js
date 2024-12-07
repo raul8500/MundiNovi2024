@@ -58,7 +58,7 @@ $(document).on('click', '.btn-ver', async function () {
 
     try {
         // Obtener las respuestas desde el backend
-        const response = await fetch(`http://localhost:3000/api/respuestas/${examenId}`);
+        const response = await fetch(`/api/respuestas/${examenId}`);
         const respuestas = await response.json();
 
         if (response.ok) {
@@ -169,7 +169,7 @@ $(document).on('click', '.btn-estado', async function () {
         if (result.isConfirmed) {
             try {
                 // Realizar la solicitud al backend
-                const response = await fetch(`http://localhost:3000/api/examenes/${id}/estado`, {
+                const response = await fetch(`/api/examenes/${id}/estado`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'
