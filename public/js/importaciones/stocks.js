@@ -93,8 +93,8 @@ const archivoInput = document.getElementById('archivoInput');
     const realizarCargaBtn = document.getElementById('realizarCargaBtn');
     const sucursalSelect = document.getElementById('sucursalSelect');
     const descargarFormatosBtn = document.getElementById('descargarFormatosBtn');
-    const endpointBase = 'http://localhost:3000/api/actualizar/';
-    const descargarEndpointBase = 'http://localhost:3000/api/reporte/';
+    const endpointBase = '/api/actualizar/';
+    const descargarEndpointBase = '/api/reporte/';
     let archivoSeleccionado = null;
     let datosCargados = [];
 
