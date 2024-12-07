@@ -9,6 +9,8 @@ const Message = require('./schemas/mensajes/mensajesSchema');
 const ModelUser = require('./schemas/usersSchema/usersSchema');
 const ModelSucursal = require('./schemas/sucursalSchema/sucursalSchema');
 const jwt = require('jsonwebtoken');
+const path = require('path');
+
 
 // Conectar a la base de datos
 dbconnect();
@@ -28,6 +30,7 @@ app.set('view engine', 'ejs');
 
 // Seteamos la carpeta public para archivos estáticos
 app.use(express.static('public'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Para procesar datos enviados desde forms
 app.use(express.urlencoded({ extended: true }));

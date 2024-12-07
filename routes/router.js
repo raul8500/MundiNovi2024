@@ -43,11 +43,26 @@ const tipoActaController = require('../controllers/actaAdministrativa/tipoActaCo
 const parametros = require('../controllers/evaluaciones/parametrosController');
 const inventario = require('../controllers/inventarios/inventariosController');
 const inventarioMateriaPrima = require('../controllers/inventarios/inventariosMPrima');
+const egresos = require('../controllers/egresos/egresosController');
 
 
 const multerw = require('multer');
 const upload = multerw({ dest: 'uploads/' }); // Carpeta temporal para archivos
+const path = require('path');
 
+
+const storage = multerw.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); // Carpeta donde se guardan los archivos
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = path.extname(file.originalname); // Obtener extensión del archivo
+        cb(null, uniqueSuffix + ext); // Guardar con la extensión
+    }
+});
+
+const upload2 = multerw({ storage });
 
 
 
@@ -254,6 +269,14 @@ router.get('/arqueoProductos', (req, res) => {
 
 router.get('/arqueoMatPrima', (req, res) => {    
     res.render('Arqueos/materiaPrima/arqueoMatPrima');
+});
+
+router.get('/egresosAdmin', (req, res) => {    
+    res.render('Egresos/egresosAdmin');
+});
+
+router.get('/egresos', (req, res) => {    
+    res.render('Egresos/egresosUser');
 });
 
 
@@ -555,6 +578,13 @@ router.get('/api/inventarioDescargar/:id', inventario.descargarInventario);
 
 //materia prima
 router.post('/api/inventario/materiaprima', inventarioMateriaPrima.crearOActualizarInventario);
+
+//egresos
+router.post('/api/egresos', upload2.single('archivoComprobatorio'), egresos.crearEgreso);
+router.get('/api/egresos', egresos.getAllEgresos);
+router.get('/api/egresos/:id', egresos.getEgresoById);
+router.delete('/api/egresos/:id', egresos.deleteEgreso);
+
 
 
 
