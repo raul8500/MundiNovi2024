@@ -42,6 +42,7 @@ const actaController = require('../controllers/actaAdministrativa/actasControlle
 const tipoActaController = require('../controllers/actaAdministrativa/tipoActaController');
 const parametros = require('../controllers/evaluaciones/parametrosController');
 const inventario = require('../controllers/inventarios/inventariosController');
+const inventarioMateriaPrima = require('../controllers/inventarios/inventariosMPrima');
 
 
 const multerw = require('multer');
@@ -246,6 +247,15 @@ router.get('/listadoInventarios', (req, res) => {
 router.get('/arqueoSupervisor', (req, res) => {    
     res.render('Arqueos/productos/arqueoSupervisor');
 });
+
+router.get('/arqueoProductos', (req, res) => {    
+    res.render('Arqueos/productos/arqueosUsuario');
+});
+
+router.get('/arqueoMatPrima', (req, res) => {    
+    res.render('Arqueos/materiaPrima/arqueoMatPrima');
+});
+
 
 
 
@@ -542,6 +552,9 @@ router.get('/api/inventario/:id', inventario.getInventarioById);
 router.put('/api/inventario/:id', inventario.cambiarEstadoInventario );
 router.delete('/api/inventario/:id', inventario.deleteInventario);
 router.get('/api/inventarioDescargar/:id', inventario.descargarInventario);
+
+//materia prima
+router.post('/api/inventario/materiaprima', inventarioMateriaPrima.crearOActualizarInventario);
 
 
 

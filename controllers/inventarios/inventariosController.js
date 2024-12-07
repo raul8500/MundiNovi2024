@@ -13,7 +13,7 @@ const getNextFolio = async () => {
 
 exports.crearOActualizarInventario = async (req, res) => {
     try {
-        const { sucursal, productos, encargado } = req.body;
+        const { sucursal, productos, encargado, tipo } = req.body;
 
         if (!sucursal) {
             return res.status(400).send({ message: 'La sucursal es requerida.' });
@@ -25,6 +25,10 @@ exports.crearOActualizarInventario = async (req, res) => {
 
         if (!Array.isArray(productos) || productos.length === 0) {
             return res.status(400).send({ message: 'Debe proporcionar productos para el inventario.' });
+        }
+
+        if (!tipo || typeof tipo !== 'string') {
+            return res.status(400).send({ message: 'El tipo es requerido y debe ser un string.' });
         }
 
         const sucursalId = mongoose.isValidObjectId(sucursal)
@@ -85,13 +89,16 @@ exports.crearOActualizarInventario = async (req, res) => {
         });
 
         if (inventario) {
+            const referenciasExistentes = new Set(inventario.productos.map(p => p.referencia));
+
             productos.forEach((producto) => {
                 const index = inventario.productos.findIndex(p => p.referencia === producto.referencia);
-
                 if (index !== -1) {
+                    // Actualizar producto existente
                     inventario.productos[index].existenciaFisica = producto.existenciaFisica;
                     inventario.productos[index].existenciaContable = mapaExistencias[producto.referencia] || 0;
                 } else {
+                    // Solo agregar si no existe (nuevo producto)
                     inventario.productos.push({
                         referencia: producto.referencia,
                         descripcion: producto.descripcion,
@@ -101,16 +108,19 @@ exports.crearOActualizarInventario = async (req, res) => {
                 }
             });
 
-            nuevosProductosConMovimiento.forEach(productoMov => {
-                const index = inventario.productosConMovimiento?.findIndex(p => p.referencia === productoMov.referencia);
+            nuevosProductosConMovimiento.forEach((productoMov) => {
+                const index = inventario.productosConMovimiento.findIndex(p => p.referencia === productoMov.referencia);
 
                 if (index !== -1) {
+                    // Actualizar producto con movimiento existente
                     inventario.productosConMovimiento[index] = productoMov;
                 } else {
+                    // Agregar nuevo producto con movimiento
                     inventario.productosConMovimiento.push(productoMov);
                 }
             });
 
+            inventario.tipo = tipo; // Actualizar el tipo en caso de ser necesario
             await inventario.save();
 
             return res.status(200).send({
@@ -142,6 +152,7 @@ exports.crearOActualizarInventario = async (req, res) => {
                 sucursal: sucursalId,
                 encargado: new mongoose.Types.ObjectId(encargado),
                 estado: false,
+                tipo, // Guardar el tipo en el nuevo inventario
                 productos: productosFinales,
                 productosConMovimiento: nuevosProductosConMovimiento
             });

@@ -1,105 +1,56 @@
-const selectOptions = [
-    {url: '/api/sucursal', selectId: 'sucursalSelect'}
-];
-
-async function loadSelectOptions(options) {
-    try {
-        // Función para cargar opciones en un select específico
-        const loadOptions = async (url, selectId) => {
-            const select = document.getElementById(selectId);
-
-            // Realiza una solicitud GET a la API
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Error al obtener los datos de ${selectId}`);
-            }
-
-            // Convierte la respuesta en JSON
-            const data = await response.json();
-
-            // Limpia las opciones existentes
-            select.innerHTML = '';
-
-            // Agrega una opción predeterminada (opcional)
-            const defaultOption = document.createElement('option');
-            defaultOption.textContent = `Selecciona una sucursal`;
-            defaultOption.value = '';
-            select.appendChild(defaultOption);
-
-            // Agrega una opción para cada ítem
-            data.forEach(item => {
-                const option = document.createElement('option');
-                option.value = item._id; // Usa el id del item como valor
-                option.textContent = item.nombre; // Usa el nombre del item como texto
-                select.appendChild(option);
-            });
-        };
-
-        // Recorre las opciones y carga cada select
-        for (const option of options) {
-            await loadOptions(option.url, option.selectId);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-loadSelectOptions(selectOptions);
-
-
 const productoInput = document.getElementById('productoInput');
 const productosSugerencias = document.getElementById('productosSugerencias');
 const tablaProductos = document.getElementById('tablaProductos').querySelector('tbody');
 
-// Variable para almacenar todos los productos
-let todosLosProductos = [];
+// Variable para almacenar todas las materias primas
+let todasLasMateriasPrimas = [];
 let indiceSeleccionado = -1; // Índice para las flechas de navegación
 
-// Función para cargar todos los productos
-async function cargarProductos() {
+// Función para cargar todas las materias primas
+async function cargarMateriasPrimas() {
     try {
-        const response = await fetch('/api/productos');
-        if (!response.ok) throw new Error('Error al cargar los productos');
+        const response = await fetch('/api/materiasPrimas');
+        if (!response.ok) throw new Error('Error al cargar las materias primas');
 
         const data = await response.json();
-        if (!Array.isArray(data.products)) {
-            throw new Error('La respuesta del servidor no contiene un arreglo de productos');
+        if (!Array.isArray(data)) {
+            throw new Error('La respuesta del servidor no contiene un arreglo de materias primas');
         }
 
-        todosLosProductos = data.products; // Asignar productos a la variable global
+        todasLasMateriasPrimas = data; // Asignar materias primas a la variable global
     } catch (error) {
-        console.error('Error al cargar los productos:', error);
+        console.error('Error al cargar las materias primas:', error);
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'No se pudieron cargar los productos. Intenta nuevamente.',
+            text: 'No se pudieron cargar las materias primas. Intenta nuevamente.',
         });
     }
 }
 
-// Función para filtrar productos según el query
-function filtrarProductos(query) {
-    if (!Array.isArray(todosLosProductos)) return [];
-    return todosLosProductos.filter(
-        (producto) =>
-            producto.reference.toLowerCase().includes(query.toLowerCase()) ||
-            (producto.name && producto.name.toLowerCase().includes(query.toLowerCase()))
+// Función para filtrar materias primas según el query
+function filtrarMateriasPrimas(query) {
+    if (!Array.isArray(todasLasMateriasPrimas)) return [];
+    return todasLasMateriasPrimas.filter(
+        (materiaPrima) =>
+            materiaPrima.clave.toLowerCase().includes(query.toLowerCase()) ||
+            (materiaPrima.nombre && materiaPrima.nombre.toLowerCase().includes(query.toLowerCase()))
     );
 }
 
 // Función para mostrar sugerencias
-function mostrarSugerencias(productos) {
+function mostrarSugerencias(materiasPrimas) {
     productosSugerencias.innerHTML = '';
-    productos.forEach((producto, index) => {
+    materiasPrimas.forEach((materiaPrima, index) => {
         const item = document.createElement('button');
         item.type = 'button';
         item.className = `list-group-item list-group-item-action ${indiceSeleccionado === index ? 'active' : ''}`;
-        item.textContent = `${producto.reference} - ${producto.name}`;
-        item.dataset.reference = producto.reference;
-        item.dataset.name = producto.name;
+        item.textContent = `${materiaPrima.clave} - ${materiaPrima.nombre}`;
+        item.dataset.clave = materiaPrima.clave;
+        item.dataset.nombre = materiaPrima.nombre;
 
         item.addEventListener('click', () => {
-            agregarProductoATabla(producto);
+            agregarMateriaPrimaATabla(materiaPrima);
             productosSugerencias.innerHTML = ''; // Limpiar sugerencias
             productoInput.value = ''; // Limpiar el input
         });
@@ -108,26 +59,26 @@ function mostrarSugerencias(productos) {
     });
 }
 
-// Función para agregar un producto a la tabla
-function agregarProductoATabla(producto) {
+// Función para agregar una materia prima a la tabla
+function agregarMateriaPrimaATabla(materiaPrima) {
     const filaExistente = Array.from(tablaProductos.children).find(
-        (row) => row.dataset.reference === producto.reference
+        (row) => row.dataset.clave === materiaPrima.clave
     );
 
     if (filaExistente) {
         Swal.fire({
             icon: 'warning',
-            title: 'Producto ya agregado',
-            text: `El producto ${producto.name} ya está en la lista.`,
+            title: 'Materia prima ya agregada',
+            text: `La materia prima ${materiaPrima.nombre} ya está en la lista.`,
         });
         return;
     }
 
     const fila = document.createElement('tr');
-    fila.dataset.reference = producto.reference;
+    fila.dataset.clave = materiaPrima.clave;
     fila.innerHTML = `
-        <td>${producto.reference}</td>
-        <td>${producto.name}</td>
+        <td>${materiaPrima.clave}</td>
+        <td>${materiaPrima.nombre}</td>
         <td>
             <input type="number" class="form-control form-control-sm cantidad-fisica" placeholder="Cantidad física" min="0">
         </td>
@@ -158,13 +109,13 @@ function agregarProductoATabla(producto) {
     });
 }
 
-// Evento para buscar productos mientras se escribe
+// Evento para buscar materias primas mientras se escribe
 productoInput.addEventListener('input', () => {
     const query = productoInput.value.trim();
     if (query.length > 2) {
-        const productosFiltrados = filtrarProductos(query);
+        const materiasPrimasFiltradas = filtrarMateriasPrimas(query);
         indiceSeleccionado = -1; // Reiniciar selección al escribir
-        mostrarSugerencias(productosFiltrados);
+        mostrarSugerencias(materiasPrimasFiltradas);
     } else {
         productosSugerencias.innerHTML = '';
     }
@@ -181,46 +132,37 @@ productoInput.addEventListener('keydown', (e) => {
         e.preventDefault();
         indiceSeleccionado = (indiceSeleccionado + 1) % items.length;
         mostrarSugerencias(Array.from(items).map((item) => ({
-            reference: item.dataset.reference,
-            name: item.dataset.name,
+            clave: item.dataset.clave,
+            nombre: item.dataset.nombre,
         })));
     } else if (e.key === 'ArrowUp') {
         // Mover hacia arriba
         e.preventDefault();
         indiceSeleccionado = (indiceSeleccionado - 1 + items.length) % items.length;
         mostrarSugerencias(Array.from(items).map((item) => ({
-            reference: item.dataset.reference,
-            name: item.dataset.name,
+            clave: item.dataset.clave,
+            nombre: item.dataset.nombre,
         })));
     } else if (e.key === 'Enter') {
-        // Seleccionar producto
+        // Seleccionar materia prima
         e.preventDefault();
         if (indiceSeleccionado >= 0) {
-            const productoSeleccionado = {
-                reference: items[indiceSeleccionado].dataset.reference,
-                name: items[indiceSeleccionado].dataset.name,
+            const materiaPrimaSeleccionada = {
+                clave: items[indiceSeleccionado].dataset.clave,
+                nombre: items[indiceSeleccionado].dataset.nombre,
             };
-            agregarProductoATabla(productoSeleccionado);
+            agregarMateriaPrimaATabla(materiaPrimaSeleccionada);
             productosSugerencias.innerHTML = ''; // Limpiar sugerencias
             productoInput.value = ''; // Limpiar el input
         }
     }
 });
 
-// Cargar todos los productos al cargar la página
-cargarProductos();
+// Cargar todas las materias primas al cargar la página
+cargarMateriasPrimas();
+
 
 document.getElementById('enviarArqueo').addEventListener('click', async () => {
-    const sucursalId = document.getElementById('sucursalSelect').value;
-
-    if (!sucursalId) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Falta información',
-            text: 'Por favor, selecciona una sucursal antes de enviar el arqueo.',
-        });
-        return;
-    }
 
     const filas = Array.from(document.getElementById('tablaProductos').querySelectorAll('tr'));
     const productos = filas.map((fila) => {
@@ -234,12 +176,12 @@ document.getElementById('enviarArqueo').addEventListener('click', async () => {
             return null; // Ignorar filas inválidas
         }
 
-        const referencia = referenciaElem.textContent.trim();
+        const clave = referenciaElem.textContent.trim();
         const descripcion = descripcionElem.textContent.trim();
         const existenciaFisica = parseInt(inputExistencia.value.trim(), 10);
 
         return {
-            referencia,
+            clave,
             descripcion,
             existenciaFisica: isNaN(existenciaFisica) ? 0 : existenciaFisica,
         };
@@ -256,14 +198,16 @@ document.getElementById('enviarArqueo').addEventListener('click', async () => {
     }
 
     const payload = {
-        sucursal: sucursalId,
-        encargado: infoUser._id, // Asume que tienes el ID del usuario en una variable `infoUser`
+        sucursal: '66e1b4986dca15c1b8653494',
+        encargado: infoUser._id,
         productos,
-        tipo: 'Productos'
+        tipo: 'Materia Prima'
     };
 
+    console.log(payload)
+
     try {
-        const response = await fetch('/api/inventario', {
+        const response = await fetch('/api/inventario/materiaprima', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

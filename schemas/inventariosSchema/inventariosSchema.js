@@ -21,6 +21,10 @@ const inventarioSchema = new mongoose.Schema({
         required: true,
         default: false
     },
+    tipo: {
+        type: String,
+        required: true
+    },
     productos: [
         {
             referencia: {

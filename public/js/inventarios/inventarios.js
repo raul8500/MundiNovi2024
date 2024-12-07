@@ -7,6 +7,7 @@ $('#tablaInventarios').DataTable({
         { data: 'folio', title: 'Folio' },
         { data: 'sucursal.nombre', title: 'Sucursal' },
         { data: 'encargado.name', title: 'Encargado' },
+        { data: 'tipo', title: 'Tipo' },
         {
             data: 'productosConMovimiento',
             title: 'Importe',
