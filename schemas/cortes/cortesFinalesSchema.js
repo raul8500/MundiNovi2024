@@ -19,6 +19,7 @@ const corteFinalSchema = new Schema({
     transferencias: { type: Boolean, required: false, default: 0  }, 
     monto_transferencias: { type: Number, required: false, default: 0  }, 
     devolucion_ventas: { type: Number, required: false, default: 0  },  
+    egresos: { type: Number, required: false, default: 0  },  
     cortes: [ { type: String, required: false } ],
     salidas: { type: Number, required: false },  
     ind_ventas: { type: Number, required: false },  

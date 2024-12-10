@@ -132,6 +132,7 @@ function mostrarEnTabla(cortes) {
                     <td class="text-center">$${item.T_credito !== undefined ? item.T_credito : 0}</td>
                     <td class="text-center">$${item.T_debito !== undefined ? item.T_debito : 0}</td>
                     <td class="text-center">$${item.monto_transferencias !== undefined ? item.monto_transferencias : 0}</td>
+                    <td class="text-center">$${item.egresos}</td>
                     <td class="text-center">$${totalVenta}</td>
                     <td class="text-center">0.0</td>
                     <td class="text-center">$${totalVenta}</td>
@@ -204,7 +205,6 @@ function mostrarEnTabla(cortes) {
     console.log("Folios Totales:", foliosTotales);
 }
 
-
 on(document, 'click', '.btnRecibir', async e => {
     const button = e.target.closest('.btnRecibir');
     const id = button.getAttribute('id');
@@ -247,35 +247,6 @@ on(document, 'click', '.btnRecibir', async e => {
         button.style.visibility = 'visible';
     });
 });
-
-document.getElementById('buscarFolio').addEventListener('input', () => {
-    const folioBuscado = document.getElementById('buscarFolio').value.trim();
-
-    if (folioBuscado !== "") {
-        // Buscar la fila correspondiente al folio ingresado
-        const filas = document.querySelectorAll('#tablaRecoleccionBody tr'); // Asegúrate de que este sea el tbody correcto
-
-        let folioEncontrado = false; // Bandera para saber si el folio fue encontrado
-        filas.forEach(fila => {
-            const celdaFolio = fila.querySelector('td:first-child');
-            
-            if (celdaFolio && celdaFolio.textContent.trim() === folioBuscado) {
-                // Llamar a la lógica de la función si el folio coincide
-                const button = fila.querySelector('.btnRecibir');
-                if (button && button.style.visibility !== 'hidden') {
-                    aplicarLogicaRecibir(button);  // Llama a la función para ocultar el botón y agregar la fila
-                    folioEncontrado = true;
-                }
-            }
-        });
-
-        // Limpiar el campo de entrada independientemente de si el folio fue encontrado o no
-        document.getElementById('buscarFolio').value = ""; // Limpiar el input
-    }
-});
-
-
-
 
 function aplicarLogicaRecibir(button) {
     const id = button.getAttribute('id');
@@ -326,7 +297,6 @@ function aplicarLogicaRecibir(button) {
         console.log(`El folio ${folio} ya ha sido añadido a la tabla de recibir cortes.`);
     }
 }
-
 
 document.getElementById('btnEnviarCortes').addEventListener('click', async () => {
     const tablaRecibirCortes = document.getElementById('tablaRecibirCortes');
@@ -397,6 +367,42 @@ document.getElementById('btnEnviarCortes').addEventListener('click', async () =>
             icon: 'info',
             confirmButtonText: 'Aceptar'
         });
+    }
+});
+
+document.getElementById('buscarFolio').addEventListener('input', () => {
+    const folioBuscado = document.getElementById('buscarFolio').value.trim();
+
+    if (folioBuscado !== "") {
+        const filas = document.querySelectorAll('#tablaRecoleccionBody tr');
+        const tablaRecibirCortes = document.getElementById('tablaRecibirCortes');
+
+        let folioEncontrado = false;
+        let folioYaAgregado = false;
+
+        // Verificar si el folio ya está en la tabla de recibir cortes
+        const foliosEnTabla = Array.from(tablaRecibirCortes.querySelectorAll('tr td:first-child')).map(td => td.textContent.trim());
+
+        if (foliosEnTabla.includes(folioBuscado)) {
+            folioYaAgregado = true;
+        } else {
+            // Buscar en las filas si el folio coincide
+            filas.forEach(fila => {
+                const celdaFolio = fila.querySelector('td:first-child');
+                if (celdaFolio && celdaFolio.textContent.trim() === folioBuscado) {
+                    const button = fila.querySelector('.btnRecibir');
+                    if (button && button.style.visibility !== 'hidden') {
+                        aplicarLogicaRecibir(button);
+                        folioEncontrado = true;
+                    }
+                }
+            });
+        }
+
+        // Limpia el input si el folio ya está agregado o si fue encontrado y procesado
+        if (folioYaAgregado || folioEncontrado) {
+            document.getElementById('buscarFolio').value = ""; // Limpia el input
+        }
     }
 });
 

@@ -2,7 +2,6 @@ const Venta = require('../../schemas/venta/ventaSchema');
 const Kardex = require('../../schemas/kardexSchema/kardexSchema'); // Asegúrate de ajustar la ruta según tu estructura
 const Producto = require('../../schemas/productosSchema/productosSchema');
 const Client = require('../../schemas/clientesSchema/clientesSchema');
-const CorteGeneral = require('../../schemas/cortes/cortesFinalesSchema');
 const CorteFinal = require('../../schemas/cortes/cortesFinalesSchema');
 const Email = require('../../schemas/venta/emailSchema');
 
@@ -189,6 +188,8 @@ async function sendTicketEmail(email, venta, sucursalInfo) {
 
 exports.createVenta = async (req, res) => {
 
+
+    
     const responseStatus = {
         ventaCreada: false
     };
@@ -199,23 +200,31 @@ exports.createVenta = async (req, res) => {
         const vendedor = req.body.venta.usuario._id;
         const sucursal = req.body.venta.sucursalId;
         
-        let corteFolio = '';
-        const cortePendiente = await checkCorteUsuarioIniciadoONoFinalizado(vendedor);
-        corteFolio = cortePendiente ? cortePendiente : await crearCorteFinal(vendedor, sucursal);
 
-        const resultado = await checkCorteUsuarioIniciadoConVentas(vendedor);
-        if (resultado.codigo === 1) {
-            responseStatus.message = 'Es necesario realizar un corte parcial antes de proceder con la venta.';
-            responseStatus.totalEfectivo = resultado.totalVentasEfectivo;
-            return res.status(304).json(responseStatus);
-        } else if (resultado.codigo === -1) {
-            responseStatus.message = 'No se encontró un corte pendiente.';
-            return res.status(404).json(responseStatus);
-        }
+        //Zona de cortes
+            //Verifica si ya hay un folio para una venta, si no hay, lo crea 
+            let corteFolio = '';
+            const cortePendiente = await checkCorteUsuarioIniciadoONoFinalizado(vendedor);
+            corteFolio = cortePendiente ? cortePendiente : await crearCorteFinal(vendedor, sucursal);
+            //
+            //verifica si es necesario realizar un corte parcial
+
+            const resultado = await checkCorteUsuarioIniciadoConVentas(vendedor);
+
+            if (resultado.codigo === 1) {
+                responseStatus.message = 'Es necesario realizar un corte parcial antes de proceder con la venta.';
+                responseStatus.totalEfectivo = resultado.totalVentasEfectivo;
+                return res.status(304).json(responseStatus);
+            } else if (resultado.codigo === -1) {
+                responseStatus.message = 'No se encontró un corte pendiente.';
+                return res.status(404).json(responseStatus);
+            }
+            //
+
 
         // Verificación de factura y monedero
         let totalVenta = 0;
-
+        
         const cliente = await Client.findById(req.body.resumenVenta.cliente._id);
         const pagoConMonedero = req.body.resumenVenta.formasDePago.find(
             (forma) => forma.tipo === 'monedero'
@@ -258,14 +267,14 @@ exports.createVenta = async (req, res) => {
         const productosConKardex = [];
 
         for (const producto of productos) {
-            const { _id, cantidad, precio } = producto;
+            const { _id, cantidad, precioConIVA } = producto;
             const productoEncontrado = await Producto.findById(_id);
             if (!productoEncontrado) {
                 responseStatus.message = `Producto no encontrado: ${_id}`;
                 return res.status(404).json(responseStatus);
             }
 
-            const totalProducto = cantidad * precio;
+            const totalProducto = cantidad * precioConIVA;
             totalVenta += totalProducto;
             totalProductos += cantidad;
 
@@ -282,18 +291,17 @@ exports.createVenta = async (req, res) => {
                 reference: productoEncontrado.reference,
                 nombre: productoEncontrado.name,
                 cantidad: -cantidad,
-                costoUnitario: precio,
+                costoUnitario: precioConIVA,
                 existencia: nuevaExistencia,
             });
 
             console.log("Kardex actualizado para producto:", productoEncontrado.name);
 
-            await Producto.updateOne({ _id }, { $set: { controlAlmacen: nuevaExistencia } });
             productosConKardex.push({
                 nombre: productoEncontrado.name,
                 productoId: _id,
                 cantidad,
-                precio,
+                precio: precioConIVA,
                 kardexId: nuevoKardex._id,
                 kardexFolio: folio,
             });
@@ -322,10 +330,55 @@ exports.createVenta = async (req, res) => {
             }
         }
 
+
+        
+        const corteFinal = await CorteFinal.findOne({ folio: corteFolio });
+
+            let totalEfectivoVenta = 0;
+            let totalTarjetas = 0;
+            let totalTransferencias = 0;
+            let montoTransferencias = 0;
+
+            console.log(corteFinal)
+            console.log(ventaGuardada)
+
+            ventaGuardada.formasDePago.forEach(forma => {
+                if (forma.tipo === 'cash') {
+                    totalEfectivoVenta += forma.importe - forma.cambio;
+                } else if (forma.tipo === 'credit-card') {
+                    corteFinal.T_credito = (corteFinal.T_credito || 0) + forma.importe;
+                    totalTarjetas += forma.importe;
+                } else if (forma.tipo === 'debit-card') {
+                    corteFinal.T_debito = (corteFinal.T_debito || 0) + forma.importe;
+                    totalTarjetas += forma.importe;
+                } else if (forma.tipo === 'transfer') {
+                    corteFinal.transferencias = true;
+                    montoTransferencias += forma.importe;
+                }
+            });
+
+            // Actualizar total de tarjetas y transferencias
+            corteFinal.total_tarjetas = (corteFinal.total_tarjetas || 0) + totalTarjetas;
+            corteFinal.monto_transferencias = (corteFinal.monto_transferencias || 0) + montoTransferencias;
+
+            // Agregar la venta al arreglo de ventas del corte final
+            corteFinal.ventas.push({
+                venta: ventaGuardada._id,
+                contada: false,
+            });
+
+            if (totalEfectivoVenta > 0) {
+                corteFinal.totalVentasEfectivoCortes = (corteFinal.totalVentasEfectivoCortes || 0) + totalEfectivoVenta;
+            }
+
+            await corteFinal.save();
+
        await sumarAlMonedero(req)
 
         responseStatus.message = 'Proceso de creación de venta completado.';
         res.status(201).json(responseStatus);
+
+
 
     } catch (error) {
         console.error("Error en createVenta:", error);
@@ -456,10 +509,9 @@ async function crearFactura(req) {
                     });
                 }
 
-                // Si la factura se creó correctamente y no está en borrador
                 if (responseBody.id && responseBody.status === 'open') {
                     const invoiceId = responseBody.id;
-                    const emailEnviado = await enviarFacturaPorCorreo(invoiceId, /*responseBody.client.email ||*/ 'lopezjo299@gmail.com');
+                    const emailEnviado = await enviarFacturaPorCorreo(invoiceId, responseBody.client.email || 'lopezjo299@gmail.com');
                     return resolve({ success: true, enviada: emailEnviado });
                 }
 
@@ -475,6 +527,7 @@ async function crearFactura(req) {
         console.error("Error en crearFactura:", error);
         return { success: false, message: 'Error en la creación de la factura' };
     }
+
 }
 
 function enviarFacturaPorCorreo(invoiceId, email) {
@@ -538,11 +591,7 @@ async function sumarAlMonedero(req) {
     }
 }
 
-
-const generateFolio = () => {
-  return String(Math.floor(1000000 + Math.random() * 9000000)); // Genera un número aleatorio de 7 dígitos
-};
-
+//Revisa si hay un corte Final creado
 async function checkCorteUsuarioIniciadoONoFinalizado(userId) {
     try {
         const corte = await CorteFinal.findOne({
@@ -564,6 +613,7 @@ async function checkCorteUsuarioIniciadoONoFinalizado(userId) {
     }
 }
 
+//Crear un nuevo corte final
 async function crearCorteFinal(usuario, sucursal) {
     try {
         const folioUnico = await generarFolioPadreUnico();
@@ -584,30 +634,11 @@ async function crearCorteFinal(usuario, sucursal) {
     }
 }
 
-async function generarFolioPadreUnico() {
-    let folioPadre;
-    let folioExiste = true;
-
-    // Bucle para seguir generando folios hasta que sea único
-    while (folioExiste) {
-        // Generar un número aleatorio de 4 dígitos
-        folioPadre = Math.floor(1000 + Math.random() * 9000);
-
-        // Comprobar si ya existe un corte final con este folio
-        const corteExistente = await CorteFinal.findOne({ folio: folioPadre });
-
-        if (!corteExistente) {
-            folioExiste = false; // Si no existe, salir del bucle
-        }
-    }
-
-    return folioPadre.toString(); // Devolver el folio como string si es necesario
-}
-
+//Corte para realizar un corte parcial
 async function checkCorteUsuarioIniciadoConVentas(userId) {
     try {
         // Buscar el corte para el usuario con un corte iniciado o no finalizado
-        const corte = await CorteGeneral.findOne({
+        const corte = await CorteFinal.findOne({
             usuario: userId,
             $or: [
                 { fecha_inicial: { $exists: true } },
@@ -643,6 +674,31 @@ async function checkCorteUsuarioIniciadoConVentas(userId) {
         throw new Error('Error interno del servidor');
     }
 }
+
+//generar un folio padre unico
+async function generarFolioPadreUnico() {
+    let folioPadre;
+    let folioExiste = true;
+
+    // Bucle para seguir generando folios hasta que sea único
+    while (folioExiste) {
+        // Generar un número aleatorio de 4 dígitos
+        folioPadre = Math.floor(1000 + Math.random() * 9000);
+
+        // Comprobar si ya existe un corte final con este folio
+        const corteExistente = await CorteFinal.findOne({ folio: folioPadre });
+
+        if (!corteExistente) {
+            folioExiste = false; // Si no existe, salir del bucle
+        }
+    }
+
+    return folioPadre.toString(); // Devolver el folio como string si es necesario
+}
+
+const generateFolio = () => {
+  return String(Math.floor(1000000 + Math.random() * 9000000)); // Genera un número aleatorio de 7 dígitos
+};
 
 
 

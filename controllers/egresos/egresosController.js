@@ -81,6 +81,17 @@ exports.crearEgreso = async (req, res) => {
 
         await nuevoEgreso.save();
 
+        const corteFinal = await CorteFinal.findOne({ folio: folioPadre });
+
+            let egreso = 0;
+            // Actualizar total de tarjetas y transferencias
+            corteFinal.egresos = (corteFinal.egresos || 0) + importe;
+
+            corteFinal.totalVentasEfectivoCortes = (corteFinal.totalVentasEfectivoCortes || 0) - importe;
+
+            await corteFinal.save();
+
+
         return res.status(201).send({
             message: 'Egreso creado exitosamente.',
             egreso: nuevoEgreso
