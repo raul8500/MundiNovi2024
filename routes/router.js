@@ -44,6 +44,7 @@ const parametros = require('../controllers/evaluaciones/parametrosController');
 const inventario = require('../controllers/inventarios/inventariosController');
 const inventarioMateriaPrima = require('../controllers/inventarios/inventariosMPrima');
 const egresos = require('../controllers/egresos/egresosController');
+const cotizacion = require('../controllers/cotizaciones/cotizacionesController');
 
 
 const multerw = require('multer');
@@ -277,6 +278,10 @@ router.get('/egresosAdmin', (req, res) => {
 
 router.get('/egresos', (req, res) => {    
     res.render('Egresos/egresosUser');
+});
+
+router.get('/cotizacionAdmin', (req, res) => {    
+    res.render('Cotizaciones/cotizacionesAdmin');
 });
 
 
@@ -585,6 +590,7 @@ router.get('/api/egresos', egresos.getAllEgresos);
 router.get('/api/egresos/:id', egresos.getEgresoById);
 router.delete('/api/egresos/:id', egresos.deleteEgreso);
 
+router.post('/api/cotizaciones', cotizacion.crearCotizacion);
 
 
 
