@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const dbconnect = async () => {
     try {
-        await mongoose.connect('mongodb://mongo:dFzoeShHsdmAVtUBKJRbUyHIDqnFjwmk@autorack.proxy.rlwy.net:56976', {
+        await mongoose.connect("mongodb://admin:raulxt914@85.31.224.165:27017/admin", {
             
         });
         console.log('Conexión correcta');

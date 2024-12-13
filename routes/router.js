@@ -590,8 +590,9 @@ router.get('/api/egresos', egresos.getAllEgresos);
 router.get('/api/egresos/:id', egresos.getEgresoById);
 router.delete('/api/egresos/:id', egresos.deleteEgreso);
 
-router.post('/api/cotizaciones', cotizacion.crearCotizacion);
 
+
+router.post('/api/cotizaciones', cotizacion.crearCotizacion);
 
 
 router.use((req, res, next) => {
