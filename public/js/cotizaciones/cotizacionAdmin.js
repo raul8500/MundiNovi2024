@@ -5,7 +5,7 @@ const clientesSeleccionados = []; // Arreglo para guardar los clientes seleccion
 // Función para recuperar clientes desde la API
 async function fetchClientes() {
     try {
-        const response = await fetch('http://localhost:3000/api/clientes');
+        const response = await fetch('/api/clientes');
         if (!response.ok) {
             throw new Error('Error al recuperar los clientes');
         }
