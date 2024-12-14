@@ -326,8 +326,359 @@ function actualizarPrecio(id, nuevoPrecio) {
     }
 }
 
-
-
-
 // Inicializar
 cargarProductos();
+
+
+
+//Listado de cotizaciones
+
+$('#tablaCotizaciones').DataTable({
+    ajax: {
+        url: '/api/cotizaciones', // Endpoint para obtener las cotizaciones
+        dataSrc: ''
+    },
+    columns: [
+        { data: 'folio', title: 'Folio' },
+        { data: 'cliente.nombre', title: 'Cliente' },
+        { data: 'cliente.direccion', title: 'Dirección' },
+        { 
+            data: 'totalGeneral', 
+            title: 'Total', 
+            render: function (data) {
+                return `$${data.toFixed(2)}`;
+            }
+        },
+        {
+            data: 'fechaCreacion',
+            title: 'Fecha',
+            render: function (data) {
+                const date = new Date(data);
+                const formattedDate = date.toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+                const formattedTime = date.toLocaleTimeString('es-ES', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                return `${formattedDate} ${formattedTime}`;
+            }
+        },
+        {
+            data: null,
+            title: 'Acciones',
+            render: function (data, type, row) {
+                return `
+                    <button class="btn btn-info btn-sm btn-detalles" data-id="${row._id}" title="Ver Detalles">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn btn-warning btn-sm btn-reenviar" data-id="${row._id}" title="Reenviar">
+                        <i class="fas fa-envelope"></i>
+                    </button>
+                    <button class="btn btn-primary btn-sm btn-imprimir" data-id="${row._id}" title="Imprimir">
+                        <i class="fas fa-print"></i>
+                    </button>
+                    <button class="btn btn-success btn-sm btn-convertir" data-id="${row._id}" title="Convertir a Pedido">
+                        <i class="fas fa-file-alt"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm btn-eliminar" data-id="${row._id}" title="Eliminar">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                `;
+            }
+
+        }
+    ],
+    language: {
+        "sProcessing": "Procesando...",
+        "sLengthMenu": "Mostrar _MENU_ registros",
+        "sZeroRecords": "No se encontraron resultados",
+        "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando 0 a 0 de 0 registros",
+        "sInfoFiltered": "(filtrado de _MAX_ registros totales)",
+        "sSearch": "Buscar:",
+        "sLoadingRecords": "Cargando...",
+        "oPaginate": {
+            "sFirst": "Primera",
+            "sLast": "Última",
+            "sNext": "Siguiente",
+            "sPrevious": "Anterior"
+        }
+    }
+});
+
+
+
+$('#tablaCotizaciones').on('click', '.btn-convertir', function () {
+    const id = $(this).data('id');
+    console.log(`Convertir a pedido cotización con ID: ${id}`);
+    // Implementar lógica para convertir a pedido
+});
+
+
+$('#tablaCotizaciones').on('click', '.btn-imprimir', function () {
+    const id = $(this).data('id');
+
+    // Mostrar un mensaje mientras se genera el PDF
+    Swal.fire({
+        title: 'Generando impresión',
+        text: 'Por favor, espere...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    // Hacer la solicitud para obtener el PDF
+    $.ajax({
+        url: `/api/cotizaciones/${id}/imprimir`, // Endpoint para generar o descargar el PDF
+        method: 'GET',
+        xhrFields: {
+            responseType: 'blob' // Importante para manejar archivos binarios como PDF
+        },
+        success: function (data) {
+            Swal.close();
+
+            // Crear un objeto URL para el archivo PDF
+            const blob = new Blob([data], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+
+            // Abrir el PDF en una nueva pestaña
+            const pdfWindow = window.open();
+            if (pdfWindow) {
+                pdfWindow.location.href = url;
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudo abrir el archivo PDF. Verifique su configuración del navegador.',
+                    icon: 'error'
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'No se pudo generar el PDF. Intente nuevamente.',
+                icon: 'error'
+            });
+            console.error(`Error al obtener el PDF: ${error}`);
+        }
+    });
+});
+
+$('#tablaCotizaciones').on('click', '.btn-eliminar', function () {
+    const id = $(this).data('id');
+
+    // Confirmar la eliminación con SweetAlert
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción eliminará la cotización de manera permanente.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Realizar la solicitud para eliminar la cotización
+            $.ajax({
+                url: `/api/cotizaciones/${id}`, // Endpoint para eliminar
+                method: 'DELETE',
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Eliminada',
+                        text: response.message,
+                        icon: 'success',
+                    }).then(() => {
+                        // Recargar la tabla para reflejar los cambios
+                        $('#tablaCotizaciones').DataTable().ajax.reload();
+                    });
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudo eliminar la cotización. Intenta de nuevo.',
+                        icon: 'error',
+                    });
+                    console.error(`Error al eliminar la cotización: ${error}`);
+                }
+            });
+        }
+    });
+});
+
+$('#tablaCotizaciones').on('click', '.btn-detalles', function () {
+    const id = $(this).data('id');
+
+    // Mostrar un mensaje de carga mientras se obtienen los datos
+    Swal.fire({
+        title: 'Cargando detalles',
+        text: 'Por favor, espere...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    // Hacer la solicitud para obtener los detalles de la cotización
+    $.ajax({
+        url: `/api/cotizaciones/${id}`, // Endpoint para obtener los detalles
+        method: 'GET',
+        success: function (response) {
+            Swal.close();
+
+            // Llenar los detalles en el modal
+            $('#detalleFolio').text(response.folio);
+            $('#detalleCliente').text(response.cliente.nombre);
+            $('#detalleDireccion').text(response.cliente.direccion);
+            $('#detalleTotalGeneral').text(response.totalGeneral.toFixed(2));
+            $('#detalleFecha').text(new Date(response.fechaCreacion).toLocaleString('es-ES'));
+            
+            // Llenar la lista de productos
+            const productosHtml = response.productos
+                .map(
+                    (producto) =>
+                        `<li>${producto.nombre} - ${producto.cantidad} x $${producto.precio.toFixed(
+                            2
+                        )} = $${producto.total.toFixed(2)}</li>`
+                )
+                .join('');
+            $('#detalleProductos').html(productosHtml);
+
+            // Mostrar el modal
+            $('#modalDetallesCotizacion').modal('show');
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'No se pudieron cargar los detalles. Intente nuevamente.',
+                icon: 'error'
+            });
+            console.error(`Error al obtener los detalles: ${error}`);
+        }
+    });
+});
+
+$('#tablaCotizaciones').on('click', '.btn-reenviar', function () {
+    const id = $(this).data('id');
+
+    // Confirmar reenvío con SweetAlert
+    Swal.fire({
+        title: '¿Reenviar cotización?',
+        text: 'Se enviará nuevamente la cotización al cliente.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, reenviar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Realizar la solicitud para reenviar la cotización
+            $.ajax({
+                url: `/api/cotizaciones/${id}/reenviar`, // Endpoint para reenviar
+                method: 'POST',
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Reenvío exitoso',
+                        text: response.message,
+                        icon: 'success',
+                    });
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudo reenviar la cotización. Intente nuevamente.',
+                        icon: 'error',
+                    });
+                    console.error(`Error al reenviar la cotización: ${error}`);
+                }
+            });
+        }
+    });
+});
+
+
+//Crear
+
+function generarJsonCotizacion() {
+    // Recuperar información del cliente
+    const cliente = {
+        nombre: document.getElementById('nombreCliente').value.trim(),
+        telefono: document.getElementById('telefonoCliente').value.trim(),
+        correo: document.getElementById('correoCliente').value.trim(),
+        direccion: `${document.getElementById('streetCliente').value.trim()} #${document.getElementById('exteriorNumberCliente').value.trim()} ${document.getElementById('interiorNumberCliente').value.trim()}, ${document.getElementById('colonyCliente').value.trim()}, CP: ${document.getElementById('zipCodeCliente').value.trim()},`
+    };
+
+    // Recuperar información de los productos seleccionados
+    const productos = productosSeleccionados.map(producto => ({
+        nombre: producto.reference,
+        cantidad: producto.cantidad,
+        precio: producto.precio
+    }));
+
+    // Recuperar información de la sucursal
+    const sucursal = {
+        nombre: 'Nave C',
+        direccion: 'Direccion Nave C',
+        telefono: '2282546598'
+    };
+
+    // Recuperar ID del usuario actual
+    const usuario = infoUser._id;
+
+    // Construir el JSON final
+    const jsonCotizacion = {
+        cliente,
+        productos,
+        sucursal,
+        usuario
+    };
+
+    console.log('JSON generado:', jsonCotizacion);
+    return jsonCotizacion;
+}
+
+document.getElementById('btnGenerarCotizacion').addEventListener('click', async () => {
+    try {
+        const jsonCotizacion = generarJsonCotizacion();
+
+        // Enviar la cotización al backend
+        const response = await fetch('/api/cotizaciones', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonCotizacion)
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al generar la cotización');
+        }
+
+        const data = await response.json();
+        Swal.fire({
+            title: 'Cotización generada',
+            text: `Folio: ${data.folio}`,
+            icon: 'success'
+        }).then(() => {
+            // Refrescar la página después de que el usuario cierre el mensaje
+            window.location.reload();
+        });
+    } catch (error) {
+        console.error('Error al generar la cotización:', error);
+        Swal.fire({
+            title: 'Error',
+            text: 'No se pudo generar la cotización. Intente nuevamente.',
+            icon: 'error'
+        });
+    }
+});
+
+
+
+
+

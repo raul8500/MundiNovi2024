@@ -73,7 +73,7 @@ function obtenerNombreRol(rol) {
         case 7:
             return "Supervisor";
         case 8:
-            return "Visitante";
+            return "AClientes";
         default:
             return "Rol desconocido";
     }

@@ -592,7 +592,10 @@ router.delete('/api/egresos/:id', egresos.deleteEgreso);
 
 
 
-router.post('/api/cotizaciones', cotizacion.crearCotizacion);
+
+
+
+
 
 
 router.use((req, res, next) => {

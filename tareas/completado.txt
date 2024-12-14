@@ -1,0 +1,111 @@
+Administrador: 
+    Asistencias
+
+Operativo:
+    Asistencias
+
+Produccion: 
+    Produccion
+    Tareas
+    Arqueo mat prima
+    Asistencias
+
+Almacen:
+    Pedidos por entregar
+    Concnetrado pedidos por entregar
+    Traspasos por entregar
+    Devolucion de mercancia
+    Recepcion mercancia de proveedores
+    Traspasos a Almacen
+    Responsivas
+    Tareas
+    Codigo barras Traspasos
+    Asistencias
+    Capacitacion
+    Recepcion de Produccion
+
+Auxiliar admistrativo
+    Pagos a proveedores
+    Nominas
+    Listado de ventas
+    Asistencias
+    Faltantes
+    Cortes (Listado)
+    Alta de productos
+
+
+Atencion a Clientes
+    Ventas a facturar
+    Cotizaciones
+    Capacitacion
+    Historial Clientes
+    Existencia sucursales
+    Clientes
+    Ventas a cancelar
+    Asistencia
+
+Supervisor
+    Arqueo Efectivo
+    Recoleccion
+    Arqueo productos
+    Evaluar sucursales
+    Actas adaministrativas
+    Asignar Tareas
+    Tareas
+    Asistencias
+
+Supervisor ruta
+    Zona por usuario
+    Fecha zona entrega
+    Asistencia
+    Zona Cliente
+
+
+Cajero
+    Caja
+    Corte Final
+    Capacitacion
+    Recepcion Faltantes
+    Arqueo
+    Pedido
+    Egresos
+    Cortes parciales
+    Preciadores
+    Tareas
+    Cotizaciones
+    Cuentas por cobrar
+    Asistencias
+    Asistencias
+    Codigos de barras
+
+Pedido
+    Crear pedidos
+    Historial Cliente
+    Mis ventas
+    Capacitacion
+    Tareas
+    Documentos por cobrar
+    Cotizaciones
+    Corte Cobranza
+    Asistencia
+
+Ventas
+    Asistencia
+
+Reparto
+    Pedidos a entregar
+    Corte
+    Devolucion de mercancia
+    Tareas
+    Faltantes a entregar
+    Capacitacion
+    Asistencia
+
+Servicios Generales
+    Tareas
+    Asistencia
+
+Contraloria
+    Asistencia
+
+

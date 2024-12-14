@@ -93,17 +93,50 @@
     </header>
 
     <main style="margin-top: 20px">
-        <div class="container pt-4">
+        <div class="container-fluid pt-4" style="width: 80%;">
             <h3 class="text-center">Cotizaciones</h3>
     
             <!-- Botón para abrir el modal -->
-            <div class="text-center mt-4">
-                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+            <div class="text-end mt-4">
+                <button type="button" class="btn btn-primary btn-rounded" data-bs-toggle="modal"
                     data-bs-target="#cotizacionModal">
-                    Crear Cotización
+                    Crear
                 </button>
             </div>
+
+
+            <div class="table-responsive pt-3">
+                <table id="tablaCotizaciones" class="table align-middle mb-0 bg-white">
+                    <thead class="bg-light">
+                        <tr class="text-center">
+                            <th scope="col">Folio</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Direccion</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        <!-- Aquí se cargarán las sucursales -->
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         <div class="modal fade" id="cotizacionModal" tabindex="-1" aria-labelledby="cotizacionModalLabel" aria-hidden="true">
@@ -127,11 +160,6 @@
                                 <button class="nav-link" id="productos-tab" data-bs-toggle="pill" data-bs-target="#productos"
                                     type="button" role="tab" aria-controls="productos" aria-selected="false" disabled>Agregar
                                     Productos</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="resumen-tab" data-bs-toggle="pill" data-bs-target="#resumen"
-                                    type="button" role="tab" aria-controls="resumen" aria-selected="false"
-                                    disabled>Resumen</button>
                             </li>
                         </ul>
         
@@ -158,27 +186,27 @@
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="correoCliente" class="form-label">Correo</label>
-                                        <input type="text" id="correoCliente" class="form-control" disabled>
+                                        <input type="text" id="correoCliente" class="form-control" >
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
                                         <label for="streetCliente" class="form-label">Calle</label>
-                                        <input type="text" id="streetCliente" class="form-control" disabled>
+                                        <input type="text" id="streetCliente" class="form-control" >
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="exteriorNumberCliente" class="form-label">Número Exterior</label>
-                                        <input type="text" id="exteriorNumberCliente" class="form-control" disabled>
+                                        <input type="text" id="exteriorNumberCliente" class="form-control" >
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="interiorNumberCliente" class="form-label">Número Interior</label>
-                                        <input type="text" id="interiorNumberCliente" class="form-control" disabled>
+                                        <input type="text" id="interiorNumberCliente" class="form-control" >
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
                                         <label for="colonyCliente" class="form-label">Colonia</label>
-                                        <input type="text" id="colonyCliente" class="form-control" disabled>
+                                        <input type="text" id="colonyCliente" class="form-control" >
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="localityCliente" class="form-label">Localidad</label>
@@ -192,7 +220,7 @@
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
                                         <label for="zipCodeCliente" class="form-label">Código Postal</label>
-                                        <input type="text" id="zipCodeCliente" class="form-control" disabled>
+                                        <input type="text" id="zipCodeCliente" class="form-control" >
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="stateCliente" class="form-label">Estado</label>
@@ -250,28 +278,38 @@
                                     </div>
                                 </div>
                                 <div class="text-end mt-4">
-                                    <button type="button" class="btn btn-success">Finalizar Cotización</button>
+                                    <button id="btnGenerarCotizacion" type="button" class="btn btn-success">Finalizar Cotización</button>
                                 </div>
                             </div>
         
-                            <!-- Resumen -->
-                            <div class="tab-pane fade" id="resumen" role="tabpanel" aria-labelledby="resumen-tab">
-                                <h5>Resumen de la Cotización</h5>
-                                <div class="d-flex justify-content-between">
-                                    <p>Subtotal:</p>
-                                    <p id="subtotalFinalCotizacion">$0.00</p>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <h5>Total:</h5>
-                                    <h5 id="totalFinalCotizacion">$0.00</h5>
-                                </div>
-                                <div class="text-end mt-4">
-                                    <button type="button" class="btn btn-success">Guardar Cotización</button>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <!-- Pie del Modal -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para Ver Detalles -->
+        <div class="modal fade" id="modalDetallesCotizacion" tabindex="-1" aria-labelledby="modalDetallesLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalDetallesLabel">Detalles de la Cotización</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Folio:</strong> <span id="detalleFolio"></span></p>
+                        <p><strong>Cliente:</strong> <span id="detalleCliente"></span></p>
+                        <p><strong>Dirección:</strong> <span id="detalleDireccion"></span></p>
+                        <p><strong>Total General:</strong> $<span id="detalleTotalGeneral"></span></p>
+                        <p><strong>Fecha:</strong> <span id="detalleFecha"></span></p>
+                        <h5>Productos:</h5>
+                        <ul id="detalleProductos"></ul>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
