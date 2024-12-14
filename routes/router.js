@@ -598,6 +598,23 @@ router.delete('/api/egresos/:id', egresos.deleteEgreso);
 
 
 
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+router.post('/api/cotizaciones', cotizacion.crearCotizacion);
+router.get('/api/cotizaciones', cotizacion.getAllCotizaciones);
+router.get('/api/cotizaciones/:id', cotizacion.getCotizacionById);
+router.delete('/api/cotizaciones/:id', cotizacion.deleteCotizacion);
+router.get('/api/cotizaciones/:id/imprimir', cotizacion.imprimirCotizacion);
+router.post('/api/cotizaciones/:id/reenviar', cotizacion.reenviarCotizacion);
+
+
+
+
+
 router.use((req, res, next) => {
     res.status(404).render('404', {
         title: 'Página no encontrada',
