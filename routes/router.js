@@ -612,9 +612,6 @@ router.get('/api/cotizaciones/:id/imprimir', cotizacion.imprimirCotizacion);
 router.post('/api/cotizaciones/:id/reenviar', cotizacion.reenviarCotizacion);
 
 
-
-
-
 router.use((req, res, next) => {
     res.status(404).render('404', {
         title: 'Página no encontrada',
