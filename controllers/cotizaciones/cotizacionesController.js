@@ -14,31 +14,32 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-// Crear una cotización con tabla de productos, guardarla en la base de datos y enviarla por correo
 exports.crearCotizacion = async (req, res) => {
     try {
         const { cliente, productos, sucursal, usuario } = req.body;
 
-        // Validar que se haya recibido la información necesaria
         if (!cliente || !productos || productos.length === 0 || !sucursal || !usuario) {
             return res.status(400).send("Se requiere la información del cliente, la sucursal, el usuario y al menos un producto.");
         }
 
-        // Obtener el siguiente folio
         const lastCotizacion = await Cotizacion.findOne().sort({ folio: -1 });
         const folio = lastCotizacion ? lastCotizacion.folio + 1 : 1000;
 
-        // Calcular el total general
-        const totalGeneral = productos.reduce((sum, producto) => sum + producto.cantidad * producto.precio, 0);
+        let totalGeneral = 0;
+        const productosConTotal = productos.map((producto) => {
+            const totalProducto = producto.cantidad * producto.precio;
+            totalGeneral += totalProducto;
+            return {
+                ...producto,
+                total: totalProducto,
+            };
+        });
 
-        // Crear el PDF
-        const fecha = new Date();
-        const pdfPath = path.join(__dirname, "../../uploads", `cotizacion_${fecha.getTime()}.pdf`);
+        const pdfPath = path.join(__dirname, "../../uploads", `cotizacion_${Date.now()}.pdf`);
         const doc = new PDFDocument({ margin: 30 });
-
         doc.pipe(fs.createWriteStream(pdfPath));
 
-        // Agregar el logo
+         // Agregar el logo
         const logoPath = path.join(__dirname, "../../public/img/logoColor.png");
         doc.image(logoPath, 30, 30, { width: 70, height: 60 });
 
@@ -46,14 +47,12 @@ exports.crearCotizacion = async (req, res) => {
         doc.fontSize(18).text("Cotización", { align: "center" });
         doc.moveDown();
 
-        // Información de la sucursal
         doc.fontSize(12).font("Helvetica-Bold").text("Sucursal:", 400, 90, { align: "right" });
         doc.font("Helvetica");
         doc.text(`Nombre: ${sucursal.nombre}`, 400, 105, { align: "right" });
         doc.text(`Dirección: ${sucursal.direccion}`, 300, 120, { align: "right" });
         doc.text(`Teléfono: ${sucursal.telefono}`, 400, 135, { align: "right" });
 
-        // Información del cliente
         doc.fontSize(12).font("Helvetica-Bold").text("Cliente:", 30, 120);
         doc.font("Helvetica");
         doc.text(`Nombre: ${cliente.nombre}`, 30, 135);
@@ -62,66 +61,75 @@ exports.crearCotizacion = async (req, res) => {
         doc.text(`Dirección: ${cliente.direccion}`, 30, 180);
         doc.moveDown();
 
-        // Información del folio y usuario
         doc.fontSize(12).font("Helvetica-Bold").text(`Folio: ${folio}`, 30, 210);
-        doc.text(`Usuario: ${usuario}`, 30, 225);
+        doc.text(`Cotizado por: ${usuario.nombre}`, 30, 225);
+        
 
         // Tabla de productos
-        const tableTop = doc.y;
-        const columnWidths = [200, 70, 120, 120];
-        const startX = doc.page.margins.left;
+        const tableTop = doc.y + 20;
+        const columnWidths = [150, 100, 70, 50, 80, 80];
+        const headers = ["Producto", "Referencia", "Unidad", "Cant.", "Precio", "Total"];
+        const startX = 40; // Alineado con el margen
 
-        doc.fontSize(10).font("Helvetica-Bold");
-        const headers = ["Producto", "Cantidad", "Precio Unitario", "Total"];
+        // Encabezado de tabla
+        doc.font("Helvetica-Bold").fontSize(8);
         headers.forEach((header, i) => {
-            const align = i === 3 ? "right" : i === 0 ? "left" : "center";
+            // Verificar si el encabezado es "Precio" o "Total" para alinearlos a la derecha
+            const align = (header === "Precio" || header === "Total") ? "right" : "center";
             doc.text(header, startX + columnWidths.slice(0, i).reduce((a, b) => a + b, 0), tableTop, {
                 width: columnWidths[i],
-                align,
+                align: align,
             });
         });
 
-        doc.moveTo(startX, tableTop + 15).lineTo(startX + columnWidths.reduce((a, b) => a + b, 0), tableTop + 15).stroke();
 
-        let totalAcumulado = 0;
-        productos.forEach((producto, index) => {
-            const y = tableTop + 25 + index * 20;
-            doc.text(producto.nombre, startX, y, { width: columnWidths[0], align: "left" });
-            doc.text(producto.cantidad, startX + columnWidths[0], y, { width: columnWidths[1], align: "center" });
-            doc.text(`$${producto.precio.toFixed(2)}`, startX + columnWidths[0] + columnWidths[1], y, {
-                width: columnWidths[2],
-                align: "center",
-            });
-            const totalProducto = producto.cantidad * producto.precio;
-            doc.text(`$${totalProducto.toFixed(2)}`, startX + columnWidths[0] + columnWidths[1] + columnWidths[2], y, {
-                width: columnWidths[3],
-                align: "right",
-            });
-            totalAcumulado += totalProducto;
+        doc.moveTo(startX, tableTop + 15)
+        .lineTo(startX + columnWidths.reduce((a, b) => a + b, 0), tableTop + 15)
+        .stroke();
+
+        // Cuerpo de la tabla
+        let currentY = tableTop + 20; // Empezamos después del encabezado de la tabla
+
+        productosConTotal.forEach((producto) => {
+            // Dibujar cada fila de la tabla
+            doc.font("Helvetica").fontSize(8);
+            doc.text(producto.nombre, startX, currentY, { width: columnWidths[0], align: "center" });
+            doc.text(producto.reference, startX + columnWidths[0], currentY, { width: columnWidths[1], align: "center" });
+            doc.text(producto.unidad, startX + columnWidths.slice(0, 2).reduce((a, b) => a + b, 0), currentY, { width: columnWidths[2], align: "center" });
+            doc.text(producto.cantidad.toString(), startX + columnWidths.slice(0, 3).reduce((a, b) => a + b, 0), currentY, { width: columnWidths[3], align: "center" });
+            doc.text(`$${producto.precio.toFixed(2)}`, startX + columnWidths.slice(0, 4).reduce((a, b) => a + b, 0), currentY, { width: columnWidths[4], align: "right" });
+            doc.text(`$${producto.total.toFixed(2)}`, startX + columnWidths.slice(0, 5).reduce((a, b) => a + b, 0), currentY, { width: columnWidths[5], align: "right" });
+
+            currentY += 12; // Incrementamos para la siguiente fila (altura de texto + pequeño espacio)
         });
 
-        const endTableY = tableTop + 25 + productos.length * 20;
-        doc.moveTo(startX, endTableY).lineTo(startX + columnWidths.reduce((a, b) => a + b, 0), endTableY).stroke();
+        // Dibujar la línea final de la tabla usando currentY
+        doc.moveTo(startX, currentY)
+        .lineTo(startX + columnWidths.reduce((a, b) => a + b, 0), currentY)
+        .stroke();
 
+
+        const endTableY = tableTop + productos.length * 18;
+ 
         // Total General en una misma línea
         const totalX = startX + columnWidths[0] + columnWidths[1] + columnWidths[2] + 10; // Mover más a la derecha
         doc.fontSize(12)
-            .text("Total General:", totalX - 120, endTableY + 10, { align: "right", width: 100 })
-            .text(`$${totalGeneral.toFixed(2)}`, totalX, endTableY + 10, { align: "right", width: 100 });
+            .text("Total General:", totalX - 10, endTableY + 10, { align: "right", width: 100 })
+            .text(`$${totalGeneral.toFixed(2)}`, totalX + 100, endTableY + 10, { align: "right", width: 100 });
 
         // Texto centrado debajo de la tabla
-        doc.moveDown(2);
+        doc.moveDown(5);
 
         // Línea principal en negrita y centrada
         doc.font("Helvetica-Bold").fontSize(10).text(
             "Gracias por su compra, ¡vuelva pronto!!!!.",
-            totalX - 400, endTableY + 70,
+            totalX - 325, endTableY + 70,
             { align: "center", continued: false }
         );
 
         // Resto del texto, cada línea centrada individualmente
         doc.moveDown();
-        doc.font("Helvetica").fontSize(8);
+        doc.font("Helvetica").fontSize(10);
         doc.text(
             "FACTURAS, PEDIDOS Y COTIZACIONES WHATSAPP 2283-53-25-68",
             { align: "center", continued: false }
@@ -145,40 +153,33 @@ exports.crearCotizacion = async (req, res) => {
 
         doc.end();
 
-        // Esperar a que el PDF esté listo
         await new Promise((resolve, reject) => {
             doc.on("end", resolve);
             doc.on("error", reject);
         });
 
-        // Guardar la cotización en la base de datos
+        // Guardar la cotización
         const nuevaCotizacion = new Cotizacion({
             folio,
             cliente,
             sucursal,
-            productos: productos.map(p => ({
-                ...p,
-                total: p.cantidad * p.precio,
-            })),
+            productos: productosConTotal,
             totalGeneral,
             pdfPath,
             usuario,
         });
-
         await nuevaCotizacion.save();
 
-        // Enviar el correo con el PDF adjunto
-        const sendEmailResponse = await sendCotizacionEmail(cliente.correo, pdfPath, cliente, sucursal);
+        // Enviar por correo
+        await sendCotizacionEmail(cliente.correo, pdfPath, cliente, sucursal);
 
-        res.status(201).send({
-            message: sendEmailResponse.message,
-            pdfPath,
-        });
+        res.status(201).send({ message: "Cotización creada y enviada por correo", pdfPath });
     } catch (error) {
         console.error(error);
         res.status(500).send("Error interno del servidor.");
     }
 };
+
 
 // Función para enviar correo
 async function sendCotizacionEmail(email, pdfPath, cliente, sucursal) {
@@ -236,7 +237,6 @@ exports.getCotizacionById = async (req, res) => {
         res.status(500).send("Error interno del servidor.");
     }
 };
-
 
 // Eliminar una cotización
 exports.deleteCotizacion = async (req, res) => {

@@ -15,6 +15,8 @@ const CotizacionSchema = new mongoose.Schema({
     },
     productos: [
         {
+            reference: { type: String, required: true },
+            unidad: { type: String, required: false },
             nombre: { type: String, required: true },
             cantidad: { type: Number, required: true },
             precio: { type: Number, required: true },
@@ -23,7 +25,10 @@ const CotizacionSchema = new mongoose.Schema({
     ],
     totalGeneral: { type: Number, required: true },
     pdfPath: { type: String, required: true },
-    usuario: { type: mongoose.Schema.Types.ObjectId, ref: "users", required: true }, // Referencia a la colección de usuarios
+    usuario: {
+        nombre : { type: String, required: true},
+        usuario: { type: String, required: true}
+    }, // Referencia a la colección de usuarios
     fechaCreacion: { type: Date, default: Date.now },
 });
 

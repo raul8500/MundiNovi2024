@@ -593,16 +593,6 @@ router.delete('/api/egresos/:id', egresos.deleteEgreso);
 
 
 
-
-
-
-
-
-
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.post('/api/cotizaciones', cotizacion.crearCotizacion);
 router.get('/api/cotizaciones', cotizacion.getAllCotizaciones);

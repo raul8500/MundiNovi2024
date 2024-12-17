@@ -48,6 +48,10 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: false, // Ahora es opcional
   },
+  unidad: {
+    type: String,
+    required: false, // Ahora es opcional
+  },
   peso: {
     type: Number,
     required: false, // Ahora es opcional

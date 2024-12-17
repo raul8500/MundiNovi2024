@@ -615,10 +615,13 @@ function generarJsonCotizacion() {
 
     // Recuperar información de los productos seleccionados
     const productos = productosSeleccionados.map(producto => ({
-        nombre: producto.reference,
-        cantidad: producto.cantidad,
-        precio: producto.precio
+        nombre: producto.name || "",
+        reference: producto.reference || "",
+        unidad: producto.unidad || "",
+        cantidad: producto.cantidad || "",
+        precio: producto.precio || "",
     }));
+
 
     // Recuperar información de la sucursal
     const sucursal = {
@@ -628,7 +631,10 @@ function generarJsonCotizacion() {
     };
 
     // Recuperar ID del usuario actual
-    const usuario = infoUser._id;
+    const usuario = {
+        nombre :  infoUser.name,
+        usuario:  infoUser.username
+    }
 
     // Construir el JSON final
     const jsonCotizacion = {
@@ -662,7 +668,6 @@ document.getElementById('btnGenerarCotizacion').addEventListener('click', async 
         const data = await response.json();
         Swal.fire({
             title: 'Cotización generada',
-            text: `Folio: ${data.folio}`,
             icon: 'success'
         }).then(() => {
             // Refrescar la página después de que el usuario cierre el mensaje
