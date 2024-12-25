@@ -10,6 +10,7 @@ const ModelUser = require('./schemas/usersSchema/usersSchema');
 const ModelSucursal = require('./schemas/sucursalSchema/sucursalSchema');
 const jwt = require('jsonwebtoken');
 const path = require('path');
+const expressLayouts = require('express-ejs-layouts');
 
 
 // Conectar a la base de datos
@@ -27,10 +28,14 @@ app.use(cors());
 
 // Seteamos el motor de plantillas
 app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
 
 // Seteamos la carpeta public para archivos estáticos
 app.use(express.static('public'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.use(expressLayouts);
+app.set('layout', 'layout/base'); // Define el layout base
 
 // Para procesar datos enviados desde forms
 app.use(express.urlencoded({ extended: true }));

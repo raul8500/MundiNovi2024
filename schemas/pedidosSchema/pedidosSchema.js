@@ -1,19 +1,57 @@
 const mongoose = require('mongoose');
 
-const PedidoSchema = new mongoose.Schema({
-    folio: { type: Number, unique: true, required: true },
-    cliente: { type: mongoose.Schema.Types.ObjectId, ref: 'Cliente', required: true },
-    productos: [
-        {
-            producto: { type: mongoose.Schema.Types.ObjectId, ref: 'Producto', required: true },
-            cantidad: { type: Number, required: true },
-            estado: { type: String, enum: ['pendiente', 'parcial', 'entregado'], default: 'pendiente' }
+const pedidoSchema = new mongoose.Schema({
+    cotizacionId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'cotizacion',
+        required: true
+    },
+    cliente: {
+        idCliente: { type: mongoose.Schema.Types.ObjectId, ref: 'Client', required: true },
+        nombre: { type: String, required: true },
+        identificacion: { type: String },
+        regimen: { type: String },
+        telefonoPrincipal: { type: String },
+        telefonoContacto: { type: String },
+        correo: { type: String },
+        direccion: {
+            calle: { type: String },
+            colonia: { type: String },
+            localidad: { type: String },
+            estado: { type: String },
+            codigoPostal: { type: String }
         }
-    ],
-    sucursalOrigen: { type: mongoose.Schema.Types.ObjectId, ref: 'Sucursal', required: true },
-    fechaCreacion: { type: Date, default: Date.now },
-    fechaEntrega: { type: Date },
-    estado: { type: String, enum: ['pendiente', 'en proceso', 'entregado'], default: 'pendiente' }
+    },
+    factura: {
+        type: Boolean,
+        required: true
+    },
+    entrega: {
+        fecha: { type: Date, required: true },
+        sucursal: {
+            id: { type: mongoose.Schema.Types.ObjectId, ref: 'sucursal', required: true },
+            nombre: { type: String, required: true }
+        }
+    },
+    productos: [{
+        id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+        reference: { type: String, required: true },
+        nombre: { type: String, required: true },
+        cantidad: { type: Number, required: true },
+        precio: { type: Number, required: true },
+        total: { type: Number, required: true }
+    }],
+    observaciones: {
+        type: String
+    },
+    total: {
+        type: Number,
+        required: true
+    },
+    creadoEn: {
+        type: Date,
+        default: Date.now
+    }
 });
 
-module.exports = mongoose.model('Pedido', PedidoSchema);
+module.exports = mongoose.model('Pedido', pedidoSchema);

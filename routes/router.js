@@ -45,6 +45,7 @@ const inventario = require('../controllers/inventarios/inventariosController');
 const inventarioMateriaPrima = require('../controllers/inventarios/inventariosMPrima');
 const egresos = require('../controllers/egresos/egresosController');
 const cotizacion = require('../controllers/cotizaciones/cotizacionesController');
+const pedidos = require('../controllers/pedido/pedidoControlle');
 
 
 const multerw = require('multer');
@@ -75,7 +76,7 @@ router.get('/', (req, res) => {
 
 //Vistas
 router.get('/login', (req, res) => {    
-    res.render('login');
+        res.render('login', { hideHeader: true });
 });
 
 router.get('/main', authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
@@ -173,6 +174,9 @@ router.get('/asistencias', (req, res) => {
 router.get('/asistenciaUsuario', (req, res) => {    
     res.render('Asistencias/asistencia');
 });
+
+
+
 
 router.get('/fabricarFormula', (req, res) => {    
     res.render('Produccion/fabricarFormulas');
@@ -283,6 +287,20 @@ router.get('/egresos', (req, res) => {
 router.get('/cotizacionAdmin', (req, res) => {    
     res.render('Cotizaciones/cotizacionesAdmin');
 });
+
+router.get('/crearPedido', (req, res) => {
+    const { id } = req.params;
+    res.render('Pedido/crearPedido', { cotizacionId: id });
+});
+
+router.get('/pedidosPorEntregar', (req, res) => {    
+    res.render('Pedido/pedidosPorEntregar');
+});
+
+
+
+
+
 
 
 
@@ -600,6 +618,14 @@ router.get('/api/cotizaciones/:id', cotizacion.getCotizacionById);
 router.delete('/api/cotizaciones/:id', cotizacion.deleteCotizacion);
 router.get('/api/cotizaciones/:id/imprimir', cotizacion.imprimirCotizacion);
 router.post('/api/cotizaciones/:id/reenviar', cotizacion.reenviarCotizacion);
+router.put('/api/cotizaciones/:id', cotizacion.actualizarCotizacion);
+
+
+//Pedidos
+
+router.post('/api/pedidos', pedidos.crearPedido);
+router.get('/api/pedidos', pedidos.getAllPedidos);
+router.get('/api/pedidos/filtrar/:sucursalId/:fechaEntrega', pedidos.getPedidosPorSucursalYFecha);
 
 
 router.use((req, res, next) => {

@@ -1,0 +1,156 @@
+<% extraStyles=`
+    <style>
+        /* 🔍 Filtros y ⚙️ Acciones compactados */
+        #formFiltrosPedidos .form-label,
+        #filtroUsuario .form-label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        }
+        
+        .card-header {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        }
+        
+        .card-body {
+        padding: 0.5rem 1rem;
+        }
+        
+        .btn-sm {
+        font-size: 0.8rem;
+        padding: 0.2rem 0.5rem;
+        }
+        
+        /* 📊 Resumen de Pedidos */
+        #resumenTotalPedidos,
+        #resumenImporteTotal {
+        font-size: 1.2rem;
+        font-weight: bold;
+        }
+        
+        /* Espaciado para botones */
+        #filtroUsuario {
+        margin-bottom: 0.5rem;
+        }
+        
+        /* Tabla de Pedidos */
+        .table th,
+        .table td {
+        font-size: 0.9rem;
+        text-align: center;
+        }
+
+
+
+    </style>
+    `; %>
+
+<main style="margin-top: 20px">
+    <div class="container-fluid pt-4" style="width: 90%; margin-bottom: 50px;">
+
+        <!-- 🛠️ Filtros y Acciones en una sola fila -->
+        <div class="row g-2 mb-3">
+            <!-- 🔍 Filtros de Búsqueda -->
+            <div class="col-md-6">
+                <div class="card" style="font-size: 0.9rem; height: 250px;">
+                    <div class="card-header fw-bold" style="font-size: 1rem;">🔍 Filtros de Búsqueda</div>
+                    <div class="card-body p-2">
+                        <form id="formFiltrosPedidos">
+                            <div class="row g-2">
+                                <div class="col-md-4">
+                                    <label for="filtroSucursal" class="form-label">Sucursal:</label>
+                                    <select id="filtroSucursal" class="form-select form-select-sm">
+                                        <option value="">Selecciona una sucursal</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="filtroFecha" class="form-label">Fecha:</label>
+                                    <input type="date" id="filtroFecha" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="filtroFolio" class="form-label">Folio (Opcional):</label>
+                                    <input type="text" id="filtroFolio" class="form-control form-control-sm"
+                                        placeholder="Buscar por Folio">
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-12 text-end">
+                                    <button type="button" id="btnBuscarPedidos"
+                                        class="btn btn-primary btn-sm">Buscar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ⚙️ Acciones y Exportaciones -->
+            <div class="col-md-6">
+                <div class="card" style="font-size: 0.9rem; height: 250px;" >
+                    <div class="card-header fw-bold" style="font-size: 1rem;">⚙️ Acciones y Exportaciones</div>
+                    <div class="card-body p-2">
+                        <div class="row g-2 align-items-center">
+                            <div class="col-md-12 mb-2">
+                                <label for="filtroUsuario" class="form-label">Usuario:</label>
+                                <select id="filtroUsuario" class="form-select form-select-sm">
+                                    <option value="">Selecciona un usuario</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 text-end">
+                                <button class="btn btn-outline-primary btn-sm">📄 Responsiva Carta</button>
+                                <button class="btn btn-outline-secondary btn-sm">📝 Responsiva Ticket</button>
+                                <button class="btn btn-outline-success btn-sm">📦 Pedido Carta</button>
+                                <button class="btn btn-outline-info btn-sm">🛒 Pedido Ticket</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📊 Resumen General -->
+        <div class="card mb-3">
+            <div class="card-header fw-bold">📊 Resumen de Pedidos</div>
+            <div class="card-body text-center">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Total de Pedidos: <span id="resumenTotalPedidos">0</span></h6>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Importe Total: <span id="resumenImporteTotal">$0.00</span></h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📋 Tabla de Pedidos -->
+        <div class="card">
+            <div class="card-header fw-bold">📋 Lista de Pedidos</div>
+            <div class="card-body">
+                <table class="table table-hover table-responsive" id="tablaPedidos">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Folio</th>
+                            <th>Nombre</th>
+                            <th>Vendedor</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                            <th>Importe</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Datos cargados dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+
+    <% extraScripts=` 
+            <script src="js/pedido/pedidosPorEntregar.js"></script>
+
+        `; %>
