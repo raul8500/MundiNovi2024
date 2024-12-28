@@ -68,12 +68,6 @@ const upload2 = multerw({ storage });
 
 
 
-
-router.get('/', (req, res) => {    
-    res.render('index');
-});
-
-
 //Vistas
 router.get('/login', (req, res) => {    
         res.render('login', { hideHeader: true });
@@ -297,6 +291,9 @@ router.get('/pedidosPorEntregar', (req, res) => {
     res.render('Pedido/pedidosPorEntregar');
 });
 
+router.get('/reporteFaltantes', (req, res) => {    
+    res.render('Faltantes/reporteFaltantes');
+});
 
 
 
