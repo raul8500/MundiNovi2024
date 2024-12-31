@@ -52,6 +52,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: false, // Ahora es opcional
   },
+    presentacion: {
+    type: Number,
+    required: false, // Ahora es opcional
+  },
   peso: {
     type: Number,
     required: false, // Ahora es opcional

@@ -5,24 +5,31 @@
 <main>
     <div class="container-fluid pt-4" style="width: 100%;">
         <div class="row text-center">
-            <div class="col-md-3 text-center">
-                <h5>Sucursal Origen</h5>
-                <select id="sucursalOrigen" class="form-select" style="width: 250px;" aria-label="Sucursal Origen">
+            <div class="col-md-3 d-flex flex-column align-items-center">
+                <h5 style="font-size: 0.9rem;">Sucursal Origen</h5>
+                <select id="sucursalOrigen" class="form-select text-center" style="width: 250px; font-size: 0.9rem;"
+                    aria-label="Sucursal Origen">
                 </select>
             </div>
-            <div class="col-md-3 text-center">
-                <h5>Sucursal destino</h5>
-                <select id="sucursalDestino" class="form-select" style="width: 250px;" aria-label="Sucursal destino">
+            <div class="col-md-3 d-flex flex-column align-items-center">
+                <h5 style="font-size: 0.9rem;">Sucursal destino</h5>
+                <select id="sucursalDestino" class="form-select text-center" style="width: 250px; font-size: 0.9rem;"
+                    aria-label="Sucursal destino">
                 </select>
             </div>
-            <div class="col-md-3 text-center">
-                <button class="btn btn-primary">
-                    Obtener faltantes por sucursal
+            <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <button id="btnObtenerFaltantes" class="btn btn-primary">
+                    Obtener faltantes
+                </button>
+            </div>
+            <div class="col-md-3 d-flex justify-content-center align-items-center">
+                <button id="btnConvertirTraspaso" class="btn btn-success" style="visibility: hidden;">
+                    Convertir a traspaso
                 </button>
             </div>
         </div>
 
-        <div class="row mt-4"> 
+        <div class="row mt-4">
             <div class="col-md-12">
                 <table class="table table-bordered">
                     <thead>
@@ -33,19 +40,51 @@
                             <th>E. Física Suc. Origen</th>
                             <th>Stock Mínimo</th>
                             <th>Stock Máximo</th>
-                            <th>Presetación</th>
+                            <th>Presentación</th>
                             <th>Necesarios</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        
+                    <tbody id="contenedorFaltantes">
+
                     </tbody>
                 </table>
             </div>
         </div>
-
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalFechasTraspaso" tabindex="-1" aria-labelledby="modalFechasLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalFechasLabel">Fechas para obtener las ventas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="fechaInicial" class="form-label">Fecha Inicial</label>
+                            <input type="date" class="form-control" id="fechaInicial">
+                        </div>
+                        <div class="mb-3">
+                            <label for="fechaFinal" class="form-label">Fecha Final</label>
+                            <input type="date" class="form-control" id="fechaFinal">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnContinuar">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
 
 
-<% extraScripts=``; %>
+
+<% extraScripts=`
+        <script src="js/faltantes/reporteFaltantes.js"></script>
+
+    `; %>

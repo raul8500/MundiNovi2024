@@ -46,6 +46,8 @@ const inventarioMateriaPrima = require('../controllers/inventarios/inventariosMP
 const egresos = require('../controllers/egresos/egresosController');
 const cotizacion = require('../controllers/cotizaciones/cotizacionesController');
 const pedidos = require('../controllers/pedido/pedidoControlle');
+const  faltantes = require('../controllers/faltantes/faltantesController');
+
 
 
 const multerw = require('multer');
@@ -293,6 +295,14 @@ router.get('/pedidosPorEntregar', (req, res) => {
 
 router.get('/reporteFaltantes', (req, res) => {    
     res.render('Faltantes/reporteFaltantes');
+});
+
+router.get('/reporteFaltantes', (req, res) => {    
+    res.render('Faltantes/reporteFaltantes');
+});
+
+router.get('/traspasoProductos', (req, res) => {    
+    res.render('Traspaso/traspasoProductos');
 });
 
 
@@ -623,6 +633,14 @@ router.put('/api/cotizaciones/:id', cotizacion.actualizarCotizacion);
 router.post('/api/pedidos', pedidos.crearPedido);
 router.get('/api/pedidos', pedidos.getAllPedidos);
 router.get('/api/pedidos/filtrar/:sucursalId/:fechaEntrega', pedidos.getPedidosPorSucursalYFecha);
+
+
+//Faltantes
+
+router.get('/api/faltantes/:sucursalOrigen/:sucursalDestino', faltantes.generarReporteFaltantes);
+
+
+
 
 
 router.use((req, res, next) => {
