@@ -15,6 +15,29 @@
         margin: 2px;
         }
 
+        .is-invalid {
+            border-color: #dc3545 !important;
+            background-color: #f8d7da !important;
+        }
+
+        #sugerenciasProductos {
+            position: absolute;
+            z-index: 1050;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 0.25rem;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        #sugerenciasProductos .list-group-item.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+
+
 
 
     </style>
@@ -23,24 +46,26 @@
 <main style="margin-top: 10px;">
     <div class="container-fluid pt-4" style="width: 100%;">
 
+        <div class="row" style="margin-bottom: 20px;">
+            <div class="col-12 d-flex gap-2">
+                <button id="btnRealizarTraspaso" class="btn btn-success">Realizar Traspaso</button>
+                <button id="btnCancelarTraspaso" class="btn btn-danger">Cancelar Traspaso</button>
+            </div>
+        </div>
         <!-- Row para las dos Cards principales -->
-        <div class="row gx-3 gy-3">
-
+        <div class="row">
             <!-- Card 1: Información Principal (6 columnas) -->
             <div class="col-md-6">
                 <div class="card mb-3 h-100">
-                    <div class="card-header bg-primary text-white">
-                        Información de Traspaso
-                    </div>
                     <div class="card-body">
                         <div class="row gx-2 gy-2">
                             <div class="col-md-6">
                                 <label for="sucursalOrigen" class="form-label fw-bold">Sucursal Origen</label>
-                                <select id="sucursalOrigen" class="form-select form-select-sm"></select>
+                                <select id="sucursalOrigen" class="form-select form-select-sm" disabled></select>
                             </div>
                             <div class="col-md-6">
                                 <label for="sucursalDestino" class="form-label fw-bold">Sucursal Destino</label>
-                                <select id="sucursalDestino" class="form-select form-select-sm"></select>
+                                <select id="sucursalDestino" class="form-select form-select-sm" disabled></select>
                             </div>
                             <div class="col-md-6">
                                 <label for="usuarioOrigen" class="form-label fw-bold">Usuario Origen</label>
@@ -62,37 +87,38 @@
             <!-- Card 2: Agregar Productos (6 columnas) -->
             <div class="col-md-6">
                 <div class="card mb-3 h-100">
-                    <div class="card-header bg-success text-white">
-                        Agregar Productos
-                    </div>
                     <div class="card-body">
                         <div class="row gx-2 gy-2 align-items-end">
                             <div class="col-md-6" style="margin-bottom: 50px;">
                                 <label for="fechaInicio" class="form-label fw-bold">Fecha Inicial</label>
-                                <input type="date" id="fechaInicio" class="form-control form-control-sm">
+                                <input type="date" id="fechaInicio" class="form-control form-control-sm" disabled>
                             </div>
                             <div class="col-md-6" style="margin-bottom: 50px;">
                                 <label for="fechaFinal" class="form-label fw-bold">Fecha Final</label>
-                                <input type="date" id="fechaFinal" class="form-control form-control-sm">
+                                <input type="date" id="fechaFinal" class="form-control form-control-sm" disabled>
                             </div>
-                            
+
+                            <h5>Agregar Productos</h5>
                             <div class="col-md-2">
                                 <label for="cantidad" class="form-label fw-bold">Cantidad</label>
-                                <input type="number" id="cantidad" class="form-control form-control-sm">
+                                <input type="number" id="cantidad" class="form-control form-control-sm" value="1">
                             </div>
                             <div class="col-md-7">
                                 <label for="codigoProducto" class="form-label fw-bold">Código Producto</label>
                                 <input type="text" id="codigoProducto" class="form-control form-control-sm">
+                                <div id="sugerenciasProductos" class="list-group position-absolute w-100"></div>
+
                             </div>
                             <div class="col-md-3 text-end">
                                 <button id="btnAgregarProducto" class="btn btn-primary w-100">Agregar</button>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
+
         <br>
         <!-- Card 3: Control de la Tabla -->
         <div class="card mb-3">
@@ -127,26 +153,19 @@
                         <th>Venta Período</th>
                         <th>Venta Diaria</th>
                         <th>Stock Mín. Sug.</th>
+                        <th>Stock Max. Sug.</th>
+                        <th>Stock Mín</th>
+                        <th>Stock Max</th>
                         <th>Volumen</th>
                         <th>Peso</th>
                         <th>Participación</th>
                         <th>Cant. Sug. Cajas</th>
+                        <th>Cant.</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Fila de Totales (Siempre arriba) -->
-                    <tr class="table-info fw-bold">
-                        <td colspan="5" class="text-end">Totales:</td>
-                        <td id="totalVentaPeriodo">0</td>
-                        <td colspan="2"></td>
-                        <td id="totalVolumen">0</td>
-                        <td id="totalPeso">0</td>
-                        <td colspan="2"></td>
-                        <td>
-                            <button id="btnVaciarListado" class="btn btn-sm btn-danger">Vaciar Listado</button>
-                        </td>
-                    </tr>
+                <tbody id="productosTraspaso">
+                
                 </tbody>
             </table>
         </div>
@@ -157,6 +176,7 @@
 
 
 
+
     <% extraScripts=`
-    
+        <script src = "js/traspasos/traspasos.js"></script>
         `; %>

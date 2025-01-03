@@ -1,5 +1,6 @@
 const bcryptjs = require('bcryptjs');
 const ModelUser = require('../../schemas/usersSchema/usersSchema');
+const Sucursal = require('../../schemas/sucursalSchema/sucursalSchema');
 const jwt = require('jsonwebtoken');
 
 
@@ -213,4 +214,66 @@ exports.updateUserStatus = async (req, res) => {
     }
 };
 
+exports.obtenerSucursalesYUsuarios = async (req, res) => {
+    try {
+        // Extraer y limpiar los IDs de las sucursales desde los parámetros o el cuerpo
+        let { sucursalId1, sucursalId2 } = req.params; // O req.body si los pasas en el cuerpo
+
+        if (!sucursalId1 || !sucursalId2) {
+            return res.status(400).json({
+                success: false,
+                message: 'Se requieren dos IDs de sucursales.'
+            });
+        }
+
+        // Eliminar saltos de línea y espacios en blanco
+        sucursalId1 = sucursalId1.trim().replace(/\n/g, '');
+        sucursalId2 = sucursalId2.trim().replace(/\n/g, '');
+
+        // Validar que los IDs sean ObjectId válidos
+        const mongoose = require('mongoose');
+        if (!mongoose.Types.ObjectId.isValid(sucursalId1) || !mongoose.Types.ObjectId.isValid(sucursalId2)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Uno o ambos IDs no son válidos.'
+            });
+        }
+
+        // Buscar las sucursales por sus IDs
+        const sucursales = await Sucursal.find({
+            _id: { $in: [sucursalId1, sucursalId2] }
+        });
+
+        if (sucursales.length !== 2) {
+            return res.status(404).json({
+                success: false,
+                message: 'Una o ambas sucursales no fueron encontradas.'
+            });
+        }
+
+        // Buscar los usuarios asociados a las sucursales
+        const usuarios = await ModelUser.find({
+            sucursalId: { $in: [sucursalId1, sucursalId2] }
+        });
+
+        // Formatear la respuesta
+        const respuesta = sucursales.map(sucursal => ({
+            sucursal,
+            usuarios: usuarios.filter(user => user.sucursalId.equals(sucursal._id))
+        }));
+
+        return res.status(200).json({
+            success: true,
+            data: respuesta
+        });
+
+    } catch (error) {
+        console.error('Error al obtener sucursales y usuarios:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor.',
+            error: error.message
+        });
+    }
+};
 

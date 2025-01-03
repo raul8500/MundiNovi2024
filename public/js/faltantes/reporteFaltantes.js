@@ -95,3 +95,19 @@ document.getElementById('btnConvertirTraspaso').addEventListener('click', () => 
     const modalFechasTraspaso = new mdb.Modal(document.getElementById('modalFechasTraspaso'));
     modalFechasTraspaso.show()
 });
+
+document.getElementById('btnContinuar').addEventListener('click', () => {
+    const sucursalOrigen = document.getElementById('sucursalOrigen').value;
+    const sucursalDestino = document.getElementById('sucursalDestino').value;
+    const fechaInicial = document.getElementById('fechaInicial').value;
+    const fechaFinal = document.getElementById('fechaFinal').value;
+
+    // Validar que los campos no estén vacíos
+    if (!sucursalOrigen|| !sucursalDestino || !fechaInicial || !fechaFinal) {
+        alert('Por favor, complete todos los campos.');
+        return;
+    }
+
+    // Redirigir a la página con los parámetros en la URL
+    window.location.href = `/traspasoProductos?sucursalOrigen=${encodeURIComponent(sucursalOrigen)}&sucursalDestino=${encodeURIComponent(sucursalDestino)}&fechaInicial=${encodeURIComponent(fechaInicial)}&fechaFinal=${encodeURIComponent(fechaFinal)}`;
+});

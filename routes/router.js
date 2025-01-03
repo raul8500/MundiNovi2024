@@ -47,6 +47,7 @@ const egresos = require('../controllers/egresos/egresosController');
 const cotizacion = require('../controllers/cotizaciones/cotizacionesController');
 const pedidos = require('../controllers/pedido/pedidoControlle');
 const  faltantes = require('../controllers/faltantes/faltantesController');
+const  traspasos = require('../controllers/traspasos/traspasosController');
 
 
 
@@ -340,6 +341,10 @@ router.put('/api/auth/users/password/:id', auth.updatePassword)
 router.delete('/api/auth/users/:id', auth.deleteUserById);
 router.put('/api/auth/users/status/:id', auth.updateUserStatus)
 router.get('/logout', logout.logout)
+router.get('/api/auth/users/sucursales/:sucursalId1/:sucursalId2', auth.obtenerSucursalesYUsuarios)
+
+
+
 
 //MiddleWare
 router.get('/api/verifySesion', verifySesion.verifyToken)
@@ -638,6 +643,12 @@ router.get('/api/pedidos/filtrar/:sucursalId/:fechaEntrega', pedidos.getPedidosP
 //Faltantes
 
 router.get('/api/faltantes/:sucursalOrigen/:sucursalDestino', faltantes.generarReporteFaltantes);
+
+
+//traspasos
+router.get('/api/traspasos/:sucursalOrigenId/:sucursalDestinoId/:fechaInicio/:fechaFinal', traspasos.obtenerVentasPorSucursalYFechas);
+router.post('/api/traspasos', traspasos.realizarTraspaso);
+
 
 
 

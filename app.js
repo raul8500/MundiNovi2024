@@ -12,13 +12,12 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 
-
 // Conectar a la base de datos
 dbconnect();
 const app = express();
 
 // Crear el servidor HTTP
-const server = http.createServer(app);
+let server = http.createServer(app);
 
 // Integrar Socket.IO con el servidor HTTP
 const io = socketIo(server);
@@ -61,10 +60,9 @@ app.use(function (req, res, next) {
 io.on('connection', (socket) => {
     // Cargar mensajes al conectarse
     Message.find()
-        .populate('user', 'name sucursalId') // Incluye user y sucursalId
-        .sort({ date: 1 }) // Ordenar los mensajes por fecha
+        .populate('user', 'name sucursalId')
+        .sort({ date: 1 })
         .then(async messages => {
-            // Obtener la sucursal para cada mensaje
             const messagesWithSucursal = await Promise.all(messages.map(async (message) => {
                 const user = message.user;
                 const sucursal = await ModelSucursal.findById(user.sucursalId).select('nombre');
@@ -96,7 +94,6 @@ io.on('connection', (socket) => {
 
             await newMessage.save();
 
-            // Emitir el nuevo mensaje con el nombre del usuario y la sucursal
             io.emit('newMessage', {
                 user: {
                     name: user.name,
@@ -111,14 +108,53 @@ io.on('connection', (socket) => {
     });
 });
 
-
 // Limpieza de mensajes antiguos
 setInterval(() => {
-  Message.deleteMany({ date: { $lt: new Date(Date.now() - 24*60*60*1000) } })
-    .then(() => console.log('Mensajes antiguos eliminados'));
-}, 24*60*60*1000); // Cada 24 horas
+    Message.deleteMany({ date: { $lt: new Date(Date.now() - 24 * 60 * 60 * 1000) } })
+        .then(() => console.log('Mensajes antiguos eliminados'));
+}, 24 * 60 * 60 * 1000); // Cada 24 horas
+
+// Manejar errores globales en el servidor
+server.on('error', (err) => {
+    if (err.code === 'ECONNRESET') {
+        console.warn('⚠️ Conexión reseteada por el cliente. Ignorando y continuando...');
+    } else {
+        console.error('🔥 Error en el servidor:', err);
+    }
+});
+
+// Capturar errores en solicitudes individuales
+app.use((err, req, res, next) => {
+    if (err.code === 'ECONNRESET') {
+        console.warn('⚠️ Error ECONNRESET en la solicitud.');
+        res.status(500).send('Error interno del servidor. Intenta de nuevo.');
+    } else {
+        console.error('🔥 Error inesperado:', err);
+        res.status(500).send('Error interno del servidor.');
+    }
+});
+
+// Reiniciar conexiones fallidas automáticamente
+function restartServer() {
+    console.warn('🔄 Reiniciando servidor...');
+    server.close(() => {
+        server = http.createServer(app);
+        server.listen(3000, () => console.log('✅ Servidor reiniciado correctamente'));
+    });
+}
+
+// Capturar errores críticos
+process.on('uncaughtException', (err) => {
+    console.error('🚨 Excepción no controlada:', err);
+    restartServer();
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('🚨 Promesa no manejada:', reason);
+    restartServer();
+});
 
 // Iniciar el servidor
 server.listen(3000, () => {
-    console.log('Servidor corriendo');
+    console.log('🚀 Servidor corriendo en el puerto 3000');
 });
