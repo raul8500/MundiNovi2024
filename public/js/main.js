@@ -74,6 +74,8 @@ function obtenerNombreRol(rol) {
             return "Supervisor";
         case 8:
             return "AClientes";
+        case 9:
+            return "Almacen";
         default:
             return "Rol desconocido";
     }

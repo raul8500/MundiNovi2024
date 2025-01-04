@@ -306,9 +306,9 @@ router.get('/traspasoProductos', (req, res) => {
     res.render('Traspaso/traspasoProductos');
 });
 
-
-
-
+router.get('/listadoTraspasos', (req, res) => {    
+    res.render('Traspaso/listadoTraspasos');
+});
 
 
 
@@ -648,6 +648,7 @@ router.get('/api/faltantes/:sucursalOrigen/:sucursalDestino', faltantes.generarR
 //traspasos
 router.get('/api/traspasos/:sucursalOrigenId/:sucursalDestinoId/:fechaInicio/:fechaFinal', traspasos.obtenerVentasPorSucursalYFechas);
 router.post('/api/traspasos', traspasos.realizarTraspaso);
+router.get('/api/traspasos/fechas/:fechaInicio/:fechaFin', traspasos.obtenerTraspasosPorFechas);
 
 
 

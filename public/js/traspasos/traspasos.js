@@ -655,9 +655,10 @@ async function realizarTraspaso() {
 
         // ✅ Llamada a imprimirTraspaso después de un traspaso exitoso
     if (response.ok) {
-        Swal.fire('✅ Éxito', 'El traspaso se ha realizado correctamente.', 'success');
+        Swal.fire('✅ Éxito', `El traspaso se ha realizado correctamente. Folio: ${result.folio}`, 'success');
 
         imprimirTraspaso({
+            folio: result.folio,
             sucursalOrigen: {
                 nombre: document.getElementById('sucursalOrigen').options[document.getElementById('sucursalOrigen').selectedIndex].text
             },
@@ -678,7 +679,6 @@ async function realizarTraspaso() {
         });
 
         window.location.href = '/reporteFaltantes';
-
     }else {
             throw new Error(result.message || 'Error al realizar el traspaso');
         }
@@ -691,14 +691,13 @@ async function realizarTraspaso() {
 // 📌 Evento para el botón de realizar traspaso
 document.getElementById('btnRealizarTraspaso').addEventListener('click', realizarTraspaso);
 
-// 📌 Función para imprimir el comprobante de traspaso
 function imprimirTraspaso(data) {
     const ventanaImpresion = window.open('', '_blank');
 
     const contenido = `
     <html>
     <head>
-        <title>Comprobante de Traspaso</title>
+        <title>TRASPASO ENTRE ALMACÉNES</title>
         <style>
             body { font-family: Arial, sans-serif; margin: 20px; }
             h1, h3 { text-align: center; }
@@ -714,7 +713,7 @@ function imprimirTraspaso(data) {
     <body>
         <h1>Comprobante de Traspaso</h1>
         <div class="info">
-            <h3>Información General</h3>
+            <p><strong>Folio:</strong> ${data.folio}</p>
             <p><strong>Sucursal Origen:</strong> ${data.sucursalOrigen.nombre}</p>
             <p><strong>Sucursal Destino:</strong> ${data.sucursalDestino.nombre}</p>
             <p><strong>Usuario Origen:</strong> ${data.usuarioOrigen.nombre} (@${data.usuarioOrigen.username})</p>
@@ -722,57 +721,34 @@ function imprimirTraspaso(data) {
             <p><strong>Fecha:</strong> ${new Date(data.fecha).toLocaleString()}</p>
             <p><strong>Observaciones:</strong> ${data.observaciones || 'N/A'}</p>
         </div>
-
         <h3>Productos Traspasados</h3>
         <table>
             <thead>
                 <tr>
                     <th>Referencia</th>
                     <th>Nombre</th>
-                    <th>Presentación</th>
                     <th>Cantidad</th>
-                    <th>Existencia Origen</th>
-                    <th>Existencia Destino</th>
-                    <th>Stock Mínimo</th>
-                    <th>Stock Máximo</th>
-                    <th>Volumen</th>
-                    <th>Peso</th>
                 </tr>
             </thead>
             <tbody>
-                ${data.productos.map(producto => `
+                ${data.productos.map(p => `
                     <tr>
-                        <td>${producto.reference}</td>
-                        <td>${producto.name}</td>
-                        <td>${producto.presentacion || '-'}</td>
-                        <td>${producto.cantidad}</td>
-                        <td>${producto.existenciaOrigen}</td>
-                        <td>${producto.existenciaDestino}</td>
-                        <td>${producto.stockMinimo}</td>
-                        <td>${producto.stockMaximo}</td>
-                        <td>${producto.volumen}</td>
-                        <td>${producto.peso}</td>
+                        <td>${p.reference}</td>
+                        <td>${p.name}</td>
+                        <td>${p.cantidad}</td>
                     </tr>
                 `).join('')}
             </tbody>
         </table>
-
-        <div class="footer">
-            <p><strong>¡Gracias por usar nuestro sistema de traspasos!</strong></p>
-        </div>
     </body>
     </html>
     `;
 
-    // ✅ Escribir contenido en la nueva ventana
     ventanaImpresion.document.write(contenido);
     ventanaImpresion.document.close();
-
-    // ✅ Imprimir automáticamente
     ventanaImpresion.onload = () => {
         ventanaImpresion.print();
         ventanaImpresion.close();
     };
 }
-
 

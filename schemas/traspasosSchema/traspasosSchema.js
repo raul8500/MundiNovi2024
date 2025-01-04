@@ -14,14 +14,16 @@ const ProductoTraspasoSchema = new mongoose.Schema({
 });
 
 const TraspasoSchema = new mongoose.Schema({
-    sucursalOrigen: { type: mongoose.Schema.Types.ObjectId, ref: 'Sucursal', required: true },
-    sucursalDestino: { type: mongoose.Schema.Types.ObjectId, ref: 'Sucursal', required: true },
-    usuarioOrigen: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
-    usuarioDestino: { type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true },
+    folio: { type: Number, unique: true, required: true }, // Folio numérico incremental
+    sucursalOrigen: { type: mongoose.Schema.Types.ObjectId, ref: 'sucursal', required: true },
+    sucursalDestino: { type: mongoose.Schema.Types.ObjectId, ref: 'sucursal', required: true },
+    usuarioOrigen: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
+    usuarioDestino: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
     fecha: { type: Date, default: Date.now },
     observaciones: { type: String, default: '' },
     productos: [ProductoTraspasoSchema], // Array de productos traspasados
     estado: { type: String, enum: ['pendiente', 'completado'], default: 'pendiente' } // Estado del traspaso
 });
+
 
 module.exports = mongoose.model('Traspaso', TraspasoSchema);

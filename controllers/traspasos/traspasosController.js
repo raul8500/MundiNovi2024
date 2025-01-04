@@ -161,6 +161,25 @@ exports.obtenerVentasPorSucursalYFechas = async (req, res) => {
 };
 
 
+async function generarFolio() {
+    try {
+        const ultimoTraspaso = await Traspaso.findOne().sort({ folio: -1 }).select('folio').lean();
+        
+        let nuevoFolio = 1000; // Valor inicial predeterminado
+        
+        if (ultimoTraspaso && ultimoTraspaso.folio && !isNaN(ultimoTraspaso.folio)) {
+            nuevoFolio = ultimoTraspaso.folio + 1;
+        }
+
+        console.log(`📑 Nuevo Folio Generado: ${nuevoFolio}`);
+        return nuevoFolio;
+    } catch (error) {
+        console.error('❌ Error al generar folio:', error);
+        return 1000; // Fallback en caso de error
+    }
+}
+
+// 📌 Realizar un traspaso de productos
 exports.realizarTraspaso = async (req, res) => {
     try {
         const { sucursalOrigen, sucursalDestino, usuarioOrigen, usuarioDestino, observaciones, productos } = req.body;
@@ -171,15 +190,23 @@ exports.realizarTraspaso = async (req, res) => {
             return res.status(400).json({ message: 'Todos los campos son obligatorios y debe haber al menos un producto.' });
         }
 
-        // Validar los productos
+        // ✅ Validar los productos
         for (const producto of productos) {
             if (!producto.reference || !producto.name || !producto.presentacion || producto.cantidad <= 0 || producto.existenciaOrigen < producto.cantidad) {
                 return res.status(400).json({ message: `Datos inválidos en el producto: ${producto.reference}` });
             }
         }
 
-        // Crear el traspaso
+        // ✅ Generar Folio Único
+        const folio = await generarFolio();
+
+        if (isNaN(folio)) {
+            throw new Error('El folio generado no es un número válido.');
+        }
+
+        // ✅ Crear el traspaso
         const nuevoTraspaso = new Traspaso({
+            folio,
             sucursalOrigen,
             sucursalDestino,
             usuarioOrigen,
@@ -190,7 +217,7 @@ exports.realizarTraspaso = async (req, res) => {
 
         await nuevoTraspaso.save();
 
-        // Actualizar existencias
+        // ✅ Actualizar existencias
         for (const producto of productos) {
             await Stock.updateOne(
                 { sucursalId: sucursalOrigen, 'productos.reference': producto.reference },
@@ -205,11 +232,62 @@ exports.realizarTraspaso = async (req, res) => {
 
         res.status(201).json({
             message: '✅ Traspaso realizado exitosamente',
-            traspasoId: nuevoTraspaso._id
+            traspasoId: nuevoTraspaso._id,
+            folio: nuevoTraspaso.folio
         });
+
     } catch (error) {
         console.error('❌ Error al realizar el traspaso:', error);
         res.status(500).json({ message: 'Error interno del servidor' });
     }
 };
 
+exports.obtenerTraspasosPorFechas = async (req, res) => {
+    try {
+        const { fechaInicio, fechaFin } = req.params;
+
+        // ✅ Validar parámetros
+        if (!fechaInicio || !fechaFin) {
+            return res.status(400).json({ message: 'Las fechas de inicio y fin son obligatorias.' });
+        }
+
+        const inicio = new Date(fechaInicio);
+        const fin = new Date(fechaFin);
+
+        if (isNaN(inicio.getTime()) || isNaN(fin.getTime())) {
+            return res.status(400).json({ message: 'Las fechas proporcionadas no son válidas.' });
+        }
+
+        // ✅ Ajustar las fechas para incluir todo el día
+        fin.setHours(23, 59, 59, 999);
+
+        // ✅ Buscar traspasos en el rango de fechas
+        const traspasos = await Traspaso.find({
+            fecha: { $gte: inicio, $lte: fin }
+        })
+        .populate('sucursalOrigen')
+        .populate('sucursalDestino')
+        .populate('usuarioOrigen')
+        .populate('usuarioDestino')
+        .sort({ fecha: -1 });
+
+        if (!traspasos.length) {
+            return res.status(404).json({ message: 'No se encontraron traspasos en el rango de fechas especificado.' });
+        }
+
+        // ✅ Calcular el total de artículos traspasados
+        const totalArticulos = traspasos.reduce((total, traspaso) => {
+            const totalPorTraspaso = traspaso.productos.reduce((subtotal, producto) => subtotal + producto.cantidad, 0);
+            return total + totalPorTraspaso;
+        }, 0);
+
+        res.status(200).json({
+            message: '✅ Traspasos obtenidos correctamente',
+            totalArticulos,
+            traspasos
+        });
+    } catch (error) {
+        console.error('❌ Error al obtener traspasos por fechas:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
