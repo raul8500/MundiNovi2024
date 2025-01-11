@@ -310,6 +310,18 @@ router.get('/listadoTraspasos', (req, res) => {
     res.render('Traspaso/listadoTraspasos');
 });
 
+router.get('/codigosTraspasos', (req, res) => {    
+    res.render('Traspaso/codigosTraspasos');
+});
+
+router.get('/recepcionFaltantes', (req, res) => {    
+    res.render('Traspaso/recepcionFaltantes');
+});
+
+router.get('/recepcionFaltantesProductos', (req, res) => {    
+    res.render('Traspaso/recepcionFaltantesProductos');
+});
+
 
 
 
@@ -649,10 +661,9 @@ router.get('/api/faltantes/:sucursalOrigen/:sucursalDestino', faltantes.generarR
 router.get('/api/traspasos/:sucursalOrigenId/:sucursalDestinoId/:fechaInicio/:fechaFinal', traspasos.obtenerVentasPorSucursalYFechas);
 router.post('/api/traspasos', traspasos.realizarTraspaso);
 router.get('/api/traspasos/fechas/:fechaInicio/:fechaFin', traspasos.obtenerTraspasosPorFechas);
-
-
-
-
+router.get('/api/traspasos/:id', traspasos.obtenerTraspasoPorId);
+router.post('/api/traspasos/:traspasoId', traspasos.generarPDFTraspaso);
+router.get('/api/traspasos', traspasos.obtenerTodosLosTraspasos);
 
 
 router.use((req, res, next) => {

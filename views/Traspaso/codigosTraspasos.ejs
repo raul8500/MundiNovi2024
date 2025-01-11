@@ -1,0 +1,66 @@
+<% extraStyles=` `; %>
+
+
+
+    <main style="margin-top: 10px;">
+        <div class="container-fluid pt-4" style="width: 100%;">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">📊 Filtros para Traspasos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row gx-2 gy-3 align-items-end">
+                        <!-- Select para Sucursal -->
+                        <div class="col-md-4">
+                            <label for="sucursalSelect" class="form-label fw-bold">Sucursal Destino</label>
+                            <select id="sucursalSelect" class="form-select form-select-sm">
+                                <option value="">Seleccione una sucursal</option>
+                                <!-- Opciones dinámicas desde el backend -->
+                            </select>
+                        </div>
+
+                        <!-- Input Fecha Inicial -->
+                        <div class="col-md-3">
+                            <label for="fechaInicio" class="form-label fw-bold">Fecha Inicial</label>
+                            <input type="date" id="fechaInicio" class="form-control form-control-sm">
+                        </div>
+
+                        <!-- Input Fecha Final -->
+                        <div class="col-md-3">
+                            <label for="fechaFin" class="form-label fw-bold">Fecha Final</label>
+                            <input type="date" id="fechaFin" class="form-control form-control-sm">
+                        </div>
+
+                        <!-- Botón para Cargar Traspasos -->
+                        <div class="col-md-2 text-end">
+                            <button id="btnCargarTraspasos" class="btn btn-primary w-100">Cargar Traspasos</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla para mostrar los traspasos -->
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Folio</th>
+                            <th>Fecha</th>
+                            <th>Sucursal Origen</th>
+                            <th>Usuario Origen</th>
+                            <th>Sucursal Destino</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyTraspasos">
+                        <!-- Filas dinámicas cargadas desde JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+
+    <% extraScripts=`
+        <script src="js/traspasos/codigosTraspasos.js"></script>
+        `; %>

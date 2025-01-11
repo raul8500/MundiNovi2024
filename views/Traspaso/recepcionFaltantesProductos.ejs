@@ -1,0 +1,78 @@
+<% extraStyles=` `; %>
+
+
+<main style="margin-top: 10px;">
+    <div class="container-fluid pt-4" style="width: 70%;">
+
+        <!-- 📌 Botones superiores -->
+        <div class="d-flex justify-content-start gap-2 mb-3">
+            <button id="btnRecibir" class="btn btn-success"><i class="fa-solid fa-check"></i> Recibir</button>
+            <button id="btnCancelar" class="btn btn-danger"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+        </div>
+
+
+        <!-- 📌 Información del traspaso -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">Detalles del Traspaso</div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Sucursal Origen -->
+                    <div class="col-md-6">
+                        <label><strong>Sucursal Origen:</strong></label>
+                        <p id="sucursalOrigen"></p>
+                    </div>
+                    <!-- Sucursal Destino -->
+                    <div class="col-md-6">
+                        <label><strong>Sucursal Destino:</strong></label>
+                        <p id="sucursalDestino"></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Usuario Origen -->
+                    <div class="col-md-6">
+                        <label><strong>Usuario Origen:</strong></label>
+                        <p id="usuarioOrigen"></p>
+                    </div>
+                    <!-- Usuario Destino -->
+                    <div class="col-md-6">
+                        <label><strong>Usuario Destino:</strong></label>
+                        <p id="usuarioDestino"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📌 Input para códigos de barras -->
+        <div class="mb-4">
+            <label for="inputCodigoBarras"><strong>Escanear Código de Barras:</strong></label>
+            <input type="text" id="inputCodigoBarras" class="form-control"
+                placeholder="Escanea o ingresa el código de barras aquí">
+        </div>
+
+        <!-- 📌 Tabla para productos escaneados -->
+        <div class="card">
+            <div class="card-header bg-secondary text-white">Productos Escaneados</div>
+            <div class="card-body">
+                <table id="tablaProductos" class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Código</th>
+                            <th>Descripción</th>
+                            <th>Cant.</th>
+                            <th>Correcto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Filas dinámicas aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+
+    <% extraScripts=` <script src="js/traspasos/recepcionTraspasosProductos.js">
+        </script>
+        `; %>

@@ -1,0 +1,33 @@
+<% extraStyles=` `; %>
+
+
+
+    <main style="margin-top: 10px;">
+        <div class="container-fluid pt-4" style="width: 100%;">
+            <h4 class="text-center" style="margin-bottom: 20px;">Recepción de Traspasos</h4>
+
+            <!-- Tabla de Recepción -->
+            <div class="table-responsive">
+                <table id="tablaRecepcion" class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Sucursal Origen</th>
+                            <th>Usuario Origen</th>
+                            <th>Sucursal Destino</th>
+                            <th>Estado</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Filas dinámicas aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+
+    <% extraScripts=` <script src="js/traspasos/recepcionTraspasos.js">
+        </script>
+        `; %>
