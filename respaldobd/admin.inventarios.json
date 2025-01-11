@@ -1,0 +1,1674 @@
+[{
+  "_id": {
+    "$oid": "675477477244eba04ec7631b"
+  },
+  "folio": 1,
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "encargado": {
+    "$oid": "673be75360dd2ae3bcc67d59"
+  },
+  "estado": false,
+  "tipo": "Materia Prima",
+  "productos": [
+    {
+      "referencia": "MATP",
+      "existenciaFisica": 0,
+      "existenciaContable": 10,
+      "_id": {
+        "$oid": "675477477244eba04ec7631c"
+      }
+    },
+    {
+      "referencia": "AGU",
+      "existenciaFisica": 15,
+      "existenciaContable": 300,
+      "_id": {
+        "$oid": "675477477244eba04ec7631d"
+      }
+    },
+    {
+      "referencia": "GLIC",
+      "existenciaFisica": 0,
+      "existenciaContable": 84,
+      "_id": {
+        "$oid": "675477477244eba04ec7631e"
+      }
+    },
+    {
+      "referencia": "AGU",
+      "existenciaFisica": 100,
+      "existenciaContable": 300,
+      "_id": {
+        "$oid": "67548fb6af95f8d7d1b63220"
+      }
+    },
+    {
+      "referencia": "GLIC",
+      "existenciaFisica": 20,
+      "existenciaContable": 84,
+      "_id": {
+        "$oid": "67548fb6af95f8d7d1b63221"
+      }
+    }
+  ],
+  "productosConMovimiento": [
+    {
+      "referencia": "GLIC",
+      "descripcion": "GLICERINA",
+      "existenciaFisica": 20,
+      "existenciaContable": 84,
+      "diferencia": -64,
+      "costo": 70,
+      "importe": -4480,
+      "_id": {
+        "$oid": "67548fb6af95f8d7d1b63223"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-12-07T16:26:47.528Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T18:11:03.005Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67548bfca84c18e14838bcb5"
+  },
+  "folio": 2,
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "encargado": {
+    "$oid": "6747f8349c879fb52050075f"
+  },
+  "estado": true,
+  "tipo": "Productos",
+  "productos": [
+    {
+      "referencia": "ATOCHH",
+      "existenciaFisica": 0,
+      "existenciaContable": 1000,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcb6"
+      }
+    },
+    {
+      "referencia": "AROGLACAS",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcb7"
+      }
+    },
+    {
+      "referencia": "BOMDESREY",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcb8"
+      }
+    },
+    {
+      "referencia": "AROFERCON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcb9"
+      }
+    },
+    {
+      "referencia": "BOTBALNEGMD",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcba"
+      }
+    },
+    {
+      "referencia": "ABRCER",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcbb"
+      }
+    },
+    {
+      "referencia": "CLODES",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcbc"
+      }
+    },
+    {
+      "referencia": "CEPPLAN",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcbd"
+      }
+    },
+    {
+      "referencia": "BOLG",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcbe"
+      }
+    },
+    {
+      "referencia": "COL",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcbf"
+      }
+    },
+    {
+      "referencia": "ABRGLICH",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcc0"
+      }
+    },
+    {
+      "referencia": "BOLM",
+      "existenciaFisica": 12,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcc1"
+      }
+    },
+    {
+      "referencia": "CEPIXT8",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcc2"
+      }
+    },
+    {
+      "referencia": "CEPWC",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcc3"
+      }
+    },
+    {
+      "referencia": "COLFREPLA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcc4"
+      }
+    },
+    {
+      "referencia": "BOMDES",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcc5"
+      }
+    },
+    {
+      "referencia": "CUBESP",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcc6"
+      }
+    },
+    {
+      "referencia": "AROVAICON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcc7"
+      }
+    },
+    {
+      "referencia": "ATOPROM",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcc8"
+      }
+    },
+    {
+      "referencia": "CEPESCPLA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcc9"
+      }
+    },
+    {
+      "referencia": "BASMAD",
+      "existenciaFisica": 1,
+      "existenciaContable": -19,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcca"
+      }
+    },
+    {
+      "referencia": "CUB12",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bccb"
+      }
+    },
+    {
+      "referencia": "ATOTIG",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bccc"
+      }
+    },
+    {
+      "referencia": "AROHUGCON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bccd"
+      }
+    },
+    {
+      "referencia": "AROCHACON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcce"
+      }
+    },
+    {
+      "referencia": "BOTBALNEGCH",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bccf"
+      }
+    },
+    {
+      "referencia": "BOTBAS",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcd0"
+      }
+    },
+    {
+      "referencia": "DETAXI",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcd1"
+      }
+    },
+    {
+      "referencia": "ARODRACON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcd2"
+      }
+    },
+    {
+      "referencia": "ATOIND",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcd3"
+      }
+    },
+    {
+      "referencia": "AROPOLCON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcd4"
+      }
+    },
+    {
+      "referencia": "CESROPMD",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcd5"
+      }
+    },
+    {
+      "referencia": "CEPDENCAJ",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcd6"
+      }
+    },
+    {
+      "referencia": "CEPSAC",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcd7"
+      }
+    },
+    {
+      "referencia": "CEPMANM",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcd8"
+      }
+    },
+    {
+      "referencia": "CUB121",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcd9"
+      }
+    },
+    {
+      "referencia": "AROETECON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcda"
+      }
+    },
+    {
+      "referencia": "BOLCH",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcdb"
+      }
+    },
+    {
+      "referencia": "CARLIQGOT",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcdc"
+      }
+    },
+    {
+      "referencia": "CLODESCON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcdd"
+      }
+    },
+    {
+      "referencia": "CUB18",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcde"
+      }
+    },
+    {
+      "referencia": "DETSAL",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcdf"
+      }
+    },
+    {
+      "referencia": "CEPBIB",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bce0"
+      }
+    },
+    {
+      "referencia": "CESROPGD",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bce1"
+      }
+    },
+    {
+      "referencia": "DESUNIATO",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bce2"
+      }
+    },
+    {
+      "referencia": "CESROPCH",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bce3"
+      }
+    },
+    {
+      "referencia": "DESTOA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bce4"
+      }
+    },
+    {
+      "referencia": "DETROM10",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bce5"
+      }
+    },
+    {
+      "referencia": "CEPTAZREY",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bce6"
+      }
+    },
+    {
+      "referencia": "CUBTRA8",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bce7"
+      }
+    },
+    {
+      "referencia": "ATOMED",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bce8"
+      }
+    },
+    {
+      "referencia": "CUB14PRE",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bce9"
+      }
+    },
+    {
+      "referencia": "DETBUL",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcea"
+      }
+    },
+    {
+      "referencia": "CUBESPDOB",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bceb"
+      }
+    },
+    {
+      "referencia": "CUBESPINS",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcec"
+      }
+    },
+    {
+      "referencia": "DESSHA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bced"
+      }
+    },
+    {
+      "referencia": "DETVEL",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcee"
+      }
+    },
+    {
+      "referencia": "CEPIXT12 SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcef"
+      }
+    },
+    {
+      "referencia": "CUCCHI",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcf0"
+      }
+    },
+    {
+      "referencia": "BOLGP",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcf1"
+      }
+    },
+    {
+      "referencia": "BOTBALCOLCH",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcf2"
+      }
+    },
+    {
+      "referencia": "CEPWCST",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcf3"
+      }
+    },
+    {
+      "referencia": "AROFRECON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcf4"
+      }
+    },
+    {
+      "referencia": "CUCGRA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcf5"
+      }
+    },
+    {
+      "referencia": "DETPOL",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcf6"
+      }
+    },
+    {
+      "referencia": "BOTBALCOLGD",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcf7"
+      }
+    },
+    {
+      "referencia": "CEPMANG",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcf8"
+      }
+    },
+    {
+      "referencia": "ATOCAMP",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcf9"
+      }
+    },
+    {
+      "referencia": "CEPPLANITA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcfa"
+      }
+    },
+    {
+      "referencia": "BOLMP",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcfb"
+      }
+    },
+    {
+      "referencia": "DESPAPG",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcfc"
+      }
+    },
+    {
+      "referencia": "DETMAS",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcfd"
+      }
+    },
+    {
+      "referencia": "DESPAPCH",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcfe"
+      }
+    },
+    {
+      "referencia": "BOLCHP",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bcff"
+      }
+    },
+    {
+      "referencia": "CUBTRA12",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd00"
+      }
+    },
+    {
+      "referencia": "DESINT",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd01"
+      }
+    },
+    {
+      "referencia": "DETMASOBS",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd02"
+      }
+    },
+    {
+      "referencia": "DETARI",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd03"
+      }
+    },
+    {
+      "referencia": "CUCMED",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd04"
+      }
+    },
+    {
+      "referencia": "DETPER",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd05"
+      }
+    },
+    {
+      "referencia": "DETAJAAMO",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd06"
+      }
+    },
+    {
+      "referencia": "CEPMAS",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd07"
+      }
+    },
+    {
+      "referencia": "DESVAN",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd08"
+      }
+    },
+    {
+      "referencia": "CEPFLE",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd09"
+      }
+    },
+    {
+      "referencia": "DETZOTBLA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd0a"
+      }
+    },
+    {
+      "referencia": "ABRGLIGDE",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd0b"
+      }
+    },
+    {
+      "referencia": "ABRALL",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd0c"
+      }
+    },
+    {
+      "referencia": "BOTTAPG",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd0d"
+      }
+    },
+    {
+      "referencia": "BOMMIN",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd0e"
+      }
+    },
+    {
+      "referencia": "CEPESCRAI",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd0f"
+      }
+    },
+    {
+      "referencia": "CEPLAVPLA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd10"
+      }
+    },
+    {
+      "referencia": "CLOPAS",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd11"
+      }
+    },
+    {
+      "referencia": "CUB114",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd12"
+      }
+    },
+    {
+      "referencia": "ESCAUTMN SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd13"
+      }
+    },
+    {
+      "referencia": "ESCCEPMN SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd14"
+      }
+    },
+    {
+      "referencia": "ESCBASBLAMN",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd15"
+      }
+    },
+    {
+      "referencia": "ESCBASBLAMN SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd16"
+      }
+    },
+    {
+      "referencia": "ESCABAMN",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd17"
+      }
+    },
+    {
+      "referencia": "ENVGAR10",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd18"
+      }
+    },
+    {
+      "referencia": "ESCDUR",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd19"
+      }
+    },
+    {
+      "referencia": "ESCBON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd1a"
+      }
+    },
+    {
+      "referencia": "ESCCEPRUD SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd1b"
+      }
+    },
+    {
+      "referencia": "ENV20",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd1c"
+      }
+    },
+    {
+      "referencia": "ESCCEPSUP SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd1d"
+      }
+    },
+    {
+      "referencia": "ESCABAPER",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd1e"
+      }
+    },
+    {
+      "referencia": "ENV220",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd1f"
+      }
+    },
+    {
+      "referencia": "ESCABAMN SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd20"
+      }
+    },
+    {
+      "referencia": "ESCITAPER",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd21"
+      }
+    },
+    {
+      "referencia": "ESCBASBLA SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd22"
+      }
+    },
+    {
+      "referencia": "ESCBON SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd23"
+      }
+    },
+    {
+      "referencia": "ESCEXTSUA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd24"
+      }
+    },
+    {
+      "referencia": "ESCCEPSUP",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd25"
+      }
+    },
+    {
+      "referencia": "ESCATRMAGREY",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd26"
+      }
+    },
+    {
+      "referencia": "DISAROGOT",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd27"
+      }
+    },
+    {
+      "referencia": "ESCCLAMN",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd28"
+      }
+    },
+    {
+      "referencia": "ENVGAR",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd29"
+      }
+    },
+    {
+      "referencia": "ENV10",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd2a"
+      }
+    },
+    {
+      "referencia": "ESCFLOCOL",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd2b"
+      }
+    },
+    {
+      "referencia": "ESTROYPLU",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd2c"
+      }
+    },
+    {
+      "referencia": "ESCAUTPER",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd2d"
+      }
+    },
+    {
+      "referencia": "ESCABAPER SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd2e"
+      }
+    },
+    {
+      "referencia": "ESCCEPRUD",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd2f"
+      }
+    },
+    {
+      "referencia": "ESCFLOCLA SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd30"
+      }
+    },
+    {
+      "referencia": "ESCFLOCLA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd31"
+      }
+    },
+    {
+      "referencia": "ESCAUTMN",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd32"
+      }
+    },
+    {
+      "referencia": "ESCBASBLA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd33"
+      }
+    },
+    {
+      "referencia": "ESCJARMET SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd34"
+      }
+    },
+    {
+      "referencia": "ESCINF",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd35"
+      }
+    },
+    {
+      "referencia": "ESTMATTOA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd36"
+      }
+    },
+    {
+      "referencia": "ESTSAL",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd37"
+      }
+    },
+    {
+      "referencia": "ESTIXTTOA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd38"
+      }
+    },
+    {
+      "referencia": "ESCCLAMN SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd39"
+      }
+    },
+    {
+      "referencia": "FABMASCON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd3a"
+      }
+    },
+    {
+      "referencia": "ESCJARMET",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd3b"
+      }
+    },
+    {
+      "referencia": "ESTBB",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd3c"
+      }
+    },
+    {
+      "referencia": "ESTARG",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd3d"
+      }
+    },
+    {
+      "referencia": "ENV1",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd3e"
+      }
+    },
+    {
+      "referencia": "FIBCUATEL",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd3f"
+      }
+    },
+    {
+      "referencia": "ESCDURMN",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd40"
+      }
+    },
+    {
+      "referencia": "ESCVEN SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd41"
+      }
+    },
+    {
+      "referencia": "ESTRED",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd42"
+      }
+    },
+    {
+      "referencia": "ESPAUT",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd43"
+      }
+    },
+    {
+      "referencia": "FABMAS",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd44"
+      }
+    },
+    {
+      "referencia": "FIBAZUREY",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd45"
+      }
+    },
+    {
+      "referencia": "FIBBRIJUM",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd46"
+      }
+    },
+    {
+      "referencia": "ESTMINFAC",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd47"
+      }
+    },
+    {
+      "referencia": "FABCANCON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd48"
+      }
+    },
+    {
+      "referencia": "FABLAV",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd49"
+      }
+    },
+    {
+      "referencia": "FIBVERM",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd4a"
+      }
+    },
+    {
+      "referencia": "ESCITAMN SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd4b"
+      }
+    },
+    {
+      "referencia": "FIBMINTAL",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd4c"
+      }
+    },
+    {
+      "referencia": "FIBTAL1",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd4d"
+      }
+    },
+    {
+      "referencia": "ESCITAMN",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd4e"
+      }
+    },
+    {
+      "referencia": "FABMAR",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd4f"
+      }
+    },
+    {
+      "referencia": "FIBTAL",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd50"
+      }
+    },
+    {
+      "referencia": "FIBESPI",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd51"
+      }
+    },
+    {
+      "referencia": "FABLIMCON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd52"
+      }
+    },
+    {
+      "referencia": "FIBAJA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd53"
+      }
+    },
+    {
+      "referencia": "ESCDURMN SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd54"
+      }
+    },
+    {
+      "referencia": "ESTFAC",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd55"
+      }
+    },
+    {
+      "referencia": "FABFRUCON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd56"
+      }
+    },
+    {
+      "referencia": "ESTSALTOA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd57"
+      }
+    },
+    {
+      "referencia": "FIBREY",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd58"
+      }
+    },
+    {
+      "referencia": "FIBCUATELCH",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd59"
+      }
+    },
+    {
+      "referencia": "ESCVEN",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd5a"
+      }
+    },
+    {
+      "referencia": "ESCMIH",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd5b"
+      }
+    },
+    {
+      "referencia": "FIBBRIM",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd5c"
+      }
+    },
+    {
+      "referencia": "ESCAUTPER SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd5d"
+      }
+    },
+    {
+      "referencia": "DETZOTROS",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd5e"
+      }
+    },
+    {
+      "referencia": "ESCITAPER SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd5f"
+      }
+    },
+    {
+      "referencia": "FRAAMA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd60"
+      }
+    },
+    {
+      "referencia": "FIBBRIG",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd61"
+      }
+    },
+    {
+      "referencia": "ESTFLO",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd62"
+      }
+    },
+    {
+      "referencia": "EXTACE",
+      "existenciaFisica": 123,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd63"
+      }
+    },
+    {
+      "referencia": "ESCJARPLA",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd64"
+      }
+    },
+    {
+      "referencia": "ESTBB2",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd65"
+      }
+    },
+    {
+      "referencia": "ESTMATG",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd66"
+      }
+    },
+    {
+      "referencia": "ESCDUR SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd67"
+      }
+    },
+    {
+      "referencia": "ESCJARPLA SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd68"
+      }
+    },
+    {
+      "referencia": "FIBNEG",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd69"
+      }
+    },
+    {
+      "referencia": "ESCFLOCOL SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd6a"
+      }
+    },
+    {
+      "referencia": "ESCCEPMN",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd6b"
+      }
+    },
+    {
+      "referencia": "FABFRU",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd6c"
+      }
+    },
+    {
+      "referencia": "FIBESP",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd6d"
+      }
+    },
+    {
+      "referencia": "FABLIM",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd6e"
+      }
+    },
+    {
+      "referencia": "FABCAN",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd6f"
+      }
+    },
+    {
+      "referencia": "FABMARCON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd70"
+      }
+    },
+    {
+      "referencia": "FABLAVCON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd71"
+      }
+    },
+    {
+      "referencia": "ESCCEPPER SIN BASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd72"
+      }
+    },
+    {
+      "referencia": "ESCEXTSUASINBASTON",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd73"
+      }
+    },
+    {
+      "referencia": "ESCCEPPER",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd74"
+      }
+    },
+    {
+      "referencia": "ESTMAGBOL",
+      "existenciaFisica": 0,
+      "existenciaContable": 0,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd75"
+      }
+    }
+  ],
+  "productosConMovimiento": [
+    {
+      "referencia": "EXTACE",
+      "descripcion": "EXTENCION DE ACERO",
+      "existenciaFisica": 123,
+      "existenciaContable": 0,
+      "diferencia": 123,
+      "costo": 55,
+      "importe": 6765,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd76"
+      }
+    },
+    {
+      "referencia": "BOLM",
+      "descripcion": "BOLSA PARA BASURA 60*90 PQT",
+      "existenciaFisica": 12,
+      "existenciaContable": 0,
+      "diferencia": 12,
+      "costo": 25,
+      "importe": 300,
+      "_id": {
+        "$oid": "67548bfca84c18e14838bd77"
+      }
+    },
+    {
+      "referencia": "BASMAD",
+      "descripcion": "BASTON DE MADERA",
+      "existenciaFisica": 1,
+      "existenciaContable": -19,
+      "diferencia": 20,
+      "costo": 9,
+      "importe": 180,
+      "_id": {
+        "$oid": "67548c9069b5613af337419d"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-12-07T17:55:08.615Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T17:58:21.735Z"
+  },
+  "__v": 0
+}]

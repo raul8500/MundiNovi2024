@@ -1,0 +1,423 @@
+[{
+  "_id": {
+    "$oid": "66d9d78f6a25a753c7e2f3f7"
+  },
+  "clave": "GRP1",
+  "nombre": "ABRILLANTADORES",
+  "descripcion": "ABRILLANTADORES",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1125f389f8f9c541489"
+  },
+  "clave": "GRP2",
+  "nombre": "AROMAS",
+  "descripcion": "GRUPO DE AROMAS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f11e5f389f8f9c54148c"
+  },
+  "clave": "GRP3",
+  "nombre": "ATOMIZADORES",
+  "descripcion": "GRUPO DE ATOMIZADORES",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f13d5f389f8f9c54148f"
+  },
+  "clave": "GRP4",
+  "nombre": "JARCIERIA",
+  "descripcion": "GRUPO DE JARCIERIA",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1465f389f8f9c541492"
+  },
+  "clave": "GRP5",
+  "nombre": "BOLSA",
+  "descripcion": "GRUPO DE BOLSA",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f14d5f389f8f9c541495"
+  },
+  "clave": "GRP6",
+  "nombre": "BOMBAS",
+  "descripcion": "GRUPO DE BOMBAS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1565f389f8f9c541498"
+  },
+  "clave": "GRP7",
+  "nombre": "BOTES",
+  "descripcion": "GRUPO DE BOTES",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1605f389f8f9c54149b"
+  },
+  "clave": "GRP8",
+  "nombre": "CEPILLOS",
+  "descripcion": "GRUPO DE CEPILLOS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1765f389f8f9c54149e"
+  },
+  "clave": "GRP9",
+  "nombre": "CLOROS",
+  "descripcion": "GRUPO DE CLOROS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f17e5f389f8f9c5414a1"
+  },
+  "clave": "GRP10",
+  "nombre": "CUBETAS",
+  "descripcion": "GRUPO DE CUBETAS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1865f389f8f9c5414a4"
+  },
+  "clave": "GRP11",
+  "nombre": "DESPACHADORES",
+  "descripcion": "GRUPO DE DESPACHADORES",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f18d5f389f8f9c5414a7"
+  },
+  "clave": "GRP12",
+  "nombre": "DETERGENTES",
+  "descripcion": "GRUPO DE DETERGENTES",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1955f389f8f9c5414aa"
+  },
+  "clave": "GRP13",
+  "nombre": "ENVASE",
+  "descripcion": "GRUPO DE ENVASE",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f19d5f389f8f9c5414ad"
+  },
+  "clave": "GRP14",
+  "nombre": "ABANICO",
+  "descripcion": "GRUPO DE ABANICO",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1a55f389f8f9c5414b0"
+  },
+  "clave": "GRP15",
+  "nombre": "BASE BLANCA",
+  "descripcion": "GRUPO DE BASE BLANCA",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1ad5f389f8f9c5414b3"
+  },
+  "clave": "GRP16",
+  "nombre": "ESCOBA",
+  "descripcion": "GRUPO DE ESCOBA",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1b55f389f8f9c5414b6"
+  },
+  "clave": "GRP17",
+  "nombre": "FLORENTINA",
+  "descripcion": "GRUPO DE FLORENTINA",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1bc5f389f8f9c5414b9"
+  },
+  "clave": "GRP18",
+  "nombre": "INFANTIL",
+  "descripcion": "GRUPO DE INFANTIL",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1c45f389f8f9c5414bc"
+  },
+  "clave": "GRP19",
+  "nombre": "ITALIANA",
+  "descripcion": "GRUPO DE ITALIANA",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1cb5f389f8f9c5414bf"
+  },
+  "clave": "GRP20",
+  "nombre": "JARDINERA",
+  "descripcion": "GRUPO DE JARDINERA",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1d45f389f8f9c5414c2"
+  },
+  "clave": "GRP21",
+  "nombre": "MIHO",
+  "descripcion": "GRUPO DE MIHO",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1dd5f389f8f9c5414c5"
+  },
+  "clave": "GRP22",
+  "nombre": "ESTROPAJO",
+  "descripcion": "GRUPO DE ESTROPAJO",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1e45f389f8f9c5414c8"
+  },
+  "clave": "GRP23",
+  "nombre": "LIMPIADORES",
+  "descripcion": "GRUPO DE LIMPIADORES",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1ed5f389f8f9c5414cb"
+  },
+  "clave": "GRP24",
+  "nombre": "FIBRA",
+  "descripcion": "GRUPO DE FIBRA",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1f55f389f8f9c5414ce"
+  },
+  "clave": "GRP25",
+  "nombre": "BRIOSA",
+  "descripcion": "GRUPO DE BRIOSA",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f1fd5f389f8f9c5414d1"
+  },
+  "clave": "GRP26",
+  "nombre": "MEX",
+  "descripcion": "GRUPO DE MEX",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f2045f389f8f9c5414d4"
+  },
+  "clave": "GRP27",
+  "nombre": "SCOTCH BRITE",
+  "descripcion": "GRUPO DE SCOTCH BRITE",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f20c5f389f8f9c5414d7"
+  },
+  "clave": "GRP28",
+  "nombre": "FRANELAS",
+  "descripcion": "GRUPO DE FRANELAS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f2135f389f8f9c5414da"
+  },
+  "clave": "GRP29",
+  "nombre": "GUANTES",
+  "descripcion": "GRUPO DE GUANTES",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f21a5f389f8f9c5414dd"
+  },
+  "clave": "GRP30",
+  "nombre": "INSECTICIDAS",
+  "descripcion": "GRUPO DE INSECTICIDAS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f2215f389f8f9c5414e0"
+  },
+  "clave": "GRP31",
+  "nombre": "JALADORES",
+  "descripcion": "GRUPO DE JALADORES",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f2295f389f8f9c5414e3"
+  },
+  "clave": "GRP32",
+  "nombre": "JERGAS",
+  "descripcion": "GRUPO DE JERGAS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f2305f389f8f9c5414e6"
+  },
+  "clave": "GRP33",
+  "nombre": "DESENGRASANTES",
+  "descripcion": "GRUPO DE DESENGRASANTES",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f2385f389f8f9c5414e9"
+  },
+  "clave": "GRP34",
+  "nombre": "QUIMICOS",
+  "descripcion": "GRUPO DE QUIMICOS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f23f5f389f8f9c5414ec"
+  },
+  "clave": "GRP35",
+  "nombre": "MANDILES",
+  "descripcion": "GRUPO DE MANDILES",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f2465f389f8f9c5414ef"
+  },
+  "clave": "GRP36",
+  "nombre": "MECHUDOS",
+  "descripcion": "GRUPO DE MECHUDOS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f24d5f389f8f9c5414f2"
+  },
+  "clave": "GRP37",
+  "nombre": "MOP",
+  "descripcion": "GRUPO DE MOP",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f2555f389f8f9c5414f5"
+  },
+  "clave": "GRP38",
+  "nombre": "PAPEL",
+  "descripcion": "GRUPO DE PAPEL",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f25b5f389f8f9c5414f8"
+  },
+  "clave": "GRP39",
+  "nombre": "PINZAS",
+  "descripcion": "GRUPO DE PINZAS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f2625f389f8f9c5414fb"
+  },
+  "clave": "GRP40",
+  "nombre": "PINO",
+  "descripcion": "GRUPO DE PINO",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f26c5f389f8f9c5414fe"
+  },
+  "clave": "GRP41",
+  "nombre": "PLASTICOS",
+  "descripcion": "GRUPO DE PLASTICOS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f2725f389f8f9c541501"
+  },
+  "clave": "GRP42",
+  "nombre": "RECOJEDORES",
+  "descripcion": "GRUPO DE RECOJEDORES",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f2795f389f8f9c541504"
+  },
+  "clave": "GRP43",
+  "nombre": "SERVILLETA",
+  "descripcion": "GRUPO DE SERVILLETA",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f27f5f389f8f9c541507"
+  },
+  "clave": "GRP44",
+  "nombre": "SHAMPOOS",
+  "descripcion": "GRUPO DE SHAMPOOS",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f2855f389f8f9c54150a"
+  },
+  "clave": "GRP45",
+  "nombre": "SUAVIZANTE",
+  "descripcion": "GRUPO DE SUAVIZANTE",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f28c5f389f8f9c54150d"
+  },
+  "clave": "GRP46",
+  "nombre": "TENDEDERO",
+  "descripcion": "GRUPO DE TENDEDERO",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d9f28e5f389f8f9c541510"
+  },
+  "clave": "GRP47",
+  "nombre": "TRAMPA",
+  "descripcion": "GRUPO DE TRAMPA",
+  "__v": 0
+}]

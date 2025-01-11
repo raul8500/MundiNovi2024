@@ -1,0 +1,44 @@
+[{
+  "_id": {
+    "$oid": "66e89c8943c8aebe44821ce8"
+  },
+  "nombre": "Proveedor 3",
+  "informacionContacto": {
+    "telefono": "2282519509",
+    "correo": "correo@corre.com"
+  },
+  "direccion": {
+    "calle": "Avenida Principal 123",
+    "ciudad": "XALAPA",
+    "estado": "Veracruz",
+    "codigoPostal": "12345",
+    "pais": "México"
+  },
+  "fechaRegistro": {
+    "$date": "2024-09-16T12:00:00.000Z"
+  },
+  "estado": "activo",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66e8a4b090fadb9649b5e57b"
+  },
+  "nombre": "Bodegon",
+  "informacionContacto": {
+    "telefono": "228515959",
+    "correo": "bodegon@correo.com"
+  },
+  "direccion": {
+    "calle": "11",
+    "ciudad": "Xalapa",
+    "estado": "Veracruz",
+    "codigoPostal": "91030",
+    "pais": "Mexico"
+  },
+  "fechaRegistro": {
+    "$date": "2024-09-16T21:35:44.110Z"
+  },
+  "estado": "activo",
+  "__v": 0
+}]

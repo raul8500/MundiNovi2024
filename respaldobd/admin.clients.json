@@ -1,0 +1,64 @@
+[{
+  "_id": {
+    "$oid": "67362d31c55d4f5a10439efb"
+  },
+  "esfactura": false,
+  "estado": "active",
+  "clientData": {
+    "id": "5091",
+    "name": "Raul Peredo",
+    "identification": null,
+    "email": "correo@correo.com",
+    "phonePrimary": "2282519509",
+    "phoneSecondary": null,
+    "fax": null,
+    "mobile": null,
+    "observations": null,
+    "status": "active",
+    "cfdiUse": null,
+    "paymentType": null,
+    "paymentMethod": null,
+    "operationType": null,
+    "thirdType": "NATIONAL",
+    "fiscalId": null,
+    "regime": "NO_REGIME",
+    "regimeObject": [
+      "SIMPLIFIED_REGIME"
+    ],
+    "address": {
+      "street": null,
+      "exteriorNumber": null,
+      "interiorNumber": null,
+      "colony": null,
+      "locality": null,
+      "municipality": null,
+      "zipCode": "91030",
+      "state": null,
+      "country": "MEX",
+      "reference": null
+    },
+    "type": [
+      "client"
+    ],
+    "seller": null,
+    "term": null,
+    "priceList": null,
+    "internalContacts": [],
+    "statementAttached": false,
+    "accounting": {
+      "accountReceivable": null,
+      "debtToPay": null
+    }
+  },
+  "monedero": 0,
+  "login": {
+    "password": "$2a$04$nOSAn8OW0ELvkejIMD6n1.LbgsiiDfd8soDAaPOK0lsrbgFd4ZXDe"
+  },
+  "createdAt": {
+    "$date": "2024-11-14T17:02:42.137Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-11T02:46:28.534Z"
+  },
+  "__v": 0
+}]

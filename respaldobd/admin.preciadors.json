@@ -1,0 +1,40 @@
+[{
+  "_id": {
+    "$oid": "67089e3978ae1c8145f30bd7"
+  },
+  "productoId": {
+    "$oid": "66d8cea7564b62425c255a4e"
+  },
+  "__v": 1,
+  "createdAt": {
+    "$date": "2024-10-11T03:40:41.537Z"
+  },
+  "sucursalesPendientes": [
+    {
+      "$oid": "66e1b4986dca15c1b8653494"
+    }
+  ],
+  "updatedAt": {
+    "$date": "2024-10-11T06:41:31.674Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6708cbd578ae1c8145f327ec"
+  },
+  "productoId": {
+    "$oid": "66d8cea7564b62425c255a6e"
+  },
+  "__v": 2,
+  "createdAt": {
+    "$date": "2024-10-11T06:55:17.502Z"
+  },
+  "sucursalesPendientes": [
+    {
+      "$oid": "66e1b4986dca15c1b8653494"
+    }
+  ],
+  "updatedAt": {
+    "$date": "2024-10-11T18:27:30.979Z"
+  }
+}]

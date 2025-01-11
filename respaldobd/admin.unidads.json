@@ -1,0 +1,9 @@
+[{
+  "_id": {
+    "$oid": "66c4d57ee3f430357b545729"
+  },
+  "clave": "UNI01",
+  "nombre": "unidad 1",
+  "descripcion": "Unidad",
+  "__v": 0
+}]

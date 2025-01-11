@@ -1,0 +1,9 @@
+[{
+  "_id": {
+    "$oid": "6703717f9811c0e3a09916d6"
+  },
+  "clave": "MC01",
+  "nombre": "Nike",
+  "descripcion": "Ropa",
+  "__v": 0
+}]

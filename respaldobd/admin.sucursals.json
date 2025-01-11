@@ -1,0 +1,80 @@
+[{
+  "_id": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "clave": "SU789",
+  "nombre": "Nave B",
+  "mensajeTicket": "Gracias por su compra",
+  "precioDevolucionMercancia": 49,
+  "status": "Activo",
+  "datosTicket": {
+    "direccion": "Av. Siempre Viva 123",
+    "colonia": "Centro",
+    "ciudad": "Ciudad de México",
+    "codigoPostal": "01000",
+    "telefonos": [
+      "+1234567890"
+    ],
+    "tamanoTicket": "A4",
+    "_id": {
+      "$oid": "66c376269a38283aa834b5b7"
+    }
+  },
+  "datosFiscales": {
+    "razonSocial": "Sucursal Ejemplo S.A. de C.V.",
+    "rfc": "SE123456789",
+    "direccionFiscal": "Av. Siempre Viva 123, Col. Centro, Ciudad de México, 01000",
+    "_id": {
+      "$oid": "66c376269a38283aa834b5b6"
+    }
+  },
+  "idFranquicia": {
+    "$oid": "66c36fb1469394cf8b91a1e6"
+  },
+  "createdAt": {
+    "$date": "2024-08-19T16:15:56.991Z"
+  },
+  "updatedAt": {
+    "$date": "2024-08-19T16:43:18.781Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "clave": "SCU01",
+  "nombre": "Nave C",
+  "mensajeTicket": "Gracias por su compra!",
+  "precioDevolucionMercancia": 0,
+  "status": "Activo",
+  "datosTicket": {
+    "direccion": "/",
+    "colonia": "/",
+    "ciudad": "/",
+    "codigoPostal": "/",
+    "telefonos": [
+      "/"
+    ],
+    "tamanoTicket": "/",
+    "_id": {
+      "$oid": "66e1b49f6dca15c1b86534a5"
+    }
+  },
+  "datosFiscales": {
+    "razonSocial": "-",
+    "rfc": "-",
+    "direccionFiscal": "/",
+    "_id": {
+      "$oid": "66e1b49f6dca15c1b86534a4"
+    }
+  },
+  "idFranquicia": {
+    "$oid": "66c36fb1469394cf8b91a1e6"
+  },
+  "createdAt": {
+    "$date": "2024-09-11T15:17:44.715Z"
+  },
+  "updatedAt": {
+    "$date": "2024-09-11T15:17:51.211Z"
+  }
+}]

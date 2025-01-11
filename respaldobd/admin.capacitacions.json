@@ -1,0 +1,182 @@
+[{
+  "_id": {
+    "$oid": "673fef5d76fcd16af428c488"
+  },
+  "tipo": "pagina",
+  "nombre": "minimal phone",
+  "descripcion": "dawdawdawdawdwa",
+  "link": "https://www.minimalcompany.com",
+  "fechaCreacion": {
+    "$date": "2024-11-22T02:41:33.766Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "673ffa1528683db59b8f3815"
+  },
+  "tipo": "pagina",
+  "nombre": "minimal phone",
+  "descripcion": "dawdawdawdawdwa",
+  "link": "https://www.minimalcompany.com",
+  "fechaCreacion": {
+    "$date": "2024-11-22T03:27:17.092Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "673ffa7881b82cbaf2396e4a"
+  },
+  "tipo": "pagina",
+  "nombre": "codemy",
+  "descripcion": "dwadawdwadwa",
+  "link": "https://www.codecademy.com/pricing",
+  "fechaCreacion": {
+    "$date": "2024-11-22T03:28:56.154Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740ba96ed1a6b1baef95d9a"
+  },
+  "tipo": "video",
+  "nombre": "ACOMODO DE PUNTO DE VENTA",
+  "descripcion": "ACOMODO PUNTO DE VENTA",
+  "link": "https://www.youtube.com/watch?v=wW4qyPKQIlc",
+  "fechaCreacion": {
+    "$date": "2024-11-22T17:08:38.383Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740baaded1a6b1baef95d9d"
+  },
+  "tipo": "video",
+  "nombre": "ARQUEO",
+  "descripcion": "EN ESTE VIDEO ENCONTRARAS COMO REALIZAR ARQUEOS DE MERCANCIA, CUALQUIER DUDA CONSULTALA ANTES CON TU JEFE DIRECTO",
+  "link": "https://www.youtube.com/watch?v=l2XytNO6Zw0&feature=youtu.be",
+  "fechaCreacion": {
+    "$date": "2024-11-22T17:09:01.463Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740bac2ed1a6b1baef95da3"
+  },
+  "tipo": "video",
+  "nombre": "COBRAR UNA VENTA EN SISTEMA",
+  "descripcion": "COMO REALIZAR EL COBRO DE UNA VENTA",
+  "link": "https://www.youtube.com/watch?v=VX8qfV1U2Dw",
+  "fechaCreacion": {
+    "$date": "2024-11-22T17:09:22.222Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740bb370ecc43e9ab126b80"
+  },
+  "tipo": "video",
+  "nombre": "CORTE FINAL",
+  "descripcion": "Al final del dia realiza este procedimiento",
+  "link": "https://www.youtube.com/watch?v=F2Yuu6sms3s",
+  "fechaCreacion": {
+    "$date": "2024-11-22T17:11:19.664Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740bb490ecc43e9ab126b85"
+  },
+  "tipo": "video",
+  "nombre": "CORTE PARCIAL",
+  "descripcion": "El sistema solicita cortes parciales a lo largo del dia, aprende a realizarlos",
+  "link": "https://www.youtube.com/watch?v=GFet-LdGaXw&feature=youtu.be",
+  "fechaCreacion": {
+    "$date": "2024-11-22T17:11:37.823Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740bb5a0ecc43e9ab126b8a"
+  },
+  "tipo": "video",
+  "nombre": "FACTURAS",
+  "descripcion": "COMO REALIZAR UNA FACTURA",
+  "link": "https://www.youtube.com/watch?v=ZCr8fJVDXM4",
+  "fechaCreacion": {
+    "$date": "2024-11-22T17:11:54.384Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740bb6b0ecc43e9ab126b8f"
+  },
+  "tipo": "video",
+  "nombre": "FINALIZAR TRASPASOS",
+  "descripcion": "FINALIZAR TRASPASOS DE MERCANCIA",
+  "link": "https://www.youtube.com/watch?v=Ij44kz-uwTA",
+  "fechaCreacion": {
+    "$date": "2024-11-22T17:12:11.979Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740bb7b0ecc43e9ab126b94"
+  },
+  "tipo": "video",
+  "nombre": "INGRESAR A CAJA",
+  "descripcion": "INGRESAR A CAJA PARA COBRO",
+  "link": "https://www.youtube.com/watch?v=Mxy0HMZbBFE",
+  "fechaCreacion": {
+    "$date": "2024-11-22T17:12:27.908Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740bb8e0ecc43e9ab126b99"
+  },
+  "tipo": "video",
+  "nombre": "INGRESAR A CAPACITACIÓN",
+  "descripcion": "INGRESA AL MODÚLO DONDE ENCONTRARAS TODAS LAS HERRAMIENTAS PARA CAPACITARTE",
+  "link": "https://www.youtube.com/watch?v=u7CBLlo8dS8",
+  "fechaCreacion": {
+    "$date": "2024-11-22T17:12:46.398Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740bba20ecc43e9ab126b9e"
+  },
+  "tipo": "video",
+  "nombre": "INGRESAR CLIENTE",
+  "descripcion": "INGRESAR CLIENTE NUEVO",
+  "link": "https://www.youtube.com/watch?v=C5zbfpOPYhw",
+  "fechaCreacion": {
+    "$date": "2024-11-22T17:13:06.930Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740cdf8e07b277b48002b0f"
+  },
+  "tipo": "examen",
+  "nombre": "doc 1erstf",
+  "descripcion": "fesfsef",
+  "archivo": "/capacitacion/1732300280302-804465969.pdf",
+  "fechaCreacion": {
+    "$date": "2024-11-22T18:31:20.521Z"
+  },
+  "__v": 0
+}]

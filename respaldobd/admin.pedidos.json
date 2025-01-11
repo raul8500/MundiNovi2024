@@ -1,0 +1,226 @@
+[{
+  "_id": {
+    "$oid": "6766d14e46bc37c4cd711612"
+  },
+  "cotizacionId": {
+    "$oid": "67664c23d41c94d1cec2545f"
+  },
+  "cliente": {
+    "idCliente": {
+      "$oid": "67362d31c55d4f5a10439efb"
+    },
+    "nombre": "Raul Peredo",
+    "identificacion": "",
+    "regimen": "NO_REGIME",
+    "telefonoPrincipal": "2282519509",
+    "telefonoContacto": "",
+    "correo": "lopezjo299@gmail.com",
+    "direccion": {
+      "calle": "dawda",
+      "colonia": "wdwad",
+      "localidad": "wadaw",
+      "estado": "",
+      "codigoPostal": "91030"
+    }
+  },
+  "factura": false,
+  "entrega": {
+    "fecha": {
+      "$date": "2024-12-21T00:00:00.000Z"
+    },
+    "sucursal": {
+      "id": {
+        "$oid": "66e1b4986dca15c1b8653494"
+      },
+      "nombre": "Nave C"
+    }
+  },
+  "productos": [
+    {
+      "id": {
+        "$oid": "66d8cea7564b62425c255a3e"
+      },
+      "reference": "ATOCHH",
+      "nombre": "ATOMIZADOR CHICO",
+      "cantidad": 1,
+      "precio": 18,
+      "total": 18,
+      "_id": {
+        "$oid": "6766d14e46bc37c4cd711613"
+      }
+    },
+    {
+      "id": {
+        "$oid": "66d8cea7564b62425c255a96"
+      },
+      "reference": "BASMAD",
+      "nombre": "BASTON DE MADERA",
+      "cantidad": 1,
+      "precio": 14,
+      "total": 14,
+      "_id": {
+        "$oid": "6766d14e46bc37c4cd711614"
+      }
+    },
+    {
+      "id": {
+        "$oid": "66d8cfdefdb9f700721057f3"
+      },
+      "reference": "FABCAN",
+      "nombre": "LIMPIADOR  CANELA SIN ENVASE",
+      "cantidad": 1,
+      "precio": 7,
+      "total": 7,
+      "_id": {
+        "$oid": "6766d14e46bc37c4cd711615"
+      }
+    }
+  ],
+  "total": 39,
+  "creadoEn": {
+    "$date": "2024-12-21T14:31:42.356Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6766e97cb6ebfa30a2d992a9"
+  },
+  "cotizacionId": {
+    "$oid": "6766e7b6b6ebfa30a2d97e27"
+  },
+  "cliente": {
+    "idCliente": {
+      "$oid": "67362d31c55d4f5a10439efb"
+    },
+    "nombre": "Raul Peredo",
+    "identificacion": "",
+    "regimen": "NO_REGIME",
+    "telefonoPrincipal": "2282519509",
+    "telefonoContacto": "",
+    "correo": "correo@correo.com",
+    "direccion": {
+      "calle": "dwadaw",
+      "colonia": "dawd",
+      "localidad": "awdaw",
+      "estado": "",
+      "codigoPostal": "91030"
+    }
+  },
+  "factura": false,
+  "entrega": {
+    "fecha": {
+      "$date": "2024-12-21T00:00:00.000Z"
+    },
+    "sucursal": {
+      "id": {
+        "$oid": "66e1b4986dca15c1b8653494"
+      },
+      "nombre": "Nave C"
+    }
+  },
+  "productos": [
+    {
+      "id": {
+        "$oid": "66d8cea7564b62425c255a96"
+      },
+      "reference": "BASMAD",
+      "nombre": "BASTON DE MADERA",
+      "cantidad": 1,
+      "precio": 14,
+      "total": 14,
+      "_id": {
+        "$oid": "6766e97cb6ebfa30a2d992aa"
+      }
+    },
+    {
+      "id": {
+        "$oid": "66d8cfdefdb9f700721057f3"
+      },
+      "reference": "FABCAN",
+      "nombre": "LIMPIADOR  CANELA SIN ENVASE",
+      "cantidad": 1,
+      "precio": 7,
+      "total": 7,
+      "_id": {
+        "$oid": "6766e97cb6ebfa30a2d992ab"
+      }
+    }
+  ],
+  "total": 21,
+  "creadoEn": {
+    "$date": "2024-12-21T16:14:52.109Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6766fdfe0756681876ecfc8d"
+  },
+  "cotizacionId": {
+    "$oid": "6766fb1d0756681876ecf2d1"
+  },
+  "cliente": {
+    "idCliente": {
+      "$oid": "67362d31c55d4f5a10439efb"
+    },
+    "nombre": "Raul Peredo",
+    "identificacion": "",
+    "regimen": "NO_REGIME",
+    "telefonoPrincipal": "2282519509",
+    "telefonoContacto": "",
+    "correo": "lopezjo299@gmail.com",
+    "direccion": {
+      "calle": "americas",
+      "colonia": "cardel",
+      "localidad": "xalapa",
+      "estado": "",
+      "codigoPostal": "91030"
+    }
+  },
+  "factura": false,
+  "entrega": {
+    "fecha": {
+      "$date": "2024-12-21T00:00:00.000Z"
+    },
+    "sucursal": {
+      "id": {
+        "$oid": "66e1b4986dca15c1b8653494"
+      },
+      "nombre": "Nave C"
+    }
+  },
+  "productos": [
+    {
+      "id": {
+        "$oid": "66d8cea7564b62425c255a96"
+      },
+      "reference": "BASMAD",
+      "nombre": "bsm",
+      "cantidad": 6,
+      "precio": 13.5,
+      "total": 81,
+      "_id": {
+        "$oid": "6766fdfe0756681876ecfc8e"
+      }
+    },
+    {
+      "id": {
+        "$oid": "66d8cfdefdb9f700721057f3"
+      },
+      "reference": "FABCAN",
+      "nombre": "ghjuk",
+      "cantidad": 1,
+      "precio": 7,
+      "total": 7,
+      "_id": {
+        "$oid": "6766fdfe0756681876ecfc8f"
+      }
+    }
+  ],
+  "total": 88,
+  "creadoEn": {
+    "$date": "2024-12-21T17:42:22.727Z"
+  },
+  "__v": 0
+}]

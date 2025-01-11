@@ -1,0 +1,959 @@
+[{
+  "_id": {
+    "$oid": "673ca04fc0ef433d2c5e4627"
+  },
+  "fecha": {
+    "$date": "2024-11-19T14:27:27.209Z"
+  },
+  "folio": "3147124",
+  "usuario": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "movimiento": "Ajuste",
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "sucursalDestino": null,
+  "reference": "AGU",
+  "nombre": "AGUA",
+  "cantidad": 100,
+  "existencia": 100,
+  "costoUnitario": 0.1,
+  "createdAt": {
+    "$date": "2024-11-19T14:27:27.242Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-19T14:27:27.242Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "673ca05ac0ef433d2c5e4634"
+  },
+  "fecha": {
+    "$date": "2024-11-19T14:27:38.415Z"
+  },
+  "folio": "7750007",
+  "usuario": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "movimiento": "Ajuste",
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "sucursalDestino": null,
+  "reference": "GLIC",
+  "nombre": "GLICERINA",
+  "cantidad": 100,
+  "existencia": 100,
+  "costoUnitario": 70,
+  "createdAt": {
+    "$date": "2024-11-19T14:27:38.430Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-19T14:27:38.430Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "673ca072c0ef433d2c5e4655"
+  },
+  "fecha": {
+    "$date": "2024-11-19T14:28:02.531Z"
+  },
+  "folio": "1821884",
+  "usuario": {
+    "$oid": "673be75360dd2ae3bcc67d59"
+  },
+  "movimiento": "Salida Producción",
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "reference": "GLIC",
+  "nombre": "GLICERINA",
+  "cantidad": -4,
+  "existencia": 96,
+  "costoUnitario": 1.12,
+  "createdAt": {
+    "$date": "2024-11-19T14:28:02.668Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-19T14:28:02.668Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "673ca2b4114486000ce86ea0"
+  },
+  "fecha": {
+    "$date": "2024-11-19T14:37:40.335Z"
+  },
+  "folio": "7185865",
+  "usuario": {
+    "$oid": "673be75360dd2ae3bcc67d59"
+  },
+  "movimiento": "Salida Producción",
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "reference": "GLIC",
+  "nombre": "GLICERINA",
+  "cantidad": -4,
+  "existencia": 92,
+  "costoUnitario": 1.12,
+  "createdAt": {
+    "$date": "2024-11-19T14:37:40.472Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-19T14:37:40.472Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "673ca2ee114486000ce86ec7"
+  },
+  "fecha": {
+    "$date": "2024-11-19T14:38:38.170Z"
+  },
+  "folio": "7775500",
+  "usuario": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "movimiento": "Ajuste",
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "sucursalDestino": null,
+  "reference": "AGU",
+  "nombre": "AGUA",
+  "cantidad": 100,
+  "existencia": 200,
+  "costoUnitario": 0.1,
+  "createdAt": {
+    "$date": "2024-11-19T14:38:38.179Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-19T14:38:38.179Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "673ca89e9d773ea5b605e963"
+  },
+  "fecha": {
+    "$date": "2024-11-19T15:02:54.729Z"
+  },
+  "folio": "8311024",
+  "usuario": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "movimiento": "Ajuste",
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "sucursalDestino": null,
+  "reference": "ABRALL",
+  "nombre": "ABRILLANTADOR TIPO ALL MORALL",
+  "cantidad": 10,
+  "existencia": 10,
+  "costoUnitario": 8.4,
+  "createdAt": {
+    "$date": "2024-11-19T15:02:54.752Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-19T15:02:54.752Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "673caa1882629debbd0dfc43"
+  },
+  "fecha": {
+    "$date": "2024-11-19T15:09:12.575Z"
+  },
+  "folio": "1950800",
+  "usuario": {
+    "$oid": "673be75360dd2ae3bcc67d59"
+  },
+  "movimiento": "Salida Producción",
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "reference": "GLIC",
+  "nombre": "GLICERINA",
+  "cantidad": -4,
+  "existencia": 88,
+  "costoUnitario": 1.12,
+  "createdAt": {
+    "$date": "2024-11-19T15:09:12.718Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-19T15:09:12.718Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "673caa6dd2c574ab2e73805a"
+  },
+  "fecha": {
+    "$date": "2024-11-19T15:10:37.162Z"
+  },
+  "folio": "1",
+  "usuario": {
+    "$oid": "673be75360dd2ae3bcc67d59"
+  },
+  "movimiento": "Entrada Producción",
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "reference": "ABRILLANTADOR TIPO ARMOR ALL SIN ENVASE",
+  "nombre": "ABRILLANTADOR TIPO ARMOR ALL SIN ENVASE",
+  "cantidad": 250,
+  "existencia": 260,
+  "costoUnitario": 8.4,
+  "createdAt": {
+    "$date": "2024-11-19T15:10:37.182Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-19T15:10:37.182Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "673caaf4160acc25ec1f40b4"
+  },
+  "fecha": {
+    "$date": "2024-11-19T15:12:52.675Z"
+  },
+  "folio": "1",
+  "usuario": {
+    "$oid": "673be75360dd2ae3bcc67d59"
+  },
+  "movimiento": "Entrada Producción",
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "reference": "ABRALL",
+  "nombre": "ABRILLANTADOR TIPO ARMOR ALL SIN ENVASE",
+  "cantidad": 250,
+  "existencia": 260,
+  "costoUnitario": 8.4,
+  "createdAt": {
+    "$date": "2024-11-19T15:12:52.698Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-19T15:12:52.698Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740cb64e07b277b48001e3f"
+  },
+  "fecha": {
+    "$date": "2024-11-22T18:20:20.614Z"
+  },
+  "folio": "1771680",
+  "usuario": {
+    "$oid": "673be75360dd2ae3bcc67d59"
+  },
+  "movimiento": "Salida Producción",
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "reference": "GLIC",
+  "nombre": "GLICERINA",
+  "cantidad": -4,
+  "existencia": 84,
+  "costoUnitario": 1.12,
+  "createdAt": {
+    "$date": "2024-11-22T18:20:20.617Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-22T18:20:20.617Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740cbb8e07b277b48001e61"
+  },
+  "fecha": {
+    "$date": "2024-11-22T18:21:44.934Z"
+  },
+  "folio": "2",
+  "usuario": {
+    "$oid": "673be75360dd2ae3bcc67d59"
+  },
+  "movimiento": "Entrada Producción",
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "reference": "ABRALL",
+  "nombre": "ABRILLANTADOR TIPO ARMOR ALL SIN ENVASE",
+  "cantidad": 250,
+  "existencia": 510,
+  "costoUnitario": 8.4,
+  "createdAt": {
+    "$date": "2024-11-22T18:21:44.934Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-22T18:21:44.934Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6747f2610f76e28cbccb5251"
+  },
+  "fecha": {
+    "$date": "2024-11-28T04:32:33.708Z"
+  },
+  "folio": "4581445",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -16,
+  "existencia": -16,
+  "costoUnitario": 11.206896551724139,
+  "createdAt": {
+    "$date": "2024-11-28T04:32:33.723Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-28T04:32:33.723Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67491084bd5a32f33137c1a2"
+  },
+  "fecha": {
+    "$date": "2024-11-29T00:53:24.633Z"
+  },
+  "folio": "8838751",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -1,
+  "existencia": -17,
+  "costoUnitario": 12.06896551724138,
+  "createdAt": {
+    "$date": "2024-11-29T00:53:24.642Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-29T00:53:24.642Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674910d8bd5a32f33137c4e1"
+  },
+  "fecha": {
+    "$date": "2024-11-29T00:54:48.310Z"
+  },
+  "folio": "4082896",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -1,
+  "existencia": -18,
+  "costoUnitario": 12.06896551724138,
+  "createdAt": {
+    "$date": "2024-11-29T00:54:48.313Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-29T00:54:48.313Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6751336cdb3a3b900b73e288"
+  },
+  "fecha": {
+    "$date": "2024-12-05T05:00:28.642Z"
+  },
+  "folio": "9605778",
+  "usuario": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "movimiento": "Ajuste",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "sucursalDestino": null,
+  "reference": "ATOCHH",
+  "nombre": "ATOMIZADOR CHICO",
+  "cantidad": 1000,
+  "existencia": 1000,
+  "costoUnitario": 5.4,
+  "createdAt": {
+    "$date": "2024-12-05T05:00:28.663Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-05T05:00:28.663Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6753b9d4f50881e3c9339fe9"
+  },
+  "fecha": {
+    "$date": "2024-12-07T02:58:28.244Z"
+  },
+  "folio": "9295741",
+  "usuario": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "movimiento": "Ajuste",
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "sucursalDestino": null,
+  "reference": "AGU",
+  "nombre": "AGUA",
+  "cantidad": 100,
+  "existencia": 300,
+  "costoUnitario": 0.1,
+  "createdAt": {
+    "$date": "2024-12-07T02:58:28.275Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T02:58:28.275Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6753beb78b28f983d754c0c8"
+  },
+  "fecha": {
+    "$date": "2024-12-07T03:19:19.520Z"
+  },
+  "folio": "8416165",
+  "usuario": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "movimiento": "Ajuste",
+  "sucursal": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "sucursalDestino": null,
+  "reference": "MATP",
+  "nombre": "Materia Prima 1",
+  "cantidad": 10,
+  "existencia": 10,
+  "costoUnitario": 150.75,
+  "createdAt": {
+    "$date": "2024-12-07T03:19:19.527Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T03:19:19.527Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6753dbe6d001a6fca26bf44e"
+  },
+  "fecha": {
+    "$date": "2024-12-07T05:23:50.836Z"
+  },
+  "folio": "1516872",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -1,
+  "existencia": -19,
+  "costoUnitario": 12.06896551724138,
+  "createdAt": {
+    "$date": "2024-12-07T05:23:50.839Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T05:23:50.839Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6757236c764467e867b250a6"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:05:48.243Z"
+  },
+  "folio": "9436469",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -1,
+  "existencia": -20,
+  "costoUnitario": 14,
+  "createdAt": {
+    "$date": "2024-12-09T17:05:48.267Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T17:05:48.267Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675723cbfbdc892107f80f4c"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:07:23.328Z"
+  },
+  "folio": "5107771",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -1,
+  "existencia": -21,
+  "costoUnitario": 14,
+  "createdAt": {
+    "$date": "2024-12-09T17:07:23.341Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T17:07:23.341Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67572407385b1eee4c33a87f"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:08:23.078Z"
+  },
+  "folio": "4732828",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -1,
+  "existencia": -22,
+  "costoUnitario": 14,
+  "createdAt": {
+    "$date": "2024-12-09T17:08:23.092Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T17:08:23.092Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6757245f385b1eee4c33ad46"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:09:51.831Z"
+  },
+  "folio": "7671102",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -1,
+  "existencia": -23,
+  "costoUnitario": 14,
+  "createdAt": {
+    "$date": "2024-12-09T17:09:51.833Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T17:09:51.833Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675729223ae328617352a024"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:30:10.210Z"
+  },
+  "folio": "9569240",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -1,
+  "existencia": -24,
+  "costoUnitario": 14,
+  "createdAt": {
+    "$date": "2024-12-09T17:30:10.216Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T17:30:10.216Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675729d32040cd9857713981"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:33:07.886Z"
+  },
+  "folio": "8283004",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -1,
+  "existencia": -25,
+  "costoUnitario": 14,
+  "createdAt": {
+    "$date": "2024-12-09T17:33:07.892Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T17:33:07.892Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67572aafe3b6c32c9ec0d9a2"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:36:47.809Z"
+  },
+  "folio": "4835080",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -1,
+  "existencia": -26,
+  "costoUnitario": 14,
+  "createdAt": {
+    "$date": "2024-12-09T17:36:47.814Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T17:36:47.814Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67572b17e3b6c32c9ec0dcef"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:38:31.150Z"
+  },
+  "folio": "3300497",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -500,
+  "existencia": -526,
+  "costoUnitario": 13,
+  "createdAt": {
+    "$date": "2024-12-09T17:38:31.152Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T17:38:31.152Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67572e25e3b6c32c9ec0e02b"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:51:33.049Z"
+  },
+  "folio": "3510202",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -600,
+  "existencia": -1126,
+  "costoUnitario": 13,
+  "createdAt": {
+    "$date": "2024-12-09T17:51:33.052Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T17:51:33.052Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67572ee4e3b6c32c9ec0e52c"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:54:44.287Z"
+  },
+  "folio": "4541680",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -1,
+  "existencia": -1127,
+  "costoUnitario": 14,
+  "createdAt": {
+    "$date": "2024-12-09T17:54:44.289Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T17:54:44.289Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67572ee4e3b6c32c9ec0e532"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:54:44.719Z"
+  },
+  "folio": "8019943",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "FABCAN",
+  "nombre": "LIMPIADOR  CANELA SIN ENVASE",
+  "cantidad": -1,
+  "existencia": -1,
+  "costoUnitario": 7,
+  "createdAt": {
+    "$date": "2024-12-09T17:54:44.720Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T17:54:44.720Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67573013e3b6c32c9ec0e87f"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:59:47.502Z"
+  },
+  "folio": "8515088",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -500,
+  "existencia": -1627,
+  "costoUnitario": 13,
+  "createdAt": {
+    "$date": "2024-12-09T17:59:47.504Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T17:59:47.504Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67577ce8fd53666902c587d0"
+  },
+  "fecha": {
+    "$date": "2024-12-09T23:27:36.503Z"
+  },
+  "folio": "8189749",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "BASMAD",
+  "nombre": "BASTON DE MADERA",
+  "cantidad": -50,
+  "existencia": -1677,
+  "costoUnitario": 13,
+  "createdAt": {
+    "$date": "2024-12-09T23:27:36.648Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T23:27:36.648Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67747555f0da680151929393"
+  },
+  "fecha": {
+    "$date": "2024-12-31T22:51:01.299Z"
+  },
+  "folio": "8403595",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "ATOCHH",
+  "nombre": "ATOMIZADOR CHICO",
+  "cantidad": -70,
+  "existencia": 930,
+  "costoUnitario": 13.89,
+  "createdAt": {
+    "$date": "2024-12-31T22:51:01.319Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-31T22:51:01.319Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6775b793ea36e21463b6b8ed"
+  },
+  "fecha": {
+    "$date": "2025-01-01T21:45:55.413Z"
+  },
+  "folio": "1090503",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "ATOCHH",
+  "nombre": "ATOMIZADOR CHICO",
+  "cantidad": -10,
+  "existencia": 920,
+  "costoUnitario": 15.99,
+  "createdAt": {
+    "$date": "2025-01-01T21:45:55.440Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-01T21:45:55.440Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6775cc85ac0f80279ba0ac1d"
+  },
+  "fecha": {
+    "$date": "2025-01-01T23:15:17.789Z"
+  },
+  "folio": "6694279",
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "movimiento": "Venta",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "reference": "AROGLACAS",
+  "nombre": "AROMA TIPO GLADE CASCADAS CONCENTRADO",
+  "cantidad": -2,
+  "existencia": -2,
+  "costoUnitario": 30,
+  "createdAt": {
+    "$date": "2025-01-01T23:15:17.809Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-01T23:15:17.809Z"
+  },
+  "__v": 0
+}]

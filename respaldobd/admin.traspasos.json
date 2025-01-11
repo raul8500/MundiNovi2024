@@ -1,0 +1,82 @@
+[{
+  "_id": {
+    "$oid": "6779573ac68111e6effd93ec"
+  },
+  "folio": 1001,
+  "sucursalOrigen": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "sucursalDestino": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "usuarioOrigen": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "usuarioDestino": {
+    "$oid": "66c3746e567b03030339316c"
+  },
+  "observaciones": "",
+  "productos": [
+    {
+      "reference": "ATOCHH",
+      "name": "ATOMIZADOR CHICO",
+      "presentacion": "1",
+      "cantidad": 49,
+      "existenciaOrigen": 920,
+      "existenciaDestino": 0,
+      "stockMinimo": 10,
+      "stockMaximo": 49,
+      "volumen": 100,
+      "peso": 100,
+      "_id": {
+        "$oid": "6779573ac68111e6effd93ed"
+      }
+    }
+  ],
+  "estado": "pendiente",
+  "fecha": {
+    "$date": "2025-01-04T15:43:54.320Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "677dfb487f40db26269267ea"
+  },
+  "folio": 1002,
+  "sucursalOrigen": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "sucursalDestino": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "usuarioOrigen": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "usuarioDestino": {
+    "$oid": "6747f8349c879fb52050075f"
+  },
+  "observaciones": "",
+  "productos": [
+    {
+      "reference": "ATOCHH",
+      "name": "ATOMIZADOR CHICO",
+      "presentacion": "1",
+      "cantidad": 10,
+      "existenciaOrigen": 920,
+      "existenciaDestino": 0,
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "volumen": 100,
+      "peso": 100,
+      "_id": {
+        "$oid": "677dfb487f40db26269267eb"
+      }
+    }
+  ],
+  "estado": "pendiente",
+  "fecha": {
+    "$date": "2025-01-08T04:12:56.284Z"
+  },
+  "__v": 0
+}]

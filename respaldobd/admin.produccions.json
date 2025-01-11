@@ -1,0 +1,105 @@
+[{
+  "_id": {
+    "$oid": "673caa1882629debbd0dfc45"
+  },
+  "fechaHora": {
+    "$date": "2024-11-19T15:09:12.575Z"
+  },
+  "Estado": 2,
+  "nombreProducto": "ABRILLANTADOR TIPO ARMOR ALL SIN ENVASE",
+  "claveProducto": "ABRALL",
+  "cantidad": 250,
+  "folio": "1",
+  "numeroLote": "19-11-2024-1",
+  "usuario": {
+    "$oid": "673be75360dd2ae3bcc67d59"
+  },
+  "materiasPrimas": [
+    {
+      "clave": "GLIC",
+      "nombre": "GLICERINA",
+      "cantidad": 4,
+      "folio": "1950800",
+      "_id": {
+        "$oid": "673caa1882629debbd0dfc46"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-11-19T15:09:12.859Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-19T15:12:52.845Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6740cb64e07b277b48001e41"
+  },
+  "fechaHora": {
+    "$date": "2024-11-22T18:20:20.614Z"
+  },
+  "Estado": 2,
+  "nombreProducto": "ABRILLANTADOR TIPO ARMOR ALL SIN ENVASE",
+  "claveProducto": "ABRALL",
+  "cantidad": 250,
+  "folio": "2",
+  "numeroLote": "22-11-2024-2",
+  "usuario": {
+    "$oid": "673be75360dd2ae3bcc67d59"
+  },
+  "materiasPrimas": [
+    {
+      "clave": "GLIC",
+      "nombre": "GLICERINA",
+      "cantidad": 4,
+      "folio": "1771680",
+      "_id": {
+        "$oid": "6740cb64e07b277b48001e42"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-11-22T18:20:20.620Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-22T18:21:44.937Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675485c769b5613af3373113"
+  },
+  "fechaHora": {
+    "$date": "2024-12-07T17:28:39.578Z"
+  },
+  "Estado": 3,
+  "nombreProducto": "ABRILLANTADOR TIPO ARMOR ALL SIN ENVASE",
+  "claveProducto": "ABRALL",
+  "cantidad": 150,
+  "folio": "3",
+  "numeroLote": "7-12-2024-3",
+  "usuario": {
+    "$oid": "673be75360dd2ae3bcc67d59"
+  },
+  "materiasPrimas": [
+    {
+      "clave": "GLIC",
+      "nombre": "GLICERINA",
+      "cantidad": 2.4,
+      "folio": "2440493",
+      "_id": {
+        "$oid": "675485c769b5613af3373114"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-12-07T17:28:39.597Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T17:29:17.483Z"
+  },
+  "__v": 0
+}]

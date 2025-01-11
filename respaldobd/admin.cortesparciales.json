@@ -1,0 +1,29 @@
+[{
+  "_id": {
+    "$oid": "6757301ee3b6c32c9ec0ea25"
+  },
+  "billetes_1000": 6,
+  "billetes_500": 1,
+  "billetes_200": 0,
+  "billetes_100": 0,
+  "billetes_50": 0,
+  "billetes_20": 0,
+  "monedas_20": 0,
+  "monedas_10": 0,
+  "monedas_5": 0,
+  "monedas_2": 0,
+  "monedas_1": 0,
+  "monedas_50c": 0,
+  "cantidad": 6500,
+  "observaciones": "",
+  "folio": "1000",
+  "folioPadre": "1498",
+  "recibido": false,
+  "vendedor": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "fechaCreacion": {
+    "$date": "2024-12-09T17:59:58.183Z"
+  },
+  "__v": 0
+}]

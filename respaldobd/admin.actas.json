@@ -1,0 +1,28 @@
+[{
+  "_id": {
+    "$oid": "6749e42114f68a703ac03ef7"
+  },
+  "usuarioId": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "tipo": "retardos",
+  "mensaje": "SIENDO 9:56:17 a.m. DEL DIA 29/11/2024, SE EXTIENDE LA PRESENTE ACTA ADMINISTRATIVA AL SR. Raul Arturo Peredo Estudillo POR LLEGAR FUERA DE SU HORARIO DE ENTRADA. FIRMAN AL CALCE LOS INTERESADOS Y TESTIGO.",
+  "fecha": {
+    "$date": "2024-11-29T15:56:17.618Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6749e8069e15b9eda7fd305d"
+  },
+  "usuarioId": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "tipo": "retardos",
+  "mensaje": "SIENDO 10:12:54 a.m. DEL DIA 29/11/2024, SE EXTIENDE LA PRESENTE ACTA ADMINISTRATIVA AL SR. Raul Arturo Peredo Estudillo POR LLEGAR FUERA DE SU HORARIO DE ENTRADA. FIRMAN AL CALCE LOS INTERESADOS Y TESTIGO.",
+  "fecha": {
+    "$date": "2024-11-29T16:12:54.266Z"
+  },
+  "__v": 0
+}]

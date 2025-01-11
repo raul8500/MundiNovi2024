@@ -1,0 +1,3122 @@
+[{
+  "_id": {
+    "$oid": "67468f8a3efcf40b69228c5f"
+  },
+  "sucursalId": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "productos": [
+    {
+      "reference": "ATOCHH",
+      "stockMinimo": 88,
+      "stockMaximo": 88,
+      "_id": {
+        "$oid": "67468f8a3efcf40b69228c63"
+      }
+    },
+    {
+      "reference": "AROGLACAS",
+      "stockMinimo": 6,
+      "stockMaximo": 5,
+      "_id": {
+        "$oid": "67468f8a3efcf40b69228c67"
+      }
+    },
+    {
+      "reference": "BOMDESREY",
+      "stockMinimo": 6,
+      "stockMaximo": 5,
+      "_id": {
+        "$oid": "67468f8a3efcf40b69228c6b"
+      }
+    },
+    {
+      "reference": "AROFERCON",
+      "stockMinimo": 6,
+      "stockMaximo": 5,
+      "_id": {
+        "$oid": "67468f8b3efcf40b69228c6f"
+      }
+    },
+    {
+      "reference": "BOTBALNEGMD",
+      "stockMinimo": 6,
+      "stockMaximo": 5,
+      "_id": {
+        "$oid": "67468f8b3efcf40b69228c73"
+      }
+    },
+    {
+      "reference": "ABRCER",
+      "stockMinimo": 6,
+      "stockMaximo": 5,
+      "_id": {
+        "$oid": "67468f8b3efcf40b69228c77"
+      }
+    },
+    {
+      "reference": "CLODES",
+      "stockMinimo": 6,
+      "stockMaximo": 5,
+      "_id": {
+        "$oid": "67468f8b3efcf40b69228c7b"
+      }
+    },
+    {
+      "reference": "CEPPLAN",
+      "stockMinimo": 6,
+      "stockMaximo": 5,
+      "_id": {
+        "$oid": "67468f8b3efcf40b69228c7f"
+      }
+    },
+    {
+      "reference": "BOLG",
+      "stockMinimo": 6,
+      "stockMaximo": 5,
+      "_id": {
+        "$oid": "67468f8b3efcf40b69228c83"
+      }
+    },
+    {
+      "reference": "COL",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8b3efcf40b69228c87"
+      }
+    },
+    {
+      "reference": "ABRGLICH",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8b3efcf40b69228c8b"
+      }
+    },
+    {
+      "reference": "BOLM",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8c3efcf40b69228c8f"
+      }
+    },
+    {
+      "reference": "CEPIXT8",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8c3efcf40b69228c93"
+      }
+    },
+    {
+      "reference": "CEPWC",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8c3efcf40b69228c97"
+      }
+    },
+    {
+      "reference": "COLFREPLA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8c3efcf40b69228c9b"
+      }
+    },
+    {
+      "reference": "BOMDES",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8c3efcf40b69228c9f"
+      }
+    },
+    {
+      "reference": "CUBESP",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8c3efcf40b69228ca3"
+      }
+    },
+    {
+      "reference": "AROVAICON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8c3efcf40b69228ca7"
+      }
+    },
+    {
+      "reference": "ATOPROM",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8c3efcf40b69228cab"
+      }
+    },
+    {
+      "reference": "CEPESCPLA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8d3efcf40b69228caf"
+      }
+    },
+    {
+      "reference": "BASMAD",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8d3efcf40b69228cb3"
+      }
+    },
+    {
+      "reference": "CUB12",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8d3efcf40b69228cb7"
+      }
+    },
+    {
+      "reference": "ATOTIG",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8d3efcf40b69228cbb"
+      }
+    },
+    {
+      "reference": "AROHUGCON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8d3efcf40b69228cbf"
+      }
+    },
+    {
+      "reference": "AROCHACON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8d3efcf40b69228cc3"
+      }
+    },
+    {
+      "reference": "BOTBALNEGCH",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8d3efcf40b69228cc7"
+      }
+    },
+    {
+      "reference": "BOTBAS",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8e3efcf40b69228ccb"
+      }
+    },
+    {
+      "reference": "DETAXI",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8e3efcf40b69228ccf"
+      }
+    },
+    {
+      "reference": "ARODRACON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8e3efcf40b69228cd3"
+      }
+    },
+    {
+      "reference": "ATOIND",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8e3efcf40b69228cd7"
+      }
+    },
+    {
+      "reference": "AROPOLCON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8e3efcf40b69228cdb"
+      }
+    },
+    {
+      "reference": "CESROPMD",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8e3efcf40b69228cdf"
+      }
+    },
+    {
+      "reference": "CEPDENCAJ",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8e3efcf40b69228ce3"
+      }
+    },
+    {
+      "reference": "CEPSAC",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8e3efcf40b69228ce7"
+      }
+    },
+    {
+      "reference": "CEPMANM",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8f3efcf40b69228ceb"
+      }
+    },
+    {
+      "reference": "CUB121",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8f3efcf40b69228cef"
+      }
+    },
+    {
+      "reference": "AROETECON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8f3efcf40b69228cf3"
+      }
+    },
+    {
+      "reference": "BOLCH",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8f3efcf40b69228cf7"
+      }
+    },
+    {
+      "reference": "CARLIQGOT",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8f3efcf40b69228cfb"
+      }
+    },
+    {
+      "reference": "CLODESCON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8f3efcf40b69228cff"
+      }
+    },
+    {
+      "reference": "CUB18",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8f3efcf40b69228d03"
+      }
+    },
+    {
+      "reference": "DETSAL",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f8f3efcf40b69228d07"
+      }
+    },
+    {
+      "reference": "CEPBIB",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f903efcf40b69228d0b"
+      }
+    },
+    {
+      "reference": "CESROPGD",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f903efcf40b69228d0f"
+      }
+    },
+    {
+      "reference": "DESUNIATO",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f903efcf40b69228d13"
+      }
+    },
+    {
+      "reference": "CESROPCH",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f903efcf40b69228d17"
+      }
+    },
+    {
+      "reference": "DESTOA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f903efcf40b69228d1b"
+      }
+    },
+    {
+      "reference": "DETROM10",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f903efcf40b69228d1f"
+      }
+    },
+    {
+      "reference": "CEPTAZREY",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f903efcf40b69228d23"
+      }
+    },
+    {
+      "reference": "CUBTRA8",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f903efcf40b69228d27"
+      }
+    },
+    {
+      "reference": "ATOMED",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f913efcf40b69228d2b"
+      }
+    },
+    {
+      "reference": "CUB14PRE",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f913efcf40b69228d2f"
+      }
+    },
+    {
+      "reference": "DETBUL",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f913efcf40b69228d33"
+      }
+    },
+    {
+      "reference": "CUBESPDOB",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f913efcf40b69228d37"
+      }
+    },
+    {
+      "reference": "CUBESPINS",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f913efcf40b69228d3b"
+      }
+    },
+    {
+      "reference": "DESSHA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f913efcf40b69228d3f"
+      }
+    },
+    {
+      "reference": "DETVEL",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f913efcf40b69228d43"
+      }
+    },
+    {
+      "reference": "CEPIXT12 SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f913efcf40b69228d47"
+      }
+    },
+    {
+      "reference": "CUCCHI",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f923efcf40b69228d4b"
+      }
+    },
+    {
+      "reference": "BOLGP",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f923efcf40b69228d4f"
+      }
+    },
+    {
+      "reference": "BOTBALCOLCH",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f923efcf40b69228d53"
+      }
+    },
+    {
+      "reference": "CEPWCST",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f923efcf40b69228d57"
+      }
+    },
+    {
+      "reference": "AROFRECON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f923efcf40b69228d5b"
+      }
+    },
+    {
+      "reference": "CUCGRA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f923efcf40b69228d5f"
+      }
+    },
+    {
+      "reference": "DETPOL",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f923efcf40b69228d63"
+      }
+    },
+    {
+      "reference": "BOTBALCOLGD",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f923efcf40b69228d67"
+      }
+    },
+    {
+      "reference": "CEPMANG",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f933efcf40b69228d6b"
+      }
+    },
+    {
+      "reference": "ATOCAMP",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f933efcf40b69228d6f"
+      }
+    },
+    {
+      "reference": "CEPPLANITA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f933efcf40b69228d73"
+      }
+    },
+    {
+      "reference": "BOLMP",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f933efcf40b69228d77"
+      }
+    },
+    {
+      "reference": "DESPAPG",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f933efcf40b69228d7b"
+      }
+    },
+    {
+      "reference": "DETMAS",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f933efcf40b69228d7f"
+      }
+    },
+    {
+      "reference": "DESPAPCH",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f933efcf40b69228d83"
+      }
+    },
+    {
+      "reference": "BOLCHP",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f933efcf40b69228d87"
+      }
+    },
+    {
+      "reference": "CUBTRA12",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f943efcf40b69228d8b"
+      }
+    },
+    {
+      "reference": "DESINT",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f943efcf40b69228d8f"
+      }
+    },
+    {
+      "reference": "DETMASOBS",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f943efcf40b69228d93"
+      }
+    },
+    {
+      "reference": "DETARI",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f943efcf40b69228d97"
+      }
+    },
+    {
+      "reference": "CUCMED",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f943efcf40b69228d9b"
+      }
+    },
+    {
+      "reference": "DETPER",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f943efcf40b69228d9f"
+      }
+    },
+    {
+      "reference": "DETAJAAMO",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f943efcf40b69228da3"
+      }
+    },
+    {
+      "reference": "CEPMAS",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f943efcf40b69228da7"
+      }
+    },
+    {
+      "reference": "DESVAN",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f953efcf40b69228dab"
+      }
+    },
+    {
+      "reference": "CEPFLE",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f953efcf40b69228daf"
+      }
+    },
+    {
+      "reference": "DETZOTBLA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f953efcf40b69228db3"
+      }
+    },
+    {
+      "reference": "ABRGLIGDE",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f953efcf40b69228db7"
+      }
+    },
+    {
+      "reference": "ABRALL",
+      "stockMinimo": 1,
+      "stockMaximo": 600,
+      "_id": {
+        "$oid": "67468f953efcf40b69228dbb"
+      }
+    },
+    {
+      "reference": "BOTTAPG",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f953efcf40b69228dbf"
+      }
+    },
+    {
+      "reference": "BOMMIN",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f953efcf40b69228dc3"
+      }
+    },
+    {
+      "reference": "CEPESCRAI",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f963efcf40b69228dc7"
+      }
+    },
+    {
+      "reference": "CEPLAVPLA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f963efcf40b69228dcb"
+      }
+    },
+    {
+      "reference": "CLOPAS",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f963efcf40b69228dcf"
+      }
+    },
+    {
+      "reference": "CUB114",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f963efcf40b69228dd3"
+      }
+    },
+    {
+      "reference": "ESCAUTMN SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f963efcf40b69228dd7"
+      }
+    },
+    {
+      "reference": "ESCCEPMN SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f963efcf40b69228ddb"
+      }
+    },
+    {
+      "reference": "ESCBASBLAMN",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f963efcf40b69228ddf"
+      }
+    },
+    {
+      "reference": "ESCBASBLAMN SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f963efcf40b69228de3"
+      }
+    },
+    {
+      "reference": "ESCABAMN",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f973efcf40b69228de7"
+      }
+    },
+    {
+      "reference": "ENVGAR10",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f973efcf40b69228deb"
+      }
+    },
+    {
+      "reference": "ESCDUR",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f973efcf40b69228def"
+      }
+    },
+    {
+      "reference": "ESCBON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f973efcf40b69228df3"
+      }
+    },
+    {
+      "reference": "ESCCEPRUD SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f973efcf40b69228df7"
+      }
+    },
+    {
+      "reference": "ENV20",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f973efcf40b69228dfb"
+      }
+    },
+    {
+      "reference": "ESCCEPSUP SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f973efcf40b69228dff"
+      }
+    },
+    {
+      "reference": "ESCABAPER",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f973efcf40b69228e03"
+      }
+    },
+    {
+      "reference": "ENV220",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f983efcf40b69228e07"
+      }
+    },
+    {
+      "reference": "ESCABAMN SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f983efcf40b69228e0b"
+      }
+    },
+    {
+      "reference": "ESCITAPER",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f983efcf40b69228e0f"
+      }
+    },
+    {
+      "reference": "ESCBASBLA SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f983efcf40b69228e13"
+      }
+    },
+    {
+      "reference": "ESCBON SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f983efcf40b69228e17"
+      }
+    },
+    {
+      "reference": "ESCEXTSUA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f983efcf40b69228e1b"
+      }
+    },
+    {
+      "reference": "ESCCEPSUP",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f983efcf40b69228e1f"
+      }
+    },
+    {
+      "reference": "ESCATRMAGREY",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f983efcf40b69228e23"
+      }
+    },
+    {
+      "reference": "DISAROGOT",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f993efcf40b69228e27"
+      }
+    },
+    {
+      "reference": "ESCCLAMN",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f993efcf40b69228e2b"
+      }
+    },
+    {
+      "reference": "ENVGAR",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f993efcf40b69228e2f"
+      }
+    },
+    {
+      "reference": "ENV10",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f993efcf40b69228e33"
+      }
+    },
+    {
+      "reference": "ESCFLOCOL",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f993efcf40b69228e37"
+      }
+    },
+    {
+      "reference": "ESTROYPLU",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f993efcf40b69228e3b"
+      }
+    },
+    {
+      "reference": "ESCAUTPER",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f993efcf40b69228e3f"
+      }
+    },
+    {
+      "reference": "ESCABAPER SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f993efcf40b69228e43"
+      }
+    },
+    {
+      "reference": "ESCCEPRUD",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9a3efcf40b69228e47"
+      }
+    },
+    {
+      "reference": "ESCFLOCLA SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9a3efcf40b69228e4b"
+      }
+    },
+    {
+      "reference": "ESCFLOCLA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9a3efcf40b69228e4f"
+      }
+    },
+    {
+      "reference": "ESCAUTMN",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9a3efcf40b69228e53"
+      }
+    },
+    {
+      "reference": "ESCBASBLA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9a3efcf40b69228e57"
+      }
+    },
+    {
+      "reference": "ESCJARMET SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9a3efcf40b69228e5b"
+      }
+    },
+    {
+      "reference": "ESCINF",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9a3efcf40b69228e5f"
+      }
+    },
+    {
+      "reference": "ESTMATTOA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9a3efcf40b69228e63"
+      }
+    },
+    {
+      "reference": "ESTSAL",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9b3efcf40b69228e67"
+      }
+    },
+    {
+      "reference": "ESTIXTTOA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9b3efcf40b69228e6b"
+      }
+    },
+    {
+      "reference": "ESCCLAMN SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9b3efcf40b69228e6f"
+      }
+    },
+    {
+      "reference": "FABMASCON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9b3efcf40b69228e73"
+      }
+    },
+    {
+      "reference": "ESCJARMET",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9b3efcf40b69228e77"
+      }
+    },
+    {
+      "reference": "ESTBB",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9b3efcf40b69228e7b"
+      }
+    },
+    {
+      "reference": "ESTARG",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9b3efcf40b69228e7f"
+      }
+    },
+    {
+      "reference": "ENV1",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9b3efcf40b69228e83"
+      }
+    },
+    {
+      "reference": "FIBCUATEL",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9c3efcf40b69228e87"
+      }
+    },
+    {
+      "reference": "ESCDURMN",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9c3efcf40b69228e8b"
+      }
+    },
+    {
+      "reference": "ESCVEN SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9c3efcf40b69228e8f"
+      }
+    },
+    {
+      "reference": "ESTRED",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9c3efcf40b69228e93"
+      }
+    },
+    {
+      "reference": "ESPAUT",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9c3efcf40b69228e97"
+      }
+    },
+    {
+      "reference": "FABMAS",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9c3efcf40b69228e9b"
+      }
+    },
+    {
+      "reference": "FIBAZUREY",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9c3efcf40b69228e9f"
+      }
+    },
+    {
+      "reference": "FIBBRIJUM",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9c3efcf40b69228ea3"
+      }
+    },
+    {
+      "reference": "ESTMINFAC",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9d3efcf40b69228ea7"
+      }
+    },
+    {
+      "reference": "FABCANCON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9d3efcf40b69228eab"
+      }
+    },
+    {
+      "reference": "FABLAV",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9d3efcf40b69228eaf"
+      }
+    },
+    {
+      "reference": "FIBVERM",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9d3efcf40b69228eb3"
+      }
+    },
+    {
+      "reference": "ESCITAMN SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9d3efcf40b69228eb7"
+      }
+    },
+    {
+      "reference": "FIBMINTAL",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9d3efcf40b69228ebb"
+      }
+    },
+    {
+      "reference": "FIBTAL1",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9d3efcf40b69228ebf"
+      }
+    },
+    {
+      "reference": "ESCITAMN",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9e3efcf40b69228ec3"
+      }
+    },
+    {
+      "reference": "FABMAR",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9e3efcf40b69228ec7"
+      }
+    },
+    {
+      "reference": "FIBTAL",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9e3efcf40b69228ecb"
+      }
+    },
+    {
+      "reference": "FIBESPI",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9e3efcf40b69228ecf"
+      }
+    },
+    {
+      "reference": "FABLIMCON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9e3efcf40b69228ed3"
+      }
+    },
+    {
+      "reference": "FIBAJA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9e3efcf40b69228ed7"
+      }
+    },
+    {
+      "reference": "ESCDURMN SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9e3efcf40b69228edb"
+      }
+    },
+    {
+      "reference": "ESTFAC",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9e3efcf40b69228edf"
+      }
+    },
+    {
+      "reference": "FABFRUCON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9f3efcf40b69228ee3"
+      }
+    },
+    {
+      "reference": "ESTSALTOA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9f3efcf40b69228ee7"
+      }
+    },
+    {
+      "reference": "FIBREY",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9f3efcf40b69228eeb"
+      }
+    },
+    {
+      "reference": "FIBCUATELCH",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9f3efcf40b69228eef"
+      }
+    },
+    {
+      "reference": "ESCVEN",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9f3efcf40b69228ef3"
+      }
+    },
+    {
+      "reference": "ESCMIH",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9f3efcf40b69228ef7"
+      }
+    },
+    {
+      "reference": "FIBBRIM",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9f3efcf40b69228efb"
+      }
+    },
+    {
+      "reference": "ESCAUTPER SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468f9f3efcf40b69228eff"
+      }
+    },
+    {
+      "reference": "DETZOTROS",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa03efcf40b69228f03"
+      }
+    },
+    {
+      "reference": "ESCITAPER SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa03efcf40b69228f07"
+      }
+    },
+    {
+      "reference": "FRAAMA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa03efcf40b69228f0b"
+      }
+    },
+    {
+      "reference": "FIBBRIG",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa03efcf40b69228f0f"
+      }
+    },
+    {
+      "reference": "ESTFLO",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa03efcf40b69228f13"
+      }
+    },
+    {
+      "reference": "EXTACE",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa03efcf40b69228f17"
+      }
+    },
+    {
+      "reference": "ESCJARPLA",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa03efcf40b69228f1b"
+      }
+    },
+    {
+      "reference": "ESTBB2",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa03efcf40b69228f1f"
+      }
+    },
+    {
+      "reference": "ESTMATG",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa13efcf40b69228f23"
+      }
+    },
+    {
+      "reference": "ESCDUR SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa13efcf40b69228f27"
+      }
+    },
+    {
+      "reference": "ESCJARPLA SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa13efcf40b69228f2b"
+      }
+    },
+    {
+      "reference": "FIBNEG",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa13efcf40b69228f2f"
+      }
+    },
+    {
+      "reference": "ESCFLOCOL SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa13efcf40b69228f33"
+      }
+    },
+    {
+      "reference": "ESCCEPMN",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa13efcf40b69228f37"
+      }
+    },
+    {
+      "reference": "FABFRU",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa13efcf40b69228f3b"
+      }
+    },
+    {
+      "reference": "FIBESP",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa13efcf40b69228f3f"
+      }
+    },
+    {
+      "reference": "FABLIM",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa23efcf40b69228f43"
+      }
+    },
+    {
+      "reference": "FABCAN",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa23efcf40b69228f47"
+      }
+    },
+    {
+      "reference": "FABMARCON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa23efcf40b69228f4b"
+      }
+    },
+    {
+      "reference": "FABLAVCON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa23efcf40b69228f4f"
+      }
+    },
+    {
+      "reference": "ESCCEPPER SIN BASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa23efcf40b69228f53"
+      }
+    },
+    {
+      "reference": "ESCEXTSUASINBASTON",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa23efcf40b69228f57"
+      }
+    },
+    {
+      "reference": "ESCCEPPER",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa23efcf40b69228f5b"
+      }
+    },
+    {
+      "reference": "ESTMAGBOL",
+      "stockMinimo": 1,
+      "stockMaximo": 1,
+      "_id": {
+        "$oid": "67468fa23efcf40b69228f5f"
+      }
+    },
+    {
+      "reference": "Raul88",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "67468fa33efcf40b69228f65"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-11-27T03:18:59.178Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-08T04:12:56.454Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674e782f3824525d48284c7e"
+  },
+  "sucursalId": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "productos": [
+    {
+      "reference": "ATOCHH",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c7f"
+      }
+    },
+    {
+      "reference": "AROGLACAS",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c80"
+      }
+    },
+    {
+      "reference": "BOMDESREY",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c81"
+      }
+    },
+    {
+      "reference": "AROFERCON",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c82"
+      }
+    },
+    {
+      "reference": "BOTBALNEGMD",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c83"
+      }
+    },
+    {
+      "reference": "ABRCER",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c84"
+      }
+    },
+    {
+      "reference": "CLODES",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c85"
+      }
+    },
+    {
+      "reference": "CEPPLAN",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c86"
+      }
+    },
+    {
+      "reference": "BOLG",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c87"
+      }
+    },
+    {
+      "reference": "COL",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c88"
+      }
+    },
+    {
+      "reference": "ABRGLICH",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c89"
+      }
+    },
+    {
+      "reference": "BOLM",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c8a"
+      }
+    },
+    {
+      "reference": "CEPIXT8",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c8b"
+      }
+    },
+    {
+      "reference": "CEPWC",
+      "stockMinimo": 10,
+      "stockMaximo": 10,
+      "_id": {
+        "$oid": "674e782f3824525d48284c8c"
+      }
+    },
+    {
+      "reference": "COLFREPLA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c8d"
+      }
+    },
+    {
+      "reference": "BOMDES",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c8e"
+      }
+    },
+    {
+      "reference": "CUBESP",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c8f"
+      }
+    },
+    {
+      "reference": "AROVAICON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c90"
+      }
+    },
+    {
+      "reference": "ATOPROM",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c91"
+      }
+    },
+    {
+      "reference": "CEPESCPLA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c92"
+      }
+    },
+    {
+      "reference": "BASMAD",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c93"
+      }
+    },
+    {
+      "reference": "CUB12",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c94"
+      }
+    },
+    {
+      "reference": "ATOTIG",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c95"
+      }
+    },
+    {
+      "reference": "AROHUGCON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c96"
+      }
+    },
+    {
+      "reference": "AROCHACON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c97"
+      }
+    },
+    {
+      "reference": "BOTBALNEGCH",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c98"
+      }
+    },
+    {
+      "reference": "BOTBAS",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c99"
+      }
+    },
+    {
+      "reference": "DETAXI",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c9a"
+      }
+    },
+    {
+      "reference": "ARODRACON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c9b"
+      }
+    },
+    {
+      "reference": "ATOIND",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c9c"
+      }
+    },
+    {
+      "reference": "AROPOLCON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c9d"
+      }
+    },
+    {
+      "reference": "CESROPMD",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c9e"
+      }
+    },
+    {
+      "reference": "CEPDENCAJ",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284c9f"
+      }
+    },
+    {
+      "reference": "CEPSAC",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ca0"
+      }
+    },
+    {
+      "reference": "CEPMANM",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ca1"
+      }
+    },
+    {
+      "reference": "CUB121",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ca2"
+      }
+    },
+    {
+      "reference": "AROETECON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ca3"
+      }
+    },
+    {
+      "reference": "BOLCH",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ca4"
+      }
+    },
+    {
+      "reference": "CARLIQGOT",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ca5"
+      }
+    },
+    {
+      "reference": "CLODESCON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ca6"
+      }
+    },
+    {
+      "reference": "CUB18",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ca7"
+      }
+    },
+    {
+      "reference": "DETSAL",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ca8"
+      }
+    },
+    {
+      "reference": "CEPBIB",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ca9"
+      }
+    },
+    {
+      "reference": "CESROPGD",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284caa"
+      }
+    },
+    {
+      "reference": "DESUNIATO",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cab"
+      }
+    },
+    {
+      "reference": "CESROPCH",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cac"
+      }
+    },
+    {
+      "reference": "DESTOA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cad"
+      }
+    },
+    {
+      "reference": "DETROM10",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cae"
+      }
+    },
+    {
+      "reference": "CEPTAZREY",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284caf"
+      }
+    },
+    {
+      "reference": "CUBTRA8",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cb0"
+      }
+    },
+    {
+      "reference": "ATOMED",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cb1"
+      }
+    },
+    {
+      "reference": "CUB14PRE",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cb2"
+      }
+    },
+    {
+      "reference": "DETBUL",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cb3"
+      }
+    },
+    {
+      "reference": "CUBESPDOB",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cb4"
+      }
+    },
+    {
+      "reference": "CUBESPINS",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cb5"
+      }
+    },
+    {
+      "reference": "DESSHA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cb6"
+      }
+    },
+    {
+      "reference": "DETVEL",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cb7"
+      }
+    },
+    {
+      "reference": "CEPIXT12 SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cb8"
+      }
+    },
+    {
+      "reference": "CUCCHI",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cb9"
+      }
+    },
+    {
+      "reference": "BOLGP",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cba"
+      }
+    },
+    {
+      "reference": "BOTBALCOLCH",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cbb"
+      }
+    },
+    {
+      "reference": "CEPWCST",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cbc"
+      }
+    },
+    {
+      "reference": "AROFRECON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cbd"
+      }
+    },
+    {
+      "reference": "CUCGRA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cbe"
+      }
+    },
+    {
+      "reference": "DETPOL",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cbf"
+      }
+    },
+    {
+      "reference": "BOTBALCOLGD",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cc0"
+      }
+    },
+    {
+      "reference": "CEPMANG",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cc1"
+      }
+    },
+    {
+      "reference": "ATOCAMP",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cc2"
+      }
+    },
+    {
+      "reference": "CEPPLANITA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cc3"
+      }
+    },
+    {
+      "reference": "BOLMP",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cc4"
+      }
+    },
+    {
+      "reference": "DESPAPG",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cc5"
+      }
+    },
+    {
+      "reference": "DETMAS",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cc6"
+      }
+    },
+    {
+      "reference": "DESPAPCH",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cc7"
+      }
+    },
+    {
+      "reference": "BOLCHP",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cc8"
+      }
+    },
+    {
+      "reference": "CUBTRA12",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cc9"
+      }
+    },
+    {
+      "reference": "DESINT",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cca"
+      }
+    },
+    {
+      "reference": "DETMASOBS",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ccb"
+      }
+    },
+    {
+      "reference": "DETARI",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ccc"
+      }
+    },
+    {
+      "reference": "CUCMED",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ccd"
+      }
+    },
+    {
+      "reference": "DETPER",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cce"
+      }
+    },
+    {
+      "reference": "DETAJAAMO",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ccf"
+      }
+    },
+    {
+      "reference": "CEPMAS",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cd0"
+      }
+    },
+    {
+      "reference": "DESVAN",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cd1"
+      }
+    },
+    {
+      "reference": "CEPFLE",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cd2"
+      }
+    },
+    {
+      "reference": "DETZOTBLA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cd3"
+      }
+    },
+    {
+      "reference": "ABRGLIGDE",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cd4"
+      }
+    },
+    {
+      "reference": "ABRALL",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cd5"
+      }
+    },
+    {
+      "reference": "BOTTAPG",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cd6"
+      }
+    },
+    {
+      "reference": "BOMMIN",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cd7"
+      }
+    },
+    {
+      "reference": "CEPESCRAI",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cd8"
+      }
+    },
+    {
+      "reference": "CEPLAVPLA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cd9"
+      }
+    },
+    {
+      "reference": "CLOPAS",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cda"
+      }
+    },
+    {
+      "reference": "CUB114",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cdb"
+      }
+    },
+    {
+      "reference": "ESCAUTMN SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cdc"
+      }
+    },
+    {
+      "reference": "ESCCEPMN SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cdd"
+      }
+    },
+    {
+      "reference": "ESCBASBLAMN",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cde"
+      }
+    },
+    {
+      "reference": "ESCBASBLAMN SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cdf"
+      }
+    },
+    {
+      "reference": "ESCABAMN",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ce0"
+      }
+    },
+    {
+      "reference": "ENVGAR10",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ce1"
+      }
+    },
+    {
+      "reference": "ESCDUR",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ce2"
+      }
+    },
+    {
+      "reference": "ESCBON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ce3"
+      }
+    },
+    {
+      "reference": "ESCCEPRUD SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ce4"
+      }
+    },
+    {
+      "reference": "ENV20",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ce5"
+      }
+    },
+    {
+      "reference": "ESCCEPSUP SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ce6"
+      }
+    },
+    {
+      "reference": "ESCABAPER",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ce7"
+      }
+    },
+    {
+      "reference": "ENV220",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ce8"
+      }
+    },
+    {
+      "reference": "ESCABAMN SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ce9"
+      }
+    },
+    {
+      "reference": "ESCITAPER",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cea"
+      }
+    },
+    {
+      "reference": "ESCBASBLA SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ceb"
+      }
+    },
+    {
+      "reference": "ESCBON SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cec"
+      }
+    },
+    {
+      "reference": "ESCEXTSUA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284ced"
+      }
+    },
+    {
+      "reference": "ESCCEPSUP",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cee"
+      }
+    },
+    {
+      "reference": "ESCATRMAGREY",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cef"
+      }
+    },
+    {
+      "reference": "DISAROGOT",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cf0"
+      }
+    },
+    {
+      "reference": "ESCCLAMN",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cf1"
+      }
+    },
+    {
+      "reference": "ENVGAR",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cf2"
+      }
+    },
+    {
+      "reference": "ENV10",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cf3"
+      }
+    },
+    {
+      "reference": "ESCFLOCOL",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cf4"
+      }
+    },
+    {
+      "reference": "ESTROYPLU",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cf5"
+      }
+    },
+    {
+      "reference": "ESCAUTPER",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cf6"
+      }
+    },
+    {
+      "reference": "ESCABAPER SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cf7"
+      }
+    },
+    {
+      "reference": "ESCCEPRUD",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cf8"
+      }
+    },
+    {
+      "reference": "ESCFLOCLA SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cf9"
+      }
+    },
+    {
+      "reference": "ESCFLOCLA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cfa"
+      }
+    },
+    {
+      "reference": "ESCAUTMN",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cfb"
+      }
+    },
+    {
+      "reference": "ESCBASBLA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cfc"
+      }
+    },
+    {
+      "reference": "ESCJARMET SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cfd"
+      }
+    },
+    {
+      "reference": "ESCINF",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cfe"
+      }
+    },
+    {
+      "reference": "ESTMATTOA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284cff"
+      }
+    },
+    {
+      "reference": "ESTSAL",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d00"
+      }
+    },
+    {
+      "reference": "ESTIXTTOA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d01"
+      }
+    },
+    {
+      "reference": "ESCCLAMN SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d02"
+      }
+    },
+    {
+      "reference": "FABMASCON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d03"
+      }
+    },
+    {
+      "reference": "ESCJARMET",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d04"
+      }
+    },
+    {
+      "reference": "ESTBB",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d05"
+      }
+    },
+    {
+      "reference": "ESTARG",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d06"
+      }
+    },
+    {
+      "reference": "ENV1",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d07"
+      }
+    },
+    {
+      "reference": "FIBCUATEL",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d08"
+      }
+    },
+    {
+      "reference": "ESCDURMN",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d09"
+      }
+    },
+    {
+      "reference": "ESCVEN SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d0a"
+      }
+    },
+    {
+      "reference": "ESTRED",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d0b"
+      }
+    },
+    {
+      "reference": "ESPAUT",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d0c"
+      }
+    },
+    {
+      "reference": "FABMAS",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d0d"
+      }
+    },
+    {
+      "reference": "FIBAZUREY",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d0e"
+      }
+    },
+    {
+      "reference": "FIBBRIJUM",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d0f"
+      }
+    },
+    {
+      "reference": "ESTMINFAC",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d10"
+      }
+    },
+    {
+      "reference": "FABCANCON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d11"
+      }
+    },
+    {
+      "reference": "FABLAV",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d12"
+      }
+    },
+    {
+      "reference": "FIBVERM",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d13"
+      }
+    },
+    {
+      "reference": "ESCITAMN SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d14"
+      }
+    },
+    {
+      "reference": "FIBMINTAL",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d15"
+      }
+    },
+    {
+      "reference": "FIBTAL1",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d16"
+      }
+    },
+    {
+      "reference": "ESCITAMN",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d17"
+      }
+    },
+    {
+      "reference": "FABMAR",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d18"
+      }
+    },
+    {
+      "reference": "FIBTAL",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d19"
+      }
+    },
+    {
+      "reference": "FIBESPI",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d1a"
+      }
+    },
+    {
+      "reference": "FABLIMCON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d1b"
+      }
+    },
+    {
+      "reference": "FIBAJA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d1c"
+      }
+    },
+    {
+      "reference": "ESCDURMN SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d1d"
+      }
+    },
+    {
+      "reference": "ESTFAC",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d1e"
+      }
+    },
+    {
+      "reference": "FABFRUCON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d1f"
+      }
+    },
+    {
+      "reference": "ESTSALTOA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d20"
+      }
+    },
+    {
+      "reference": "FIBREY",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d21"
+      }
+    },
+    {
+      "reference": "FIBCUATELCH",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d22"
+      }
+    },
+    {
+      "reference": "ESCVEN",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d23"
+      }
+    },
+    {
+      "reference": "ESCMIH",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d24"
+      }
+    },
+    {
+      "reference": "FIBBRIM",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d25"
+      }
+    },
+    {
+      "reference": "ESCAUTPER SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d26"
+      }
+    },
+    {
+      "reference": "DETZOTROS",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d27"
+      }
+    },
+    {
+      "reference": "ESCITAPER SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d28"
+      }
+    },
+    {
+      "reference": "FRAAMA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d29"
+      }
+    },
+    {
+      "reference": "FIBBRIG",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d2a"
+      }
+    },
+    {
+      "reference": "ESTFLO",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d2b"
+      }
+    },
+    {
+      "reference": "EXTACE",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d2c"
+      }
+    },
+    {
+      "reference": "ESCJARPLA",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d2d"
+      }
+    },
+    {
+      "reference": "ESTBB2",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d2e"
+      }
+    },
+    {
+      "reference": "ESTMATG",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d2f"
+      }
+    },
+    {
+      "reference": "ESCDUR SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d30"
+      }
+    },
+    {
+      "reference": "ESCJARPLA SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d31"
+      }
+    },
+    {
+      "reference": "FIBNEG",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d32"
+      }
+    },
+    {
+      "reference": "ESCFLOCOL SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d33"
+      }
+    },
+    {
+      "reference": "ESCCEPMN",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d34"
+      }
+    },
+    {
+      "reference": "FABFRU",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d35"
+      }
+    },
+    {
+      "reference": "FIBESP",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d36"
+      }
+    },
+    {
+      "reference": "FABLIM",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d37"
+      }
+    },
+    {
+      "reference": "FABCAN",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d38"
+      }
+    },
+    {
+      "reference": "FABMARCON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d39"
+      }
+    },
+    {
+      "reference": "FABLAVCON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d3a"
+      }
+    },
+    {
+      "reference": "ESCCEPPER SIN BASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d3b"
+      }
+    },
+    {
+      "reference": "ESCEXTSUASINBASTON",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d3c"
+      }
+    },
+    {
+      "reference": "ESCCEPPER",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d3d"
+      }
+    },
+    {
+      "reference": "ESTMAGBOL",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d3e"
+      }
+    },
+    {
+      "reference": "Raul88",
+      "stockMinimo": 0,
+      "stockMaximo": 0,
+      "_id": {
+        "$oid": "674e782f3824525d48284d3f"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-12-03T03:17:03.410Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-08T04:12:56.381Z"
+  },
+  "__v": 0
+}]

@@ -1,0 +1,297 @@
+[{
+  "_id": {
+    "$oid": "67572ee4e3b6c32c9ec0e534"
+  },
+  "noVenta": "8972266",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "tipoVenta": "false",
+  "cliente": null,
+  "totalVenta": 21,
+  "totalProductos": 2,
+  "productos": [
+    {
+      "nombre": "BASTON DE MADERA",
+      "productoId": {
+        "$oid": "66d8cea7564b62425c255a96"
+      },
+      "cantidad": 1,
+      "precio": 14,
+      "kardexId": {
+        "$oid": "67572ee4e3b6c32c9ec0e52c"
+      },
+      "kardexFolio": "4541680",
+      "_id": {
+        "$oid": "67572ee4e3b6c32c9ec0e535"
+      }
+    },
+    {
+      "nombre": "LIMPIADOR  CANELA SIN ENVASE",
+      "productoId": {
+        "$oid": "66d8cfdefdb9f700721057f3"
+      },
+      "cantidad": 1,
+      "precio": 7,
+      "kardexId": {
+        "$oid": "67572ee4e3b6c32c9ec0e532"
+      },
+      "kardexFolio": "8019943",
+      "_id": {
+        "$oid": "67572ee4e3b6c32c9ec0e536"
+      }
+    }
+  ],
+  "formasDePago": [
+    {
+      "tipo": "cash",
+      "cambio": 9,
+      "importe": 30,
+      "_id": {
+        "$oid": "67572ee4e3b6c32c9ec0e537"
+      }
+    }
+  ],
+  "factura": {
+    "estado": "sin factura"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:54:44.861Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67573013e3b6c32c9ec0e881"
+  },
+  "noVenta": "1904203",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "tipoVenta": "false",
+  "cliente": null,
+  "totalVenta": 6500,
+  "totalProductos": 500,
+  "productos": [
+    {
+      "nombre": "BASTON DE MADERA",
+      "productoId": {
+        "$oid": "66d8cea7564b62425c255a96"
+      },
+      "cantidad": 500,
+      "precio": 13,
+      "kardexId": {
+        "$oid": "67573013e3b6c32c9ec0e87f"
+      },
+      "kardexFolio": "8515088",
+      "_id": {
+        "$oid": "67573013e3b6c32c9ec0e882"
+      }
+    }
+  ],
+  "formasDePago": [
+    {
+      "tipo": "cash",
+      "cambio": 0,
+      "importe": 6500,
+      "_id": {
+        "$oid": "67573013e3b6c32c9ec0e883"
+      }
+    }
+  ],
+  "factura": {
+    "estado": "sin factura"
+  },
+  "fecha": {
+    "$date": "2024-12-09T17:59:47.653Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67577ce8fd53666902c587d2"
+  },
+  "noVenta": "9372104",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "tipoVenta": "false",
+  "cliente": null,
+  "totalVenta": 650,
+  "totalProductos": 50,
+  "productos": [
+    {
+      "nombre": "BASTON DE MADERA",
+      "productoId": {
+        "$oid": "66d8cea7564b62425c255a96"
+      },
+      "cantidad": 50,
+      "precio": 13,
+      "kardexId": {
+        "$oid": "67577ce8fd53666902c587d0"
+      },
+      "kardexFolio": "8189749",
+      "_id": {
+        "$oid": "67577ce8fd53666902c587d3"
+      }
+    }
+  ],
+  "formasDePago": [
+    {
+      "tipo": "cash",
+      "cambio": 350,
+      "importe": 1000,
+      "_id": {
+        "$oid": "67577ce8fd53666902c587d4"
+      }
+    }
+  ],
+  "factura": {
+    "estado": "sin factura"
+  },
+  "fecha": {
+    "$date": "2024-12-09T23:27:36.800Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67747555f0da680151929395"
+  },
+  "noVenta": "1651379",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "tipoVenta": "false",
+  "cliente": null,
+  "totalVenta": 972.3000000000001,
+  "totalProductos": 70,
+  "productos": [
+    {
+      "nombre": "ATOMIZADOR CHICO",
+      "productoId": {
+        "$oid": "66d8cea7564b62425c255a3e"
+      },
+      "cantidad": 70,
+      "precio": 13.89,
+      "kardexId": {
+        "$oid": "67747555f0da680151929393"
+      },
+      "kardexFolio": "8403595",
+      "_id": {
+        "$oid": "67747555f0da680151929396"
+      }
+    }
+  ],
+  "formasDePago": [
+    {
+      "tipo": "cash",
+      "cambio": 27.7,
+      "importe": 1000,
+      "_id": {
+        "$oid": "67747555f0da680151929397"
+      }
+    }
+  ],
+  "factura": {
+    "estado": "sin factura"
+  },
+  "fecha": {
+    "$date": "2024-12-31T22:51:01.405Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6775b793ea36e21463b6b8ef"
+  },
+  "noVenta": "1859040",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "tipoVenta": "false",
+  "cliente": null,
+  "totalVenta": 159.9,
+  "totalProductos": 10,
+  "productos": [
+    {
+      "nombre": "ATOMIZADOR CHICO",
+      "productoId": {
+        "$oid": "66d8cea7564b62425c255a3e"
+      },
+      "cantidad": 10,
+      "precio": 15.99,
+      "kardexId": {
+        "$oid": "6775b793ea36e21463b6b8ed"
+      },
+      "kardexFolio": "1090503",
+      "_id": {
+        "$oid": "6775b793ea36e21463b6b8f0"
+      }
+    }
+  ],
+  "formasDePago": [
+    {
+      "tipo": "cash",
+      "cambio": 0.1,
+      "importe": 160,
+      "_id": {
+        "$oid": "6775b793ea36e21463b6b8f1"
+      }
+    }
+  ],
+  "factura": {
+    "estado": "sin factura"
+  },
+  "fecha": {
+    "$date": "2025-01-01T21:45:55.521Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6775cc85ac0f80279ba0ac1f"
+  },
+  "noVenta": "1416560",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "tipoVenta": "false",
+  "cliente": null,
+  "totalVenta": 60,
+  "totalProductos": 2,
+  "productos": [
+    {
+      "nombre": "AROMA TIPO GLADE CASCADAS CONCENTRADO",
+      "productoId": {
+        "$oid": "66d8cea7564b62425c255a4a"
+      },
+      "cantidad": 2,
+      "precio": 30,
+      "kardexId": {
+        "$oid": "6775cc85ac0f80279ba0ac1d"
+      },
+      "kardexFolio": "6694279",
+      "_id": {
+        "$oid": "6775cc85ac0f80279ba0ac20"
+      }
+    }
+  ],
+  "formasDePago": [
+    {
+      "tipo": "cash",
+      "cambio": 0,
+      "importe": 60,
+      "_id": {
+        "$oid": "6775cc85ac0f80279ba0ac21"
+      }
+    }
+  ],
+  "factura": {
+    "estado": "sin factura"
+  },
+  "fecha": {
+    "$date": "2025-01-01T23:15:17.890Z"
+  },
+  "__v": 0
+}]

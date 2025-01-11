@@ -1,0 +1,176 @@
+[{
+  "_id": {
+    "$oid": "674fd08a83a7ca33226a59c7"
+  },
+  "sucursalId": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "evaluadorId": {
+    "$oid": "6747f8349c879fb52050075f"
+  },
+  "fechaHora": {
+    "$date": "2024-12-04T03:46:18.182Z"
+  },
+  "calificaciones": [
+    {
+      "titulo": "Limpieza",
+      "calificacion": 5,
+      "_id": {
+        "$oid": "674fd08a83a7ca33226a59c8"
+      }
+    },
+    {
+      "titulo": "Suciedad",
+      "calificacion": 10,
+      "_id": {
+        "$oid": "674fd08a83a7ca33226a59c9"
+      }
+    },
+    {
+      "titulo": "Mostrador",
+      "calificacion": 5,
+      "_id": {
+        "$oid": "674fd08a83a7ca33226a59ca"
+      }
+    },
+    {
+      "titulo": "Acomodo de material",
+      "calificacion": 5,
+      "_id": {
+        "$oid": "674fd08a83a7ca33226a59cb"
+      }
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674fd2302cd52726b4563a5f"
+  },
+  "sucursalId": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "evaluadorId": {
+    "$oid": "6747f8349c879fb52050075f"
+  },
+  "fechaHora": {
+    "$date": "2024-12-04T03:53:20.046Z"
+  },
+  "calificaciones": [
+    {
+      "titulo": "Limpieza",
+      "calificacion": 5,
+      "_id": {
+        "$oid": "674fd2302cd52726b4563a60"
+      }
+    },
+    {
+      "titulo": "Acomodo de material",
+      "calificacion": 10,
+      "_id": {
+        "$oid": "674fd2302cd52726b4563a61"
+      }
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6754735771f1905a176a393c"
+  },
+  "sucursalId": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "evaluadorId": {
+    "$oid": "6747f8349c879fb52050075f"
+  },
+  "fechaHora": {
+    "$date": "2024-12-07T16:09:58.340Z"
+  },
+  "calificaciones": [
+    {
+      "titulo": "Limpieza",
+      "calificacion": 5,
+      "_id": {
+        "$oid": "6754735771f1905a176a393d"
+      }
+    },
+    {
+      "titulo": "Acomodo de material",
+      "calificacion": 5,
+      "_id": {
+        "$oid": "6754735771f1905a176a393e"
+      }
+    },
+    {
+      "titulo": "Orden",
+      "calificacion": 5,
+      "_id": {
+        "$oid": "6754735771f1905a176a393f"
+      }
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675484b269b5613af3372a8a"
+  },
+  "sucursalId": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "evaluadorId": {
+    "$oid": "6747f8349c879fb52050075f"
+  },
+  "fechaHora": {
+    "$date": "2024-12-07T17:24:02.175Z"
+  },
+  "calificaciones": [
+    {
+      "titulo": "Orden",
+      "calificacion": 10,
+      "_id": {
+        "$oid": "675484b269b5613af3372a8b"
+      }
+    }
+  ],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67548bc2a84c18e14838b9a2"
+  },
+  "sucursalId": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "evaluadorId": {
+    "$oid": "6747f8349c879fb52050075f"
+  },
+  "fechaHora": {
+    "$date": "2024-12-07T17:54:10.509Z"
+  },
+  "calificaciones": [
+    {
+      "titulo": "Orden",
+      "calificacion": 5,
+      "_id": {
+        "$oid": "67548bc2a84c18e14838b9a3"
+      }
+    },
+    {
+      "titulo": "Limpieza",
+      "calificacion": 10,
+      "_id": {
+        "$oid": "67548bc2a84c18e14838b9a4"
+      }
+    },
+    {
+      "titulo": "prueba",
+      "calificacion": 5,
+      "_id": {
+        "$oid": "67548bc2a84c18e14838b9a5"
+      }
+    }
+  ],
+  "__v": 0
+}]

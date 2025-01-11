@@ -1,0 +1,89 @@
+[{
+  "_id": {
+    "$oid": "67572ee3e3b6c32c9ec0e524"
+  },
+  "folio": "1498",
+  "fecha_inicial": {
+    "$date": "2024-12-09T17:54:43.578Z"
+  },
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "T_cobranzas": 0,
+  "monto_doc_cobrar": 0,
+  "venta_efectivo": 0,
+  "T_credito": 0,
+  "T_debito": 0,
+  "total_tarjetas": 0,
+  "transferencias": false,
+  "monto_transferencias": 0,
+  "devolucion_ventas": 0,
+  "cortes": [
+    "1000"
+  ],
+  "total_ventas": 0,
+  "corte_total": 0,
+  "totalVentasEfectivoCortes": 1792.2,
+  "totalVentaCorte": 6500,
+  "ventas": [
+    {
+      "venta": {
+        "$oid": "67572ee4e3b6c32c9ec0e534"
+      },
+      "contada": false,
+      "_id": {
+        "$oid": "67572ee5e3b6c32c9ec0e53a"
+      }
+    },
+    {
+      "venta": {
+        "$oid": "67573013e3b6c32c9ec0e881"
+      },
+      "contada": false,
+      "_id": {
+        "$oid": "67573013e3b6c32c9ec0e887"
+      }
+    },
+    {
+      "venta": {
+        "$oid": "67577ce8fd53666902c587d2"
+      },
+      "contada": false,
+      "_id": {
+        "$oid": "67577ce9fd53666902c587d9"
+      }
+    },
+    {
+      "venta": {
+        "$oid": "67747555f0da680151929395"
+      },
+      "contada": false,
+      "_id": {
+        "$oid": "67747555f0da68015192939d"
+      }
+    },
+    {
+      "venta": {
+        "$oid": "6775b793ea36e21463b6b8ef"
+      },
+      "contada": false,
+      "_id": {
+        "$oid": "6775b793ea36e21463b6b8f8"
+      }
+    },
+    {
+      "venta": {
+        "$oid": "6775cc85ac0f80279ba0ac1f"
+      },
+      "contada": false,
+      "_id": {
+        "$oid": "6775cc86ac0f80279ba0ac29"
+      }
+    }
+  ],
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "__v": 7,
+  "egresos": 71
+}]

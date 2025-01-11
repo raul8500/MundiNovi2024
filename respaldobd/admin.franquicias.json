@@ -1,0 +1,44 @@
+[{
+  "_id": {
+    "$oid": "66c36fb1469394cf8b91a1e6"
+  },
+  "nombre": "Mundi Novi Xalapa",
+  "telefono": "22-83-53-25-68",
+  "sitioWeb": "www.mundinovi.com.mx",
+  "encargado": "Jesus Aguirre",
+  "razonSocial": "JESÚS MARÍA AGUIRRE FRAGOZO",
+  "porcentajePrecio1": 100,
+  "porcentajePrecio2": 88,
+  "porcentajePrecio3": 98,
+  "porcentajePrecio4": 97,
+  "porcentajePrecio5": 96,
+  "porcentajePrecio6": 95,
+  "porcentajePrecio7": 94,
+  "porcentajePrecio8": 93,
+  "porcentajePrecio9": 92,
+  "porcentajePrecio10": 91,
+  "mensajeTicket": "FACTURAS, PEDIDOS Y COTIZACIONES WHATSAPP 2283-53-25-68",
+  "permitirVenta": true,
+  "datosFiscales": {
+    "nombrePropietario": "JESUS MARIA AGUIRRE FRAGOZO",
+    "regimenFiscal": "REGIMEN DE INCORPORACION FISCAL",
+    "direccionFiscal": "ISLA B LOCAL 29",
+    "colonia": "CENTRAL DE ABASTOS",
+    "ciudad": "XALAPA VER",
+    "codigoPostal": "91149",
+    "rfc": "AUFJ9810186N1",
+    "telefonos": [
+      "+22-83-53-25-68"
+    ],
+    "correoFacturacion": "facturalimpios@hotmail.com",
+    "_id": {
+      "$oid": "66d0a081160c0ef55843da5c"
+    }
+  },
+  "createdAt": {
+    "$date": "2024-08-19T16:15:45.156Z"
+  },
+  "updatedAt": {
+    "$date": "2024-08-29T16:23:29.029Z"
+  }
+}]

@@ -1,0 +1,146 @@
+[{
+  "_id": {
+    "$oid": "67452c3c4bc53b26618ac80a"
+  },
+  "examenId": {
+    "$oid": "67452b9b4bc53b26618ac7f6"
+  },
+  "usuarioId": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "respuestas": [
+    {
+      "pregunta": "Como se llama raul",
+      "respuesta": 1,
+      "correcta": true,
+      "_id": {
+        "$oid": "67452c3c4bc53b26618ac80b"
+      }
+    }
+  ],
+  "calificacion": 100,
+  "fecha": {
+    "$date": "2024-11-26T02:02:36.306Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67452c9c4bc53b26618ac828"
+  },
+  "examenId": {
+    "$oid": "67452b9b4bc53b26618ac7f6"
+  },
+  "usuarioId": {
+    "$oid": "66c3746e567b03030339316c"
+  },
+  "respuestas": [
+    {
+      "pregunta": "Como se llama raul",
+      "respuesta": 0,
+      "correcta": false,
+      "_id": {
+        "$oid": "67452c9c4bc53b26618ac829"
+      }
+    }
+  ],
+  "calificacion": 0,
+  "fecha": {
+    "$date": "2024-11-26T02:04:12.736Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67453605f8faddc11e24982d"
+  },
+  "examenId": {
+    "$oid": "67452b9b4bc53b26618ac7f6"
+  },
+  "usuarioId": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "respuestas": [
+    {
+      "pregunta": "Como se llama raul",
+      "respuesta": 1,
+      "correcta": true,
+      "_id": {
+        "$oid": "67453605f8faddc11e24982e"
+      }
+    }
+  ],
+  "calificacion": 100,
+  "fecha": {
+    "$date": "2024-11-26T02:44:21.306Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67547b9b69b5613af33729bf"
+  },
+  "examenId": {
+    "$oid": "67547a217244eba04ec76356"
+  },
+  "usuarioId": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "respuestas": [
+    {
+      "pregunta": "pregunta 1",
+      "respuesta": 1,
+      "correcta": false,
+      "_id": {
+        "$oid": "67547b9b69b5613af33729c0"
+      }
+    },
+    {
+      "pregunta": "preginta 66",
+      "respuesta": 1,
+      "correcta": true,
+      "_id": {
+        "$oid": "67547b9b69b5613af33729c1"
+      }
+    },
+    {
+      "pregunta": "pregunat yuyu",
+      "respuesta": 2,
+      "correcta": false,
+      "_id": {
+        "$oid": "67547b9b69b5613af33729c2"
+      }
+    }
+  ],
+  "calificacion": 33.33333333333333,
+  "fecha": {
+    "$date": "2024-12-07T16:45:15.187Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6754906969b5613af33742a2"
+  },
+  "examenId": {
+    "$oid": "67549033af95f8d7d1b6323f"
+  },
+  "usuarioId": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "respuestas": [
+    {
+      "pregunta": "qwer",
+      "respuesta": 3,
+      "correcta": false,
+      "_id": {
+        "$oid": "6754906969b5613af33742a3"
+      }
+    }
+  ],
+  "calificacion": 0,
+  "fecha": {
+    "$date": "2024-12-07T18:14:01.058Z"
+  },
+  "__v": 0
+}]

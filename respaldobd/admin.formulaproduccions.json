@@ -1,0 +1,56 @@
+[{
+  "_id": {
+    "$oid": "66ec526b654db6b6b8bf7cc9"
+  },
+  "productoFinal": {
+    "$oid": "66d8cfdefdb9f700721057f3"
+  },
+  "nombreFormula": "Fabuloso canela",
+  "observaciones": "ninguna",
+  "paraQueCantidadEsLaFormula": "500",
+  "materiasPrimas": [
+    {
+      "_id": {
+        "$oid": "66ea6bd4e63d7194d329ab56"
+      },
+      "cantidad": 200
+    },
+    {
+      "_id": {
+        "$oid": "66ea7a5ce1566593e9a9cf7c"
+      },
+      "cantidad": 20
+    }
+  ],
+  "costoPorcion": 1420,
+  "costoUnidad": 2.84,
+  "fechaRegistro": {
+    "$date": "2024-09-19T16:33:47.518Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6734e514eb0b71bc592aaff9"
+  },
+  "productoFinal": {
+    "$oid": "66d8cf3c564b62425c255b96"
+  },
+  "nombreFormula": "ABRILLANTADOR TIPO ARMOR ALL SIN ENVASE",
+  "observaciones": "ninguna",
+  "paraQueCantidadEsLaFormula": "250",
+  "materiasPrimas": [
+    {
+      "_id": {
+        "$oid": "66ea7a5ce1566593e9a9cf7c"
+      },
+      "cantidad": 4
+    }
+  ],
+  "costoPorcion": 280,
+  "costoUnidad": 1.12,
+  "fechaRegistro": {
+    "$date": "2024-11-13T17:42:44.441Z"
+  },
+  "__v": 0
+}]

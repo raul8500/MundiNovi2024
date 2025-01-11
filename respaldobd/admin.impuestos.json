@@ -1,0 +1,9 @@
+[{
+  "_id": {
+    "$oid": "66c4d59ee3f430357b54572c"
+  },
+  "clave": "IMP01",
+  "nombre": "IVA",
+  "descripcion": "IDK",
+  "__v": 0
+}]

@@ -1,0 +1,8 @@
+[{
+  "_id": {
+    "$oid": "674e8c1b728b151059f0ac75"
+  },
+  "tipo": "Retardos",
+  "mensaje": "El se dice que {nombre} el dia {dia} a las {hora} se presento con retardo",
+  "__v": 0
+}]

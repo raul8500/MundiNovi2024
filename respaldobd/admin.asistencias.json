@@ -1,0 +1,120 @@
+[{
+  "_id": {
+    "$oid": "6740cf36e07b277b48002b41"
+  },
+  "usuarioId": {
+    "$oid": "673b84685cec66b0b7c4fce4"
+  },
+  "fecha": "2024-11-22",
+  "acciones": {
+    "entrada": {
+      "$date": "2024-11-22T18:36:38.225Z"
+    },
+    "salidaComer": {
+      "$date": "2024-11-22T18:37:07.746Z"
+    },
+    "regresoComer": {
+      "$date": "2024-11-22T18:37:10.488Z"
+    },
+    "terminoJornada": {
+      "$date": "2024-11-22T18:37:13.600Z"
+    }
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67533bc3583218c4376cea16"
+  },
+  "usuarioId": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "fecha": "2024-12-06",
+  "acciones": {
+    "entrada": {
+      "$date": "2024-12-06T18:00:35.699Z"
+    },
+    "salidaComer": {
+      "$date": "2024-12-06T18:00:40.129Z"
+    },
+    "regresoComer": {
+      "$date": "2024-12-06T18:00:41.852Z"
+    },
+    "terminoJornada": {
+      "$date": "2024-12-06T18:00:43.649Z"
+    }
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675d24d6836cb14b2eeac435"
+  },
+  "usuarioId": {
+    "$oid": "675baca1d7c14956603fcf3a"
+  },
+  "fecha": "2024-12-14",
+  "acciones": {
+    "entrada": {
+      "$date": "2024-12-14T06:25:26.393Z"
+    },
+    "salidaComer": {
+      "$date": "2024-12-14T06:25:28.327Z"
+    },
+    "regresoComer": {
+      "$date": "2024-12-14T06:25:29.962Z"
+    },
+    "terminoJornada": {
+      "$date": "2024-12-14T06:25:31.909Z"
+    }
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675d260b836cb14b2eeac77b"
+  },
+  "usuarioId": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "fecha": "2024-12-14",
+  "acciones": {
+    "entrada": {
+      "$date": "2024-12-14T06:30:35.654Z"
+    },
+    "salidaComer": {
+      "$date": "2024-12-14T06:30:37.227Z"
+    },
+    "regresoComer": {
+      "$date": "2024-12-14T06:30:38.552Z"
+    },
+    "terminoJornada": {
+      "$date": "2024-12-14T06:30:40.082Z"
+    }
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6765898bf3644211fb9d4585"
+  },
+  "usuarioId": {
+    "$oid": "675baca1d7c14956603fcf3a"
+  },
+  "fecha": "2024-12-20",
+  "acciones": {
+    "entrada": {
+      "$date": "2024-12-20T15:13:15.724Z"
+    },
+    "salidaComer": {
+      "$date": "2024-12-20T15:13:17.526Z"
+    },
+    "regresoComer": {
+      "$date": "2024-12-20T15:13:18.976Z"
+    },
+    "terminoJornada": {
+      "$date": "2024-12-20T15:13:20.508Z"
+    }
+  },
+  "__v": 0
+}]

@@ -1,0 +1,127 @@
+[{
+  "_id": {
+    "$oid": "67452b9b4bc53b26618ac7f6"
+  },
+  "titulo": "EXAMEN 1",
+  "descripcion": "NOSE",
+  "preguntas": [
+    {
+      "pregunta": "Como se llama raul",
+      "opciones": [
+        "Juan",
+        "Raul",
+        "Arturo",
+        "Pedro"
+      ],
+      "respuestaCorrecta": 1,
+      "_id": {
+        "$oid": "67452b9b4bc53b26618ac7f7"
+      }
+    }
+  ],
+  "creador": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "activo": false,
+  "tiposPermitidos": [
+    1,
+    2
+  ],
+  "fechaCreacion": {
+    "$date": "2024-11-26T01:59:55.563Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67547a217244eba04ec76356"
+  },
+  "titulo": "nombre de examen 1",
+  "descripcion": "descripcion 1",
+  "preguntas": [
+    {
+      "pregunta": "pregunta 1",
+      "opciones": [
+        "op1",
+        "op2",
+        "op3",
+        "op4"
+      ],
+      "respuestaCorrecta": 2,
+      "_id": {
+        "$oid": "67547a217244eba04ec76357"
+      }
+    },
+    {
+      "pregunta": "preginta 66",
+      "opciones": [
+        "opcion 5",
+        "opcion 6",
+        "opcion 7",
+        "opcion 8"
+      ],
+      "respuestaCorrecta": 1,
+      "_id": {
+        "$oid": "67547a217244eba04ec76358"
+      }
+    },
+    {
+      "pregunta": "pregunat yuyu",
+      "opciones": [
+        "opcion 77",
+        "opcion 88",
+        "opcion 99",
+        "opcion 66"
+      ],
+      "respuestaCorrecta": 0,
+      "_id": {
+        "$oid": "67547a217244eba04ec76359"
+      }
+    }
+  ],
+  "creador": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "activo": false,
+  "tiposPermitidos": [
+    2,
+    3
+  ],
+  "fechaCreacion": {
+    "$date": "2024-12-07T16:38:57.463Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67549033af95f8d7d1b6323f"
+  },
+  "titulo": "qwe",
+  "descripcion": "asd",
+  "preguntas": [
+    {
+      "pregunta": "qwer",
+      "opciones": [
+        "qwer",
+        "qwr",
+        "dsfg",
+        "hfjk"
+      ],
+      "respuestaCorrecta": 1,
+      "_id": {
+        "$oid": "67549033af95f8d7d1b63240"
+      }
+    }
+  ],
+  "creador": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "activo": false,
+  "tiposPermitidos": [
+    2
+  ],
+  "fechaCreacion": {
+    "$date": "2024-12-07T18:13:07.870Z"
+  },
+  "__v": 0
+}]

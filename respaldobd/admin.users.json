@@ -1,0 +1,220 @@
+[{
+  "_id": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "name": "Raul Arturo Peredo Estudillo",
+  "username": "tas",
+  "rol": 1,
+  "password": "$2a$04$o8nJHp3YS7K5hL4ax5tA6u17Sc0MOV1DKQrwzVkK8euJYK8NbrUvW",
+  "img": 1,
+  "sucursalId": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "createdAt": {
+    "$date": "2024-08-19T16:16:30.133Z"
+  },
+  "updatedAt": {
+    "$date": "2024-08-19T16:40:01.698Z"
+  },
+  "status": 1
+},
+{
+  "_id": {
+    "$oid": "66c3746e567b03030339316c"
+  },
+  "name": "Daniel Diaz",
+  "username": "ddiaz",
+  "rol": 2,
+  "password": "$2a$04$vlWsYF2/nFW5LKy8C.0GQup8mWTIFYmfuWvC.RYqAWfWzy.8JppD2",
+  "img": 4,
+  "sucursalId": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "createdAt": {
+    "$date": "2024-08-19T16:35:58.812Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-11T14:53:16.105Z"
+  },
+  "status": 1
+},
+{
+  "_id": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "name": "Raul peredo",
+  "username": "rperedo",
+  "rol": 2,
+  "password": "$2a$04$gcttxto8Lf7B7n0MOTyVfe2pyEKQ4h3vckiSnmoYZEAOJlgLBQ.Eq",
+  "img": 2,
+  "status": 1,
+  "sucursalId": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "createdAt": {
+    "$date": "2024-08-29T17:33:36.379Z"
+  },
+  "updatedAt": {
+    "$date": "2024-08-29T17:53:40.624Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f2333f3fd9da6c875d1e8c"
+  },
+  "name": "Raul Peredo",
+  "username": "stps",
+  "rol": 3,
+  "password": "$2a$04$sOWDYI6DPO8V8nDABD8wCe8pBCJ007eBq.JqAnULXUNqnX4c6zbNO",
+  "img": 3,
+  "status": 1,
+  "sucursalId": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "createdAt": {
+    "$date": "2024-09-24T03:34:23.170Z"
+  },
+  "updatedAt": {
+    "$date": "2024-09-24T03:34:23.170Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66f6e7392fdd18556a76b757"
+  },
+  "name": "Raul Peredo",
+  "username": "aadministrativo",
+  "rol": 4,
+  "password": "$2a$04$B2bZWJ1FDVu4b5pqMHYZ6eYxpmE.wnkBWG55nNEMWC9zaOeyTlKii",
+  "img": 5,
+  "status": 1,
+  "sucursalId": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "createdAt": {
+    "$date": "2024-09-27T17:11:21.296Z"
+  },
+  "updatedAt": {
+    "$date": "2024-09-27T17:11:21.296Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "673b84685cec66b0b7c4fce4"
+  },
+  "name": "raul peredo ",
+  "username": "admin",
+  "rol": 5,
+  "password": "$2a$04$x9iNVaxpLLI7yGyn0MI83OeaOjbF11Ansn5whYnE.QBvAM5wWjQo6",
+  "img": 1,
+  "status": 1,
+  "sucursalId": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "createdAt": {
+    "$date": "2024-11-18T18:16:08.953Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-18T18:16:08.953Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "673be75360dd2ae3bcc67d59"
+  },
+  "name": "Raul Arturo Peredo Estudillo",
+  "username": "produccion",
+  "rol": 6,
+  "password": "$2a$04$ZPJiQuupb/IOPkQ4ogwzt.//Vpx4WPZB/iiDmCITQMdJxcCjQYYsu",
+  "img": 3,
+  "status": 1,
+  "sucursalId": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "createdAt": {
+    "$date": "2024-11-19T01:18:11.734Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-19T01:18:11.734Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6747f8349c879fb52050075f"
+  },
+  "name": "Yoss DLG",
+  "username": "yoss",
+  "rol": 7,
+  "password": "$2a$04$bcYijSxe3LB5R/i398sU3u4/c5ePvxX3n0Az8D43JOsfJcgBvtkEO",
+  "img": 3,
+  "status": 1,
+  "sucursalId": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "createdAt": {
+    "$date": "2024-11-28T04:57:24.595Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-28T04:57:24.595Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "675baca1d7c14956603fcf3a"
+  },
+  "name": "Diana Aburto",
+  "username": "aclientes",
+  "rol": 8,
+  "password": "$2a$04$5SF8mZdrkPI2GVIbAhIb3OPO6/7ghCfK6i/Bwhn93QRBTuWMAIqkK",
+  "img": 3,
+  "status": 1,
+  "sucursalId": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "createdAt": {
+    "$date": "2024-12-13T03:40:17.246Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-13T03:40:17.246Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6778aea371fce777dfef2444"
+  },
+  "name": "C Juan",
+  "username": "cjuan",
+  "rol": 9,
+  "password": "$2a$04$KJmWpuemAKJTLTTrcUr09uHIdRqo9FH.AiWlSjdcAEN/J2SpyYfF.",
+  "img": 2,
+  "status": 1,
+  "sucursalId": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "createdAt": {
+    "$date": "2025-01-04T03:44:35.239Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-04T03:44:43.287Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "677ef8868453cf4186a83496"
+  },
+  "name": "Raul Peredo Bodega",
+  "username": "rbodega",
+  "rol": 10,
+  "password": "$2a$04$V9pGt4DqelXcGLdLvx7OneRDojqPv1u35..zEvTeqVgI2C.B3a3Xa",
+  "img": 2,
+  "status": 1,
+  "sucursalId": {
+    "$oid": "66e1b4986dca15c1b8653494"
+  },
+  "createdAt": {
+    "$date": "2025-01-08T22:13:26.461Z"
+  },
+  "updatedAt": {
+    "$date": "2025-01-08T22:13:26.461Z"
+  }
+}]

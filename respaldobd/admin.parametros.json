@@ -1,0 +1,72 @@
+[{
+  "_id": {
+    "$oid": "674fccab5ee37c77823741fa"
+  },
+  "nombre": "111",
+  "descripcion": "",
+  "activo": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674fcdd37b25607869c2dc08"
+  },
+  "nombre": "Limpieza",
+  "descripcion": "",
+  "activo": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674fcde17b25607869c2dc0b"
+  },
+  "nombre": "Suciedad",
+  "descripcion": "",
+  "activo": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674fcdf37b25607869c2dc0e"
+  },
+  "nombre": "Mostrador",
+  "descripcion": "",
+  "activo": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674fce0d7b25607869c2dc11"
+  },
+  "nombre": "Acomodo de material",
+  "descripcion": "",
+  "activo": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6754733371f1905a176a392e"
+  },
+  "nombre": "Orden",
+  "descripcion": "",
+  "activo": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675484d969b5613af3372abe"
+  },
+  "nombre": "Limpieza",
+  "descripcion": "",
+  "activo": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67548b57a84c18e14838b987"
+  },
+  "nombre": "prueba",
+  "descripcion": "123",
+  "activo": true,
+  "__v": 0
+}]

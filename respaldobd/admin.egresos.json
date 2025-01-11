@@ -1,0 +1,130 @@
+[{
+  "_id": {
+    "$oid": "6753eb6430670e5d28182e7a"
+  },
+  "folioEgreso": 1,
+  "importe": 100,
+  "observaciones": "dwadaw",
+  "archivoComprobatorio": null,
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "folioPadre": 5600,
+  "fechaHora": {
+    "$date": "2024-12-07T06:29:56.464Z"
+  },
+  "createdAt": {
+    "$date": "2024-12-07T06:29:56.475Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T06:29:56.475Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675490d669b5613af33742b3"
+  },
+  "folioEgreso": 2,
+  "importe": 10,
+  "observaciones": "paperia",
+  "archivoComprobatorio": "uploads/1733595349619-486962683.jpg",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "folioPadre": 5600,
+  "fechaHora": {
+    "$date": "2024-12-07T18:15:50.425Z"
+  },
+  "createdAt": {
+    "$date": "2024-12-07T18:15:50.426Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T18:15:50.426Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6754911469b5613af33742c0"
+  },
+  "folioEgreso": 3,
+  "importe": 10,
+  "observaciones": "Ys",
+  "archivoComprobatorio": "uploads/1733595410894-440412539.jpg",
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "folioPadre": 5600,
+  "fechaHora": {
+    "$date": "2024-12-07T18:16:52.789Z"
+  },
+  "createdAt": {
+    "$date": "2024-12-07T18:16:52.789Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T18:16:52.789Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67577d34fd53666902c58b35"
+  },
+  "folioEgreso": 4,
+  "importe": 71,
+  "observaciones": "papeleria",
+  "archivoComprobatorio": null,
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "folioPadre": 1498,
+  "fechaHora": {
+    "$date": "2024-12-09T23:28:52.240Z"
+  },
+  "createdAt": {
+    "$date": "2024-12-09T23:28:52.241Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T23:28:52.241Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67577ee2cdfdf59b90dd5c5a"
+  },
+  "folioEgreso": 5,
+  "importe": 71,
+  "observaciones": "papeleria",
+  "archivoComprobatorio": null,
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "usuario": {
+    "$oid": "66d0b0f096811baf5c06129c"
+  },
+  "folioPadre": 1498,
+  "fechaHora": {
+    "$date": "2024-12-09T23:36:02.238Z"
+  },
+  "createdAt": {
+    "$date": "2024-12-09T23:36:02.248Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T23:36:02.248Z"
+  },
+  "__v": 0
+}]

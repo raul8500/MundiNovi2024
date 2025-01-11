@@ -1,0 +1,72 @@
+[{
+  "_id": {
+    "$oid": "6747f45d223d58beef220ada"
+  },
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "usuario": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "totalVentasEfectivo": 208,
+  "efectivoEnCaja": 5000,
+  "diferencia": 4792,
+  "fechaHora": {
+    "$date": "2024-11-28T04:41:01.929Z"
+  },
+  "createdAt": {
+    "$date": "2024-11-28T04:41:01.940Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-28T04:41:01.940Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674801765384544c153c564e"
+  },
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "usuario": {
+    "$oid": "6747f8349c879fb52050075f"
+  },
+  "totalVentasEfectivo": 208,
+  "efectivoEnCaja": 50,
+  "diferencia": -158,
+  "fechaHora": {
+    "$date": "2024-11-28T05:36:54.269Z"
+  },
+  "createdAt": {
+    "$date": "2024-11-28T05:36:54.280Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-28T05:36:54.280Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67487e16eae0d2ef28bfa452"
+  },
+  "sucursal": {
+    "$oid": "66c36fbc469394cf8b91a1ea"
+  },
+  "usuario": {
+    "$oid": "66c36fde469394cf8b91a1f1"
+  },
+  "totalVentasEfectivo": 0,
+  "efectivoEnCaja": 0,
+  "diferencia": 0,
+  "fechaHora": {
+    "$date": "2024-11-28T14:28:38.888Z"
+  },
+  "createdAt": {
+    "$date": "2024-11-28T14:28:38.898Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-28T14:28:38.898Z"
+  },
+  "__v": 0
+}]
