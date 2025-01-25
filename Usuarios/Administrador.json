@@ -1,0 +1,40 @@
+{
+        "_id": "673b85cf19886461cd896e2b",
+        "nameRol": "Administrador",
+        "type": 5,
+        "functions": [
+            {
+                "name": "Asistencias",
+                "path": "/asistenciaUsuario",
+                "subFunctions": []
+            },
+            {
+                "name": "Actas administrativas",
+                "path": "/actasAdministrativas"
+            },
+            {
+                "name": "Egresos",
+                "path": "/egresosAdmin"
+            },
+            {
+                "name": "Actividades",
+                "path": "/actividadesAdmin"
+            },
+            {
+                "name": "Kardex Productos",
+                "path": "/kardex"
+            },
+            {
+                "name": "Kardex Materias Primas",
+                "path": "/kardexMateriasPrimas"
+            },
+            {
+                "name": "Proveedores",
+                "path": "/proveedor"
+            }
+
+
+        ],
+        "createdAt": "2024-08-13T04:49:41.250Z",
+        "updatedAt": "2024-08-13T04:49:41.250Z"
+    }

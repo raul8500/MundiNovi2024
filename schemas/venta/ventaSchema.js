@@ -7,6 +7,7 @@ const ventaSchema = new mongoose.Schema({
     cliente: { type: mongoose.Schema.Types.ObjectId, ref: 'Client', default: null },
     totalVenta: { type: Number, required: true },
     totalProductos: { type: Number, required: true },
+    codigoFacturacion: { type: Number, required: true },
     productos: [
         {
             nombre: { type: String, required: true },

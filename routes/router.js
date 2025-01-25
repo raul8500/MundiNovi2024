@@ -49,6 +49,10 @@ const pedidos = require('../controllers/pedido/pedidoControlle');
 const  faltantes = require('../controllers/faltantes/faltantesController');
 const  traspasos = require('../controllers/traspasos/traspasosController');
 
+//Nuevos
+const tipoIngresoController = require('../controllers/ingresos/tipoIngresosController');
+const ingresoController = require('../controllers/ingresos/ingresoController');
+
 
 
 const multerw = require('multer');
@@ -320,6 +324,10 @@ router.get('/recepcionFaltantes', (req, res) => {
 
 router.get('/recepcionFaltantesProductos', (req, res) => {    
     res.render('Traspaso/recepcionFaltantesProductos');
+});
+
+router.get('/ingresos', (req, res) => {    
+    res.render('Ingresos/Ingresos.ejs');
 });
 
 
@@ -664,6 +672,26 @@ router.get('/api/traspasos/fechas/:fechaInicio/:fechaFin', traspasos.obtenerTras
 router.get('/api/traspasos/:id', traspasos.obtenerTraspasoPorId);
 router.post('/api/traspasos/:traspasoId', traspasos.generarPDFTraspaso);
 router.get('/api/traspasos', traspasos.obtenerTodosLosTraspasos);
+
+
+
+
+
+//Nuevos
+
+router.post('/api/tipos-ingreso', tipoIngresoController.crearTipoIngreso);
+router.get('/api/tipos-ingreso', tipoIngresoController.obtenerTiposIngreso);
+router.get('/api/tipos-ingreso/:id', tipoIngresoController.obtenerTipoIngresoPorId); // Nueva ruta
+router.put('/api/tipos-ingreso/:id', tipoIngresoController.actualizarTipoIngreso);
+router.delete('/api/tipos-ingreso/:id', tipoIngresoController.eliminarTipoIngreso);
+
+
+router.post('/api/ingresos', ingresoController.crearIngreso);
+router.get('/api/ingresos', ingresoController.obtenerIngresos);
+router.get('/api/ingresos/:id', ingresoController.obtenerIngresoPorId);
+router.put('/api/ingresos/:id', ingresoController.actualizarIngreso);
+router.delete('/api/ingresos/:id', ingresoController.eliminarIngreso);
+
 
 
 router.use((req, res, next) => {

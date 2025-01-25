@@ -176,8 +176,6 @@ async function sendTicketEmail(email, venta, sucursalInfo) {
             subject: 'Ticket de tu compra',
             html: ticketContent,
         };
-
-        console.log('Enviando correo...');
         await transporter.sendMail(mailOptions);
         return { success: true, message: 'Correo enviado correctamente' };
     } catch (error) {
@@ -187,16 +185,11 @@ async function sendTicketEmail(email, venta, sucursalInfo) {
 }
 
 exports.createVenta = async (req, res) => {
-
-
-    
     const responseStatus = {
         ventaCreada: false
     };
 
     try {
-        console.log("Iniciando proceso de creación de venta");
-
         const vendedor = req.body.venta.usuario._id;
         const sucursal = req.body.venta.sucursalId;
         
@@ -244,21 +237,14 @@ exports.createVenta = async (req, res) => {
             );
 
             responseStatus.monederoActualizado = true;
-            console.log(`Monedero actualizado. Monto usado: ${montoUsadoMonedero}, Nuevo saldo: ${nuevoSaldoMonedero}`);
         }
 
         if (req.body.esFactura && req.body.resumenVenta.cliente.esfactura) {
-            console.log("Creando factura...");
             const facturaResultado = await crearFactura(req);
             responseStatus.facturaCreada = facturaResultado.success;
             if (facturaResultado.success) {
                 responseStatus.facturaEnviada = facturaResultado.enviada;
-                console.log("Factura creada correctamente");
-            } else {
-                console.log("Error al crear la factura:", facturaResultado.message);
             }
-        } else {
-            console.log("No es una venta con factura, continuando con el proceso de venta sin factura...");
         }
 
 
@@ -295,8 +281,6 @@ exports.createVenta = async (req, res) => {
                 existencia: nuevaExistencia,
             });
 
-            console.log("Kardex actualizado para producto:", productoEncontrado.name);
-
             productosConKardex.push({
                 nombre: productoEncontrado.name,
                 productoId: _id,
@@ -316,18 +300,17 @@ exports.createVenta = async (req, res) => {
             totalProductos,
             productos: productosConKardex,
             formasDePago: req.body.resumenVenta.formasDePago,
+            codigoFacturacion: Math.floor(100000 + Math.random() * 900000), // Genera un número aleatorio de 6 dígitos
         });
+
+        responseStatus.nuevaVenta = nuevaVenta;
 
         const ventaGuardada = await nuevaVenta.save();
         responseStatus.ventaCreada = true;
-        console.log("Venta guardada correctamente:", ventaGuardada._id);
 
         if (req.body.metodoEnvio === 'correo') {
             const emailResult = await sendTicketEmail(req.body.email, req.body, sucursal);
             responseStatus.correoEnviado = emailResult.success;
-            if (!emailResult.success) {
-                console.log(emailResult.message);
-            }
         }
 
 
@@ -338,9 +321,6 @@ exports.createVenta = async (req, res) => {
             let totalTarjetas = 0;
             let totalTransferencias = 0;
             let montoTransferencias = 0;
-
-            console.log(corteFinal)
-            console.log(ventaGuardada)
 
             ventaGuardada.formasDePago.forEach(forma => {
                 if (forma.tipo === 'cash') {
@@ -492,8 +472,6 @@ async function crearFactura(req) {
         // Enviamos la solicitud de factura
         return new Promise((resolve) => {
             request(options, async function (error, response, body) {
-                console.log(body);
-
                 if (error) {
                     return resolve({ success: false, message: 'Error en la creación de la factura' });
                 }
@@ -527,7 +505,6 @@ async function crearFactura(req) {
         console.error("Error en crearFactura:", error);
         return { success: false, message: 'Error en la creación de la factura' };
     }
-
 }
 
 function enviarFacturaPorCorreo(invoiceId, email) {
@@ -545,7 +522,6 @@ function enviarFacturaPorCorreo(invoiceId, email) {
 
         const req = http.request(options, function (res) {
             if (res.statusCode === 200) {
-                console.log("Correo enviado exitosamente");
                 resolve(true);
             } else {
                 console.error("Error al enviar correo, código de estado:", res.statusCode);
@@ -565,15 +541,24 @@ function enviarFacturaPorCorreo(invoiceId, email) {
 
 async function sumarAlMonedero(req) {
     try {
+        console.log('Entrando en la función sumarAlMonedero');
+        
         const clienteId = req.body.resumenVenta.cliente._id;
-        console.log(req.body.venta.productos)
-        // Asegurarse de que productos es un array y calcular el total de monedero sumando cada producto
+        
+        // Asegurarse de que productos es un array
         const productos = req.body.venta.productos || [];
-        const totalMonedero = productos.reduce((acc, producto) => acc + (producto.monedero || 0), 0);
+        console.log('Productos recibidos:', productos);
+        
+        // Calcular el 1% del totalConIVA de cada producto y sumarlo
+        const totalMonedero = productos.reduce((acc, producto) => {
+            const porcentajeMonedero = (producto.totalConIVA || 0) * 0.01; // 1% del totalConIVA
+            return acc + porcentajeMonedero;
+        }, 0);
 
+        console.log('Total calculado para el monedero:', totalMonedero);
+        
         // Encuentra el cliente por su ID
         const cliente = await Client.findById(clienteId);
-        
         if (!cliente) {
             throw new Error('Cliente no encontrado');
         }
@@ -584,12 +569,18 @@ async function sumarAlMonedero(req) {
         // Guardar los cambios en la base de datos
         const resultado = await cliente.save();
 
+        console.log('Actualización del monedero completada:', resultado);
+        
         return { success: true, cliente: resultado };
     } catch (error) {
-        console.error("Error al sumar al monedero:", error.message);
+        console.error('Error al sumar al monedero:', error.message);
         return { success: false, message: error.message };
     }
 }
+
+
+
+
 
 //Revisa si hay un corte Final creado
 async function checkCorteUsuarioIniciadoONoFinalizado(userId) {

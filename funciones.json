@@ -1,0 +1,441 @@
+[
+    {
+        "_id": "66c37268ff93afbf1efc383e",
+        "nameRol": "GerenteGeneral",
+        "type": 1,
+        "functions": [
+            {
+                "name": "Gestion",
+                "path": "",
+                "subFunctions": [
+                    {
+                        "name": "Usuarios",
+                        "path": "/usuarios"
+                    },
+                    {
+                        "name": "Franquicias",
+                        "path": "/franquicias"
+                    },
+                    {
+                        "name": "Tiendas",
+                        "path": "/tiendas"
+                    },
+                    {
+                        "name": "Asistencias",
+                        "path": "/asistencias"
+                    }
+                ]
+            },
+            {
+                "name": "Tienda",
+                "path": "",
+                "subFunctions": [
+                    {
+                        "name": "Productos",
+                        "path": "/productos"
+                    },
+                    {
+                        "name": "Kardex Productos",
+                        "path": "/kardex"
+                    },
+                    {
+                        "name": "Kardex Materias Primas",
+                        "path": "/kardexMateriasPrimas"
+                    },
+                    {
+                        "name": "Clientes",
+                        "path": "/clientes"
+                    }
+                ]
+            },
+            {
+                "name": "Reportes",
+                "path": "",
+                "subFunctions": [
+                    {
+                        "name": "Ventas",
+                        "path": "/ventas"
+                    },
+                    {
+                        "name": "Egresos",
+                        "path": "/egresosAdmin"
+                    }
+                ]
+            },
+            {
+                "name": "Recursos materiales",
+                "path": "",
+                "subFunctions": [
+                    {
+                        "name": "Proveedores",
+                        "path": "/proveedor"
+                    }
+                ]
+            },
+            {
+                "name": "Arqueos",
+                "path": "",
+                "subFunctions": [
+                    {
+                        "name": "Arqueo de efectivo",
+                        "path": "/arqueosEfectivo"
+                    },
+                    {
+                        "name": "Arqueos de productos",
+                        "path": "/pendiente"
+                    },
+                    {
+                        "name": "Arqueos de materias primas",
+                        "path": "/pendiente"
+                    }
+                ]
+            },
+            {
+                "name": "Almacen",
+                "path": "",
+                "subFunctions": [
+                    {
+                        "name": "Producciones",
+                        "path": "/producciones"
+                    },
+                    {
+                        "name": "Materias primas",
+                        "path": "/materiasprimas"
+                    },
+                    {
+                        "name": "Formulas",
+                        "path": "/formulas"
+                    },
+                    {
+                        "name": "Inventarios",
+                        "path": "/listadoInventarios"
+                    }
+                ]
+            },
+            {
+                "name": "Herramientas",
+                "path": "",
+                "subFunctions": [
+                    {
+                        "name": "Actividades",
+                        "path": "/actividadesAdmin"
+                    },
+                    {
+                        "name": "Capacitaciones",
+                        "path": "/capacitacionesAdmin"
+                    },
+                    {
+                        "name": "Evaluaciones",
+                        "path": "/evaluacionAdmin"
+                    },
+                    {
+                        "name": "Importaciones",
+                        "path": "/importaciones"
+                    }
+                ]
+            }
+        ],
+        "createdAt": "2024-08-13T04:49:41.250Z",
+        "updatedAt": "2024-12-07T05:34:02.564Z"
+    },
+    {
+        "_id": "66d0b0c896811baf5c061284",
+        "nameRol": "Cajero",
+        "type": 2,
+        "functions": [
+            {
+                "name": "Punto de venta",
+                "path": "/puntodeventa",
+                "subFunctions": []
+            },
+            {
+                "name": "Asistencias",
+                "path": "/asistenciaUsuario",
+                "subFunctions": []
+            },
+            {
+                "name": "Arqueo",
+                "path": "/arqueoProductos",
+                "subFunctions": []
+            },
+            {
+                "name": "Preciador",
+                "path": "/preciador",
+                "subFunctions": []
+            },
+            {
+                "name": "Economia",
+                "path": "",
+                "subFunctions": [
+                    {
+                        "name": "Corte parcial",
+                        "path": "/corteparcial"
+                    },
+                    {
+                        "name": "Corte de venta",
+                        "path": "/corteVenta"
+                    },
+                    {
+                        "name": "Egresos",
+                        "path": "/egresos"
+                    }
+                ]
+            },
+            {
+                "name": "Herramientas",
+                "path": "",
+                "subFunctions": [
+                    {
+                        "name": "Codigos de barras",
+                        "path": "/codigosBarras"
+                    },
+                    {
+                        "name": "Capacitacion",
+                        "path": "/capacitaciones"
+                    },
+                    {
+                        "name": "Actividades",
+                        "path": "/actividades"
+                    }
+                ]
+            }
+        ],
+        "createdAt": "2024-08-13T04:49:41.250Z",
+        "updatedAt": "2024-12-07T06:25:12.369Z"
+    },
+    {
+        "_id": "66f234683fd9da6c875d1e9f",
+        "nameRol": "STPS",
+        "type": 3,
+        "functions": [
+            {
+                "name": "Administración",
+                "path": "",
+                "subFunctions": [
+                    {
+                        "name": "Cortes de venta (Recolección)",
+                        "path": "/cortesRecoleccion"
+                    }
+                ]
+            }
+        ],
+        "createdAt": "2024-09-24T03:39:20.329Z",
+        "updatedAt": "2024-09-24T03:39:20.329Z"
+    },
+    {
+        "_id": "66f6e6f0ab6a3f990d449942",
+        "nameRol": "AAdministrativo",
+        "type": 4,
+        "functions": [
+            {
+                "name": "Administración",
+                "path": "",
+                "subFunctions": [
+                    {
+                        "name": "Listado cortes",
+                        "path": "/listadoCortesVenta"
+                    }
+                ]
+            },
+            {
+                "name": "Reporte faltantes",
+                "path": "/reporteFaltantes",
+                "subFunctions": []
+            }
+        ],
+        "createdAt": "2024-08-13T04:49:41.250Z",
+        "updatedAt": "2024-12-30T20:55:06.167Z"
+    },
+    {
+        "_id": "673b85cf19886461cd896e2b",
+        "nameRol": "Administrador",
+        "type": 5,
+        "functions": [
+            {
+                "name": "Asistencias",
+                "path": "/asistenciaUsuario",
+                "subFunctions": []
+            }
+        ],
+        "createdAt": "2024-08-13T04:49:41.250Z",
+        "updatedAt": "2024-08-13T04:49:41.250Z"
+    },
+    {
+        "_id": "673be70d60dd2ae3bcc67d4d",
+        "nameRol": "Produccion",
+        "type": 6,
+        "functions": [
+            {
+                "name": "Produccion",
+                "path": "/fabricarFormula",
+                "subFunctions": []
+            },
+            {
+                "name": "Asistencias",
+                "path": "/asistenciaUsuario",
+                "subFunctions": []
+            },
+            {
+                "name": "Actividades",
+                "path": "/actividades",
+                "subFunctions": []
+            },
+            {
+                "name": "Arqueo materia prima",
+                "path": "/arqueoMatPrima",
+                "subFunctions": []
+            }
+        ],
+        "createdAt": "2024-11-19T01:17:02.404Z",
+        "updatedAt": "2024-12-06T18:04:05.194Z"
+    },
+    {
+        "_id": "6747f713be30db792d73c0c1",
+        "nameRol": "Supervisor",
+        "type": 7,
+        "functions": [
+            {
+                "name": "Actividades",
+                "path": "/actividadesAdmin",
+                "subFunctions": []
+            },
+            {
+                "name": "Asistencia",
+                "path": "/asistenciaUsuario",
+                "subFunctions": []
+            },
+            {
+                "name": "Recoleccion",
+                "path": "/cortesRecoleccion",
+                "subFunctions": []
+            },
+            {
+                "name": "Arqueos",
+                "path": "",
+                "subFunctions": [
+                    {
+                        "name": "Arqueos de productos",
+                        "path": "/arqueoSupervisor"
+                    },
+                    {
+                        "name": "Arqueos de efectivo",
+                        "path": "/arqueoEfectivo"
+                    }
+                ]
+            },
+            {
+                "name": "Herramientas",
+                "path": "",
+                "subFunctions": [
+                    {
+                        "name": "Actas administrativas",
+                        "path": "/actasAdministrativas"
+                    },
+                    {
+                        "name": "Evaluación de sucursal",
+                        "path": "/evaluacionSucursal"
+                    }
+                ]
+            }
+        ],
+        "createdAt": "2024-11-28T04:52:35.951Z",
+        "updatedAt": "2024-12-06T03:43:54.632Z"
+    },
+    {
+        "_id": "675bac529730bca774552ad5",
+        "nameRol": "AClientes",
+        "type": 8,
+        "functions": [
+            {
+                "name": "Asistencias",
+                "path": "/asistenciaUsuario",
+                "subFunctions": []
+            },
+            {
+                "name": "Capacitacion",
+                "path": "/capacitaciones",
+                "subFunctions": []
+            },
+            {
+                "name": "Cotizaciones",
+                "path": "/cotizacionAdmin",
+                "subFunctions": []
+            },
+            {
+                "name": "Clientes",
+                "path": "/clientes",
+                "subFunctions": []
+            },
+            {
+                "name": "Ventas a facturar",
+                "path": "/ventasFacturar",
+                "subFunctions": []
+            }
+        ],
+        "createdAt": "2024-12-13T03:38:58.394Z",
+        "updatedAt": "2024-12-13T16:11:12.807Z"
+    },
+    {
+        "_id": "6778ae6571fce777dfef2432",
+        "nameRol": "Almacen",
+        "type": 9,
+        "functions": [
+            {
+                "name": "Asistencias",
+                "path": "/asistenciaUsuario",
+                "subFunctions": []
+            },
+            {
+                "name": "Capacitacion",
+                "path": "/capacitaciones",
+                "subFunctions": []
+            },
+            {
+                "name": "Actividades",
+                "path": "/actividades",
+                "subFunctions": []
+            },
+            {
+                "name": "Traspasos por entregar",
+                "path": "/listadoTraspasos",
+                "subFunctions": []
+            },
+            {
+                "name": "Imprimir codigos traspasos",
+                "path": "/codigosTraspasos",
+                "subFunctions": []
+            }
+        ],
+        "createdAt": "2024-12-13T03:38:58.394Z",
+        "updatedAt": "2025-01-08T03:28:45.051Z"
+    },
+    {
+        "_id": "677ef8341b6c3341bdc12b01",
+        "nameRol": "Reparto",
+        "type": 10,
+        "functions": [
+            {
+                "name": "Asistencias",
+                "path": "/asistenciaUsuario",
+                "subFunctions": []
+            },
+            {
+                "name": "Capacitacion",
+                "path": "/capacitaciones",
+                "subFunctions": []
+            },
+            {
+                "name": "Actividades",
+                "path": "/actividades",
+                "subFunctions": []
+            },
+            {
+                "name": "Recepcion de faltantes",
+                "path": "/recepcionFaltantes",
+                "subFunctions": []
+            }
+        ],
+        "createdAt": "2024-12-13T03:38:58.394Z",
+        "updatedAt": "2024-12-13T03:38:58.394Z"
+    }
+]

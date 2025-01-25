@@ -561,7 +561,7 @@ function completarVenta(resumenVenta, metodoEnvio, email = null) {
                     title: 'Venta completada',
                     text: 'La venta se ha registrado exitosamente.'
                 });
-                imprimirTicket(venta, resumenVenta);
+                imprimirTicket(venta, resumenVenta, data);
                 
                 window.location.reload();
             }
@@ -587,7 +587,7 @@ function completarVenta(resumenVenta, metodoEnvio, email = null) {
     });
 }
 
-function imprimirTicket(venta, resumenVenta) {
+function imprimirTicket(venta, resumenVenta, data) {
         console.log(venta.productos)
 
     const ticketWidth = 32; // Ancho máximo del ticket en caracteres
@@ -689,6 +689,8 @@ function imprimirTicket(venta, resumenVenta) {
                 ${formatFormasDePago(resumenVenta.formasDePago)}
             </div>
             <hr style="border: 1px solid black;">
+
+            <p style="text-align: center;">Facturación: ${data.nuevaVenta.codigoFacturacion} </p>
             <p style="text-align: center;">Usted ahorró: ${formatLine(`$${totalAhorro.toFixed(2)}`, ticketWidth, true)}</p>
             <p style="text-align: center;">Este no es un comprobante fiscal</p>
             <p style="text-align: center;">¡Super limpios a super precio!</p>
