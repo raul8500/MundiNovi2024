@@ -697,5 +697,72 @@ const generateFolio = () => {
 
 
 
+//Reportes
+exports.getReporteVentaProducto = async (req, res) => {
+  try {
+    const { sucursal, fechaInicio, fechaFin, limite } = req.params;
 
+    if (!fechaInicio || !fechaFin) {
+      return res.status(400).json({ error: 'Fecha de inicio y fecha final son requeridas.' });
+    }
 
+    const fechaInicioDate = new Date(fechaInicio);
+    const fechaFinDate = new Date(fechaFin);
+
+    if (isNaN(fechaInicioDate.getTime()) || isNaN(fechaFinDate.getTime())) {
+      return res.status(400).json({ error: 'Fecha de inicio o fecha final inválida.' });
+    }
+
+    // Ajustar fechas a UTC
+    fechaInicioDate.setUTCHours(0, 0, 0, 0); // Inicio del día en UTC
+    fechaFinDate.setUTCHours(23, 59, 59, 999); // Fin del día en UTC
+
+    // Obtener todos los productos
+    const productos = await Producto.find({}, 'reference name');
+
+    // Obtener ventas en el rango de fechas y sucursal
+    const ventas = await Venta.aggregate([
+      {
+        $match: {
+          fecha: {
+            $gte: fechaInicioDate,
+            $lte: fechaFinDate,
+          },
+          ...(sucursal && { sucursal: new mongoose.Types.ObjectId(sucursal) }),
+        },
+      },
+      { $unwind: '$productos' },
+      {
+        $group: {
+          _id: '$productos.productoId',
+          cantidadVendida: { $sum: '$productos.cantidad' },
+        },
+      },
+    ]);
+
+    // Crear un mapa de productos vendidos
+    const ventasMap = ventas.reduce((acc, venta) => {
+      acc[venta._id.toString()] = venta.cantidadVendida;
+      return acc;
+    }, {});
+
+    // Construir el reporte
+    let reporte = productos.map((producto) => ({
+      clave: producto.reference,
+      nombre: producto.name,
+      cantidad: ventasMap[producto._id.toString()] || 0, // 0 si no hay ventas
+    }));
+
+    // Si se envió un límite mayor a 0, ordenar por cantidad vendida y aplicar el límite
+    if (limite && parseInt(limite) > 0) {
+      reporte = reporte
+        .sort((a, b) => b.cantidad - a.cantidad) // Ordenar de mayor a menor cantidad
+        .slice(0, parseInt(limite)); // Limitar los resultados
+    }
+
+    res.status(200).json({ data: reporte });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al generar el reporte de ventas.' });
+  }
+};

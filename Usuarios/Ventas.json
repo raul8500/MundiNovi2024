@@ -1,0 +1,22 @@
+
+    {
+        "nameRol": "Ventas",
+        "type": 11,
+        "functions": [
+            {
+                "name": "Asistencias",
+                "path": "/asistenciaUsuario",
+                "subFunctions": []
+            },
+            {
+                "name": "Capacitacion",
+                "path": "/capacitaciones",
+                "subFunctions": []
+            },
+            {
+                "name": "Reporte de Venta de Producto",
+                "path": "/reportesVentaProductos",
+                "subFunctions": []
+            }
+        ]
+    }

@@ -1,0 +1,57 @@
+<% extraStyles=` `; %>
+
+    <main style="margin-top: 20px">
+        <div class="container pt-4">
+            <h3 class="text-center">Reporte Venta Productos</h3>
+
+            <div class="row mt-4">
+                <div class="col-md-3">
+                    <label for="selectSucursal">Sucursal</label>
+                    <select id="selectSucursal" class="form-control">
+                        <option value="">Seleccione una sucursal</option>
+                        <!-- Opciones dinámicas cargadas desde el backend -->
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="fechaInicio">Fecha Inicio</label>
+                    <input type="date" id="fechaInicio" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label for="fechaFin">Fecha Fin</label>
+                    <input type="date" id="fechaFin" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label for="limiteProductos">Número de Productos</label>
+                    <input type="number" id="limiteProductos" class="form-control" placeholder="Todos" value="0" />
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-12 text-center">
+                    <button id="btnCargar" class="btn btn-primary">Cargar Reporte</button>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Clave</th>
+                                <th>Cantidad</th>
+                                <th>Nombre</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaProductos">
+                            <!-- Datos dinámicos cargados con JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <% extraScripts=` <script src="js/reportes/reporteVentaProductos.js">
+        </script>
+        `; %>

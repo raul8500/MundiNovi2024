@@ -331,6 +331,13 @@ router.get('/ingresos', (req, res) => {
 });
 
 
+router.get('/reportesVentaProductos', (req, res) => {    
+    res.render('Reportes/reportesVentaProductos');
+});
+
+
+
+
 
 
 
@@ -691,6 +698,10 @@ router.get('/api/ingresos', ingresoController.obtenerIngresos);
 router.get('/api/ingresos/:id', ingresoController.obtenerIngresoPorId);
 router.put('/api/ingresos/:id', ingresoController.actualizarIngreso);
 router.delete('/api/ingresos/:id', ingresoController.eliminarIngreso);
+
+
+router.get('/api/venta/reporteVentasProductosSucursal/:sucursal/:fechaInicio/:fechaFin/:limite', venta.getReporteVentaProducto)
+
 
 
 
