@@ -1,0 +1,36 @@
+    {
+        "nameRol": "Almacen",
+        "type": 9,
+        "functions": [
+            {
+                "name": "Asistencias",
+                "path": "/asistenciaUsuario",
+                "subFunctions": []
+            },
+            {
+                "name": "Capacitacion",
+                "path": "/capacitaciones",
+                "subFunctions": []
+            },
+            {
+                "name": "Actividades",
+                "path": "/actividades",
+                "subFunctions": []
+            },
+            {
+                "name": "Traspasos por entregar",
+                "path": "/listadoTraspasos",
+                "subFunctions": []
+            },
+            {
+                "name": "Imprimir codigos traspasos",
+                "path": "/codigosTraspasos",
+                "subFunctions": []
+            },
+                        {
+                "name": "Recibir Producciones",
+                "path": "/producciones",
+                "subFunctions": []
+            }
+        ]
+    }

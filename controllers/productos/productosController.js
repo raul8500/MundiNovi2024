@@ -804,7 +804,67 @@ exports.exportarProductosAExcel = async (req, res) => {
     }
 };
 
+const Kardex = require('../../schemas/kardexSchema/kardexSchema'); // Modelo de Kardex
 
+
+
+exports.obtenerExistenciaPorProducto = async (req, res) => {
+    try {
+        const { id } = req.params; // ID del producto recibido en la URL
+
+        // 1. Buscar el producto en la base de datos
+        const producto = await Producto.findById(id, 'reference name');
+        if (!producto) {
+            return res.status(404).json({ error: "Producto no encontrado" });
+        }
+
+        // 2. Obtener la última existencia del producto en cada sucursal desde Kardex
+        const registrosPorSucursal = await Kardex.aggregate([
+            { $match: { reference: producto.reference } }, // Filtrar por producto
+            { $sort: { fecha: -1 } }, // Ordenar por fecha descendente
+            {
+                $group: {
+                    _id: "$sucursal",
+                    existencia: { $first: "$existencia" } // Última existencia registrada
+                }
+            },
+            {
+                $lookup: {
+                    from: "sucursals", // Nombre de la colección de sucursales en MongoDB
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "sucursalInfo"
+                }
+            },
+            {
+                $unwind: { path: "$sucursalInfo", preserveNullAndEmptyArrays: true }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    sucursal: "$sucursalInfo.nombre", // Nombre de la sucursal
+                    existencia: 1
+                }
+            }
+        ]);
+
+        // 3. Si no hay registros en Kardex, devolver 0 en todas las sucursales
+        const sucursalesConExistencia = registrosPorSucursal.map(registro => ({
+            sucursal: registro.sucursal || "Desconocida", // Si no tiene nombre, poner "Desconocida"
+            existencia: registro.existencia ?? 0
+        }));
+
+        res.json({
+            reference: producto.reference,
+            name: producto.name,
+            sucursales: sucursalesConExistencia
+        });
+
+    } catch (error) {
+        console.error("Error al obtener existencia del producto:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+};
 
 
 

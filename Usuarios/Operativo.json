@@ -1,0 +1,16 @@
+{
+    "nameRol": "ServiciosGenerales",
+    "type": 13,
+    "functions": [
+        {
+            "name": "Asistencias",
+            "path": "/asistenciaUsuario",
+            "subFunctions": []
+        },
+        {
+            "name": "Actividades",
+            "path": "/actividades",
+            "subFunctions": []
+        }
+    ]
+}

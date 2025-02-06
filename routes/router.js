@@ -335,6 +335,10 @@ router.get('/reportesVentaProductos', (req, res) => {
     res.render('Reportes/reportesVentaProductos');
 });
 
+router.get('/existenciasSucursales', (req, res) => {    
+    res.render('Existencias/existenciasSucursales');
+});
+
 
 
 
@@ -702,6 +706,8 @@ router.delete('/api/ingresos/:id', ingresoController.eliminarIngreso);
 
 router.get('/api/venta/reporteVentasProductosSucursal/:sucursal/:fechaInicio/:fechaFin/:limite', venta.getReporteVentaProducto)
 
+
+router.get('/api/existencia/productos/:id', productos.obtenerExistenciaPorProducto)
 
 
 
