@@ -1,0 +1,358 @@
+<% extraStyles=``; %>
+
+<main class="container mt-4">
+    <h3 class="text-center">
+        <i class="fas fa-users text-primary"></i> Colaboradores
+    </h3>
+
+    <button id="btnAgregarColaborador" class="btn btn-success mb-3">
+        <i class="fas fa-plus"></i> Agregar Colaborador
+    </button>
+
+    <table id="tablaColaboradores" class="table table-striped" width="100%">
+        <thead class="table-dark">
+            <tr>
+            
+            </tr>
+        </thead>
+    </table>
+</main>
+
+<!-- 🚀 Modal Agregar Colaborador -->
+<div class="modal fade" id="agregarColaboradorModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Colaborador</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="agregarColaboradorForm">
+                    <input type="hidden" id="agregarColaboradorId">
+
+                    <!-- DATOS PERSONALES -->
+                    <h5 class="text-primary">Datos Personales</h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Nombre(s)</label>
+                            <input type="text" id="agregarNombres" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Apellido Paterno</label>
+                            <input type="text" id="agregarApellidoPaterno" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Apellido Materno</label>
+                            <input type="text" id="agregarApellidoMaterno" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            <label>Edad</label>
+                            <input type="number" id="agregarEdad" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Sexo</label>
+                            <select id="agregarSexo" class="form-control">
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Estado Civil</label>
+                            <select id="agregarEstadoCivil" class="form-control">
+                                <option value="Soltero">Soltero</option>
+                                <option value="Casado">Casado</option>
+                                <option value="Divorciado">Divorciado</option>
+                                <option value="Viudo">Viudo</option>
+                                <option value="Unión Libre">Unión Libre</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Fecha de Nacimiento</label>
+                            <input type="date" id="agregarFechaNacimiento" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label>Domicilio</label>
+                            <input type="text" id="agregarDomicilio" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Ciudad</label>
+                            <input type="text" id="agregarCiudad" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Nacionalidad</label>
+                            <input type="text" id="agregarNacionalidad" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label>CURP</label>
+                            <input type="text" id="agregarCurp" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>RFC</label>
+                            <input type="text" id="agregarRfc" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- DATOS DE EMPRESA -->
+                    <h5 class="text-primary">Datos de Empresa</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Sucursal</label>
+                            <select id="agregarSucursal" class="form-control"></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Usuario en Sistema</label>
+                            <select id="agregarUsuarioSistema" class="form-control"></select>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            <label>Fecha de Ingreso</label>
+                            <input type="date" id="agregarFechaIngreso" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Tipo de Contrato</label>
+                            <select id="agregarTipoContrato" class="form-control">
+                                <option value="Indeterminado">Indeterminado</option>
+                                <option value="Temporal">Temporal</option>
+                                <option value="Prueba">Prueba</option>
+                                <option value="Honorarios">Honorarios</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Hora de Entrada</label>
+                            <input type="time" id="agregarHoraEntrada" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Hora de Salida</label>
+                            <input type="time" id="agregarHoraSalida" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label>Funciones</label>
+                            <textarea id="agregarFunciones" class="form-control" placeholder="Separadas por comas"></textarea>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Sueldo</label>
+                            <input type="number" id="agregarSueldo" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Autorización Crédito</label>
+                            <select id="agregarAutorizacionCredito" class="form-control">
+                                <option value="true">Sí</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label>Fecha de Baja (opcional)</label>
+                            <input type="date" id="agregarFechaBaja" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label>Estado</label>
+                            <select id="agregarEstado" class="form-control">
+                                <option value="true">Activo</option>
+                                <option value="false">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer mt-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 🚀 Modal Editar Colaborador -->
+<div class="modal fade" id="editarColaboradorModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Colaborador</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editarColaboradorForm">
+                    <input type="hidden" id="editarColaboradorId">
+
+                    <!-- DATOS PERSONALES -->
+                    <h5 class="text-primary">Datos Personales</h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Nombre(s)</label>
+                            <input type="text" id="editarNombres" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Apellido Paterno</label>
+                            <input type="text" id="editarApellidoPaterno" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Apellido Materno</label>
+                            <input type="text" id="editarApellidoMaterno" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            <label>Edad</label>
+                            <input type="number" id="editarEdad" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Sexo</label>
+                            <select id="editarSexo" class="form-control">
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Estado Civil</label>
+                            <select id="editarEstadoCivil" class="form-control">
+                                <option value="Soltero">Soltero</option>
+                                <option value="Casado">Casado</option>
+                                <option value="Divorciado">Divorciado</option>
+                                <option value="Viudo">Viudo</option>
+                                <option value="Unión Libre">Unión Libre</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Fecha de Nacimiento</label>
+                            <input type="date" id="editarFechaNacimiento" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label>Domicilio</label>
+                            <input type="text" id="editarDomicilio" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Ciudad</label>
+                            <input type="text" id="editarCiudad" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Nacionalidad</label>
+                            <input type="text" id="editarNacionalidad" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label>CURP</label>
+                            <input type="text" id="editarCurp" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>RFC</label>
+                            <input type="text" id="editarRfc" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- DATOS DE EMPRESA -->
+                    <h5 class="text-primary">Datos de Empresa</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Sucursal</label>
+                            <select id="editarSucursal" class="form-control"></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Usuario en Sistema</label>
+                            <select id="editarUsuarioSistema" class="form-control"></select>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            <label>Fecha de Ingreso</label>
+                            <input type="date" id="editarFechaIngreso" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Tipo de Contrato</label>
+                            <select id="editarTipoContrato" class="form-control">
+                                <option value="Indeterminado">Indeterminado</option>
+                                <option value="Temporal">Temporal</option>
+                                <option value="Prueba">Prueba</option>
+                                <option value="Honorarios">Honorarios</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Hora de Entrada</label>
+                            <input type="time" id="editarHoraEntrada" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Hora de Salida</label>
+                            <input type="time" id="editarHoraSalida" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label>Funciones</label>
+                            <textarea id="editarFunciones" class="form-control" placeholder="Separadas por comas"></textarea>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Sueldo</label>
+                            <input type="number" id="editarSueldo" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Autorización Crédito</label>
+                            <select id="editarAutorizacionCredito" class="form-control">
+                                <option value="true">Sí</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label>Fecha de Baja (opcional)</label>
+                            <input type="date" id="editarFechaBaja" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label>Estado</label>
+                            <select id="editarEstado" class="form-control">
+                                <option value="true">Activo</option>
+                                <option value="false">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer mt-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<% extraScripts=` 
+    <script src="js/colaboradores/colaboradores.js"></script>
+    <!-- jQuery (Última versión estable) -->
+
+`; %>

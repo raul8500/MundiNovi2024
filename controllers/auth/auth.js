@@ -2,6 +2,7 @@ const bcryptjs = require('bcryptjs');
 const ModelUser = require('../../schemas/usersSchema/usersSchema');
 const Sucursal = require('../../schemas/sucursalSchema/sucursalSchema');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 
 exports.registerUser = async (req, res) => {
@@ -277,3 +278,42 @@ exports.obtenerSucursalesYUsuarios = async (req, res) => {
     }
 };
 
+exports.obtenerUsuariosPorSucursal = async (req, res) => {
+    try {
+        const { sucursalId } = req.params; // Obtener el ID de la sucursal desde la URL
+
+        // Validar que el ID es un ObjectId válido
+        if (!mongoose.Types.ObjectId.isValid(sucursalId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'El ID de la sucursal no es válido.'
+            });
+        }
+
+        // Buscar la sucursal por su ID
+        const sucursal = await Sucursal.findById(sucursalId);
+        if (!sucursal) {
+            return res.status(404).json({
+                success: false,
+                message: 'Sucursal no encontrada.'
+            });
+        }
+
+        // Buscar los usuarios asociados a la sucursal
+        const usuarios = await ModelUser.find({ sucursalId: sucursalId });
+
+        return res.status(200).json({
+            success: true,
+            sucursal,
+            usuarios
+        });
+
+    } catch (error) {
+        console.error('Error al obtener usuarios por sucursal:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor.',
+            error: error.message
+        });
+    }
+};

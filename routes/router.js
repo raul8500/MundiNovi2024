@@ -52,6 +52,7 @@ const  traspasos = require('../controllers/traspasos/traspasosController');
 //Nuevos
 const tipoIngresoController = require('../controllers/ingresos/tipoIngresosController');
 const ingresoController = require('../controllers/ingresos/ingresoController');
+const colaboradorController = require('../controllers/colaboradores/colaboradoresController')
 
 
 
@@ -339,6 +340,9 @@ router.get('/existenciasSucursales', (req, res) => {
     res.render('Existencias/existenciasSucursales');
 });
 
+router.get('/colaboradores', (req, res) => {    
+    res.render('Colaboradores/colaboradores');
+});
 
 
 
@@ -373,7 +377,7 @@ router.delete('/api/auth/users/:id', auth.deleteUserById);
 router.put('/api/auth/users/status/:id', auth.updateUserStatus)
 router.get('/logout', logout.logout)
 router.get('/api/auth/users/sucursales/:sucursalId1/:sucursalId2', auth.obtenerSucursalesYUsuarios)
-
+router.get('/api/auth/users/sucursales/:sucursalId', auth.obtenerUsuariosPorSucursal)
 
 
 
@@ -708,6 +712,17 @@ router.get('/api/venta/reporteVentasProductosSucursal/:sucursal/:fechaInicio/:fe
 
 
 router.get('/api/existencia/productos/:id', productos.obtenerExistenciaPorProducto)
+
+
+//Colaboradores  
+
+
+router.post('/api/colaborador', colaboradorController.createColaborador);
+router.get('/api/colaborador', colaboradorController.getAllColaboradoresFromBD);
+router.get('/api/colaborador/:id', colaboradorController.getColaboradorByIdFromBD);
+router.put('/api/colaborador/:id', colaboradorController.updateColaborador);
+router.delete('/api/colaborador/:id', colaboradorController.deleteColaboradorFromBD);
+
 
 
 
