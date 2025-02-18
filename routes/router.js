@@ -53,6 +53,8 @@ const  traspasos = require('../controllers/traspasos/traspasosController');
 const tipoIngresoController = require('../controllers/ingresos/tipoIngresosController');
 const ingresoController = require('../controllers/ingresos/ingresoController');
 const colaboradorController = require('../controllers/colaboradores/colaboradoresController')
+const contratoController = require('../controllers/colaboradores/contratosController')
+const renunciaController = require('../controllers/colaboradores/renunciaController')
 
 
 
@@ -722,6 +724,16 @@ router.get('/api/colaborador', colaboradorController.getAllColaboradoresFromBD);
 router.get('/api/colaborador/:id', colaboradorController.getColaboradorByIdFromBD);
 router.put('/api/colaborador/:id', colaboradorController.updateColaborador);
 router.delete('/api/colaborador/:id', colaboradorController.deleteColaboradorFromBD);
+
+//Contrato
+router.get('/api/contrato', contratoController.obtenerContrato);
+router.put('/api/contrato', contratoController.actualizarContrato);
+router.get('/api/contrato/:idColaborador', contratoController.obtenerContratoConDatos);
+
+//Renuncia
+router.get("/api/renuncia/plantilla", renunciaController.obtenerPlantillaRenuncia);
+router.post('/api/renuncia/', renunciaController.subirPlantillaRenuncia);
+router.get("/api/renuncia/:idColaborador", renunciaController.obtenerRenunciaConDatos);
 
 
 

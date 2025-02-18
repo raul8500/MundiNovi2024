@@ -6,11 +6,11 @@ $(document).ready(function () {
             {
                 data: 'datos_empresa.estado',
                 title: 'Estado',
-                className: 'text-center', // ✅ Centra el contenido
+                className: 'text-center',
                 render: function (data) {
                     return data
-                        ? `<span class="badge bg-success">Sí</span>`
-                        : `<span class="badge bg-danger">No</span>`;
+                        ? `<span class="badge bg-success">Activo</span>`
+                        : `<span class="badge bg-danger">Inactivo</span>`;
                 }
             },
             { data: 'datos_personales.nombres', title: 'Nombre', className: 'text-center' },
@@ -19,7 +19,7 @@ $(document).ready(function () {
             {
                 data: '_id',
                 title: 'Acciones',
-                className: 'text-center', // ✅ Centra los botones de acción
+                className: 'text-center',
                 render: function (data) {
                     return `
                         <button class="btn btn-warning btn-sm btn-editar" data-id="${data}">
@@ -27,6 +27,12 @@ $(document).ready(function () {
                         </button>
                         <button class="btn btn-danger btn-sm btn-eliminar" data-id="${data}">
                             <i class="fas fa-trash-alt"></i> Eliminar
+                        </button>
+                        <button class="btn btn-primary btn-sm btn-contrato" data-id="${data}">
+                            <i class="fas fa-file-contract"></i> Contrato
+                        </button>
+                        <button class="btn btn-secondary btn-sm btn-renuncia" data-id="${data}">
+                            <i class="fas fa-file-signature"></i> Renuncia
                         </button>
                     `;
                 }
@@ -49,6 +55,8 @@ $(document).ready(function () {
             }
         }
     });
+    
+    
 
     $('#agregarSucursal').on('change', async function () {
         const sucursalId = $(this).val();
@@ -293,7 +301,169 @@ $(document).ready(function () {
             }
         });
     });
+
+    $(document).on('click', '.btn-contrato', async function () {
+        const colaboradorId = $(this).data('id');
     
+        try {
+            // 🚀 Obtener el contrato personalizado desde el backend
+            const response = await fetch(`/api/contrato/${colaboradorId}`);
+            if (!response.ok) throw new Error("Error al obtener el contrato");
+    
+            const data = await response.json();
+            const contratoTexto = data.contrato;
+            const gerenteNombre = data.gerente_nombre || "Gerente General";
+            const colaboradorNombre = data.colaborador || "Juan Perez Perez";
+    
+            // 🚀 Asegurar que jsPDF está disponible
+            const { jsPDF } = window.jspdf;
+    
+            // 🚀 Crear un nuevo documento PDF
+            const doc = new jsPDF({
+                orientation: "p", // Vertical (portrait)
+                unit: "mm",       // Unidad en milímetros
+                format: "a4"      // Formato A4
+            });
+    
+            // 🚀 Configurar el documento
+            const margenIzquierdo = 20;
+            const margenDerecho = 20;
+            const margenSuperior = 20;
+            const anchoTexto = 170; // Ancho máximo del texto dentro del PDF
+            const altoLinea = 7; // Espaciado entre líneas
+            const maxAlturaPagina = 270; // Altura máxima antes de hacer un salto de página
+            let y = margenSuperior; // Posición inicial en Y
+    
+            // 🚀 TÍTULO CENTRADO
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(14);
+            doc.text("CONTRATO INDIVIDUAL DE TRABAJO", 105, y, { align: "center" });
+            y += 10; // Espacio después del título
+    
+            // 🚀 TEXTO JUSTIFICADO
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(10);
+    
+            // 🚀 Dividir el texto en líneas para que se ajuste al ancho
+            const textoDividido = doc.splitTextToSize(contratoTexto, anchoTexto);
+    
+            // 🚀 Iterar sobre las líneas y agregarlas al PDF
+            textoDividido.forEach(linea => {
+                // 🚀 Verificar si hay que hacer un salto de página
+                if (y + altoLinea > maxAlturaPagina) {
+                    doc.addPage(); // Agregar una nueva página
+                    y = margenSuperior; // Reiniciar la posición Y en la nueva página
+                }
+    
+                // 🚀 Agregar la línea al PDF (simulación de justificación)
+                doc.text(linea, margenIzquierdo, y);
+                y += altoLinea; // Mover la posición Y para la siguiente línea
+            });
+    
+            // 🚀 Espacio antes de las firmas
+            y += 20;
+    
+            // 🚀 Línea para firmas
+            const firmaY = y + 10; // Posición de la línea de firma
+            doc.line(40, firmaY, 100, firmaY); // Línea para gerente
+            doc.line(120, firmaY, 180, firmaY); // Línea para trabajador
+    
+            // 🚀 Texto de las firmas (Centrado)
+            doc.text("POR 'MUNDI NOVI'", 70, firmaY + 5, { align: "center" });
+            doc.text("EL 'TRABAJADOR'", 150, firmaY + 5, { align: "center" });
+    
+            // 🚀 Nombres debajo de las firmas
+            doc.text(gerenteNombre, 70, firmaY + 10, { align: "center" });
+            doc.text(colaboradorNombre, 150, firmaY + 10, { align: "center" });
+    
+            // 🚀 Guardar o mostrar el PDF
+            doc.save(`Contrato_${colaboradorId}.pdf`);
+            Swal.fire("¡Contrato Generado!", "El contrato ha sido descargado en PDF.", "success");
+    
+        } catch (error) {
+            console.error("Error al generar el contrato:", error);
+            Swal.fire("Error", "No se pudo generar el contrato.", "error");
+        }
+    });
+    
+    const { jsPDF } = window.jspdf; // ✅ Importar correctamente jsPDF
+
+    $(document).on("click", ".btn-renuncia", function () {
+        const colaboradorId = $(this).data("id");
+        $("#renunciaColaboradorId").val(colaboradorId);
+        $("#modalRenuncia").modal("show");
+    });
+
+    $("#btnGenerarRenuncia").on("click", async function () {
+        const colaboradorId = $("#renunciaColaboradorId").val();
+        const testigo1 = $("#testigo1").val();
+        const testigo2 = $("#testigo2").val();
+
+        if (!testigo1 || !testigo2) {
+            Swal.fire("Error", "Debes ingresar los nombres de los testigos.", "error");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/renuncia/${colaboradorId}?testigo1=${testigo1}&testigo2=${testigo2}`);
+            const data = await response.json();
+
+            const { jsPDF } = window.jspdf; 
+            const doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
+
+            // 📌 Configuración de Márgenes
+            const marginLeft = 15;
+            const marginRight = 195;
+            let y = 20; // 📌 Posición inicial
+
+            // 📌 Título centrado
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(16);
+            doc.text("RENUNCIA", 105, y, { align: "center" });
+
+            // 📌 Configuración de texto justificado
+            y += 15;
+            doc.setFont("times", "normal");
+            doc.setFontSize(12);
+            const pageHeight = doc.internal.pageSize.height - 20; // Ajustar para no cortar contenido
+
+            // 📌 Dividir texto en bloques para no salir de la hoja
+            let textLines = doc.splitTextToSize(data.renuncia, marginRight - marginLeft);
+            textLines.forEach(line => {
+                if (y + 10 >= pageHeight) { // Si se llega al final de la página, agregar nueva
+                    doc.addPage();
+                    y = 20;
+                }
+                doc.text(line, marginLeft, y, { align: "justify" });
+                y += 7;
+            });
+
+            // 📌 Espacio antes de las firmas
+            y += 15;
+
+            // 📌 Firma del colaborador (centrada)
+            doc.setFont("helvetica", "bold");
+            doc.text("_________________________", 105, y, { align: "center" });
+            y += 5;
+            doc.text(data.colaborador, 105, y, { align: "center" });
+
+            // 📌 Espacio para testigos (centrado con espacio entre ellos)
+            y += 20;
+            doc.text("_________________________      _________________________", 105, y, { align: "center" });
+            y += 5;
+            doc.text(`${testigo1}                          ${testigo2}`, 105, y, { align: "center" });
+
+            // 📌 Guardar el PDF
+            doc.save(`Renuncia_${data.colaborador}.pdf`);
+
+            $("#modalRenuncia").modal("hide");
+            Swal.fire("Éxito", "Se ha generado la carta de renuncia correctamente.", "success");
+
+        } catch (error) {
+            console.error("Error al generar renuncia:", error);
+            Swal.fire("Error", "Hubo un problema al generar la renuncia.", "error");
+        }
+    });
     
 });
 
