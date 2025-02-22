@@ -49,12 +49,26 @@ const pedidos = require('../controllers/pedido/pedidoControlle');
 const  faltantes = require('../controllers/faltantes/faltantesController');
 const  traspasos = require('../controllers/traspasos/traspasosController');
 
-//Nuevos
+//
 const tipoIngresoController = require('../controllers/ingresos/tipoIngresosController');
 const ingresoController = require('../controllers/ingresos/ingresoController');
 const colaboradorController = require('../controllers/colaboradores/colaboradoresController')
 const contratoController = require('../controllers/colaboradores/contratosController')
 const renunciaController = require('../controllers/colaboradores/renunciaController')
+
+
+//test
+const productoTest = require('../controllers/productos/productoController')
+const clienteController = require('../controllers/clientes/clienteController')
+
+
+//Zona clientes
+
+const zonaClientes = require('../controllers/clientes/zonaClientes')
+
+
+
+
 
 
 
@@ -734,6 +748,28 @@ router.get('/api/contrato/:idColaborador', contratoController.obtenerContratoCon
 router.get("/api/renuncia/plantilla", renunciaController.obtenerPlantillaRenuncia);
 router.post('/api/renuncia/', renunciaController.subirPlantillaRenuncia);
 router.get("/api/renuncia/:idColaborador", renunciaController.obtenerRenunciaConDatos);
+
+
+//productos
+router.post('/api/producto/crear', productoTest.createProduct);
+router.get('/api/producto/test', productoTest.getAllProducts);
+
+
+
+//clientes
+router.post('/api/cliente/test', clienteController.createClient);
+router.get('/api/cliente/test', clienteController.getClients);
+router.get('/api/cliente/test/:id', clienteController.getClientById);
+router.delete('/api/cliente/delete/:id', clienteController.deleteClient);
+router.put('/api/cliente/test/:id', clienteController.updateClient);
+
+//Zona clientes
+// Configuración de rutas
+router.post('/api/zonaclientes', zonaClientes.createZonaCliente);
+router.get('/api/zonaclientes', zonaClientes.getZonasClientes);
+router.get('/api/zonaclientes/:id', zonaClientes.getZonaClienteById);
+router.put('/api/zonaclientes/:id', zonaClientes.updateZonaCliente);
+router.delete('/api/zonaclientes/:id', zonaClientes.deleteZonaCliente);
 
 
 

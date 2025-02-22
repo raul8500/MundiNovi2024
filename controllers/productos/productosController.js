@@ -497,7 +497,6 @@ exports.updateProductPrice = async (req, res) => {
     }
 };
 
-
 exports.getProductById = async (req, res) => {
     try {
         const { id } = req.params; // El _id del producto viene en los parámetros de la URL
@@ -703,7 +702,6 @@ exports.marcarProductoImpreso = async (req, res) => {
         res.status(500).json({ message: 'Error en la generación del PDF de precios.', error });
     }
 };
-
 
 exports.exportarProductosAExcel = async (req, res) => {
     try {

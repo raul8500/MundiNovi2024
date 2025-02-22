@@ -1,83 +1,45 @@
 <% extraStyles=`
-        <style>
-        /* Estilos para la lista desplegable */
-        #listaProductos {
-            max-height: 300px;
-            overflow-y: auto;
-            position: absolute;
-            background: white;
-            border: 1px solid #ddd;
-            z-index: 1000;
-        }
-        #listaProductos .list-group-item {
-            cursor: pointer;
-        }
-        #sugerencias {
-            position: absolute;
-            border: 1px solid #ddd;
-            background: #fff;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 1000;
-        }
-        #sugerenciasEdit {
-            position: absolute;
-            border: 1px solid #ddd;
-            background: #fff;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 1000;
-        }
-        .sugerencia {
-            padding: 10px;
-            cursor: pointer;
-        }
-        .sugerencia.seleccionado {
-            background: #ddd;
-        }
-        .total {
-            font-weight: bold;
-        }
 
-
-         /* Estilo para reducir el tamaño de las sugerencias */
-        #suggestions {
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            background-color: white;
-            padding: 0;
-            list-style-type: none;
-            width: 300px;
-        }
-
-        #suggestions li {
-            padding: 10px;
-            cursor: pointer;
-        }
-
-        #suggestions li.active {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .suggestions {
-        border: 1px solid #ccc;
-        max-height: 150px;
-        overflow-y: auto;
+<style>
+    .suggestions {
         position: absolute;
-        background: #fff;
+        background: #ADD8E6;
+        border-radius: 10px; /* Esquinas ligeramente redondeadas */
+        max-height: 200px;
+        overflow-y: auto;
         width: 300px;
-        }
-        .suggestion-item {
-        padding: 8px;
+        z-index: 1000;
+    }
+
+    .suggestion-item {
+        padding: 10px;
         cursor: pointer;
-        }
-        .suggestion-item:hover, .suggestion-item.selected {
-        background-color: #f0f0f0;
-        }
-        
-    </style>
+    }
+
+    .suggestion-item:hover {
+        background-color: #F0F0F0;
+    }
+
+    .suggestions-container {
+        position: absolute;
+        background: #ADD8E6;
+        border-radius: 10px; /* Esquinas ligeramente redondeadas */
+        max-height: 200px;
+        overflow-y: auto;
+        width: 700px;
+        z-index: 1000;
+    }
+
+    .no-results {
+        padding: 8px;
+        color: red;
+        text-align: center;
+    }
+
+
+
+</style>
+
 `; %>
 
     
@@ -87,7 +49,7 @@
             
                 <div class="d-flex justify-content-end align-items-center" style="margin-top: 20px;">
                     <div class="d-flex align-items-center">
-                        <button id="btnAddProducto" type="button" class="btn btn-primary btn-rounded me-2" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#exampleModal">
+                        <button id="btnAddProducto" type="button" class="btn btn-primary btn-rounded me-2" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#crearProducto">
                             Añadir <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
                         </button>
                 
@@ -133,11 +95,11 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="crearProducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Añadir producto</h5>
                         <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
@@ -151,6 +113,10 @@
                             <li class="nav-item" role="presentation">
                                 <a data-mdb-pill-init class="nav-link" id="ex1-tab-2" href="#ex1-pills-2" role="tab"
                                     aria-controls="ex1-pills-2" aria-selected="false">Datos Financieros</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a data-mdb-pill-init class="nav-link" id="ex1-tab-4" href="#ex1-pills-3" role="tab"
+                                    aria-controls="ex1-pills-4" aria-selected="false">Otros</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a data-mdb-pill-init class="nav-link" id="ex1-tab-4" href="#ex1-pills-4" role="tab"
@@ -275,11 +241,6 @@
                                             </select>
                                         </div>
                                     </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="observaciones" class="form-label">Observaciones</label>
-                                        <textarea class="form-control" id="observaciones" rows="3" autocomplete="off"></textarea>
-                                    </div>
                                 </div>
                             </div>
 
@@ -287,33 +248,22 @@
                                 <h3>Contenido de Datos Financieros</h3>
                                 <div>
                                     <div class="row mb-3">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label for="tiempo-surtido" class="form-label">Tiempo de surtido:</label>
                                             <input type="number" class="form-control" id="tiempo-surtido" name="tiempo-surtido" value="0">
                                         </div>
                                         
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label for="volumen" class="form-label">Volumen:</label>
                                             <input type="number" class="form-control" id="volumen" name="volumen" value="0">
                                         </div>
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label for="peso" class="form-label">Peso:</label>
                                             <input type="number" class="form-control" id="peso" name="peso" value="0">
                                         </div>
-                                    </div>
-                            
-                                    <div class="row mb-3">
-                                        
-                                        <div class="col-md-4">
-                                            <label for="stock-minimo" class="form-label">Stock Mínimo:</label>
-                                            <input type="number" class="form-control" id="stock-minimo" name="stock-minimo" value="0">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="stock-maximo" class="form-label">Stock Máximo:</label>
-                                            <input type="number" class="form-control" id="stock-maximo" name="stock-maximo" value="0">
-                                        </div>
-                                        <div class="col-md-4">
+
+                                        <div class="col-md-3">
                                             <label for="costo" class="form-label">Costo:</label>
                                             <input type="text" class="form-control" id="costo" name="costo" value="0">
                                         </div>
@@ -321,27 +271,26 @@
                             
                                     <div class="row mb-3">
                                         
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label for="ultimo-costo" class="form-label">Último costo:</label>
                                             <input type="text" class="form-control" id="ultimo-costo" name="ultimo-costo" value="0">
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label for="costo-promedio" class="form-label">Costo promedio:</label>
                                             <input type="text" class="form-control" id="costo-promedio" name="costo-promedio" value="0">
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label for="num-precio-minimo" class="form-label">Número Precio mínimo:</label>
                                             <input type="number" class="form-control" id="num-precio-minimo" name="num-precio-minimo" value="0">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="num-precio-maximo" class="form-label">Número Precio máximo:</label>
+                                            <input type="number" class="form-control" id="num-precio-maximo" name="num-precio-maximo" value="0">
                                         </div>
                                     </div>
                             
                                     <div class="row mb-3">
-                                        
-                                        <div class="col-md-4">
-                                            <label for="num-precio-maximo" class="form-label">Número Precio máximo:</label>
-                                            <input type="number" class="form-control" id="num-precio-maximo" name="num-precio-maximo" value="0">
-                                        </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label for="presentacion" class="form-label">Presentación:</label>
                                             <input type="number" class="form-control" id="presentacion" name="presentacion" value="0">
                                         </div>
@@ -620,6 +569,25 @@
                                 </div>
                             </div>
 
+                            <div class="tab-pane fade" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
+                                <h3>Imagen del producto</h3>
+                            
+                                <div class="mb-3">
+                                    <label for="productoImagen" class="form-label">Selecciona una imagen:</label>
+                                    <input type="file" class="form-control" id="productoImagen" accept="image/*">
+                                </div>
+                            
+                                <!-- Vista previa de la imagen -->
+                                <div class="text-center mb-3">
+                                    <img id="previewImagen" src="" alt="Vista previa" class="img-fluid" style="max-width: 300px; display: none; border: 1px solid #ccc; padding: 5px;">
+                                </div>
+                            
+                                <!-- Botón para subir la imagen -->
+                                <button class="btn btn-primary" id="btnSubirImagen">
+                                    <i class="fas fa-upload"></i> Subir Imagen
+                                </button>
+                            </div>
+
                             <div class="tab-pane fade" id="ex1-pills-4" role="tabpanel" aria-labelledby="ex1-tab-4">
                                 <h5>Buscar Proveedores</h5>
                                 
@@ -633,10 +601,9 @@
                                         </div>
                                     </div>                                    
                                 </div>
-                                <div id="suggestions" class="suggestions"></div>
 
+                                <div id="suggestions" class="suggestions"></div>
                             
-                                <h5 class="mt-4">Proveedores Seleccionados</h5>
                                 <table class="table table-bordered" id="providerTable">
                                     <thead>
                                         <tr>
@@ -664,8 +631,10 @@
                                         </div>
                                     </div>
                                 </form>
+
+                                <div id="suggestionsProducts" class="suggestions"></div>
+
                             
-                                <h5 class="mt-4">Productos Seleccionados</h5>
                                 <table class="table table-bordered" id="providerTableProductAditional">
                                     <thead>
                                         <tr>
@@ -696,8 +665,18 @@
                                         </div>
                                     </div>
                                 </div>
-                            
-                                <h5 class="mt-4">Productos Seleccionados Kit</h5>
+
+                                <div id="suggestionsProductsKit" class="suggestions-container"></div>
+
+                                <br>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <h5>Total General: <span id="totalGeneral">$0.00</span></h5>
+                                    </div>
+                                </div>
                                 <table class="table table-bordered" id="providerTableKit">
                                     <thead>
                                         <tr>
@@ -731,8 +710,10 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div id="suggestionsProductsGroup" class="suggestions"></div>
+
                             
-                                <h5 class="mt-4">Productos Seleccionados Grupo</h5>
                                 <table class="table table-bordered" id="providerTableGroup">
                                     <thead>
                                         <tr>
@@ -759,8 +740,9 @@
                                         </div>
                                     </div>                                    
                                 </div>
+
+                                <div id="suggestionsProductsComplement" class="suggestions"></div>
                             
-                                <h5 class="mt-4">Productos Seleccionados Complmentarios</h5>
                                 <table class="table table-bordered" id="providerTableComplementProducts">
                                     <thead>
                                         <tr>
@@ -787,51 +769,18 @@
         </div>
 
 
-        <!-- Modal -->
-        <div class="modal fade" id="precioModal" tabindex="-1" aria-labelledby="precioModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="precioModalLabel">Cambiar Precio 1</h5>
-                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="precioForm">
-                            <div class="mb-3">
-                                <label for="precio1" class="form-label">Precio 1</label>
-                                <input type="number" class="form-control" id="precio1" placeholder="Ingresa el nuevo precio"
-                                    required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="codigoBarra" class="form-label">Codigo de barras</label>
-                                    <input type="text" class="form-control" id="codigoBarra" required autocomplete="off">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary" id="savePrecio1">Guardar Cambios</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
-
     </main>
 
 
 
     <% extraScripts=` 
         <script src="js/productos/productos.js"></script>
-        <script  src="js/productos/productosPost.js" ></script>
-        <script src="js/productos/productosProveedores.js"></script>
+        <script src="js/productos/apartados/proveedores.js"></script>
+        <script src="js/productos/apartados/productosAdicionales.js"></script>
+        <script src="js/productos/apartados/productosKit.js"></script>
+        <script src="js/productos/apartados/productosGrupos.js"></script>
+        <script src="js/productos/apartados/productosComplementarios.js"></script>
+        <script src="js/productos/productosPost.js"></script>
 
-        <script src="js/productos/productosAdicionales.js" ></script>
-        <script src="js/productos/productosComplementarios.js"></script>
-        <script src="js/productos/productosGrupo.js"></script>
-        <script src="js/productos/productosKit.js"></script>
-        <script src="js/productos/productosEdit.js"></script>
+
     `; %>

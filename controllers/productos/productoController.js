@@ -1,0 +1,152 @@
+const alegra = require('../../.api/apis/alegra-productos');
+const Product = require('../../schemas/productosSchema/productosSchema');
+
+// Configuración de autenticación
+alegra.auth('facturalimpios@hotmail.com', 'ab4146c42f8d367f052d');
+
+exports.createProduct = async (req, res) => {
+    try {
+        const alegraProduct = req.body.alegra;
+        const databaseProduct = req.body.product;
+
+        // Enviar el producto a Alegra
+        const alegraResponse = await alegra.postItems({
+            inventory: { unit: alegraProduct.unit || 'H87' },
+            name: alegraProduct.name,
+            description: alegraProduct.description,
+            reference: alegraProduct.reference,
+            price: alegraProduct.price,
+            tax: alegraProduct.tax || '1',
+            type: alegraProduct.type || 'product',
+            productKey: alegraProduct.productKey || '47131700'
+        });
+
+        console.log("Producto creado en Alegra:", alegraResponse.data);
+
+        // Guardar el producto en la base de datos (ejemplo usando Mongoose)
+        const newProduct = new Product({
+            idAlegra: alegraResponse.data.id,
+            type: "product",
+            reference: databaseProduct.reference,
+            esActivo: databaseProduct.esActivo,
+            codigoBarra: databaseProduct.codigoBarra,
+            name: databaseProduct.name,
+            productKey: databaseProduct.productKey,
+            description: databaseProduct.description,
+            inventory: { unit: databaseProduct.unit || 'H87' },
+            tiempoSurtido: databaseProduct.tiempoSurtido,
+            volumen: databaseProduct.volumen,
+            peso: databaseProduct.peso,
+            presentacion: databaseProduct.presentacion,
+            datosFinancieros: {
+                costo: databaseProduct.datosFinancieros.costo,
+                ultimoCosto: databaseProduct.datosFinancieros.ultimoCosto,
+                costoPromedio: databaseProduct.datosFinancieros.costoPromedio,
+                numeroPrecioMaximo: databaseProduct.datosFinancieros.numeroPrecioMaximo,
+                numeroPrecioMinimo: databaseProduct.datosFinancieros.numeroPrecioMinimo,
+                precio1: databaseProduct.datosFinancieros.precio1,
+                precio2: databaseProduct.datosFinancieros.precio2,
+                precio3: databaseProduct.datosFinancieros.precio3,
+                precio4: databaseProduct.datosFinancieros.precio4,
+                precio5: databaseProduct.datosFinancieros.precio5,
+                precio6: databaseProduct.datosFinancieros.precio6,
+                precio7: databaseProduct.datosFinancieros.precio7,
+                precio8: databaseProduct.datosFinancieros.precio8,
+                precio9: databaseProduct.datosFinancieros.precio9,
+                precio10: databaseProduct.datosFinancieros.precio10,
+                porcentajePrecio1: databaseProduct.datosFinancieros.porcentajePrecio1,
+                porcentajePrecio2: databaseProduct.datosFinancieros.porcentajePrecio2,
+                porcentajePrecio3: databaseProduct.datosFinancieros.porcentajePrecio3,
+                porcentajePrecio4: databaseProduct.datosFinancieros.porcentajePrecio4,
+                porcentajePrecio5: databaseProduct.datosFinancieros.porcentajePrecio5,
+                porcentajePrecio6: databaseProduct.datosFinancieros.porcentajePrecio6,
+                porcentajePrecio7: databaseProduct.datosFinancieros.porcentajePrecio7,
+                porcentajePrecio8: databaseProduct.datosFinancieros.porcentajePrecio8,
+                porcentajePrecio9: databaseProduct.datosFinancieros.porcentajePrecio9,
+                porcentajePrecio10: databaseProduct.datosFinancieros.porcentajePrecio10,
+                rangoInicial1: databaseProduct.datosFinancieros.rangoInicial1,
+                rangoInicial2: databaseProduct.datosFinancieros.rangoInicial2,
+                rangoInicial3: databaseProduct.datosFinancieros.rangoInicial3,
+                rangoInicial4: databaseProduct.datosFinancieros.rangoInicial4,
+                rangoInicial5: databaseProduct.datosFinancieros.rangoInicial5,
+                rangoInicial6: databaseProduct.datosFinancieros.rangoInicial6,
+                rangoInicial7: databaseProduct.datosFinancieros.rangoInicial7,
+                rangoInicial8: databaseProduct.datosFinancieros.rangoInicial8,
+                rangoInicial9: databaseProduct.datosFinancieros.rangoInicial9,
+                rangoInicial10: databaseProduct.datosFinancieros.rangoInicial10,
+                rangoFinal1: databaseProduct.datosFinancieros.rangoFinal1,
+                rangoFinal2: databaseProduct.datosFinancieros.rangoFinal2,
+                rangoFinal3: databaseProduct.datosFinancieros.rangoFinal3,
+                rangoFinal4: databaseProduct.datosFinancieros.rangoFinal4,
+                rangoFinal5: databaseProduct.datosFinancieros.rangoFinal5,
+                rangoFinal6: databaseProduct.datosFinancieros.rangoFinal6,
+                rangoFinal7: databaseProduct.datosFinancieros.rangoFinal7,
+                rangoFinal8: databaseProduct.datosFinancieros.rangoFinal8,
+                rangoFinal9: databaseProduct.datosFinancieros.rangoFinal9,
+                rangoFinal10: databaseProduct.datosFinancieros.rangoFinal10,
+                porcentajeMonedero1: databaseProduct.datosFinancieros.porcentajeMonedero1,
+                porcentajeMonedero2: databaseProduct.datosFinancieros.porcentajeMonedero2,
+                porcentajeMonedero3: databaseProduct.datosFinancieros.porcentajeMonedero3,
+                porcentajeMonedero4: databaseProduct.datosFinancieros.porcentajeMonedero4,
+                porcentajeMonedero5: databaseProduct.datosFinancieros.porcentajeMonedero5,
+                porcentajeMonedero6: databaseProduct.datosFinancieros.porcentajeMonedero6,
+                porcentajeMonedero7: databaseProduct.datosFinancieros.porcentajeMonedero7,
+                porcentajeMonedero8: databaseProduct.datosFinancieros.porcentajeMonedero8,
+                porcentajeMonedero9: databaseProduct.datosFinancieros.porcentajeMonedero9,
+                porcentajeMonedero10: databaseProduct.datosFinancieros.porcentajeMonedero10
+            },
+            rutaImagen: databaseProduct.rutaImagen,
+            proveedor: databaseProduct.proveedor,
+            esKit: databaseProduct.esKit,
+            esGrupo: databaseProduct.esGrupo,
+            productosAdicionales: databaseProduct.productosAdicionales,
+            productosGrupo: databaseProduct.productosGrupo,
+            productosKit: databaseProduct.productosKit,
+            productosComplementarios: databaseProduct.productosComplementarios,
+            categoria: databaseProduct.categoria,
+            grupo: databaseProduct.grupo,
+            marca: databaseProduct.marca,
+            linea: databaseProduct.linea,
+            departamento: databaseProduct.departamento,
+            unidad: databaseProduct.unidad,
+            impuesto: databaseProduct.impuesto,
+        });
+
+        await newProduct.save();
+
+        res.status(201).json({
+            message: "Producto creado correctamente",
+            alegraProduct: alegraResponse.data,
+            databaseProduct: newProduct
+        });
+
+    } catch (err) {
+        console.error("Error al crear producto:", err);
+        res.status(500).json({ message: "Error al crear el producto", error: err });
+    }
+};
+
+exports.getAllProducts = async (req, res) => {
+    try {
+        const products = await Product.find({})
+            .populate('categoria')
+            .populate('grupo')
+            .populate('marca')
+            .populate('linea')
+            .populate('departamento')
+            .populate('unidad')
+            .populate('impuesto')
+            .populate('proveedor')
+            .populate('productosAdicionales')
+            .populate('productosGrupo')
+            .populate('productosKit')
+            .populate('productosComplementarios');
+        res.status(200).json({
+            message: 'Productos obtenidos exitosamente',
+            products,
+        });
+    } catch (error) {
+        console.error("Error al obtener productos:", error);
+        res.status(500).json({ error: 'Error al obtener los productos de la base de datos' });
+    }
+};

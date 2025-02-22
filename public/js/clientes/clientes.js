@@ -1,147 +1,426 @@
-const modalClientes = new mdb.Modal(document.getElementById('ModalAddCliente'));
-
-const btnGuardarCliente = document.getElementById('btnGuardarCliente')
-
-btnAddProducto.addEventListener('click', () => {
-    // Recuperar y vaciar los valores de todos los campos
-    const fieldsToClear = [
-        'nombreCliente', 'rfc', 'telefonoPrincipal', 'telefonoContacto',
-        'correoElectronicoContacto', 'calle',
-        'numeroExterior', 'numeroInterior', 'colonia', 'localidad',
-        'municipioDelegacion', 'estado', 'codigoPostal'
-    ];
-    fieldsToClear.forEach(id => {
-        document.getElementById(id).value = '';
+$(document).ready(function () {
+    $('#tablaClientes').DataTable({
+        ajax: {
+            url: '/api/cliente/test', // URL de la API
+            dataSrc: 'clientes' // Clave dentro del JSON donde están los clientes
+        },
+        columns: [
+            { data: 'idAlegra', defaultContent: "N/A" },
+            { data: 'clientData.name', defaultContent: "Sin nombre" },
+            { data: 'clientData.identification', defaultContent: "N/A" },
+            { data: 'clientData.email', defaultContent: "Sin email" },
+            { 
+                data: 'clientData.phonePrimary',
+                render: function (data, type, row) {
+                    return data || row.clientData.phoneSecondary || "Sin teléfono";
+                }
+            },
+            {
+                data: 'esfactura',
+                render: function (data) {
+                    return data 
+                        ? `<span class="badge badge-success rounded-pill d-inline">Sí</span>`
+                        : `<span class="badge badge-danger rounded-pill d-inline">No</span>`;
+                },
+                defaultContent: `<span class="badge badge-secondary rounded-pill d-inline">N/A</span>`
+            },
+            { 
+                data: 'monedero',
+                render: function (data) {
+                    return `$${data !== null ? data.toFixed(2) : "0.00"}`;
+                }
+            },
+            { 
+                data: 'updatedAt',
+                render: function (data) {
+                    return formatearFecha(data);
+                }
+            },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return `
+                        <button class="btn btn-warning btn-sm btn-editar" data-id="${row._id}" title="Editar">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm btn-eliminar" data-id="${row._id}" title="Eliminar">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    `;
+                },
+                orderable: false,
+                searchable: false
+            }
+        ]
     });
 
-    // Mostrar el modal de clientes
-    modalClientes.show();
+    // Evento para eliminar cliente
+    $('#tablaClientes tbody').on('click', '.btn-eliminar', function () {
+        const id = $(this).data('id');
+        eliminarCliente(id);
+    });
+
+    // Evento para abrir el modal de edición
+    $('#tablaClientes tbody').on('click', '.btn-editar', function () {
+        const id = $(this).data('id');
+        abrirModalEditarCliente(id);
+    });
+
+    // Evento para guardar cambios del cliente editado
+    $('#btnGuardarEdicionCliente').on('click', function () {
+        guardarEdicionCliente();
+    });
 });
 
-btnGuardarCliente.addEventListener('click', () => {
-    // Obtener todos los campos del formulario
-    const fields = [
-        { id: 'nombreCliente', name: 'name', isRequired: true },
-        { id: 'rfc', name: 'identification', isRequired: false, isFacturacionField: true },
-        { id: 'regimen', name: 'regime', isRequired: true, isFacturacionField: true },
-        { id: 'telefonoPrincipal', name: 'phonePrimary', isRequired: false, isFacturacionField: true },
-        { id: 'telefonoContacto', name: 'mobile', isRequired: false, isFacturacionField: true },
-        { id: 'correoElectronicoContacto', name: 'email', isRequired: false, isFacturacionField: true },
-        { id: 'calle', name: 'street', isRequired: false, isFacturacionField: true },
-        { id: 'numeroExterior', name: 'exteriorNumber', isRequired: false, isFacturacionField: true },
-        { id: 'numeroInterior', name: 'interiorNumber', isRequired: false, isFacturacionField: true },
-        { id: 'colonia', name: 'colony', isRequired: false, isFacturacionField: true },
-        { id: 'localidad', name: 'locality', isRequired: false, isFacturacionField: true },
-        { id: 'municipioDelegacion', name: 'municipality', isRequired: false, isFacturacionField: true },
-        { id: 'estado', name: 'state', isRequired: false, isFacturacionField: true },
-        { id: 'codigoPostal', name: 'zipCode', isRequired: true, isFacturacionField: true }
-    ];
 
-    // Obtener el valor del campo de "Factura"
-    const facturaSi = document.getElementById('factura_si').checked;
+function eliminarCliente(id) {
+    Swal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción eliminará el cliente de Alegra y la base de datos local.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Eliminando cliente...",
+                text: "Por favor, espera un momento.",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            fetch(`/api/cliente/delete/${id}`, { method: "DELETE" })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        Swal.fire({
+                            title: "¡Eliminado!",
+                            text: "El cliente ha sido eliminado correctamente.",
+                            icon: "success",
+                            confirmButtonText: "Aceptar"
+                        }).then(() => {
+                            $('#tablaClientes').DataTable().ajax.reload(); // Recargar la tabla después de eliminar
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error",
+                            text: "No se pudo eliminar el cliente.",
+                            icon: "error",
+                            confirmButtonText: "Aceptar"
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al eliminar cliente:", error);
+                    Swal.fire({
+                        title: "Error",
+                        text: "Hubo un problema al eliminar el cliente.",
+                        icon: "error",
+                        confirmButtonText: "Aceptar"
+                    });
+                });
+        }
+    });
+}
 
 
-    const clienteData = {
-        esFactura: facturaSi
-    };
+document.addEventListener("DOMContentLoaded", function () {
+    const btnAddCliente = document.getElementById("btnAddCliente");
 
+    btnAddCliente.addEventListener("click", function () {
+        var modal = new bootstrap.Modal(document.getElementById("ModalAddCliente"));
+        modal.show();
+    });
+});
 
-    // Validar campos y construir el JSON
-    let todosLlenos = true;
-    fields.forEach(field => {
-        const element = document.getElementById(field.id);
-        const value = element.value.trim();
+async function cargarZonasEnSelect() {
+    try {
+        const response = await fetch('/api/zonaclientes'); // Llamada al endpoint que devuelve las zonas
+        const zonas = await response.json();
 
-        // Determinar si el campo es obligatorio
-        const isRequired = field.isRequired || (facturaSi && field.isFacturacionField);
+        const select = document.getElementById('selectZonaCliente');
+        select.innerHTML = '<option value="">Seleccione una zona</option>'; // Opción por defecto
 
-        if (isRequired && value === '') {
-            element.classList.add('is-invalid');
-            todosLlenos = false;
+        zonas.forEach(zona => {
+            const option = document.createElement('option');
+            option.value = zona._id; // Usa el ID de la zona como valor
+            option.textContent = `${zona.nombre} (${zona.clave})`; // Muestra el nombre y clave
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error cargando zonas:', error);
+    }
+}
+
+// Llamar a la función cuando se cargue la página
+document.addEventListener('DOMContentLoaded', cargarZonasEnSelect);
+
+// Función para cargar datos del cliente en el modal de edición
+async function abrirModalEditarCliente(id) {
+    try {
+        const response = await fetch(`/api/cliente/test/${id}`);
+        const cliente = await response.json();
+
+        $('#editClienteId').val(cliente._id);
+        $('#editNombreCliente').val(cliente.clientData.name);
+        $('#editRfc').val(cliente.clientData.identification) || null,
+        $('#editTelefonoPrincipal').val(cliente.clientData.phonePrimary) || null,
+        $('#editCorreoElectronicoContacto').val(cliente.clientData.email) || null,
+        $('#editCodigoPostal').val(cliente.clientData.address?.zipCode || '');
+        $('#editEstado').val(cliente.clientData.address?.state || '');
+        $('#editMunicipioDelegacion').val(cliente.clientData.address?.municipality || '');
+        $('#editLocalidad').val(cliente.clientData.address?.locality || '');
+        $('#editColonia').val(cliente.clientData.address?.colony || '');
+        $('#editCalle').val(cliente.clientData.address?.street || '');
+        $('#editNumeroExterior').val(cliente.clientData.address?.exteriorNumber || '');
+        $('#editNumeroInterior').val(cliente.clientData.address?.interiorNumber || '');
+
+        // Cargar opción de Zona Cliente
+        await cargarZonasEnSelectEdit('#editSelectZonaCliente');
+        $('#editSelectZonaCliente').val(cliente.zonaCliente?._id || '');
+
+        // Cargar opciones del régimen y seleccionar el actual
+        loadEditRegimenOptions(cliente.clientData.identification, cliente.clientData.regime);
+
+        // Seleccionar radio de factura
+        if (cliente.esfactura) {
+            $('#edit_factura_si').prop('checked', true);
         } else {
-            element.classList.remove('is-invalid');
-            element.classList.add('is-valid');
-            if (value !== '') {
-                clienteData[field.name] = value;
+            $('#edit_factura_no').prop('checked', true);
+        }
+
+        // Mostrar el modal
+        var modal = new bootstrap.Modal(document.getElementById("ModalEditCliente"));
+        modal.show();
+
+    } catch (error) {
+        console.error('Error al cargar datos del cliente:', error);
+        alert('Error al cargar los datos del cliente.');
+    }
+}
+
+
+// Función para cargar zonas en el select del modal
+async function cargarZonasEnSelectEdit(selectId) {
+    try {
+        const response = await fetch('/api/zonaclientes');
+        const zonas = await response.json();
+        const select = document.querySelector(selectId);
+        select.innerHTML = '<option value="">Seleccione una zona</option>';
+
+        zonas.forEach(zona => {
+            const option = document.createElement('option');
+            option.value = zona._id;
+            option.textContent = `${zona.nombre} (${zona.clave})`;
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error cargando zonas:', error);
+    }
+}
+
+// Función para guardar los cambios del cliente editado
+async function guardarEdicionCliente() {
+    const id = $('#editClienteId').val();
+    const clienteActualizado = {
+        alegra: {
+            address: {
+                street: $('#editCalle').val(),
+                exteriorNumber: $('#editNumeroExterior').val(),
+                interiorNumber: $('#editNumeroInterior').val(),
+                colony: $('#editColonia').val(),
+                locality: $('#editLocalidad').val(),
+                municipality: $('#editMunicipioDelegacion').val(),
+                state: $('#editEstado').val(),
+                zipCode: $('#editCodigoPostal').val(),
+                country: "MEX"
+            },
+            thirdType: "NATIONAL",
+            regime: $('#editRegimen').val() || "NO_REGIME",
+            name: $('#editNombreCliente').val(),
+            identification: $('#editRfc').val(),
+            phonePrimary: $('#editTelefonoPrincipal').val(),
+            mobile: $('#editTelefonoPrincipal').val(),
+            email: $('#editCorreoElectronicoContacto').val(),
+            status: "active"
+        },
+        client: {
+            esfactura: $('#edit_factura_si').is(':checked'),
+            estado: true,
+            zonaCliente: $('#editSelectZonaCliente').val(),
+            login: {
+                username: $('#editTelefonoPrincipal').val(),
+                pasword: null // Aquí puedes incluir lógica para cambiar la contraseña si es necesario
             }
         }
-    });
+    };
 
-    // Validar que se haya incluido la dirección completa si es necesario
-    const addressFields = ['street', 'exteriorNumber', 'interiorNumber', 'colony', 'locality', 'municipality', 'state', 'zipCode'];
-    addressFields.forEach(field => {
-        if (clienteData[field]) {
-            clienteData.address = clienteData.address || {};
-            clienteData.address[field] = clienteData[field];
-            delete clienteData[field]; // Eliminar campo no necesario en la raíz
-        }
-    });
-
-    if (!todosLlenos) {
+    try {
+        // Mostrar alerta de carga
         Swal.fire({
-            icon: 'error',
-            title: 'Campos obligatorios faltantes',
-            text: 'Por favor, complete los campos obligatorios.'
+            title: "Actualizando cliente...",
+            text: "Por favor, espera un momento.",
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
         });
+
+        const response = await fetch(`/api/cliente/test/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(clienteActualizado)
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al actualizar el cliente');
+        }
+
+        Swal.fire({
+            title: "¡Éxito!",
+            text: "El cliente ha sido actualizado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar"
+        }).then(() => {
+            $('#ModalEditCliente').modal('hide');
+            $('#tablaClientes').DataTable().ajax.reload();
+        });
+
+    } catch (error) {
+        console.error("Error al actualizar cliente:", error);
+        Swal.fire({
+            title: "Error",
+            text: "Hubo un problema al actualizar el cliente.",
+            icon: "error",
+            confirmButtonText: "Aceptar"
+        });
+    }
+}
+
+// Función para formatear fechas
+function formatearFecha(fecha) {
+    if (!fecha) return "N/A";
+    const fechaObj = new Date(fecha);
+    return fechaObj.toLocaleDateString("es-MX", { year: 'numeric', month: '2-digit', day: '2-digit' });
+}
+
+function loadEditRegimenOptions(rfcValue, selectedRegimen) {
+    const regimenSelect = document.getElementById('editRegimen');
+    regimenSelect.innerHTML = ''; // Limpiar opciones previas
+
+    if (!rfcValue || rfcValue.trim() === '') {
+        // Si no hay RFC, solo permitimos "Sin Obligaciones Fiscales"
+        const opt = document.createElement('option');
+        opt.value = 'NO_REGIME';
+        opt.text = 'Sin Obligaciones Fiscales';
+        regimenSelect.add(opt);
         return;
     }
 
+    const opciones12 = [
+        { value: 'NO_REGIME', text: 'Sin régimen' },
+        { value: 'GENERAL_REGIME_OF_MORAL_PEOPLE_LAW', text: 'Régimen General de Ley Personas Morales' },
+        { value: 'REGIME_OF_MORAL_PEOPLE_NOT_PROFIT', text: 'Personas Morales con Fines no Lucrativos' },
+        { value: 'PRIMARY_SECTOR_REGIME', text: 'Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras (AGAPES)' },
+        { value: 'REGIME_OF_THE_COORDINATED', text: 'Coordinados' },
+        { value: 'REGIME_OF_COOPERATIVE_PRODUCTION_SOCIETIES', text: 'Sociedades Cooperativas de Producción que optan por diferir sus ingresos' },
+        { value: 'REGIME_OF_TRUST', text: 'Regimen simplificado de confianza (RESICO)' },
+        { value: 'SIMPLIFIED_REGIME', text: 'Sin obligaciones fiscales' },
+        { value: 'SOCIETIES_OPTIONAL_REGIME', text: 'Opcional para Grupos de Sociedades' }
+    ];
 
-    fetch('/api/clientes', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(clienteData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        Swal.fire({
-            icon: 'success',
-            title: 'Cliente guardado',
-            text: 'Los datos del cliente se han guardado correctamente.'
-        });
-        
-        // Ocultar el modal y limpiar los campos
-        modalClientes.hide();
-        btnAddProducto.click();
-        console.log(data.data)
-        clientes.push(data.data); // Añade el nuevo cliente a la lista de clientes
-        mostrarClientes(clientes, currentPageClientes, itemsPerPageClientes); // Actualiza la tabla
-        actualizarControlesPaginacionClientes(); // Actualiza los controles de paginación
-        generarNumerosDePaginaClientes(); // Genera los números de página
-        
-    })
-    .catch(error => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Hubo un problema al guardar los datos. Inténtelo de nuevo más tarde.'
-        });
-        console.error('Error:', error);
+    const opciones13 = [
+        { value: 'NO_REGIME', text: 'Sin régimen' },
+        { value: 'BUSINESS_ACTIVITIES_REGIME', text: 'Personas Físicas con Actividades Empresariales y Profesionales' },
+        { value: 'FISCAL_INCORPORATION_REGIME', text: 'Incorporación Fiscal' },
+        { value: 'LEASEHOLD_REGIME', text: 'Arrendamiento' },
+        { value: 'REGIME_OF_THE_TECHNOLOGICAL_PLATFORMS_INCOME_ACTIVITIES', text: 'Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas' },
+        { value: 'SALARIED_REGIME', text: 'Sueldos y Salarios e Ingresos Asimilados a Salarios' },
+        { value: 'REGIME_OF_TRUST', text: 'Regimen simplificado de confianza (RESICO)' },
+        { value: 'SIMPLIFIED_REGIME', text: 'Sin obligaciones fiscales' },
+        { value: 'DIVIDEND_INCOME', text: 'Ingresos por Dividendos (socios y accionistas)' },
+    ];
+
+    let opciones = [];
+    if (rfcValue.length === 12) {
+        opciones = opciones12;
+    } else if (rfcValue.length === 13) {
+        opciones = opciones13;
+    }
+
+    opciones.forEach(opcion => {
+        const opt = document.createElement('option');
+        opt.value = opcion.value;
+        opt.text = opcion.text;
+        if (opcion.value === selectedRegimen) {
+            opt.selected = true; // Selecciona el régimen actual del cliente
+        }
+        regimenSelect.add(opt);
     });
+}
+
+document.getElementById('editRfc').addEventListener('input', function () {
+    loadEditRegimenOptions(this.value);
 });
 
-// Función para agregar cliente a la tabla
-function agregarClienteATabla(cliente) {
-    const clienteRow = `
-        <tr>
-            <td class="text-center">${cliente.id ?? ''}</td>
-            <td class="text-center">${cliente.name ?? ''}</td>
-            <td class="text-center">${cliente.identification ?? ''}</td>
-            <td class="text-center">${cliente.email ?? ''}</td>
-            <td class="text-center">${cliente.phonePrimary ? cliente.phonePrimary : ''}</td>
-            <td class="text-center">${cliente.identification ? '<span class="badge badge-success rounded-pill d-inline">Sí</span>' : '<span class="badge badge-danger rounded-pill d-inline">No</span>'}</td>
-            <td class="text-center">${formatearFecha(cliente.updatedAt)}</td>
-            <td class="text-center">
-                <button id="${cliente.id}" type="button" class="btn btn-primary btn-rounded btnEditClientes">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-                <button id="${cliente.id}" type="button" class="btn btn-danger btn-rounded btnDeleteClientes">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </td>
-        </tr>
-    `;
-    contenedorClientes.insertAdjacentHTML('beforeend', clienteRow);
+function eliminarCliente(id) {
+    Swal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción eliminará el cliente de Alegra y la base de datos local.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Eliminando cliente...",
+                text: "Por favor, espera un momento.",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            fetch(`/api/cliente/delete/${id}`, { method: "DELETE" })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        Swal.fire({
+                            title: "¡Eliminado!",
+                            text: "El cliente ha sido eliminado correctamente.",
+                            icon: "success",
+                            confirmButtonText: "Aceptar"
+                        }).then(() => {
+                            $('#tablaClientes').DataTable().ajax.reload(); // Recargar la tabla después de eliminar
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error",
+                            text: "No se pudo eliminar el cliente.",
+                            icon: "error",
+                            confirmButtonText: "Aceptar"
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al eliminar cliente:", error);
+                    Swal.fire({
+                        title: "Error",
+                        text: "Hubo un problema al eliminar el cliente.",
+                        icon: "error",
+                        confirmButtonText: "Aceptar"
+                    });
+                });
+        }
+    });
 }
+
+

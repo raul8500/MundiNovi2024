@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "apis": [
+    {
+      "identifier": "alegraswagger-productos",
+      "source": "@alegraswagger-test/v1.0#51j2vm66ykjau",
+      "integrity": "sha512-6oF+8jvlTbN3aUl3T2SHY39yTUKMNEoW9wlA9jQDXBG12NlfjJNfOXNpkY0HhR3gNFE0BzNBxJGIOr3lVlsS8Q==",
+      "installerVersion": "6.1.2"
+    },
+    {
+      "identifier": "alegraswagger-clientes",
+      "source": "@alegraswagger-test/v1.0#1pguxm6sgt9jo",
+      "integrity": "sha512-lJqk7IezNVF4rFxlHMX8WzXh/U6OgPyErPWG1/LeL9nuq7X/Ufpfu5DkKKY1DiK9dMNExljt+vH5/CvIeCFSIQ==",
+      "installerVersion": "6.1.2"
+    }
+  ]
+}

@@ -12,6 +12,7 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 
+
 // Conectar a la base de datos
 dbconnect();
 const app = express();

@@ -6,7 +6,6 @@ const regimenSelect = document.getElementById('regimen');
 const rfcClienteLabel = document.querySelector('label[for="rfc"]');
 const nombreClienteLabel = document.querySelector('label[for="nombreCliente"]');
 const telefonoPrincipalLabel = document.querySelector('label[for="telefonoPrincipal"]');
-const telefonoContactoLabel = document.querySelector('label[for="telefonoContacto"]');
 const correoElectronicoPersonalLabel = document.querySelector('label[for="correoElectronicoPersonal"]');
 const correoElectronicoContactoLabel = document.querySelector('label[for="correoElectronicoContacto"]');
 const calleLabel = document.querySelector('label[for="calle"]');
@@ -97,7 +96,7 @@ function addAsterisks(isRequired) {
     const fields = [
         rfcClienteLabel,
         nombreClienteLabel,
-        telefonoContactoLabel,
+        telefonoPrincipalLabel,
         correoElectronicoContactoLabel,
         calleLabel,
         numeroExteriorLabel,
@@ -129,5 +128,3 @@ rfcInput.addEventListener('input', loadRegimenOptions);
 
 // Inicializar con "No" seleccionado
 handleFacturaChange();
-
-
