@@ -9,7 +9,6 @@ exports.createClient = async (req, res) => {
         const alegraClient = req.body.alegra;
         const databaseClient = req.body.client;
 
-        console.log(req.body)
         // Enviar el cliente a Alegra
         const alegraResponse = await alegra.postContacts({
             address: alegraClient.address,
