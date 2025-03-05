@@ -515,12 +515,13 @@ function imprimirTicket(data) {
             <p style="text-align: center; margin: 2px 0;">JESUS MARIA AGUIRRE VEGA</p>
             <p style="text-align: center; margin: 2px 0;">REGIMEN ACTIVIDAD EMPRESARIAL</p>
             <p style="text-align: center; margin: 2px 0;">RFC: AUVJ750221RB8</p>
-            <p style="text-align: center; margin: 2px 0;">Dirección: Sur Norte 14 BC y CD, Central de Abastos, 91637, Ejido FDO Gutierrez, Ver.</p>
+            <p style="text-align: center; margin: 2px 0;">Dirección: SUR NORTE 14-13, CENTRAL DE ABASTOS, 91637, Xalapa, Veracruz</p>
             <hr style="border: 1px solid black;">
             <p style="margin: 2px 0;">Folio: ${Math.floor(Math.random() * 90000) + 10000}</p>
             <p style="margin: 2px 0;">Fecha: ${new Date(data.fecha).toLocaleString()}</p>
             <p style="margin: 2px 0;">Cajero: ${data.vendedor.name}</p>
             <p style="margin: 2px 0;">Expedido en: ${data.sucursal.datosTicket.direccion}</p>
+            <p style="margin: 2px 0;">${data.sucursal.datosTicket.colonia} + ${data.sucursal.datosTicket.codigoPostal} </p>
             <p style="margin: 2px 0;">Cliente: ${data.cliente?.name|| 'PUBLICO EN GENERAL'}</p>
             <hr style="border: 1px solid black;">
             ${formatProductos(data.productos)}
