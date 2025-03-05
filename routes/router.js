@@ -365,7 +365,7 @@ router.get('/colaboradores', (req, res) => {
 
 
 
-router.get('/puntoVenta', (req, res) => {    
+router.get('/puntoVenta',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
     res.render('PuntoDeVenta/puntoVenta');
 });
 
