@@ -9,11 +9,11 @@ const Message = require('./schemas/mensajes/mensajesSchema');
 const ModelUser = require('./schemas/usersSchema/usersSchema');
 const ModelSucursal = require('./schemas/sucursalSchema/sucursalSchema');
 const jwt = require('jsonwebtoken');
-const path = require('path');
+const path = require('path')
 const expressLayouts = require('express-ejs-layouts');
 const fileUpload = require('express-fileupload')
 
-
+//no se 
 // Conectar a la base de datos
 dbconnect();
 const app = express();
