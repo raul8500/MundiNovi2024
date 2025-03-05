@@ -521,7 +521,7 @@ function imprimirTicket(data) {
             <p style="margin: 2px 0;">Fecha: ${new Date(data.fecha).toLocaleString()}</p>
             <p style="margin: 2px 0;">Cajero: ${data.vendedor.name}</p>
             <p style="margin: 2px 0;">Expedido en: ${data.sucursal.datosTicket.direccion}</p>
-            <p style="margin: 2px 0;">${data.sucursal.datosTicket.colonia} + ${data.sucursal.datosTicket.codigoPostal} </p>
+            <p style="margin: 2px 0;">        ${data.sucursal.datosTicket.colonia} CP:${data.sucursal.datosTicket.codigoPostal} </p>
             <p style="margin: 2px 0;">Cliente: ${data.cliente?.name|| 'PUBLICO EN GENERAL'}</p>
             <hr style="border: 1px solid black;">
             ${formatProductos(data.productos)}
