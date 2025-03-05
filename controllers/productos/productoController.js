@@ -1,6 +1,7 @@
 const alegra = require('../../.api/apis/alegra-productos');
 const Product = require('../../schemas/productosSchema/productosSchema');
 
+const xlsx = require('xlsx');
 // Configuración de autenticación
 alegra.auth('facturalimpios@hotmail.com', 'ab4146c42f8d367f052d');
 
@@ -150,3 +151,76 @@ exports.getAllProducts = async (req, res) => {
         res.status(500).json({ error: 'Error al obtener los productos de la base de datos' });
     }
 };
+
+exports.loadProductsFromExcel = async (req, res) => {
+    try {
+        // Leer el archivo Excel
+        const file = req.files.file; // Asegúrate de que el archivo esté siendo enviado en el body
+        const workbook = xlsx.read(file.data, { type: 'buffer' });
+
+        // Obtener la primera hoja del archivo
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+
+        // Convertir la hoja en un array de objetos JSON
+        const products = xlsx.utils.sheet_to_json(sheet);
+
+        // Iterar sobre los productos y guardarlos en la base de datos
+        for (let i = 0; i < products.length; i++) {
+            const product = products[i];
+
+            // Crear un nuevo producto basado en la información del archivo Excel
+            const newProduct = new Product({
+                reference: product.reference,
+                name: product.nombre,  // Asegúrate de que el nombre de la columna sea correcto
+                datosFinancieros: {
+                    precio1: product.precio1,
+                    precio2: product.precio2,
+                    precio3: product.precio3,
+                    precio4: product.precio4,
+                    precio5: product.precio5,
+                    precio6: product.precio6,
+                    precio7: product.precio7,
+                    precio8: product.precio8,
+                    precio9: product.precio9,
+                    precio10: product.precio10,
+                    rangoInicial1: product.rangoInicial1,
+                    rangoFinal1: product.rangoFinal1,
+                    rangoInicial2: product.rangoInicial2,
+                    rangoFinal2: product.rangoFinal2,
+                    rangoInicial3: product.rangoInicial3,
+                    rangoFinal3: product.rangoFinal3,
+                    rangoInicial4: product.rangoInicial4,
+                    rangoFinal4: product.rangoFinal4,
+                    rangoInicial5: product.rangoInicial5,
+                    rangoFinal5: product.rangoFinal5,
+                    rangoInicial6: product.rangoInicial6,
+                    rangoFinal6: product.rangoFinal6,
+                    rangoInicial7: product.rangoInicial7,
+                    rangoFinal7: product.rangoFinal7,
+                    rangoInicial8: product.rangoInicial8,
+                    rangoFinal8: product.rangoFinal8,
+                    rangoInicial9: product.rangoInicial9,
+                    rangoFinal9: product.rangoFinal9,
+                    rangoInicial10: product.rangoInicial10,
+                    rangoFinal10: product.rangoFinal10
+                }
+            });
+
+            // Guardar el producto en la base de datos
+            await newProduct.save();
+
+            // Log que indica que el producto se ha cargado correctamente
+            console.log(`Producto cargado: ${newProduct.name}`);
+        }
+
+        res.status(201).json({
+            message: "Productos cargados correctamente"
+        });
+
+    } catch (err) {
+        console.error("Error al cargar productos desde Excel:", err);
+        res.status(500).json({ message: "Error al cargar los productos", error: err });
+    }
+};
+

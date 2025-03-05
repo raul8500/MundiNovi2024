@@ -66,6 +66,8 @@ const clienteController = require('../controllers/clientes/clienteController')
 
 const zonaClientes = require('../controllers/clientes/zonaClientes')
 
+//Nuevas Ventas
+const ventas = require('../controllers/venta/ventasController');
 
 
 
@@ -360,6 +362,12 @@ router.get('/colaboradores', (req, res) => {
     res.render('Colaboradores/colaboradores');
 });
 
+
+
+
+router.get('/puntoVenta', (req, res) => {    
+    res.render('PuntoDeVenta/puntoVenta');
+});
 
 
 
@@ -772,6 +780,18 @@ router.put('/api/zonaclientes/:id', zonaClientes.updateZonaCliente);
 router.delete('/api/zonaclientes/:id', zonaClientes.deleteZonaCliente);
 
 
+
+
+//Mensajes: 
+router.post('/send-message', venta.sendTextMessage );
+
+//Venta
+router.post('/api/venta/crear', ventas.createVenta);
+
+
+//Cargar desde excel
+
+router.post('/api//load-products/excel', productoTest.loadProductsFromExcel);
 
 
 router.use((req, res, next) => {

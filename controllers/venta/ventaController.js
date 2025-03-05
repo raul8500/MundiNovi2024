@@ -692,11 +692,6 @@ const generateFolio = () => {
 };
 
 
-
-
-
-
-
 //Reportes
 exports.getReporteVentaProducto = async (req, res) => {
   try {
@@ -766,3 +761,29 @@ exports.getReporteVentaProducto = async (req, res) => {
     res.status(500).json({ error: 'Error al generar el reporte de ventas.' });
   }
 };
+
+
+// Exportar función para enviar un mensaje de texto
+exports.sendTextMessage = async (req, res) => {
+  try {
+    const { to, body } = req.body; // Recibe el número de teléfono y el cuerpo del mensaje desde la solicitud
+
+    if (!to || !body) {
+      return res.status(400).json({ error: 'El número de teléfono y el mensaje son requeridos.' });
+    }
+
+    // Enviar el mensaje usando Twilio
+    const message = await client.messages.create({
+      to: to,               // Número de teléfono al que se enviará el mensaje
+      from: '+18038390528',  // Número de teléfono de tu Twilio (reemplazar por el tuyo)
+      body: body            // El contenido del mensaje
+    });
+
+    // Responder con el SID del mensaje (único identificador)
+    res.status(200).json({ messageSid: message.sid });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al enviar el mensaje de texto.' });
+  }
+};
+

@@ -524,7 +524,6 @@ exports.getProductById = async (req, res) => {
 };
 
 exports.getPreciadorBySucursal = async (req, res) => {
-    console.log("Sucursal ID:", req.params.sucursalId);
     try {
         const { sucursalId } = req.params;
 
