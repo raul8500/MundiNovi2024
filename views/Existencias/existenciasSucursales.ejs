@@ -1,0 +1,65 @@
+<% extraStyles=` <style>
+.sugerencia-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    width: 100%;
+    z-index: 1000;
+    }
+
+    .sugerencia-item {
+    padding: 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    }
+
+    .sugerencia-item:hover,
+    .sugerencia-item.seleccionado {
+    background: #f1f1f1;
+    }
+
+    </style>
+    `; %>
+
+    <main>
+        <div class="container-fluid pt-4" style="width: 100%;">
+            <div class="row text-center">
+                <h4>Existencias por Sucursales</h4>
+            </div>
+
+            <!-- Input de búsqueda -->
+            <div class="row mt-3">
+                <div class="col-md-6 offset-md-3 position-relative">
+                    <input type="text" id="busquedaProducto" class="form-control"
+                        placeholder="Buscar producto por nombre o referencia...">
+                    <ul id="listaSugerencias" class="sugerencia-list"></ul>
+                </div>
+            </div>
+
+            <!-- Tabla de resultados -->
+            <div class="row mt-3">
+                <div class="col-md-8 offset-md-2">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Referencia</th>
+                                <th>Nombre</th>
+                                <th>Sucursal</th>
+                                <th>Existencia</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaResultados">
+                            <!-- Aquí se llenarán los resultados dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <% extraScripts=` <script src="js/existencias/existenciasSucursales.js">
+        </script>
+        `; %>

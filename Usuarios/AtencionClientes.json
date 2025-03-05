@@ -1,0 +1,28 @@
+    {
+        "_id": "677ef8341b6c3341bdc12b01",
+        "nameRol": "AtencionClientes",
+        "type": 13,
+        "functions": [
+            {
+                "name": "Asistencias",
+                "path": "/asistenciaUsuario",
+                "subFunctions": []
+            },
+            {
+                "name": "Capacitacion",
+                "path": "/capacitaciones",
+                "subFunctions": []
+            },
+            {
+                "name": "Actividades",
+                "path": "/actividades",
+                "subFunctions": []
+            },
+            {
+                "name": "Clientes",
+                "path": "/clientes"
+            }
+        ],
+        "createdAt": "2024-12-13T03:38:58.394Z",
+        "updatedAt": "2024-12-13T03:38:58.394Z"
+    }

@@ -1,0 +1,26 @@
+    {
+        "nameRol": "Produccion",
+        "type": 6,
+        "functions": [
+            {
+                "name": "Produccion",
+                "path": "/fabricarFormula",
+                "subFunctions": []
+            },
+            {
+                "name": "Asistencias",
+                "path": "/asistenciaUsuario",
+                "subFunctions": []
+            },
+            {
+                "name": "Actividades",
+                "path": "/actividades",
+                "subFunctions": []
+            },
+            {
+                "name": "Arqueo materia prima",
+                "path": "/arqueoMatPrima",
+                "subFunctions": []
+            }
+        ]
+    }

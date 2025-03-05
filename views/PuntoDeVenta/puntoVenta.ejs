@@ -1,0 +1,537 @@
+<% extraStyles=` <style>
+    /* Estilos para la lista de sugerencias */
+    #listaProductos {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border: 1px solid #ced4da;
+        border-top: none;
+        width: 780px;
+        max-height: 200px;
+        overflow-y: auto;
+        background: #fff;
+        position: absolute;
+        z-index: 1000;
+    }
+    #listaProductos li {
+        padding: 8px;
+        cursor: pointer;
+    }
+    #listaProductos li.active,
+    #listaProductos li:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+    </style>
+
+    <style>
+        /* Estilos para la lista de sugerencias de clientes */
+        #listaClientes {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        max-height: 150px;
+        overflow-y: auto;
+        background: #ffffff;
+        border: 1px solid #ced4da;
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        position: absolute;
+        z-index: 1000;
+        }
+        #listaClientes li {
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: background 0.3s ease, color 0.3s ease;
+        }
+        #listaClientes li:hover,
+        #listaClientes li.active {
+        background-color: #007bff;
+        color: #fff;
+        }
+    </style>
+
+    `; %>
+
+    <main>
+        <div class="container-fluid pt-4" style="width: 85%;">
+
+            <!--Botones de funciones-->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="d-flex" style="height: 30pt;">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button id="btnSeleccionarUsuario" type="button" class="btn btn-info">(F3) Cliente <i
+                                    class="fa-solid fa-user"></i></button>
+                            <button id="btnFacturar" type="button" class="btn btn-info" style="margin-left: 1pt;"
+                                data-mdb-ripple-init>Facturar
+                                (F4) <i class="fa-solid fa-newspaper"></i></button>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button id="btnPrecios" type="button" class="btn btn-info" data-mdb-ripple-init>Precios <i
+                                class="fa-solid fa-tag"></i></button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <button id="cancelarVenta" class="btn btn-danger w-100"
+                                style="height: 35pt; font-size: 6pt;">Cancelar (CTRL +
+                                Supr)</button>
+                        </div>
+                        <div class="col-md-8">
+                            <button id="btnPagar" class="btn btn-success w-100"
+                                style="height: 35pt; font-size: 10pt;"><i class="fa-solid fa-cash-register"></i> Pagar
+                                (F9) </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Info Cliente Sucursal y Venta total-->
+            <div class="row" style="margin-top: 1pt;">
+                <div class="col-md-4">
+                    <div class="card text-bg-primary mb-3" style="width: auto; height: 105pt;">
+                        <h4 style="margin-top: 4pt;" class="text-center">Informacion del Cliente:</h4>
+                        <div style="margin-left: 10pt;">
+                            <label style="font-size: 15pt;" for="nombreClienteVenta"><i
+                                    class="fa-solid fa-user-tag"></i></label>
+                            <label id="nombreClienteVenta" style="font-size: 15pt; font-weight: bold;">PUBLICO EN GENERAL
+                            </label>
+                            <br>
+                            <label style="font-size: 15pt;" for="facturaCliente"><i
+                                    class="fa-solid fa-file-invoice-dollar"></i> Emitir Factura:</label>
+                            <label id="facturaCliente" style="font-size: 15pt; font-weight: bold;">NO</label>
+                            <br>
+                            <label style="font-size: 15pt;" for="monederoCliente"><i class="fa-solid fa-wallet"></i>
+                                Monedero:</label>
+                            <label id="monederoCliente"
+                                style="font-size: 15pt; font-weight: bold; color: lightgreen;">$0.00</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card text-bg-primary mb-3" style="width: auto; height: 45pt;">
+                        <div style="margin-top: 12pt; margin-left: 20pt;">
+                            <label style="font-size: 15pt;" for="sucursal">Sucursal:</label>
+                            <label id="sucursal" style="font-size: 15pt; font-weight: bold;"></label>
+                        </div>
+                    </div>
+
+                    <div class="card text-bg-primary mb-3" style="width: auto; height: 45pt; ">
+                        <div style="margin-top: 12pt; margin-left: 20pt;">
+                            <label style="font-size: 15pt;" for="vendedor">Vendedor:</label>
+                            <label id="vendedor" style="font-size: 15pt; font-weight: bold;" for="vendedor"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <div class="card text-bg-dark" style="width:auto; height: 105pt;">
+                        <div style="margin-top: 30pt;" class="text-center">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                        </div>
+
+                        <div class="text-center">
+                            <p id="totalArticulos"="font-size: 15pt;">0</p>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card text-bg-dark" style="width:auto; height: 105pt;">
+                        <div style="margin-top: 15pt; margin-left: 20pt;">
+                            <h5>Total:</h5>
+                        </div>
+
+                        <div class="text-center">
+                            <label style="font-size: 40pt; color: lightgreen;">$</label>
+                            <label id="totalVenta" style="font-size: 40pt; color: lightgreen;">0.00</label>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr>
+
+            <!--Seleccion de productos-->
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card" style="margin-top: 5pt;">
+                        <div class="card-body">
+                            <h5 class="card-title">Productos</h5>
+                            <div class="row mb-3">
+
+
+                                <div class="col-md-2 mb-3">
+                                    <label for="cantidad" class="form-label">Cantidad</label>
+                                    <input type="number" id="cantidad" class="form-control" value="1">
+                                </div>
+
+                                <div class="col-md-8 mb-3">
+                                    <label for="producto" class="form-label">Buscar Producto</label>
+                                    <input type="text" id="producto" class="form-control"
+                                        placeholder="Buscar producto...">
+                                    <div id="sugerencias"></div> <!-- Aquí se mostrarán las sugerencias -->
+                                    <ul id="listaProductos" class="list-group mt-2"
+                                        style="display: none; position: absolute; z-index: 1000;"></ul>
+                                </div>
+
+
+                                <div class="col-md-2">
+                                    <label for="agregarProducto" class="form-label">Agregar</label>
+                                    <button id="agregarProducto" class="btn btn-primary w-100">Agregar [F4]</button>
+                                </div>
+
+                            </div>
+
+                            <!-- Tabla de Productos -->
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Rangos</th>
+                                            <th style="width: 150px;">Precio sin IVA</th>
+                                            <th style="width: 150px;">Precio con IVA</th>
+                                            <th style="width: 120px;">Cantidad</th>
+                                            <th>Total</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="productos">
+                                        <!-- Aquí se agregarán dinámicamente los productos -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- Modal seleccionar el usuario -->
+    <div class="modal fade" id="modalCliente" tabindex="-1""
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="selectUserModalLabel">Seleccionar cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                    <!-- Contenedor del botón con `inert` -->
+                    <div id="modalContainer" inert>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label style="font-weight: 600;" for="inputBuscarCliente" class="col-form-label">Buscar
+                                cliente:</label>
+                            <input type="text" class="form-control" id="inputBuscarCliente" autocomplete="off" />
+                            <ul id="listaClientes" class="list-group"
+                                style="position: absolute; z-index: 1000; max-height: 150px; overflow-y: auto; width: 50%; display: none;">
+                            </ul>
+                        </div>
+                        <hr style="margin-top: 20pt; margin-bottom: 20pt;">
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label style="font-weight: 600;" for="nombreCliente" class="col-form-label">Nombre:</label>
+                            <input type="text" class="form-control" id="nombreCliente" readonly disabled/>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label style="font-weight: 600;" for="rfcCliente" class="col-form-label">RFC:</label>
+                            <input type="text" class="form-control" id="rfcCliente" readonly disabled />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label style="font-weight: 600;" for="numeroTelefonoCliente"
+                                class="col-form-label">Telefono:</label>
+                            <input type="text" class="form-control" id="numeroTelefonoCliente" readonly disabled />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label style="font-weight: 600;" for="regimenFiscalCliente" class="col-form-label">Régimen
+                                Fiscal:</label>
+                            <select class="form-select" id="regimenFiscalCliente" disabled>
+                                <option value="">Seleccione un régimen fiscal</option>
+                                <option value="SALARIED_REGIME">Sueldos y Salarios e Ingresos Asimilados a
+                                    Salarios</option>
+                                <option value="BUSINESS_ACTIVITIES_REGIME">Personas Físicas con Actividades
+                                    Empresariales y Profesionales</option>
+                                <option value="LEASEHOLD_REGIME">Arrendamiento</option>
+                                <option value="GENERAL_REGIME_OF_MORAL_PEOPLE_LAW">General de Ley Personas
+                                    Morales</option>
+                                <option value="REGIME_OF_MORAL_PEOPLE_NOT_PROFIT">Personas Morales con Fines no
+                                    Lucrativos</option>
+                                <option value="FISCAL_INCORPORATION_REGIME">Incorporación Fiscal</option>
+                                <option value="PRIMARY_SECTOR_REGIME">Actividades Agrícolas, Ganaderas,
+                                    Silvícolas y Pesqueras (AGAPES)</option>
+                                <option value="REGIME_OF_THE_COORDINATED">Coordinados</option>
+                                <option value="REGIME_OF_THE_TECHNOLOGICAL_PLATFORMS_INCOME_ACTIVITIES">Régimen
+                                    de las Actividades Empresariales con ingresos a través de Plataformas
+                                    Tecnológicas</option>
+                                <option value="REGIME_OF_COOPERATIVE_PRODUCTION_SOCIETIES">Sociedades
+                                    Cooperativas de Producción que optan por diferir sus ingresos</option>
+                                <option value="REGIME_OF_TRUST">Régimen simplificado de confianza (RESICO)
+                                </option>
+                                <option value="SOCIETIES_OPTIONAL_REGIME">Opcional para Grupos de Sociedades
+                                </option>
+                                <option value="NO_REGIME">Sin régimen</option>
+                                <option value="SIMPLIFIED_REGIME">Sin obligaciones fiscales</option>
+                                <option value="DIVIDEND_INCOME">Ingresos por Dividendos (socios y accionistas)
+                                </option>
+                            </select>
+                        </div>
+
+                        <hr style="margin-top: 20pt; margin-bottom: 20pt;">
+
+                        <div class="col-md-4">
+                            <label style="font-weight: 600;" for="calleCliente" class="col-form-label">Calle:</label>
+                            <input type="text" class="form-control" id="calleCliente" readonly disabled />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label style="font-weight: 600;" for="localidadCliente"
+                                class="col-form-label">Localidad:</label>
+                            <input type="text" class="form-control" id="localidadCliente" readonly disabled />
+                        </div>
+
+                        <div class="col-md-2">
+                            <label style="font-weight: 600;" for="exteriorCliente"
+                                class="col-form-label">#Exterior:</label>
+                            <input type="text" class="form-control" id="exteriorCliente" readonly disabled />
+                        </div>
+
+                        <div class="col-md-2">
+                            <label style="font-weight: 600;" for="interiorCliente"
+                                class="col-form-label">#Interior:</label>
+                            <input type="text" class="form-control" id="interiorCliente" readonly disabled />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label style="font-weight: 600;" for="coloniaCliente"
+                                class="col-form-label">Colonia:</label>
+                            <input type="text" class="form-control" id="coloniaCliente" readonly disabled />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label style="font-weight: 600;" for="municipioCliente"
+                                class="col-form-label">Municipio:</label>
+                            <input type="text" class="form-control" id="municipioCliente" readonly disabled />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label style="font-weight: 600;" for="estadoCiente" class="col-form-label">Estado:</label>
+                            <input type="text" class="form-control" id="estadoCiente" readonly disabled />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label style="font-weight: 600;" for="codigoPostalCliente" class="col-form-label">Codigo
+                                postal:</label>
+                            <input type="text" class="form-control" id="codigoPostalCliente" readonly disabled />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label style="font-weight: 600;" for="correoCliente" class="col-form-label">Correo
+                                electronico:</label>
+                            <input type="text" class="form-control" id="correoCliente" readonly disabled />
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button id="btnConfirmarSeleccionarUsuario" type="button" class="btn btn-success" style="height: 50px;">Seleccionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para el Pago -->
+    <div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPagoLabel">Realizar Pago</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Información del Total -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card text-bg-dark" style="width:auto; height: 105pt;">
+                                <div style="margin-top: 15pt; margin-left: 20pt;">
+                                    <h5>Total a pagar:</h5>
+                                </div>
+        
+                                <div class="text-center">
+                                    <label style="font-size: 40pt; color: lightgreen;">$</label>
+                                    <label id="totalAPagar" style="font-size: 40pt; color: lightgreen;">0.00</label>
+        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card" style="width:auto; background-color:lightblue; height: 105pt;">
+                                <div style="margin-top: 15pt; margin-left: 20pt;">
+                                    <h5>Cambio:</h5>
+                                </div>
+        
+                                <div class="text-center">
+                                    <label style="font-size: 40pt;">$</label>
+                                    <label id="globalCambio" style="font-size: 40pt;">0.00</label>
+        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <!-- Select para el Uso de CFDI (visible solo si es venta con factura) -->
+                    <div class="mb-3" id="usoCFDIContainer" style="display: none;">
+                        <label for="usoCFDI" class="form-label">Uso de CFDI</label>
+                        <select class="form-select" id="usoCFDI">
+                            <option value="G01">Adquisición de mercancias</option>
+                            <option value="G02">Devoluciones, descuentos o bonificaciones</option>
+                            <option value="G03">Gastos en general</option>
+                            <option value="I01">Construcciones</option>
+                            <option value="I02">Mobilario y equipo de oficina por inversiones</option>
+                            <option value="I03">Equipo de transporte</option>
+                            <option value="I04">Equipo de computo y accesorios</option>
+                            <option value="I05">Dados, troqueles, moldes, matrices y herramental</option>
+                            <option value="I06">Comunicaciones telefónicas</option>
+                            <option value="I07">Comunicaciones satelitales</option>
+                            <option value="I08">Otra maquinaria y equipo</option>
+                            <option value="D01">Honorarios médicos, dentales y gastos hospitalarios</option>
+                            <option value="D02">Gastos médicos por incapacidad o discapacidad</option>
+                            <option value="D03">Gastos funerales</option>
+                            <option value="D04">Donativos</option>
+                            <option value="D05">Intereses reales efectivamente pagados por créditos hipotecarios
+                                (casa habitación)</option>
+                            <option value="D06">Aportaciones voluntarias al SAR</option>
+                            <option value="D07">Primas por seguros de gastos médicos</option>
+                            <option value="D08">Gastos de transportación escolar obligatoria</option>
+                            <option value="D09">Depósitos en cuentas para el ahorro, primas que tengan como base
+                                planes de pensiones</option>
+                            <option value="D10">Pagos por servicios educativos (colegiaturas)</option>
+                            <option value="P01">Por definir</option>
+                            <option value="S01">Sin efectos fiscales</option>
+                            <option value="CP01">Pagos</option>
+                            <option value="CN01">Nómina</option>
+                        </select>
+                    </div>
+
+
+                    <!-- Contenedor de Formas de Pago -->
+                    <div id="formasDePago">
+                        <!-- Forma de Pago Inicial -->
+                        <div class="row mb-3 formaDePago">
+                            <div class="col-md-5">
+                                <label class="form-label">Forma de Pago</label>
+                                <select class="form-select formaPago">
+                                    <option value="">Selecciona un metodo de pago</option>
+                                    <option value="cash">Efectivo</option>
+                                    <option value="credit-card">Tarjeta crédito</option>
+                                    <option value="debit-card">Tarjeta débito</option>
+                                    <option value="transfer">Transferencia</option>
+                                    <option value="electronic-money">Monedero</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label text-bold">Importe <i class="fas fa-money-bill-wave text-success"></i></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-success text-white">
+                                            <i class="fas fa-dollar-sign"></i>
+                                        </span>
+                                    </div>
+                                    <input type="number" class="form-control importePago custom-input" placeholder="0.00" disabled />
+                                </div>
+                            </div>
+
+                            <div class="col-md-1 d-flex text-center" style="height: 30px; margin-top: 27pt;">
+                                <button type="button" class="btn btn-danger btn-sm eliminarFormaPago" disabled>
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Botón para agregar más formas de pago -->
+                    <button type="button" class="btn btn-secondary" id="btnAgregarFormaPago">
+                        Agregar forma de pago adicional
+                    </button>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="btnRealizarVenta" type="button" class="btn btn-success" style="height: 60px; width: 150px;"><i class="fa-solid fa-cash-register"></i> Realizar venta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ingresar teléfono -->
+    <div class="modal fade" id="modalIngresarTelefono" tabindex="-1" aria-labelledby="modalIngresarTelefonoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalIngresarTelefonoLabel">Ingresar teléfono</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="telefonoCliente" class="form-label">Número de teléfono</label>
+                        <input type="tel" class="form-control" id="telefonoCliente" placeholder="Ingrese su número de teléfono" />
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="confirmarTelefono">
+                        <label class="form-check-label" for="confirmarTelefono">Confirmo que este es mi número de teléfono</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnEnviarTicket">Enviar ticket</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <% extraScripts=` <script src="js/puntoDeVenta/punto/cargaInfo.js">
+        </script>
+        <script src="js/puntoDeVenta/punto/cliente.js"></script>
+        <script src="js/puntoDeVenta/punto/pagar.js"></script>
+        `; %>

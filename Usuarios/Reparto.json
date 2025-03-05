@@ -1,0 +1,29 @@
+    {
+        "_id": "677ef8341b6c3341bdc12b01",
+        "nameRol": "Reparto",
+        "type": 10,
+        "functions": [
+            {
+                "name": "Asistencias",
+                "path": "/asistenciaUsuario",
+                "subFunctions": []
+            },
+            {
+                "name": "Capacitacion",
+                "path": "/capacitaciones",
+                "subFunctions": []
+            },
+            {
+                "name": "Actividades",
+                "path": "/actividades",
+                "subFunctions": []
+            },
+            {
+                "name": "Recepcion de faltantes",
+                "path": "/recepcionFaltantes",
+                "subFunctions": []
+            }
+        ],
+        "createdAt": "2024-12-13T03:38:58.394Z",
+        "updatedAt": "2024-12-13T03:38:58.394Z"
+    }

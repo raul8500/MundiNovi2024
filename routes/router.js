@@ -49,9 +49,28 @@ const pedidos = require('../controllers/pedido/pedidoControlle');
 const  faltantes = require('../controllers/faltantes/faltantesController');
 const  traspasos = require('../controllers/traspasos/traspasosController');
 
-//Nuevos
+//
 const tipoIngresoController = require('../controllers/ingresos/tipoIngresosController');
 const ingresoController = require('../controllers/ingresos/ingresoController');
+const colaboradorController = require('../controllers/colaboradores/colaboradoresController')
+const contratoController = require('../controllers/colaboradores/contratosController')
+const renunciaController = require('../controllers/colaboradores/renunciaController')
+
+
+//test
+const productoTest = require('../controllers/productos/productoController')
+const clienteController = require('../controllers/clientes/clienteController')
+
+
+//Zona clientes
+
+const zonaClientes = require('../controllers/clientes/zonaClientes')
+
+//Nuevas Ventas
+const ventas = require('../controllers/venta/ventasController');
+
+
+
 
 
 
@@ -335,7 +354,20 @@ router.get('/reportesVentaProductos', (req, res) => {
     res.render('Reportes/reportesVentaProductos');
 });
 
+router.get('/existenciasSucursales', (req, res) => {    
+    res.render('Existencias/existenciasSucursales');
+});
 
+router.get('/colaboradores', (req, res) => {    
+    res.render('Colaboradores/colaboradores');
+});
+
+
+
+
+router.get('/puntoVenta', (req, res) => {    
+    res.render('PuntoDeVenta/puntoVenta');
+});
 
 
 
@@ -369,7 +401,7 @@ router.delete('/api/auth/users/:id', auth.deleteUserById);
 router.put('/api/auth/users/status/:id', auth.updateUserStatus)
 router.get('/logout', logout.logout)
 router.get('/api/auth/users/sucursales/:sucursalId1/:sucursalId2', auth.obtenerSucursalesYUsuarios)
-
+router.get('/api/auth/users/sucursales/:sucursalId', auth.obtenerUsuariosPorSucursal)
 
 
 
@@ -703,6 +735,63 @@ router.delete('/api/ingresos/:id', ingresoController.eliminarIngreso);
 router.get('/api/venta/reporteVentasProductosSucursal/:sucursal/:fechaInicio/:fechaFin/:limite', venta.getReporteVentaProducto)
 
 
+router.get('/api/existencia/productos/:id', productos.obtenerExistenciaPorProducto)
+
+
+//Colaboradores  
+
+
+router.post('/api/colaborador', colaboradorController.createColaborador);
+router.get('/api/colaborador', colaboradorController.getAllColaboradoresFromBD);
+router.get('/api/colaborador/:id', colaboradorController.getColaboradorByIdFromBD);
+router.put('/api/colaborador/:id', colaboradorController.updateColaborador);
+router.delete('/api/colaborador/:id', colaboradorController.deleteColaboradorFromBD);
+
+//Contrato
+router.get('/api/contrato', contratoController.obtenerContrato);
+router.put('/api/contrato', contratoController.actualizarContrato);
+router.get('/api/contrato/:idColaborador', contratoController.obtenerContratoConDatos);
+
+//Renuncia
+router.get("/api/renuncia/plantilla", renunciaController.obtenerPlantillaRenuncia);
+router.post('/api/renuncia/', renunciaController.subirPlantillaRenuncia);
+router.get("/api/renuncia/:idColaborador", renunciaController.obtenerRenunciaConDatos);
+
+
+//productos
+router.post('/api/producto/crear', productoTest.createProduct);
+router.get('/api/producto/test', productoTest.getAllProducts);
+
+
+
+//clientes
+router.post('/api/cliente/test', clienteController.createClient);
+router.get('/api/cliente/test', clienteController.getClients);
+router.get('/api/cliente/test/:id', clienteController.getClientById);
+router.delete('/api/cliente/delete/:id', clienteController.deleteClient);
+router.put('/api/cliente/test/:id', clienteController.updateClient);
+
+//Zona clientes
+// Configuración de rutas
+router.post('/api/zonaclientes', zonaClientes.createZonaCliente);
+router.get('/api/zonaclientes', zonaClientes.getZonasClientes);
+router.get('/api/zonaclientes/:id', zonaClientes.getZonaClienteById);
+router.put('/api/zonaclientes/:id', zonaClientes.updateZonaCliente);
+router.delete('/api/zonaclientes/:id', zonaClientes.deleteZonaCliente);
+
+
+
+
+//Mensajes: 
+router.post('/send-message', venta.sendTextMessage );
+
+//Venta
+router.post('/api/venta/crear', ventas.createVenta);
+
+
+//Cargar desde excel
+
+router.post('/api//load-products/excel', productoTest.loadProductsFromExcel);
 
 
 router.use((req, res, next) => {

@@ -1,0 +1,16 @@
+{
+    "nameRol": "Productos",
+    "type": 14,
+    "functions": [
+        {
+            "name": "Productos",
+            "path": "/productos",
+            "subFunctions": []
+        },
+        {
+            "name": "Preciador",
+            "path": "/preciador",
+            "subFunctions": []
+        }
+    ]
+}

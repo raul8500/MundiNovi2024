@@ -2,37 +2,42 @@ const mongoose = require('mongoose');
 
 const ventaSchema = new mongoose.Schema({
     noVenta: { type: String, required: true },
+    vendedor: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
     sucursal: { type: mongoose.Schema.Types.ObjectId, ref: 'sucursal', required: true },
     tipoVenta: { type: String, required: true },
-    cliente: { type: mongoose.Schema.Types.ObjectId, ref: 'Client', default: null },
+    cliente: { type: mongoose.Schema.Types.ObjectId, ref: 'Client', required: false, default: null},
     totalVenta: { type: Number, required: true },
     totalProductos: { type: Number, required: true },
-    codigoFacturacion: { type: Number, required: true },
     productos: [
         {
+            id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
             nombre: { type: String, required: true },
-            productoId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+            reference: { type: String, required: true },
+            precioSinIva: { type: Number, required: true },
+            precioConIva: { type: Number, required: true },
+            precio1: { type: Number, required: true },
             cantidad: { type: Number, required: true },
-            precio: { type: Number, required: true },
-            kardexId: { type: mongoose.Schema.Types.ObjectId, ref: 'Kardex', required: true }, // Mantener el ObjectId de Kardex
-            kardexFolio: { type: String, required: true } // Nuevo campo para guardar el folio
+            kardexId: { type: mongoose.Schema.Types.ObjectId, ref: 'Kardex', required: true },
+            kardexFolio: { type: String, required: true }
         }
     ],
-    formasDePago: [
-        {
-            tipo: { type: String, required: true },
-            cambio : {type: Number, required: false, default : 0 },
-            importe: { type: Number, required: true }
-        }
-    ],
+    pagos:{
+        formasDePago: [
+            {
+                forma: { type: String, required: true },
+                importe: { type: Number, required: true }
+            }
+        ],
+        cambio : {type: Number, required: false, default : 0 }
+    },
     factura: 
         {
-            estado: { type: String, required: false, default : 'sin factura' },
+            codigoFacturacion: { type: String, required: false },
+            estado: { type: Number, required: false, default: 0},
             idAlegraFacura: { type: String, required: false },
             pdfUrl: { type: String, required: false },
             xmlUrl: { type: String, required: false },
-        }
-        ,
+        },
     fecha: { type: Date, default: Date.now }
 });
 
