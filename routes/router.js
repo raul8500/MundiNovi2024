@@ -71,6 +71,10 @@ const ventas = require('../controllers/venta/ventasController');
 
 
 
+//Reportes:
+const reportesCostoInventario = require('../controllers/reportes/costoInventario/costoInventarioController');
+
+
 
 
 
@@ -195,9 +199,6 @@ router.get('/asistenciaUsuario', (req, res) => {
     res.render('Asistencias/asistencia');
 });
 
-
-
-
 router.get('/fabricarFormula', (req, res) => {    
     res.render('Produccion/fabricarFormulas');
 });
@@ -278,7 +279,6 @@ router.get('/importaciones', (req, res) => {
 router.get('/importacionesStock', (req, res) => {    
     res.render('Importaciones/stoc/stoc');
 });
-
 
 router.get('/listadoInventarios', (req, res) => {    
     res.render('Inventarios/inventariosAdmin');
@@ -362,17 +362,26 @@ router.get('/colaboradores', (req, res) => {
     res.render('Colaboradores/colaboradores');
 });
 
-
-
-
 router.get('/puntoVenta',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
     res.render('PuntoDeVenta/puntoVenta');
 });
 
 
 
+//
+
+router.get('/nominas',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
+    res.render('Nominas/listadoNomina');
+});
+
+router.get('/controlBancos',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
+    res.render('Bancos/bancos');
+});
 
 
+router.get('/reporteCostoInventario',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
+    res.render('Reportes/reporteCostoInventario');
+});
 
 
 
@@ -792,6 +801,14 @@ router.post('/api/venta/crear', ventas.createVenta);
 //Cargar desde excel
 
 router.post('/api//load-products/excel', productoTest.loadProductsFromExcel);
+
+
+
+
+
+//Reportes: 
+router.get('/api/reporteCostoInventario/:sucursal', reportesCostoInventario.getAllKardex);
+
 
 
 router.use((req, res, next) => {

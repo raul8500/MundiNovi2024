@@ -1,0 +1,156 @@
+<% extraStyles=`
+
+`; %>
+
+    <main style="margin-top: 20px">
+        <div class="container pt-4">
+            <h3 class="text-center"> Pago de Nominas</h3>
+            <div class="tab-content" id="pills-tabContent2">
+
+                <div class="d-flex justify-content-end " style="margin-top: 20px;">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pagoNominaModal">
+                        Registrar pago  <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                      </button>
+                </div>
+
+                <div class="table-responsive pt-3">
+                    <table id="tablaNominas" class="table align-middle mb-0 bg-white">
+                        <thead class="bg-light">
+                            <tr class="text-center">
+                                <th scope="col">Sucursal</th>
+                                <th scope="col">Usuario</th>
+                                <th scope="col">Subtotal</th>
+                                <th scope="col">Descuento</th>
+                                <th scope="col">Vales</th>
+                                <th scope="col">Importe</th>
+                                <th scope="col">Usuario Resp. </th>
+                                <th scope="col">Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+    </main>
+
+    <div class="modal fade" id="pagoNominaModal" tabindex="-1" aria-labelledby="pagoNominaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">  <!-- modal-lg para un modal más ancho (opcional) -->
+          <div class="modal-content">
+            <!-- Encabezado del Modal -->
+            <div class="modal-header">
+              <h5 class="modal-title" id="pagoNominaModalLabel">Registrar nuevo pago de nómina</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+      
+            <!-- Cuerpo del Modal -->
+            <div class="modal-body">
+              <!-- Select de Sucursal -->
+              <div class="mb-3">
+                <label for="sucursalSelect" class="form-label">Sucursal</label>
+                <select id="sucursalSelect" class="form-select">
+                  <option selected disabled>Seleccione una sucursal</option>
+                  <option value="1">Sucursal 1</option>
+                  <option value="2">Sucursal 2</option>
+                  <option value="3">Sucursal 3</option>
+                  <!-- Agregar más opciones según las sucursales disponibles -->
+                </select>
+              </div>
+      
+              <!-- Select de Usuario -->
+              <div class="mb-3">
+                <label for="usuarioSelect" class="form-label">Usuario</label>
+                <select id="usuarioSelect" class="form-select">
+                  <option selected disabled>Seleccione un usuario</option>
+                  <option value="u1">Usuario 1</option>
+                  <option value="u2">Usuario 2</option>
+                  <option value="u3">Usuario 3</option>
+                  <!-- Agregar más opciones según los usuarios disponibles -->
+                </select>
+              </div>
+      
+              <!-- Input de Cantidad a pagar -->
+              <div class="mb-3">
+                <label for="cantidadPago" class="form-label">Cantidad a pagar</label>
+                <input type="number" class="form-control" id="cantidadPago" placeholder="0.00">
+              </div>
+      
+              <!-- Card de Vales (filtro y tabla) -->
+              <div class="card mb-3">
+                <div class="card-body">
+                  <!-- Filtro de rango de fechas y botón Buscar -->
+                  <div class="row g-2 align-items-end mb-3"> 
+                    <!-- Campo "Desde" -->
+                    <div class="col-sm-6 col-md-5">
+                      <label for="fechaDesde" class="form-label">Desde</label>
+                      <input type="date" id="fechaDesde" class="form-control">
+                    </div>
+                    <!-- Campo "Hasta" -->
+                    <div class="col-sm-6 col-md-5">
+                      <label for="fechaHasta" class="form-label">Hasta</label>
+                      <input type="date" id="fechaHasta" class="form-control">
+                    </div>
+                    <!-- Botón Buscar -->
+                    <div class="col-sm-12 col-md-2">
+                      <button type="button" class="btn btn-secondary w-100">
+                        Buscar
+                      </button>
+                    </div>
+                  </div>
+      
+                  <!-- Tabla de vales filtrados -->
+                  <div class="table-responsive">
+                    <table class="table table-striped table-bordered mb-0">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Usuario</th>
+                          <th>Fecha</th>
+                          <th>Cantidad</th>
+                          <th>Observaciones</th>
+                          <th>Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+      
+              <!-- Resumen de pago -->
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="descuentoVales" class="form-label">Descuento de vales</label>
+                  <input type="number" class="form-control" id="descuentoVales" placeholder="0.00" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label for="totalFinal" class="form-label">Total final</label>
+                  <input type="number" class="form-control" id="totalFinal" placeholder="0.00" disabled>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="observacionesPago" class="form-label">Observaciones</label>
+                <textarea class="form-control" id="observacionesPago" rows="2" placeholder="Comentarios u observaciones..."></textarea>
+              </div>
+            </div>
+      
+            <!-- Pie del Modal -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-primary">Guardar</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+<% extraScripts=` 
+
+`; %>
+
+
+

@@ -169,7 +169,6 @@ exports.createKardex = async (req, res) => {
 
 exports.getAllKardex = async (req, res) => {
     try {
-        console.log(req.query)
         const { sucursal, fechaInicio, fechaFinal } = req.query;
         const reference = req.query.reference ? req.query.reference.trim() : '';
 
