@@ -17,6 +17,8 @@ btnCorteFinal.addEventListener('click', () => {
     .then(async response => {
         if (response.status === 200) {
             const data = await response.json();
+            console.log(data)
+
             Swal.fire({
                 title: 'Éxito',
                 text: 'Corte actualizado exitosamente.',
@@ -24,7 +26,8 @@ btnCorteFinal.addEventListener('click', () => {
                 confirmButtonText: 'Aceptar'
             }).then(async () => {
                 console.log(data)
-                await imprimirTicketCorteFinal(data.corte, data.codigoBarras);  // Pasa la información del corte y el código de barras
+                await imprimirTicketCorteFinal(data.corte, data.codigoBarras);
+                window.location.replace("/puntoventa");
             });
 
         } else if (response.status === 409) {
@@ -50,8 +53,9 @@ btnCorteFinal.addEventListener('click', () => {
     });
 });
 
-async function imprimirTicketCorteFinal(corteFinal, codigoBarras) {
-    const { folio, fecha_final, fecha_inicial, totalVentaCorte, monto_transferencias, total_tarjetas } = corteFinal;
+async function imprimirTicketCorteFinal(corte, codigoBarras) {
+
+    const { folio, fecha_final, fecha_inicial, finanzasTotales, corteFinal } = corte;
     const sucursalName = await cargarSucursal(infoUser.sucursalId);
 
     const contenidoTicket = `
@@ -62,9 +66,9 @@ async function imprimirTicketCorteFinal(corteFinal, codigoBarras) {
             <p><strong>Usuario:</strong> ${infoUser.username}</p>
             <p><strong>Fecha apertura:</strong> ${new Date(fecha_inicial).toLocaleString()}</p>
             <p><strong>Fecha cierre:</strong> ${new Date(fecha_final).toLocaleString()}</p>
-            <p><strong>Monto total:</strong> $${totalVentaCorte.toFixed(2)}</p>
-            <p><strong>Total Tarjetas:</strong> $${total_tarjetas.toFixed(2)}</p>
-            <p><strong>Total Transferencias:</strong> $${monto_transferencias.toFixed(2)}</p>
+            <p><strong>Monto total:</strong> $${corteFinal.corte_total.toFixed(2)}</p>
+            <p><strong>Total Tarjetas:</strong> $${finanzasTotales.T_tarjetas.toFixed(2)}</p>
+            <p><strong>Total Transferencias:</strong> $${finanzasTotales.T_transferencias.toFixed(2)}</p>
             <p><strong>Código de Barras:</strong></p>
             <img src="img/archivos/${folio}.png" alt="Código de Barras" />
         </div>

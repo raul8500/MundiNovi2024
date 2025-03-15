@@ -4,44 +4,6 @@ const bwipjs = require('bwip-js');
 const path = require('path');
 const fs = require('fs');
 
-// Función para generar el código de barras
-const generarCodigoDeBarras = async (folio) => {
-    try {
-        const nombreArchivo = path.join(__dirname, `../../public/img/archivos/${folio}.png`);
-
-        return new Promise((resolve, reject) => {
-            bwipjs.toBuffer({
-                bcid: 'code128',       // Tipo de código de barras
-                text: folio,           // Texto que irá en el código de barras
-                scale: 3,              // Escala del código de barras
-                height: 10,            // Altura del código de barras
-                includetext: true,     // Incluye el texto en la imagen
-                textxalign: 'center',  // Alinea el texto al centro
-            }, function (err, png) {
-                if (err) {
-                    console.error('Error al generar el código de barras: ', err);
-                    return reject(err);
-                }
-
-                // Guardar la imagen en el sistema de archivos
-                fs.writeFile(nombreArchivo, png, (err) => {
-                    if (err) {
-                        console.error('Error al guardar el archivo: ', err);
-                        return reject(err);
-                    }
-
-                    // Devolver la ruta del archivo generado
-                    resolve(nombreArchivo);
-                });
-            });
-        });
-
-    } catch (error) {
-        console.error('Error en la generación del código de barras:', error);
-        throw error;
-    }
-};
-
 // Crear o actualizar el reporte de corte final con código de barras
 exports.addCorteFinal = async (req, res) => {
     try {
@@ -58,13 +20,13 @@ exports.addCorteFinal = async (req, res) => {
                 {
                     $set: {
                         'corteFinal': {
-                            cantidad: body,
+                            corte_total: body,
                             observaciones: observaciones
                         },
                         'fecha_final': new Date()
                     },
                     $inc: {
-                        'totalVentasEfectivoCortes': -body,
+                        'totalVentasEfectivoSinCortes': -body,
                         'totalVentaCorte': body
                     }
                 },
@@ -248,5 +210,46 @@ exports.getResumenCorte = async (req, res) => {
     } catch (error) {
         console.error('Error al buscar corte:', error);
         return res.status(500).json({ success: false, message: 'Error interno del servidor' });
+    }
+};
+
+
+
+//Funciones extra 
+
+const generarCodigoDeBarras = async (folio) => {
+    try {
+        const nombreArchivo = path.join(__dirname, `../../public/img/archivos/${folio}.png`);
+
+        return new Promise((resolve, reject) => {
+            bwipjs.toBuffer({
+                bcid: 'code128',       // Tipo de código de barras
+                text: folio,           // Texto que irá en el código de barras
+                scale: 3,              // Escala del código de barras
+                height: 10,            // Altura del código de barras
+                includetext: true,     // Incluye el texto en la imagen
+                textxalign: 'center',  // Alinea el texto al centro
+            }, function (err, png) {
+                if (err) {
+                    console.error('Error al generar el código de barras: ', err);
+                    return reject(err);
+                }
+
+                // Guardar la imagen en el sistema de archivos
+                fs.writeFile(nombreArchivo, png, (err) => {
+                    if (err) {
+                        console.error('Error al guardar el archivo: ', err);
+                        return reject(err);
+                    }
+
+                    // Devolver la ruta del archivo generado
+                    resolve(nombreArchivo);
+                });
+            });
+        });
+
+    } catch (error) {
+        console.error('Error en la generación del código de barras:', error);
+        throw error;
     }
 };

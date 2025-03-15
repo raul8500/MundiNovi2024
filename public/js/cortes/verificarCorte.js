@@ -55,7 +55,7 @@ function getCortesFinales(userInfo) {
 }
 
 function showCorteFields(data){
-    document.getElementById('pagoTarjetas').value = data.total_tarjetas
-    document.getElementById('pagoTransferencia').value = data.monto_transferencias
-    document.getElementById('pagoDocCobrar').value = data.monto_doc_cobrar
+    document.getElementById('pagoTarjetas').value = data.finanzasTotales.T_tarjetas
+    document.getElementById('pagoTransferencia').value = data.finanzasTotales.T_transferencias
+    document.getElementById('pagoDocCobrar').value = data.finanzasTotales.T_monto_doc_cobrar
 }
