@@ -13,6 +13,7 @@ function cargarInfoVendedor() {
       document.getElementById("vendedor").textContent = vendedor.name;
       cargarSucursal(vendedor);
       cargarProductos();
+      verificarCortesPendientes(data._id);
     })
     .catch((error) => console.log(error));
 }
@@ -39,6 +40,29 @@ function cargarProductos() {
     .catch((error) => console.error("Error al cargar productos:", error));
 }
 
+function verificarCortesPendientes(userId) {
+  fetch(`/api/cortes/verificar/${userId}`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  })
+  .then(response => {
+      console.log(response.status)
+      if (response.status === 404) {
+         window.location.href = '/corteparcial';
+      } else if (response.status === 200) {
+          console.log('No hay cortes pendientes');
+      } else {
+          throw new Error('Error al verificar cortes.');
+      }
+  })
+  .catch(error => {
+      console.error('Error al verificar cortes pendientes:', error);
+      Swal.fire('Error', 'Hubo un problema al verificar los cortes pendientes. Por favor, inténtalo de nuevo.', 'error');
+  });
+}
+
 
 //Focus en el input de buscar
 document.addEventListener("DOMContentLoaded", function () {
@@ -56,10 +80,10 @@ function calcularPrecio(producto, cantidad) {
     let rf = producto.datosFinancieros[`rangoFinal${i}`];
     let precioX = producto.datosFinancieros[`precio${i}`];
     if (cantidad >= ri && (rf === 0 || cantidad <= rf)) {
-      return precioX;
+      return precioX.toFixed(2);
     }
   }
-  return producto.datosFinancieros.precio1;
+  return producto.datosFinancieros.precio1.toFixed(2);
 }
 
 // Función para actualizar el resumen de la venta (total de artículos y total de venta)
@@ -150,7 +174,6 @@ function agregarProductoTabla(producto, cantidad) {
     inputPrecio.classList.add("form-control");
     inputPrecio.value = calcularPrecio(producto, cantidad);
     tdPrecio.appendChild(inputPrecio);
-    tr.appendChild(tdPrecio);
   
     // Nueva celda: Precio con IVA (16% del precio)
     const tdPrecioIva = document.createElement("td");

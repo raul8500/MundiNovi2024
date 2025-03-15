@@ -61,116 +61,9 @@ exports.deleteCorteParcial = async (req, res) => {
     }
 };
 
-async function checkCorteUsuarioIniciadoONoFinalizado(userId) {
-    try {
-        const corte = await CorteGeneral.findOne({
-            usuario: userId,
-            folio: { $exists: true },  // Asegura que el folio exista (es decir, que el corte esté iniciado)
-            fecha_final: { $exists: false }  // Verifica que el corte no esté finalizado
-        });
 
-        // Si existe un corte iniciado y no finalizado, retorna el folio
-        if (corte) {
-            return corte.folio;  // Devolver el folio del corte
-        }
 
-        // Si no hay corte iniciado ni pendiente, retorna null
-        return null;
-    } catch (error) {
-        console.log('Error al buscar corte:', error);
-        throw new Error('Error interno del servidor');
-    }
-}
 
-async function checkTotalVentasEfectivo(folio) {
-    try {
-        const corte = await CorteGeneral.findOne({ folio });
-
-        if (corte && corte.totalVentasEfectivoCortes >= 2000) {
-            return true;
-        } else {
-            return false;
-        }
-    } catch (error) {
-        console.error('Error al verificar el total de ventas en efectivo:', error);
-        throw new Error('Error interno al verificar el total de ventas en efectivo');
-    }
-}
-
-async function generarFolio() {
-    try {
-        const ultimoCorteParcial = await CorteParcial.findOne()
-            .sort({ folio: -1 })
-            .select('folio');
-
-        let nuevoFolio;
-
-        if (ultimoCorteParcial && ultimoCorteParcial.folio) {
-            // Si existe un corte parcial, aumentar el folio en 1
-            nuevoFolio = parseInt(ultimoCorteParcial.folio) + 1;
-        } else {
-            nuevoFolio = 1000;
-        }
-
-        if (nuevoFolio < 1000 || nuevoFolio > 9999) {
-            throw new Error('El folio generado está fuera del rango permitido.');
-        }
-
-        return nuevoFolio.toString();
-
-    } catch (error) {
-        console.error('Error al generar el folio:', error);
-        throw new Error('Error interno al generar el folio.');
-    }
-}
-
-async function agregarFolioHijoACorteFinal(folioPadre, folioHijo, cantidadCorte) {
-    try {
-        // Buscar el CorteFinal por el folio del padre
-        const corteFinal = await CorteGeneral.findOne({ folio: folioPadre });
-
-        if (!corteFinal) {
-            throw new Error(`No se encontró un CorteFinal con el folio ${folioPadre}`);
-        }
-
-        // Verificar si el total de ventas en efectivo es suficiente para restar 2000
-        if (corteFinal.totalVentasEfectivoCortes < 2000) {
-            return {
-                success: false,
-                message: `El total de ventas en efectivo es menor a 2000, no se puede realizar el corte.`
-            };
-        }
-
-        // Verificar si el folio hijo ya está presente en el arreglo de cortes
-        if (!corteFinal.cortes.includes(folioHijo)) {
-            // Restar 2000 de totalVentasEfectivoCortes
-            corteFinal.totalVentasEfectivoCortes -= cantidadCorte;
-
-            // Sumar 2000 a totalVentaCorte
-            corteFinal.totalVentaCorte = (corteFinal.totalVentaCorte || 0) + cantidadCorte;
-
-            // Agregar el folio hijo al arreglo de cortes
-            corteFinal.cortes.push(folioHijo);
-
-            // Guardar los cambios
-            await corteFinal.save();
-
-            return {
-                success: true,
-                message: `Folio hijo ${folioHijo} agregado correctamente al CorteFinal con folio ${folioPadre}, se restaron 2000 de totalVentasEfectivoCortes.`
-            };
-        } else {
-            return {
-                success: false,
-                message: `El folio hijo ${folioHijo} ya está presente en el CorteFinal con folio ${folioPadre}`
-            };
-        }
-
-    } catch (error) {
-        console.error('Error al agregar el folio hijo y actualizar las ventas:', error);
-        throw new Error('Error interno al agregar el folio hijo.');
-    }
-}
 
 // Crear un nuevo corte parcial
 exports.addCorteParcial = async (req, res) => {
@@ -179,6 +72,8 @@ exports.addCorteParcial = async (req, res) => {
         let vendedor = req.body.vendedor;
         let folioPadre = '';
         const cortePendiente = await checkCorteUsuarioIniciadoONoFinalizado(vendedor);
+
+        console.log('cortePendiente' + cortePendiente)
 
         if (cortePendiente) {
             folioPadre = cortePendiente;
@@ -191,6 +86,8 @@ exports.addCorteParcial = async (req, res) => {
                 
                 // Generar un nuevo folio para el corte parcial
                 const nuevoFolio = await generarFolio();
+
+                console.log('Nuevo Folio' + nuevoFolio)
 
                 // Crear el nuevo corte parcial
                 const nuevoCorteParcial = new CorteParcial({
@@ -312,3 +209,123 @@ exports.verificarCortePendiente = async (req, res) => {
 };
 
 
+
+//Funciones extras
+
+async function checkCorteUsuarioIniciadoONoFinalizado(userId) {
+    try {
+        const corte = await CorteGeneral.findOne({
+            usuario: userId,
+            folio: { $exists: true },  // Asegura que el folio exista (es decir, que el corte esté iniciado)
+            fecha_final: { $exists: false }  // Verifica que el corte no esté finalizado
+        });
+
+        // Si existe un corte iniciado y no finalizado, retorna el folio
+        if (corte) {
+            return corte.folio;  // Devolver el folio del corte
+        }
+
+        // Si no hay corte iniciado ni pendiente, retorna null
+        return null;
+    } catch (error) {
+        console.log('Error al buscar corte:', error);
+        throw new Error('Error interno del servidor');
+    }
+}
+
+async function checkTotalVentasEfectivo(folio) {
+    try {
+        const corte = await CorteGeneral.findOne({ folio });
+
+        if (corte && corte.totalVentasEfectivoSinCortes >= 2000) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.error('Error al verificar el total de ventas en efectivo:', error);
+        throw new Error('Error interno al verificar el total de ventas en efectivo');
+    }
+}
+
+async function generarFolio() {
+    try {
+        const ultimoCorteParcial = await CorteParcial.findOne()
+            .sort({ folio: -1 })
+            .select('folio');
+
+        let nuevoFolio;
+
+        if (ultimoCorteParcial && ultimoCorteParcial.folio) {
+            // Si existe un corte parcial, aumentar el folio en 1
+            nuevoFolio = parseInt(ultimoCorteParcial.folio) + 1;
+        } else {
+            nuevoFolio = 1000;
+        }
+
+        if (nuevoFolio < 1000 || nuevoFolio > 9999) {
+            throw new Error('El folio generado está fuera del rango permitido.');
+        }
+
+        return nuevoFolio.toString();
+
+    } catch (error) {
+        console.error('Error al generar el folio:', error);
+        throw new Error('Error interno al generar el folio.');
+    }
+}
+
+async function agregarFolioHijoACorteFinal(folioPadre, folioHijo, cantidadCorte) {
+    try {
+        // Buscar el CorteFinal por el folio del padre
+        const corteFinal = await CorteGeneral.findOne({ folio: folioPadre });
+
+        console.log('corteFinal' + corteFinal)
+
+
+        if (!corteFinal) {
+            throw new Error(`No se encontró un CorteFinal con el folio ${folioPadre}`);
+        }
+
+        // Verificar si el total de ventas en efectivo es suficiente para restar 2000
+        if (corteFinal.totalVentasEfectivoSinCortes < 2000) {
+            return {
+                success: false,
+                message: `El total de ventas en efectivo es menor a 2000, no se puede realizar el corte.`
+            };
+        }
+
+        // Verificar si el folio hijo ya está presente en el arreglo de cortes
+        if (!corteFinal.cortesParciales.includes(folioHijo)) {
+            // Restar 2000 de totalVentasEfectivoCortes
+
+            console.log("cantidadCorte" + cantidadCorte)
+
+            corteFinal.totalVentasEfectivoSinCortes -= cantidadCorte;
+
+            console.log('folioHijo' +folioHijo )
+            // Agregar el folio hijo al arreglo de cortes
+            corteFinal.cortesParciales.push({folio: folioHijo, total: cantidadCorte });
+
+            console.log('corteFinal' + corteFinal)
+            // Guardar los cambios
+            await corteFinal.save();
+
+
+
+            return {
+                success: true,
+                message: `Folio hijo ${folioHijo} agregado correctamente al CorteFinal con folio ${folioPadre}, se restaron 2000 de totalVentasEfectivoCortes.`
+            };
+        } else {
+            return {
+                success: false,
+                message: `El folio hijo ${folioHijo} ya está presente en el CorteFinal con folio ${folioPadre}`
+            };
+        }
+
+    } catch (error) {
+        console.error('Error al agregar el folio hijo y actualizar las ventas:', error);
+        throw new Error('Error interno al agregar el folio hijo.');
+    }
+}

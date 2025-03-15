@@ -443,9 +443,9 @@ function imprimirTicket(data) {
             <ul style="list-style: none; padding: 0; margin: 0; font-size: 9px;">
                 <li>
                     <span style="display: inline-block; width: 30px; text-align: left;">Cant.</span>
-                    <span style="display: inline-block; width: 90px; text-align: left;">Artículo</span>
-                    <span style="display: inline-block; width: 40px; text-align: right;">Precio</span>
-                    <span style="display: inline-block; width: 40px; text-align: right;">Total</span>
+                    <span style="display: inline-block; width: 92px; text-align: left;">Artículo</span>
+                    <span style="display: inline-block; width: 42px; text-align: right;">Precio</span>
+                    <span style="display: inline-block; width: 42px; text-align: right;">Total</span>
                 </li>
                 ${productos.map(p => {
                     const nombreDividido = p.nombre.split(" ");
@@ -465,9 +465,9 @@ function imprimirTicket(data) {
                     return `
                         <li style="word-break: break-word; margin-bottom: 5px;">
                             <span style="display: inline-block; width: 30px; text-align: left; vertical-align: middle;">${p.cantidad}</span>
-                            <span style="display: inline-block; width: 90px; text-align: left;">${nombreHtml}</span>
-                            <span style="display: inline-block; width: 40px; text-align: right;">$${p.precioConIva.toFixed(2)}</span>
-                            <span style="display: inline-block; width: 40px; text-align: right;">$${p.precioConIva.toFixed(2) * p.cantidad}</span>
+                            <span style="display: inline-block; width: 92px; text-align: left;">${nombreHtml}</span>
+                            <span style="display: inline-block; width: 42px; text-align: right;">$${p.precioConIva.toFixed(2)}</span>
+                            <span style="display: inline-block; width: 42px; text-align: right;">$${p.precioConIva.toFixed(2) * p.cantidad}</span>
                         </li>
                     `;
                 }).join('')}
@@ -509,7 +509,7 @@ function imprimirTicket(data) {
     //const totalAhorro = calcularAhorro(data.productos);
 
     const ticketContent = `
-        <div style="width: 55mm; padding: 10px; font-size: 10px;">
+        <div style="width: 60mm; padding: 10px; font-size: 10px;">
             <img id="logo" src="/img/logoColor.png" style="width: 90px; height: 80px; display: block; margin: 0 auto;">
             <h2 style="text-align: center;">Mundi Novi</h2>
             <p style="text-align: center; margin: 2px 0;">JESUS MARIA AGUIRRE VEGA</p>
