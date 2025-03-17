@@ -53,17 +53,20 @@ exports.getIndicadores = async (req, res) => {
 // Obtener indicador de ventas por ID
 exports.getIndicadorById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const indicador = await Indicadores.findById(id).populate('sucursalId', 'nombre'); // Si quieres obtener el nombre y ubicación de la sucursal
+        const { sucursalId } = req.params;
+
+        // Buscar el indicador correspondiente a la sucursalId
+        const indicador = await Indicadores.findOne({ sucursalId });
 
         if (!indicador) {
-            return res.status(404).send('Indicador no encontrado');
+            console.log('dwad')
+            return res.status(404).json({ error: 'Indicador no encontrado' });
         }
 
-        res.status(200).json(indicador);
+        res.status(200).json(indicador); // Devolver el indicador encontrado
     } catch (error) {
-        console.error('Error al obtener el indicador por ID:', error);
-        res.status(500).send('Error interno del servidor');
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener el indicador' });
     }
 };
 

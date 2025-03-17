@@ -1,5 +1,7 @@
 const CorteParcial = require('../../schemas/cortes/cortesParcialesSchema')
 const CorteFinal = require('../../schemas/cortes/cortesFinalesSchema');
+const Indicadores = require('../../schemas/cortes/indicadoresSchema');
+
 const bwipjs = require('bwip-js');
 const path = require('path');
 const fs = require('fs');
@@ -84,15 +86,25 @@ exports.getCortesFinales = async (req, res) => {
             sucursal: sucursalId,
         };
 
-        // Buscar los cortes finales según la consulta
+        // Paso 1: Obtener los indicadores para la sucursal
+        const indicadores = await Indicadores.findOne({ sucursalId });
+
+        // Paso 2: Buscar los cortes finales según la consulta
         let cortesFinales = await CorteFinal.find(query)
             .populate('usuario', 'username') // Obtener más detalles de la sucursal
             .populate('usuario_recepcion', 'username') // Obtener más detalles de la sucursal
             .sort({ fecha_inicial: -1 });   // Ordenar los resultados por fecha_inicial de manera descendente
 
-        // Iterar sobre cada corte final y buscar los detalles de los cortes parciales si existen
+        // Paso 3: Iterar sobre cada corte final y buscar los detalles de los cortes parciales si existen
         cortesFinales = await Promise.all(cortesFinales.map(async (corte) => {
             
+            // Asignar los indicadores de la sucursal
+            const indicadoresSucursal = indicadores ? {
+                verde: indicadores.verde,
+                naranja: indicadores.naranja,
+                rojo: indicadores.rojo,
+            } : { verde: 0, naranja: 0, rojo: 0 }; // Si no hay indicadores, asignar 0
+
             if (corte.cortesParciales && corte.cortesParciales.length > 0) {
             
                 // Hacer un map sobre el array de cortesParciales
@@ -107,12 +119,21 @@ exports.getCortesFinales = async (req, res) => {
             
                     return corteParcial;
                 }));
-                
-                return { ...corte.toObject(), cortesParciales: cortesParcialesData };
+
+                // Incluir los indicadores de la sucursal en cada corte
+                return { 
+                    ...corte.toObject(),
+                    cortesParciales: cortesParcialesData,
+                    indicadores: indicadoresSucursal, // Asignamos los indicadores a cada corte
+                };
             } else {
-                return { ...corte.toObject(), cortesParciales: [] };
+                // Si no hay cortes parciales, asignar los indicadores directamente
+                return { 
+                    ...corte.toObject(),
+                    cortesParciales: [],
+                    indicadores: indicadoresSucursal,
+                };
             }
-            
         }));
 
         // Enviar la respuesta con los cortes finales y sus cortes parciales
@@ -123,22 +144,29 @@ exports.getCortesFinales = async (req, res) => {
     }
 };
 
-// Obtener un corte final por ID
+// Obtener el corte final por su ID
 exports.getCorteFinalById = async (req, res) => {
     try {
         const { id } = req.params;
-        const corteFinal = await CorteFinal.findById(id);
+
+        // Buscar el corte final por su ID
+        const corteFinal = await CorteFinal.findById(id)
+            .populate('usuario', 'username')
+            .populate('sucursal', 'nombre')
+            .exec();
 
         if (!corteFinal) {
-            return res.status(404).send('Corte final no encontrado');
+            return res.status(404).json({ error: 'Corte final no encontrado' });
         }
 
-        res.status(200).send(corteFinal);
+        // Devolver el corte final encontrado
+        res.status(200).json(corteFinal);
     } catch (error) {
-        console.error('Error al obtener el corte final por ID:', error);
-        res.status(500).send('Error interno del servidor');
+        console.error('Error al obtener el corte final:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
+
 
 // Actualizar un corte final por ID
 exports.updateCorteFinalById = async (req, res) => {
@@ -222,6 +250,43 @@ exports.getResumenCorte = async (req, res) => {
     } catch (error) {
         console.error('Error al buscar corte:', error);
         return res.status(500).json({ success: false, message: 'Error interno del servidor' });
+    }
+};
+
+// Finalizar un corte de venta
+exports.finalizarCorte = async (req, res) => {
+    try {
+        const { id, totalVales } = req.body;
+
+        // Validar que se proporcionen el id y el total de vales
+        if (!id || totalVales === undefined) {
+            return res.status(400).send('El id del corte y el total de vales son requeridos');
+        }
+
+        // Buscar el corte por su ID
+        const corte = await CorteFinal.findById(id);
+
+        // Validar si el corte existe
+        if (!corte) {
+            return res.status(404).json({ error: 'Corte no encontrado' });
+        }
+
+        // Actualizar el estado del corte a finalizado (true)
+        corte.estado = true;
+
+        // Si se proporciona el total de vales, se lo asignamos al corte
+        if (totalVales !== undefined) {
+            corte.vales = totalVales;
+        }
+
+        // Guardar los cambios en la base de datos
+        await corte.save();
+
+        // Responder con éxito
+        res.status(200).json({ message: 'Corte finalizado correctamente' });
+    } catch (error) {
+        console.error('Error al finalizar el corte:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 

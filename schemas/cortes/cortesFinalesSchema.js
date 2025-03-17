@@ -12,6 +12,8 @@ const corteFinalSchema = new Schema({
     fecha_recepcion: { type: Date, required: false },
     recepcion: { type: Boolean, required: false },  
     observaciones: { type: String, required: false, default: '' },
+    estado: { type: Boolean, required: false, default: false },  
+    vales: { type: Number, required: false, default: 0 },  
     finanzasTotales: {
         T_cobranzas: { type: Number, required: false, default: 0 },  
         T_monto_doc_cobrar: { type: Number, required: false, default: 0  }, 
@@ -38,7 +40,7 @@ const corteFinalSchema = new Schema({
     corteFinal:
         {
             corte_total: { type: Number, required: false},
-            observaciones: { type: String, required: false }
+            observaciones: { type: String, required: false, default : '' }
         }
 });
 

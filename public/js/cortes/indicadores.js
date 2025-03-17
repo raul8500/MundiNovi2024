@@ -56,7 +56,7 @@ async function cargarIndicadores() {
                 <td>${indicador.naranja}</td>
                 <td>${indicador.rojo}</td>
                 <td>
-                    <button class="btn btn-warning btn-sm" onclick="editarIndicador('${indicador.sucursalId}')">Editar</button>
+                    <button class="btn btn-warning btn-sm" onclick="editarIndicador('${indicador.sucursalId._id}')">Editar</button>
                 </td>
             `;
             tableBody.appendChild(row);
@@ -70,14 +70,34 @@ async function cargarIndicadores() {
 }
 
 // Función para editar un indicador
-function editarIndicador(sucursalId) {
-    // Aquí puedes cargar los datos del indicador para editarlo en el formulario
-    const sucursalSelect = document.getElementById('sucursalSelect');
-    sucursalSelect.value = sucursalId;
-    
-    // Lógica para cargar los datos del indicador en el formulario, si existe
-    // En este ejemplo, puedes enviar una solicitud al backend para obtener el indicador y prellenar los campos.
-    // Pero eso dependerá de tu implementación.
+async function editarIndicador(sucursalId) {
+    try {
+        // Obtener el indicador correspondiente a la sucursalId desde el backend
+        const response = await fetch(`/api/indicadores/${sucursalId}`);
+        if (!response.ok) {
+            throw new Error('Error al obtener el indicador');
+        }
+
+        // Obtener los datos del indicador
+        const indicador = await response.json();
+
+        // Prellenar los campos del formulario con los datos del indicador
+        document.getElementById('sucursalSelect').value = indicador.sucursalId; // Asumimos que el campo 'sucursalSelect' es un select y su valor es sucursalId
+        document.getElementById('verde').value = indicador.verde;
+        document.getElementById('naranja').value = indicador.naranja;
+        document.getElementById('rojo').value = indicador.rojo;
+
+        // Mostrar el modal con los datos cargados
+        const modal = new bootstrap.Modal(document.getElementById('indicadoresModal'));
+        modal.show();
+    } catch (error) {
+        console.error(error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo cargar el indicador para editar.',
+        });
+    }
 }
 
 // Lógica para guardar los indicadores

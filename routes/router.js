@@ -562,9 +562,8 @@ router.get('/api/cortesFinales/:id', cortesFinales.getCorteFinalById)
 router.post('/api/cortesFinales', cortesFinales.addCorteFinal)
 router.put('/api/cortesFinales/:id', cortesFinales.updateCorteFinalById)
 router.delete('/api/cortesFinales/:id', cortesFinales.deleteCorteFinalById)
-
 router.get('/api/cortesFinalesUser/:userId', cortesFinales.getResumenCorte)
-
+router.post('/api/cortes/finalizar', cortesFinales.finalizarCorte)
 
 
 //Recepcion Cortes
@@ -818,7 +817,7 @@ router.get('/api/reporteCostoInventario/:sucursal', reportesCostoInventario.getA
 router.get('/api/indicadores', indicadoresController.getIndicadores);
 
 // Ruta para obtener un indicador por ID
-router.get('/api/indicadores/:id', indicadoresController.getIndicadorById);
+router.get('/api/indicadores/:sucursalId', indicadoresController.getIndicadorById);
 
 // Ruta para crear un nuevo indicador
 router.post('/api/indicadores', indicadoresController.createIndicador);

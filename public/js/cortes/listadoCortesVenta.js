@@ -116,6 +116,16 @@ function mostrarEnTabla(cortes) {
         const totalVenta = item.total_ventas
         const totalEfectivo = item.finanzasTotales.T_efectivo || 0;
 
+        let indicador = ''
+
+        if (totalVenta >= item.indicadores.verde) {
+            indicador = '<i class="fa-solid fa-circle fa-2xl" style="color: #77bb41;"></i>'; // Verde
+        } else if (totalVenta >= item.indicadores.naranja) {
+            indicador = '<i class="fa-solid fa-circle fa-2xl" style="color: #ff8c82;"></i>'; // Naranja
+        } else if (totalVenta >= item.indicadores.rojo) {
+            indicador = '<i class="fa-solid fa-circle fa-2xl" style="color: #e32400;"></i>'; // Rojo
+        }
+
         // Mostrar cantidades de cortes parciales en forma de lista con su signo de peso
         let cantidadesCortesParciales = '';
         let totalCortesParciales = 0;
@@ -130,7 +140,24 @@ function mostrarEnTabla(cortes) {
         const corteFinal = item.corteFinal ? `$${(item.corteFinal.corte_total || 0).toFixed(2)}` : `$0.00`;
 
         // Sumar el total de los cortes
-        const totalCortes = totalCortesParciales + (item.corteFinal ? item.corteFinal.corte_total : 0);
+        // Verificar si los valores son números válidos y asignarles 0 si no lo son
+        const totalCortesParcialesValid = isNaN(totalCortesParciales) ? 0 : totalCortesParciales;
+        const corteFinalTotalValid = isNaN(item.corteFinal?.corte_total) ? 0 : item.corteFinal.corte_total;
+
+        // Calcular el total de los cortes
+        const totalCortes = totalCortesParcialesValid + corteFinalTotalValid;
+
+
+
+        let totalVales = ''
+
+        if(item.corteFinal && item.corteFinal.corte_total){
+            totalVales = (totalEfectivo - totalCortes).toFixed(2)
+
+        }else{
+            totalVales = (0).toFixed(2)
+        }
+
 
         resultadosCortes += `
         
@@ -162,27 +189,151 @@ function mostrarEnTabla(cortes) {
                         ${corteFinal}
                     </td>
                     <td class="text-center">$${item.egresos}</td>
-                    <td class="text-center"><i class="fa-solid fa-circle fa-2xl" style="color: #77bb41;"></i></td>
+                    <td class="text-center">${indicador}</td>
                     <td class="text-center" style="color: green; font-weight: bold;">$${totalVenta.toFixed(2)}</td>
                     <td class="text-center">$${totalCortes.toFixed(2)}</td> <!-- Total de los cortes -->
-                    <td class="text-center">Vales</td>
-                    <td class="text-center">Vales2</td>
-                    <td class="text-center">${item.observaciones}</td>
+                    <td class="text-center">$${totalVales}</td>
+                    <td class="text-center">${item.corteFinal.observaciones}</td>
                     <td class="text-center">
-                            <button id="${item._id}" type="button" class="btn btn-success btn-rounded btnRecibir corteFinal">
-                                Finalizar
-                            </button>
-                            <button id="${item._id}" type="button" class="btn btn-primary btn-rounded btnRecibir corteFinal">
-                                Ver
-                            </button>
-                            <button id="${item._id}" type="button" class="btn btn-info btn-rounded btnRecibir corteFinal">
-                                Vales
-                            </button>
+                        ${item.estado === true 
+                            ? `<button data-id="${item._id}" type="button" class="btn btn-success btn-rounded btnRecibir corteFinal">
+                                    Finalizado
+                            </button>`
+                            : `<button data-id="${item._id}" type="button" class="btn btn-warning btn-rounded btnRecibir corteFinal">
+                                    Finalizar
+                            </button>`
+                        }
+
+                        <!-- Los botones "Ver" y "Vales" permanecen iguales -->
+                        <button data-id="${item._id}" type="button" class="btn btn-primary btn-rounded btnVer corteFinal">
+                            Ver
+                        </button>
+                        <button data-id="${item._id}" type="button" class="btn btn-info btn-rounded btnVales corteFinal">
+                            Vales
+                        </button>
                     </td>
+
                 </tr>`;
     });
 
     // Insertar el contenido generado en el cuerpo de la tabla
     tablaRecoleccionBody.innerHTML = resultadosCortes;
 }
+
+
+$(document).on('click', '.btnRecibir', function () {
+    // Obtener la fila donde se hizo clic en el botón
+    const row = $(this).closest('tr');
+    // Obtener el valor de la columna 21 (la columna con el índice 20)
+    const valorColumna21 = row.find('td').eq(20).text();
+    // Eliminar el signo de dólar y convertir a número
+    const vales = parseFloat(valorColumna21.replace('$', '').replace(',', '').trim());
+
+    // Obtener el ID del botón
+    const id = $(this).data('id');
+
+    // Llamar a la función para finalizar el corte
+    finalizarCorte(id, vales);
+
+});
+
+// Lógica para finalizar el corte
+async function finalizarCorte(idCorte, totalVales) {
+    try {
+        // Enviar la solicitud al backend para finalizar el corte
+        const response = await fetch('/api/cortes/finalizar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: idCorte,  // El id del corte que se va a finalizar
+                totalVales: totalVales,  // El total de vales
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al finalizar el corte');
+        }
+
+        const data = await response.json();
+        console.log(data.message);  // Mensaje de éxito
+
+        // Puedes actualizar la interfaz de usuario, por ejemplo, ocultando el botón de finalizar
+        Swal.fire({
+            icon: 'success',
+            title: 'Corte Finalizado',
+            text: data.message,
+        }).then(() => {
+            // Puedes recargar la página o actualizar la tabla con los datos nuevos
+            location.reload();
+        });
+
+    } catch (error) {
+        console.error('Error al finalizar el corte:', error);
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al finalizar el corte.',
+        });
+    }
+}
+$(document).on('click', '.btnVer', async function () {
+    const id = $(this).data('id');  // Obtener el ID del corte desde el botón
+
+    try {
+        // Hacer la petición GET al backend para obtener los detalles del corte
+        const response = await fetch(`/api/cortesFinales/${id}`);
+
+        if (!response.ok) {
+            throw new Error('No se pudo obtener el corte');
+        }
+
+        const corteFinal = await response.json();
+
+        // Formatear la fecha
+        const fechaInicial = new Date(corteFinal.fecha_inicial);
+        const fechaFinalFormatted = fechaInicial.toLocaleString('es-ES', {
+            weekday: 'long', // Día de la semana
+            year: 'numeric', // Año completo
+            month: 'long', // Nombre completo del mes
+            day: 'numeric', // Día del mes
+            hour: 'numeric', // Hora
+            minute: 'numeric', // Minutos
+            second: 'numeric', // Segundos
+            hour12: false // Formato de 24 horas
+        });
+
+        // Mostrar los detalles del corte final en el modal
+        console.log(corteFinal);  // Muestra los datos del corte final en la consola
+
+        // Insertar los detalles en el modal
+        $('#sucursal').text(corteFinal.sucursal.nombre || 'N/A');
+        $('#folioCorte').text(corteFinal.folio || 'N/A');
+        $('#fechaInicialCorte').text(fechaFinalFormatted || 'N/A');
+        $('#usuario').text(corteFinal.usuario.username || 'N/A');
+
+        $('#totalVentasCorte').text(corteFinal.total_ventas || '0.00');
+        $('#estadoCorte').text(corteFinal.finalizado ? 'Finalizado' : 'Pendiente');
+        $('#totalValesCorte').text(corteFinal.totalVales || '0.00');
+
+        // Mostrar el modal con los detalles del corte
+        const modal = new bootstrap.Modal(document.getElementById('corteFinalModal'));
+        modal.show();
+
+    } catch (error) {
+        console.error('Error al obtener el corte:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al cargar los detalles del corte.',
+        });
+    }
+});
+
+
+
+
+
 
