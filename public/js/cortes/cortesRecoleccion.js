@@ -52,6 +52,9 @@ async function loadSelectOptions(options) {
     }
 }
 
+
+
+
 btnCargarCortes.addEventListener('click', () => {
     let url = getFormValuesAndBuildUrl()
 
@@ -64,6 +67,9 @@ btnCargarCortes.addEventListener('click', () => {
     .then(async response => {
         if (response.status === 200) {
             const data = await response.json();
+            console.log(data)
+
+
             mostrarEnTabla(data)
             buscarFolio.focus()
         } else {
@@ -113,8 +119,8 @@ function mostrarEnTabla(cortes) {
         const fechaInicial = item.fecha_inicial ? new Date(item.fecha_inicial).toLocaleString() : '';
         const fechaFinal = item.fecha_final ? new Date(item.fecha_final).toLocaleString() : '';
         const username = item.usuario && item.usuario.username ? item.usuario.username : '';
-        const totalVenta = item.total_tarjetas + item.monto_transferencias + (item.totalVentasEfectivoCortes || 0) + (item.totalVentaCorte || 0);
-        const totalEfectivo = item.totalVentasEfectivoCortes || 0;
+        const totalVenta = item.total_ventas
+        const totalEfectivo = item.finanzasTotales.T_efectivo || 0;
 
         // Agregar el folio general a la variable global
         if (item.folio) {
@@ -129,14 +135,14 @@ function mostrarEnTabla(cortes) {
                     <td class="text-center">${fechaFinal}</td>
                     <td class="text-center">${username}</td>
                     <td class="text-center">0.0</td>
-                    <td class="text-center">$${item.T_credito !== undefined ? item.T_credito : 0}</td>
-                    <td class="text-center">$${item.T_debito !== undefined ? item.T_debito : 0}</td>
-                    <td class="text-center">$${item.monto_transferencias !== undefined ? item.monto_transferencias : 0}</td>
+                    <td class="text-center">$${item.finanzasTotales.T_credito !== undefined ? item.finanzasTotales.T_credito : 0}</td>
+                    <td class="text-center">$${item.finanzasTotales.T_debito !== undefined ? item.finanzasTotales.T_debito : 0}</td>
+                    <td class="text-center">$${item.finanzasTotales.T_transferencias !== undefined ? item.finanzasTotales.T_transferencias : 0}</td>
                     <td class="text-center">$${item.egresos}</td>
-                    <td class="text-center">$${totalVenta}</td>
+                    <td class="text-center">$${totalEfectivo}</td>
                     <td class="text-center">0.0</td>
                     <td class="text-center">$${totalVenta}</td>
-                    <td class="text-center">$${totalEfectivo}</td>
+                    <td class="text-center">$${item.totalVentasEfectivoSinCortes}</td>
                     <td class="text-center">0.0</td>                    
                     <td class="text-center">
                         ${item.recepcion ? 

@@ -92,15 +92,27 @@ exports.getCortesFinales = async (req, res) => {
 
         // Iterar sobre cada corte final y buscar los detalles de los cortes parciales si existen
         cortesFinales = await Promise.all(cortesFinales.map(async (corte) => {
-            if (corte.cortes && corte.cortes.length > 0) {
-                // Buscar los detalles de cada corte parcial por su folio
-                const cortesParciales = await CorteParcial.find({ folio: { $in: corte.cortes } });
-                // Agregar la información de los cortes parciales al corte final
-                return { ...corte.toObject(), cortesParciales };
+            
+            if (corte.cortesParciales && corte.cortesParciales.length > 0) {
+            
+                // Hacer un map sobre el array de cortesParciales
+                const cortesParcialesData = await Promise.all(corte.cortesParciales.map(async (cp) => {
+                    // Para cada folio, buscar el CorteParcial correspondiente
+                    const corteParcial = await CorteParcial.findOne({ folio: cp.folio });
+            
+                    // Si no se encuentra el corte parcial, puedes decidir qué hacer, por ejemplo, devolver null o un objeto vacío
+                    if (!corteParcial) {
+                        return { folio: cp.folio, corteParcial: null };  // Puedes personalizar lo que se retorna si no se encuentra
+                    }
+            
+                    return corteParcial;
+                }));
+                
+                return { ...corte.toObject(), cortesParciales: cortesParcialesData };
             } else {
-                // Si no hay cortes parciales, devolvemos el campo vacío
                 return { ...corte.toObject(), cortesParciales: [] };
             }
+            
         }));
 
         // Enviar la respuesta con los cortes finales y sus cortes parciales
