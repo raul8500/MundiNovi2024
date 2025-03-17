@@ -171,15 +171,15 @@
                     <hr>
                     <p><strong>Total Ventas:</strong> $<span id="totalVentasCorte"></span></p>
                     <p><strong>Importe ventas en efectivo:</strong> $<span id="totalVentasEfectivoCorte"></span></p>
-                    <p><strong>Importe tarjetas de crédito:</strong> $<span id="totalVentasEfectivoCorte"></span></p>
-                    <p><strong>Importe tarjetas de débito:</strong> $<span id="totalVentasEfectivoCorte"></span></p>
-                    <p><strong>Importe transferencias electrónicas:</strong> $<span id="totalVentasEfectivoCorte"></span></p>
-                    <p><strong>Devoluciones:</strong> $<span id="totalVentasEfectivoCorte"></span></p>
-                    <p><strong>Cortes parciales:</strong> $<span id="totalVentasEfectivoCorte"></span></p>
-                    <p><strong>Salidas:</strong> $<span id="totalVentasEfectivoCorte"></span></p>
-                    <p><strong>Efectivo en caja:</strong> $<span id="totalVentasEfectivoCorte"></span></p>
+                    <p><strong>Importe tarjetas de crédito:</strong> $<span id="totalVentasCreditoCorte"></span></p>
+                    <p><strong>Importe tarjetas de débito:</strong> $<span id="totalVentasDebitoCorte"></span></p>
+                    <p><strong>Importe transferencias electrónicas:</strong> $<span id="totalVentasTransferenciaCorte"></span></p>
+                    <p><strong>Devoluciones:</strong> $<span id="totalDevolucionesCorte"></span></p>
+                    <p><strong>Cortes parciales:</strong> $<span id="totalCortesParcialesCorte"></span></p>
+                    <p><strong>Salidas:</strong> $<span id="totalVentasEgresosCorte"></span></p>
+                    <p><strong>Efectivo en caja:</strong> $<span id="totalVentasEfectivoCajaCorte"></span></p>
                     <p><strong>Vales:</strong> $<span id="totalValesCorte"></span></p>
-                    <p><strong>Observaciones:</strong> $<span id="totalVentasEfectivoCorte"></span></p>
+                    <p><strong>Observaciones:</strong><span id="totalVentasEfectivoCorte"></span></p>
 
                 </div>
                 <div class="modal-footer">
@@ -190,8 +190,25 @@
         </div>
     </div>
 
-
-
+    <!-- Modal para mostrar detalles del vale -->
+    <div class="modal fade" id="valeModal" tabindex="-1" aria-labelledby="valeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="valeModalLabel">Detalles del Vale</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Fecha:</strong> <span id="fechaVale"></span></p>
+                    <p><strong>Usuario:</strong> <span id="usuarioVale"></span></p>
+                    <p><strong>Importe del Vale:</strong> $<span id="importeVale"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 

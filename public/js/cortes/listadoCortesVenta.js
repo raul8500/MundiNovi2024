@@ -279,6 +279,7 @@ async function finalizarCorte(idCorte, totalVales) {
         });
     }
 }
+
 $(document).on('click', '.btnVer', async function () {
     const id = $(this).data('id');  // Obtener el ID del corte desde el botón
 
@@ -305,18 +306,33 @@ $(document).on('click', '.btnVer', async function () {
             hour12: false // Formato de 24 horas
         });
 
-        // Mostrar los detalles del corte final en el modal
-        console.log(corteFinal);  // Muestra los datos del corte final en la consola
-
         // Insertar los detalles en el modal
-        $('#sucursal').text(corteFinal.sucursal.nombre || 'N/A');
+        $('#sucursal').text(corteFinal.sucursal?.nombre || 'N/A');
         $('#folioCorte').text(corteFinal.folio || 'N/A');
         $('#fechaInicialCorte').text(fechaFinalFormatted || 'N/A');
-        $('#usuario').text(corteFinal.usuario.username || 'N/A');
+        $('#usuario').text(corteFinal.usuario?.username || 'N/A');
+        $('#estadoCorte').text(corteFinal.finalizado ? 'Finalizado' : 'Pendiente');
 
         $('#totalVentasCorte').text(corteFinal.total_ventas || '0.00');
-        $('#estadoCorte').text(corteFinal.finalizado ? 'Finalizado' : 'Pendiente');
-        $('#totalValesCorte').text(corteFinal.totalVales || '0.00');
+
+        $('#totalVentasEfectivoCorte').text(corteFinal.finanzasTotales.T_efectivo || '0.00');
+        $('#totalVentasCreditoCorte').text(corteFinal.finanzasTotales.T_credito|| '0.00');
+        $('#totalVentasDebitoCorte').text(corteFinal.finanzasTotales.T_debito  || '0.00');
+        $('#totalVentasTransferenciaCorte').text(corteFinal.finanzasTotales.T_transferencias || '0.00');
+        $('#totalDevolucionesCorte').text(corteFinal.devolucionones || '0.00');
+        // Si corteFinal.corte_total es un arreglo de objetos con la propiedad "total"
+
+
+        const totalCortesParciales = corteFinal.cortesParciales.reduce((sum, item) => {
+            return sum + (item.total || 0); // Sumar el valor de "total" de cada objeto, o 0 si no existe
+        }, 0);
+
+        // Asignar el valor calculado al campo del modal
+        $('#totalCortesParcialesCorte').text(totalCortesParciales.toFixed(2) || '0.00');
+        $('#totalVentasEgresosCorte').text(corteFinal.egresos || '0.00');
+        $('#totalVentasEfectivoCajaCorte').text(corteFinal.totalVentasEfectivoSinCortes || '0.00');
+        $('#totalValesCorte').text(corteFinal.vales || '0.00');
+        $('#observacionesCorte').text(corteFinal.corteFinal.observaciones || 'N/A');
 
         // Mostrar el modal con los detalles del corte
         const modal = new bootstrap.Modal(document.getElementById('corteFinalModal'));
@@ -331,6 +347,54 @@ $(document).on('click', '.btnVer', async function () {
         });
     }
 });
+
+$(document).on('click', '.btnVales', async function () {
+    const id = $(this).data('id');  // Obtener el ID del corte desde el botón
+
+    try {
+        // Hacer la petición GET al backend para obtener los detalles del corte
+        const response = await fetch(`/api/cortesFinales/${id}`);
+
+        if (!response.ok) {
+            throw new Error('No se pudo obtener el corte');
+        }
+
+        const corteFinal = await response.json();
+
+        // Formatear la fecha
+        const fechaVale = new Date(corteFinal.fecha_inicial);  // Asumiendo que `fecha_vale` es la fecha del vale
+        const fechaValeFormatted = fechaVale.toLocaleString('es-ES', {
+            weekday: 'long', // Día de la semana
+            year: 'numeric', // Año completo
+            month: 'long', // Nombre completo del mes
+            day: 'numeric', // Día del mes
+            hour: 'numeric', // Hora
+            minute: 'numeric', // Minutos
+            second: 'numeric', // Segundos
+            hour12: false // Formato de 24 horas
+        });
+
+        // Insertar los detalles del vale en el modal
+        $('#fechaVale').text(fechaValeFormatted || 'N/A');
+        $('#usuarioVale').text(corteFinal.usuario?.username || 'N/A');
+        $('#importeVale').text(corteFinal.importe_vale || '0.00');
+
+        // Mostrar el modal con los detalles del vale
+        const modal = new bootstrap.Modal(document.getElementById('valeModal'));
+        modal.show();
+
+    } catch (error) {
+        console.error('Error al obtener el corte:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al cargar los detalles del vale.',
+        });
+    }
+});
+
+
+
 
 
 
