@@ -4,10 +4,17 @@
         <div class="container-fluid pt-4" style="width: 100%;">
             <h3 class="text-center" style="margin-bottom: 50px;">Listado de cortes de venta por sucursal (Recolección)</h3>
 
+            <div class="d-flex justify-content-end " style="margin-top: 20px;">
+                <button id="abrirIndicadoresModal" type="button" class="btn btn-secondary btn-rounded ms-2">
+                    Indicadores <i class="fa-solid fa-cog" style="color: rgb(42, 42, 243);"></i>
+                </button>
+            </div>
+
+
             <div class="row">
                 <div class="col-md-3">
                     <label for="sucursal" class="form-label">Sucursal</label>
-                    <select id="sucursal" class="form-select" aria-label="Combo box example">
+                    <select id="sucursalId" class="form-select" aria-label="Combo box example">
                     </select>
 
                 </div>
@@ -46,7 +53,6 @@
                                     <th>Recepción</th>
                                     <th>U. Recepción</th>
                                     <th>Fecha Recepción</th>
-                                    
                                     <th>T. Cobranzas</th>
                                     <th>Monto Doc. Cobrar</th>
                                     <th>Venta Efectivo</th>
@@ -54,7 +60,6 @@
                                     <th>T. Débito</th>
                                     <th>Monto Tarjetas</th>
                                     <th>Transferencia E.</th>
-                                    <th>Monto Trans. Elec.</th>
                                     <th>Dev. ventas</th>
                                     <th>Cortes</th>
                                     <th>Salidas</th>
@@ -68,7 +73,6 @@
                                 </tr>
                             </thead>
                             <tbody id="tablaRecoleccionBody" class="table-group-divider">
-                                <!-- Aquí se agregarán las filas -->
                             </tbody>
                         </table>
                     </div>
@@ -78,6 +82,71 @@
 
         </div>
     </main>
+
+
+    <!-- Modal para editar los indicadores -->
+    <div class="modal fade" id="indicadoresModal" tabindex="-1" aria-labelledby="indicadoresModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="indicadoresModalLabel">Actualizar Indicadores de Sucursal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formIndicadores">
+                        <div class="row">
+                            
+                            <div class="col-md-6">
+                                <label for="sucursalSelect" class="form-label">Sucursal</label>
+                                <select id="sucursalSelect" class="form-select" required>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="verde" class="form-label">Indicador Verde</label>
+                                <input type="number" class="form-control" id="verde" placeholder="Cantidad para indicador verde" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="naranja" class="form-label">Indicador Naranja</label>
+                                <input type="number" class="form-control" id="naranja" placeholder="Cantidad para indicador naranja" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="rojo" class="form-label">Indicador Rojo</label>
+                                <input type="number" class="form-control" id="rojo" placeholder="Cantidad para indicador rojo" required>
+                            </div>
+                        </div>
+                        <br>
+                        <button type="button" class="btn btn-primary" id="guardarIndicador">Guardar Indicador</button>
+                        <br>
+                    </form>
+                    <br>
+
+                    <!-- DataTable para mostrar los indicadores -->
+                    <table id="indicadoresTable" class="display">
+                        <thead>
+                            <tr>
+                                <th>Sucursal</th>
+                                <th>Indicador Verde</th>
+                                <th>Indicador Naranja</th>
+                                <th>Indicador Rojo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Los datos de los indicadores se llenarán aquí dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 
@@ -94,4 +163,10 @@
             dateFormat: "Y-m-d"
         });
     </script>
+
+    <script src="js/cortes/listadoCortesVenta.js"></script>
+    <script src="js/cortes/indicadores.js"></script>
+
+
+
     `; %>

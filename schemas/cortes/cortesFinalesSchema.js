@@ -11,6 +11,7 @@ const corteFinalSchema = new Schema({
     usuario_recepcion: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: false }, 
     fecha_recepcion: { type: Date, required: false },
     recepcion: { type: Boolean, required: false },  
+    observaciones: { type: String, required: false, default: '' },
     finanzasTotales: {
         T_cobranzas: { type: Number, required: false, default: 0 },  
         T_monto_doc_cobrar: { type: Number, required: false, default: 0  }, 

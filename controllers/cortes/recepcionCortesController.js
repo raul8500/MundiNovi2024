@@ -4,7 +4,9 @@ const CorteGeneral = require('../../schemas/cortes/cortesFinalesSchema');
 // Actualizar estado de cortes generales y parciales
 exports.updateEstadoCortes = async (req, res) => {
     try {
-        const { foliosGenerales, foliosParciales } = req.body;  // Recibir dos arreglos de folios: uno para generales y otro para parciales
+        const { foliosGenerales, foliosParciales, recolector } = req.body;  // Recibir dos arreglos de folios: uno para generales y otro para parciales
+
+        console.log('user' + recolector)
 
         if (!foliosGenerales && !foliosParciales) {
             return res.status(400).send('Faltan parámetros requeridos: foliosGenerales o foliosParciales');
@@ -16,7 +18,8 @@ exports.updateEstadoCortes = async (req, res) => {
         if (foliosGenerales && foliosGenerales.length > 0) {
             resultGenerales = await CorteGeneral.updateMany(
                 { folio: { $in: foliosGenerales } },  // Buscar los cortes por los folios proporcionados
-                { $set: { recepcion: true, estado: 'recepcion', fecha_recepcion: new Date() } }  // Cambiar el estado a "recepcion" y marcar como recibido
+                { $set: { recepcion: true, fecha_recepcion: new Date(), usuario_recepcion: recolector._id } }
+
             );
         }
 
@@ -24,7 +27,9 @@ exports.updateEstadoCortes = async (req, res) => {
         if (foliosParciales && foliosParciales.length > 0) {
             resultParciales = await CorteParcial.updateMany(
                 { folio: { $in: foliosParciales } },  // Buscar los cortes por los folios proporcionados
-                { $set: { estado: 'recibido', recibido: true } }  // Cambiar el estado a "recibido" y marcar como recibido
+                { $set: { estado: 'recibido', recibido: true } 
+                }
+
             );
         }
 

@@ -86,8 +86,8 @@ exports.getCortesFinales = async (req, res) => {
 
         // Buscar los cortes finales según la consulta
         let cortesFinales = await CorteFinal.find(query)
-            .populate('sucursal', 'nombre')
             .populate('usuario', 'username') // Obtener más detalles de la sucursal
+            .populate('usuario_recepcion', 'username') // Obtener más detalles de la sucursal
             .sort({ fecha_inicial: -1 });   // Ordenar los resultados por fecha_inicial de manera descendente
 
         // Iterar sobre cada corte final y buscar los detalles de los cortes parciales si existen

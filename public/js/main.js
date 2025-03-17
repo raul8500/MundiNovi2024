@@ -62,10 +62,8 @@ function obtenerNombreRol(rol) {
             return "GerenteGeneral";
         case 2:
             return "Cajero";
-        case 3:
-            return "STPS";
         case 4:
-            return "AAdministrativo";
+            return "AuxiliarAdministrativo";
         case 5:
             return "Administrador";
         case 6:

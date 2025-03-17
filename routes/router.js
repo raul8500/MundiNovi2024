@@ -75,7 +75,8 @@ const ventas = require('../controllers/venta/ventasController');
 const reportesCostoInventario = require('../controllers/reportes/costoInventario/costoInventarioController');
 
 
-
+//indicadores
+const indicadoresController = require('../controllers/cortes/indicadoresController');
 
 
 const multerw = require('multer');
@@ -123,7 +124,7 @@ router.get('/puntoDeVenta', authenticated.isAuthenticated,  verifyToken.verifyTo
     res.render('PuntoDeVenta/puntoDeVenta');
 });
 
-router.get('/productos', authenticated.isAuthenticated,  verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
+router.get('/productos', authenticated.isAuthenticated,  verifyToken.verifyToken, (req, res) => {    
     res.render('Productos/productos');
 });
 
@@ -809,6 +810,26 @@ router.post('/api//load-products/excel', productoTest.loadProductsFromExcel);
 //Reportes: 
 router.get('/api/reporteCostoInventario/:sucursal', reportesCostoInventario.getAllKardex);
 
+
+
+//Indicadores
+
+// Ruta para obtener todos los indicadores
+router.get('/api/indicadores', indicadoresController.getIndicadores);
+
+// Ruta para obtener un indicador por ID
+router.get('/api/indicadores/:id', indicadoresController.getIndicadorById);
+
+// Ruta para crear un nuevo indicador
+router.post('/api/indicadores', indicadoresController.createIndicador);
+
+// Ruta para actualizar un indicador por ID
+router.put('/api/indicadores/:id', indicadoresController.updateIndicador);
+
+// Ruta para eliminar un indicador por ID
+router.delete('/api/indicadores/:id', indicadoresController.deleteIndicador);
+
+router.post('/api/indicadores/update', indicadoresController.updateOrCreateIndicador);
 
 
 router.use((req, res, next) => {

@@ -9,6 +9,19 @@ let tablaRecoleccionBody = document.getElementById('tablaRecoleccionBody')
 
 loadSelectOptions(selectOptions);
 
+let recolector = ''
+
+verificarTokenYMostrar2();
+
+function verificarTokenYMostrar2() {
+    fetch(verifyToken)
+        .then(response => response.json())
+        .then(data => {
+            recolector = data;
+        })
+        .catch(error => console.log(error));
+}
+
 
 async function loadSelectOptions(options) {
     try {
@@ -342,7 +355,7 @@ document.getElementById('btnEnviarCortes').addEventListener('click', async () =>
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ foliosGenerales, foliosParciales }), // Enviar arrays de folios generales y parciales
+                body: JSON.stringify({ foliosGenerales, foliosParciales, recolector }), // Enviar arrays de folios generales y parciales
             });
 
             if (response.ok) {
