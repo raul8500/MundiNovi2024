@@ -46,7 +46,7 @@ const kardexSchema = new mongoose.Schema({
     },
     costoUnitario: {
         type: Number,
-        required: true
+        required: false
     }
 }, {
     timestamps: true 

@@ -2,6 +2,7 @@ const Product = require('../../schemas/productosSchema/productosSchema'); // Mod
 const Kardex = require('../../schemas/kardexSchema/kardexSchema'); // Modelo de Kardex
 const Stock = require('../../schemas/stocksSchema/stocksSchema'); // Modelo de Stock
 
+
 // Generar reporte de faltantes
 exports.generarReporteFaltantes = async (req, res) => {
     try {
@@ -19,37 +20,39 @@ exports.generarReporteFaltantes = async (req, res) => {
         }
 
         /** 2. Mapear referencias y buscar existencias para cada producto */
-        const reporte = await Promise.all(productos.map(async (producto) => {
-            // Obtener la existencia más reciente para Origen
-            const existenciaOrigen = await Kardex.findOne(
+        const reporte = await Promise.all(productos.map((producto) => {
+            // Ejecutar todas las consultas de manera simultánea
+            const existenciaOrigenPromise = Kardex.findOne(
                 { reference: producto.reference, sucursal: sucursalOrigen },
                 'existencia'
             ).sort({ fecha: -1 }).lean();
 
-            // Obtener la existencia más reciente para Destino
-            const existenciaDestino = await Kardex.findOne(
+            const existenciaDestinoPromise = Kardex.findOne(
                 { reference: producto.reference, sucursal: sucursalDestino },
                 'existencia'
             ).sort({ fecha: -1 }).lean();
 
-            // Obtener stock para la referencia en la sucursal destino
-            const stockData = await Stock.findOne(
+            const stockDataPromise = Stock.findOne(
                 { sucursalId: sucursalDestino, 'productos.reference': producto.reference },
                 { 'productos.$': 1 } // Proyección para obtener solo el producto específico
             ).lean();
 
-            const stockMinimo = stockData?.productos?.[0]?.stockMinimo || 0;
-            const stockMaximo = stockData?.productos?.[0]?.stockMaximo || 0;
+            // Esperar todas las promesas
+            return Promise.all([existenciaOrigenPromise, existenciaDestinoPromise, stockDataPromise])
+                .then(([existenciaOrigen, existenciaDestino, stockData]) => {
+                    const stockMinimo = stockData?.productos?.[0]?.stockMinimo || 0;
+                    const stockMaximo = stockData?.productos?.[0]?.stockMaximo || 0;
 
-            return {
-                clave: producto.reference,
-                nombre: producto.name,
-                presentacion: producto.presentacion || "N/A",
-                existenciaOrigen: existenciaOrigen?.existencia || 0,
-                existenciaDestino: existenciaDestino?.existencia || 0,
-                stockMinimo,
-                stockMaximo
-            };
+                    return {
+                        clave: producto.reference,
+                        nombre: producto.name,
+                        presentacion: producto.presentacion || "N/A",
+                        existenciaOrigen: existenciaOrigen?.existencia || 0,
+                        existenciaDestino: existenciaDestino?.existencia || 0,
+                        stockMinimo,
+                        stockMaximo
+                    };
+                });
         }));
 
         return res.status(200).json({

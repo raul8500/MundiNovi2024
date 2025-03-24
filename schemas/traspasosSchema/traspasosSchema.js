@@ -1,5 +1,17 @@
 const mongoose = require('mongoose');
 
+const ProductoRecepcionDestino = new mongoose.Schema({
+    reference: { type: String, required: true }, // Referencia del producto
+    name: { type: String, required: true }, // Nombre del producto
+    cantidad: { type: Number, required: true }, // Cantidad traspasada
+});
+
+const ProductoRecepcionReparto = new mongoose.Schema({
+    reference: { type: String, required: true }, // Referencia del producto
+    name: { type: String, required: true }, // Nombre del producto
+    cantidad: { type: Number, required: true }, // Cantidad traspasada
+});
+
 const ProductoTraspasoSchema = new mongoose.Schema({
     reference: { type: String, required: true }, // Referencia del producto
     name: { type: String, required: true }, // Nombre del producto
@@ -21,8 +33,11 @@ const TraspasoSchema = new mongoose.Schema({
     usuarioDestino: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
     fecha: { type: Date, default: Date.now },
     observaciones: { type: String, default: '' },
-    productos: [ProductoTraspasoSchema], // Array de productos traspasados
-    estado: { type: String, enum: ['pendiente', 'completado'], default: 'pendiente' } // Estado del traspaso
+    productos: [ProductoTraspasoSchema],
+    productosReparto: [ProductoRecepcionReparto],
+    productosReparto: [ProductoRecepcionDestino],
+    usuarioReparto: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: false },
+    estado: {type: Number, required: false}
 });
 
 

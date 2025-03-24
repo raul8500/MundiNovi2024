@@ -318,10 +318,11 @@ router.get('/pedidosPorEntregar', (req, res) => {
     res.render('Pedido/pedidosPorEntregar');
 });
 
-router.get('/reporteFaltantes', (req, res) => {    
-    res.render('Faltantes/reporteFaltantes');
-});
 
+
+
+
+//Inico de traspaso
 router.get('/reporteFaltantes', (req, res) => {    
     res.render('Faltantes/reporteFaltantes');
 });
@@ -330,6 +331,7 @@ router.get('/traspasoProductos', (req, res) => {
     res.render('Traspaso/traspasoProductos');
 });
 
+//Listado de traspasos para almacen e impresion de los codigos para los productos
 router.get('/listadoTraspasos', (req, res) => {    
     res.render('Traspaso/listadoTraspasos');
 });
@@ -338,6 +340,8 @@ router.get('/codigosTraspasos', (req, res) => {
     res.render('Traspaso/codigosTraspasos');
 });
 
+//recepcion del reparto
+
 router.get('/recepcionFaltantes', (req, res) => {    
     res.render('Traspaso/recepcionFaltantes');
 });
@@ -345,6 +349,19 @@ router.get('/recepcionFaltantes', (req, res) => {
 router.get('/recepcionFaltantesProductos', (req, res) => {    
     res.render('Traspaso/recepcionFaltantesProductos');
 });
+
+
+//Recepcion de productos de las sucursales 
+router.get('/recepcionFaltantesSucursal', (req, res) => {    
+    res.render('Traspaso/recepcionFaltantesSucursal');
+});
+
+
+
+
+
+
+
 
 router.get('/ingresos', (req, res) => {    
     res.render('Ingresos/Ingresos.ejs');
@@ -721,6 +738,7 @@ router.get('/api/traspasos/:id', traspasos.obtenerTraspasoPorId);
 router.post('/api/traspasos/:traspasoId', traspasos.generarPDFTraspaso);
 router.get('/api/traspasos', traspasos.obtenerTodosLosTraspasos);
 
+router.put('/api/traspasos/recibirReparto/:id', traspasos.recibirProductosBodega);
 
 
 

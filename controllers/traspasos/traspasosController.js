@@ -36,10 +36,10 @@ exports.obtenerVentasPorSucursalYFechas = async (req, res) => {
         fechaFinalISO.setUTCHours(23, 59, 59, 999); // Último milisegundo UTC del día final
 
         // 4️⃣ **Obtener todos los productos**
-        const productos = await Producto.find({}, 'reference name presentacion volumen peso');
+        const productosPromise = Producto.find({}, 'reference name presentacion volumen peso');
 
-        // 5️⃣ **Buscar ventas por sucursal origen y rango de fechas (en UTC)**
-        const ventasOrigen = await Venta.find({
+        // 5️⃣ **Buscar ventas por sucursal origen y destino en paralelo**
+        const ventasOrigenPromise = Venta.find({
             sucursal: sucursalOrigenObjId,
             fecha: {
                 $gte: fechaInicioISO.toISOString(),
@@ -47,7 +47,7 @@ exports.obtenerVentasPorSucursalYFechas = async (req, res) => {
             }
         });
 
-        const ventasDestino = await Venta.find({
+        const ventasDestinoPromise = Venta.find({
             sucursal: sucursalDestinoObjId,
             fecha: {
                 $gte: fechaInicioISO.toISOString(),
@@ -55,13 +55,60 @@ exports.obtenerVentasPorSucursalYFechas = async (req, res) => {
             }
         });
 
+        // 6️⃣ **Buscar stock para las sucursales en paralelo**
+        const stockOrigenPromise = Stock.findOne({ sucursalId: sucursalOrigenObjId });
+        const stockDestinoPromise = Stock.findOne({ sucursalId: sucursalDestinoObjId });
+
+        // 7️⃣ **Buscar la última existencia en Kardex para Origen y Destino en paralelo**
+        const kardexOrigenPromise = Kardex.aggregate([
+            { $match: { sucursal: sucursalOrigenObjId } },
+            { $sort: { fecha: -1 } },
+            {
+                $group: {
+                    _id: "$reference",
+                    ultimaExistencia: { $first: "$existencia" }
+                }
+            }
+        ]);
+
+        const kardexDestinoPromise = Kardex.aggregate([
+            { $match: { sucursal: sucursalDestinoObjId } },
+            { $sort: { fecha: -1 } },
+            {
+                $group: {
+                    _id: "$reference",
+                    ultimaExistencia: { $first: "$existencia" }
+                }
+            }
+        ]);
+
+        // Ejecutar todas las promesas simultáneamente
+        const [
+            productos,
+            ventasOrigen,
+            ventasDestino,
+            stockOrigen,
+            stockDestino,
+            kardexOrigen,
+            kardexDestino
+        ] = await Promise.all([
+            productosPromise,
+            ventasOrigenPromise,
+            ventasDestinoPromise,
+            stockOrigenPromise,
+            stockDestinoPromise,
+            kardexOrigenPromise,
+            kardexDestinoPromise
+        ]);
+
         // Crear mapas para sumar cantidades vendidas por producto usando `productoId`
         const mapaCantidadesOrigen = {};
         const mapaCantidadesDestino = {};
 
         ventasOrigen.forEach(venta => {
             venta.productos.forEach(producto => {
-                const productoId = producto.productoId.toString();
+                console.log(producto.id)
+                const productoId = producto.id.toString();
 
                 if (!mapaCantidadesOrigen[productoId]) {
                     mapaCantidadesOrigen[productoId] = 0;
@@ -72,7 +119,7 @@ exports.obtenerVentasPorSucursalYFechas = async (req, res) => {
 
         ventasDestino.forEach(venta => {
             venta.productos.forEach(producto => {
-                const productoId = producto.productoId.toString();
+                const productoId = producto.id.toString();
 
                 if (!mapaCantidadesDestino[productoId]) {
                     mapaCantidadesDestino[productoId] = 0;
@@ -81,10 +128,7 @@ exports.obtenerVentasPorSucursalYFechas = async (req, res) => {
             });
         });
 
-        // 6️⃣ **Buscar stock para las sucursales**
-        const stockOrigen = await Stock.findOne({ sucursalId: sucursalOrigenObjId });
-        const stockDestino = await Stock.findOne({ sucursalId: sucursalDestinoObjId });
-
+        // Crear mapas de stock para las sucursales
         const mapaStockOrigen = stockOrigen?.productos.reduce((mapa, producto) => {
             mapa[producto.reference] = {
                 stockMinimo: producto.stockMinimo,
@@ -101,30 +145,7 @@ exports.obtenerVentasPorSucursalYFechas = async (req, res) => {
             return mapa;
         }, {}) || {};
 
-        // 7️⃣ **Buscar la última existencia en Kardex para Origen y Destino**
-        const kardexOrigen = await Kardex.aggregate([
-            { $match: { sucursal: sucursalOrigenObjId } },
-            { $sort: { fecha: -1 } },
-            {
-                $group: {
-                    _id: "$reference",
-                    ultimaExistencia: { $first: "$existencia" }
-                }
-            }
-        ]);
-
-        const kardexDestino = await Kardex.aggregate([
-            { $match: { sucursal: sucursalDestinoObjId } },
-            { $sort: { fecha: -1 } },
-            {
-                $group: {
-                    _id: "$reference",
-                    ultimaExistencia: { $first: "$existencia" }
-                }
-            }
-        ]);
-
-        // Crear mapas para las existencias
+        // Crear mapas para las existencias de Kardex
         const mapaExistenciaOrigen = kardexOrigen.reduce((mapa, registro) => {
             mapa[registro._id] = registro.ultimaExistencia;
             return mapa;
@@ -166,34 +187,13 @@ exports.obtenerVentasPorSucursalYFechas = async (req, res) => {
     }
 };
 
-async function generarFolio() {
-    try {
-        const ultimoTraspaso = await Traspaso.findOne().sort({ folio: -1 }).select('folio').lean();
-        
-        let nuevoFolio = 1000; // Valor inicial predeterminado
-        
-        if (ultimoTraspaso && ultimoTraspaso.folio && !isNaN(ultimoTraspaso.folio)) {
-            nuevoFolio = ultimoTraspaso.folio + 1;
-        }
-
-        console.log(`📑 Nuevo Folio Generado: ${nuevoFolio}`);
-        return nuevoFolio;
-    } catch (error) {
-        console.error('❌ Error al generar folio:', error);
-        return 1000; // Fallback en caso de error
-    }
-}
-
 exports.realizarTraspaso = async (req, res) => {
     try {
         const { sucursalOrigen, sucursalDestino, usuarioOrigen, usuarioDestino, observaciones, productos } = req.body;
 
-        console.log('📦 Datos recibidos:', { sucursalOrigen, sucursalDestino, usuarioOrigen, usuarioDestino, observaciones, productos });
-
         if (!sucursalOrigen || !sucursalDestino || !usuarioOrigen || !usuarioDestino || !productos || productos.length === 0) {
             return res.status(400).json({ message: 'Todos los campos son obligatorios y debe haber al menos un producto.' });
         }
-
         // ✅ Validar los productos
         for (const producto of productos) {
             if (!producto.reference || !producto.name || !producto.presentacion || producto.cantidad <= 0 || producto.existenciaOrigen < producto.cantidad) {
@@ -216,23 +216,11 @@ exports.realizarTraspaso = async (req, res) => {
             usuarioOrigen,
             usuarioDestino,
             observaciones,
-            productos
+            productos,
+            estado: 0
         });
 
         await nuevoTraspaso.save();
-
-        // ✅ Actualizar existencias
-        for (const producto of productos) {
-            await Stock.updateOne(
-                { sucursalId: sucursalOrigen, 'productos.reference': producto.reference },
-                { $inc: { 'productos.$.existencia': -producto.cantidad } }
-            );
-
-            await Stock.updateOne(
-                { sucursalId: sucursalDestino, 'productos.reference': producto.reference },
-                { $inc: { 'productos.$.existencia': producto.cantidad } }
-            );
-        }
 
         res.status(201).json({
             message: '✅ Traspaso realizado exitosamente',
@@ -461,3 +449,75 @@ exports.obtenerTodosLosTraspasos = async (req, res) => {
         res.status(500).json({ message: 'Error interno del servidor', error });
     }
 };
+
+
+//recibir por el reparto
+exports.recibirProductosBodega = async (req, res) => {
+    try {
+        const traspasoId = req.params.id; // Obtenemos el ID del traspaso desde los parámetros de la URL
+        const { productosRecibidos, usuarioRepartoId } = req.body; // Obtenemos los productos recibidos y el ID del usuario desde el cuerpo de la solicitud
+
+        // Verificamos que los productos recibidos estén presentes
+        if (!productosRecibidos || productosRecibidos.length === 0) {
+            return res.status(400).json({ message: 'No se enviaron productos para recibir.' });
+        }
+
+        // Verificamos que el ID del usuario de reparto esté presente
+        if (!usuarioRepartoId) {
+            return res.status(400).json({ message: 'El ID del usuario de reparto es obligatorio.' });
+        }
+
+        // Buscamos el traspaso por ID
+        const traspaso = await Traspaso.findById(traspasoId);
+
+        if (!traspaso) {
+            return res.status(404).json({ message: 'Traspaso no encontrado' });
+        }
+
+        // Cambiar el estado del traspaso a 1 (en ruta)
+        traspaso.estado = 1;
+
+        // Asignamos el usuario que realiza la recepción
+        traspaso.usuarioReparto = usuarioRepartoId;
+
+        // Agregar los productos recibidos a ProductoRecepcionReparto
+        productosRecibidos.forEach(productoRecibido => {
+            const nuevoProductoReparto = {
+                reference: productoRecibido.reference,
+                name: productoRecibido.name,
+                cantidad: productoRecibido.cantidad,
+            };
+            traspaso.productosReparto.push(nuevoProductoReparto); // Agregamos el producto a productosReparto
+        });
+
+        // Guardamos los cambios en el traspaso
+        await traspaso.save();
+
+        // Enviar la respuesta de éxito
+        return res.status(200).json({ message: 'Traspaso actualizado correctamente', traspaso });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: 'Error al procesar la solicitud', error: err.message });
+    }
+};
+
+
+
+
+async function generarFolio() {
+    try {
+        const ultimoTraspaso = await Traspaso.findOne().sort({ folio: -1 }).select('folio').lean();
+        
+        let nuevoFolio = 1000; // Valor inicial predeterminado
+        
+        if (ultimoTraspaso && ultimoTraspaso.folio && !isNaN(ultimoTraspaso.folio)) {
+            nuevoFolio = ultimoTraspaso.folio + 1;
+        }
+
+        console.log(`📑 Nuevo Folio Generado: ${nuevoFolio}`);
+        return nuevoFolio;
+    } catch (error) {
+        console.error('❌ Error al generar folio:', error);
+        return 1000; // Fallback en caso de error
+    }
+}

@@ -76,6 +76,10 @@ function obtenerNombreRol(rol) {
             return "Almacen";
         case 10:
             return "Reparto";
+        case 11: 
+            return "Ventas"
+        case 12: 
+            return "Contraloria"
         default:
             return "Rol desconocido";
     }

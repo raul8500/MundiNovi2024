@@ -17,16 +17,15 @@ $(document).ready(function () {
             { data: 'sucursalOrigen.nombre', title: 'Sucursal Origen' },
             { data: 'usuarioOrigen.name', title: 'Usuario Origen' },
             { data: 'sucursalDestino.nombre', title: 'Sucursal Destino' },
-            { data: 'estado', title: 'Estado' },
             { data: 'observaciones', title: 'Observaciones' },
+            { data: 'estado', title: 'Estado' },
             {
-                data: null,
+                data: 'estado',
                 title: 'Acciones',
                 render: function (data, type, row) {
                     let botones = '';
-                    
-                    // Botón Recibir (solo si el estado es "pendiente")
-                    if (row.estado === 'pendiente') {
+                    // Verificar si el estado es "0" (pendiente) para mostrar el botón de recibir
+                    if (data === 0) {
                         botones += `
                             <button class="btn btn-warning btn-recibir" data-id="${row._id}" title="Recibir">
                                 <i class="fa-solid fa-truck"></i> Recibir

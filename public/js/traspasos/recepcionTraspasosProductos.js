@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const tbodyProductos = document.querySelector('#tablaProductos tbody');
     const inputCodigoBarras = document.getElementById('inputCodigoBarras');
 
+    // Array para guardar los productos recibidos
+    let productosRecibidos = [];
+
     if (traspasoSeleccionado) {
         console.log('Datos del Traspaso:', traspasoSeleccionado);
 
@@ -55,12 +58,57 @@ document.addEventListener('DOMContentLoaded', () => {
             if (fila) {
                 fila.querySelector('.correcto').innerHTML = '✅';
                 fila.classList.add('table-success'); // Marcar la fila como válida
+
+                // Guardar el producto recibido en el array
+                const productoRecibido = {
+                    reference: fila.dataset.reference,
+                    name: fila.querySelector('td:nth-child(2)').innerText,
+                    cantidad: 1 // Asumimos que cada producto recibido es 1 unidad
+                };
+                productosRecibidos.push(productoRecibido);
+
                 inputCodigoBarras.value = '';
             } else {
                 Swal.fire('❌ Error', 'El código no corresponde a ningún producto pendiente.', 'error');
-                inputCodigoBarras.value = ""
+                inputCodigoBarras.value = "";
             }
         }
+    });
+
+    // ✅ Evento para el botón Recibir
+    document.getElementById('btnRecibir').addEventListener('click', async () => {
+
+            // Obtener el usuario de reparto (por ejemplo, desde el sessionStorage)
+            const usuarioRepartoId = infoUser._id
+
+            // Enviar los productos recibidos al backend para actualizar el traspaso
+            const traspasoId = traspasoSeleccionado._id;
+
+            try {
+                // Realizar la solicitud PUT para actualizar el traspaso en el backend
+                const response = await fetch(`/api/traspasos/recibirReparto/${traspasoId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        productosRecibidos: productosRecibidos,
+                        usuarioRepartoId: usuarioRepartoId // Enviar el ID del usuario de reparto
+                    }),
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || 'Error al actualizar el traspaso');
+                }
+
+                Swal.fire('✅', 'El traspaso ha sido actualizado exitosamente', 'success');
+
+            } catch (error) {
+                console.error('❌ Error al recibir los productos:', error);
+                Swal.fire('❌ Error', 'No se pudo actualizar el traspaso.', 'error');
+            }
+        
     });
 
     // ✅ Evento para el botón Cancelar
@@ -77,19 +125,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = '/recepcion';
             }
         });
-    });
-
-    // ✅ Evento para el botón Recibir
-    document.getElementById('btnRecibir').addEventListener('click', () => {
-        const filasPendientes = Array.from(tbodyProductos.querySelectorAll('tr')).filter(row => {
-            return row.querySelector('.correcto').innerText === '❌';
-        });
-
-        if (filasPendientes.length > 0) {
-            Swal.fire('⚠️ Advertencia', 'Aún hay productos pendientes por escanear.', 'warning');
-        } else {
-            Swal.fire('✅ Recepción completada', 'Todos los productos han sido marcados como recibidos.', 'success');
-            // Aquí puedes enviar los datos al backend
-        }
     });
 });

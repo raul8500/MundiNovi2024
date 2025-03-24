@@ -75,6 +75,25 @@ async function cargarTraspasos() {
         tbody.innerHTML = '';
 
         data.traspasos.forEach(traspaso => {
+            // Convertir el estado en texto y asignar colores en badge
+            let estadoTexto = '';
+            let estadoColor = '';
+            let badgeClase = '';
+
+            if (traspaso.estado === 0) {
+                estadoTexto = 'En preparación';
+                estadoColor = 'blue';  // Azul
+                badgeClase = 'badge bg-primary'; // Clases de Bootstrap para badge azul
+            } else if (traspaso.estado === 1) {
+                estadoTexto = 'En ruta';
+                estadoColor = 'orange';  // Naranja
+                badgeClase = 'badge bg-warning'; // Clases de Bootstrap para badge naranja
+            } else if (traspaso.estado === 2) {
+                estadoTexto = 'Recibido';
+                estadoColor = 'green';  // Verde
+                badgeClase = 'badge bg-success'; // Clases de Bootstrap para badge verde
+            }
+
             // Calcular el total de artículos por traspaso
             const totalArticulos = traspaso.productos.reduce((acc, prod) => acc + prod.cantidad, 0);
 
@@ -86,7 +105,7 @@ async function cargarTraspasos() {
                     <td>${traspaso.usuarioOrigen.name} (@${traspaso.usuarioOrigen.username})</td>
                     <td>${traspaso.usuarioDestino.name} (@${traspaso.usuarioDestino.username})</td>
                     <td>${new Date(traspaso.fecha).toLocaleDateString()}</td>
-                    <td>${traspaso.estado}</td>
+                    <td><span class="${badgeClase}">${estadoTexto}</span></td> <!-- Usar badge para mostrar estado -->
                     <td>${totalArticulos}</td>
                     <td>
                         <button class="btn btn-sm btn-info btnImprimirTraspaso" data-id="${traspaso._id}">Imprimir</button>

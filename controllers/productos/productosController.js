@@ -2,7 +2,6 @@ const Producto = require('../../schemas/productosSchema/productosSchema');
 const Sucursal = require('../../schemas/sucursalSchema/sucursalSchema');
 const Preciador = require('../../schemas/preciador/preciadorSchema');
 const mongoose = require('mongoose');
-const request = require('request');
 const xlsx = require('xlsx');
 const fs = require('fs');
 const path = require('path');

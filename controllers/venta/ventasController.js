@@ -5,7 +5,7 @@ const Venta = require('../../schemas/venta/ventaSchema');
 const Cliente = require('../../schemas/clientesSchema/clientesSchema');
 
 const moment = require('moment-timezone');
-const alegra = require('../../.api/apis/alegra-factura');
+//const alegra = require('../../.api/apis/alegra-factura');
 
 exports.createVenta = async (req, res) => { 
     try {        

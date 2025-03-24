@@ -1,8 +1,8 @@
-const alegra = require('../../.api/apis/alegra-clientes');
+//const alegra = require('../../.api/apis/alegra-clientes');
 const Client = require('../../schemas/clientesSchema/clientesSchema');
-
+const alegra = ''
 // Configuración de autenticación
-alegra.auth('facturalimpios@hotmail.com', 'ab4146c42f8d367f052d');
+//alegra.auth('facturalimpios@hotmail.com', 'ab4146c42f8d367f052d');
 
 exports.createClient = async (req, res) => {
     try {

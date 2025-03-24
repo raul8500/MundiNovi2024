@@ -1,6 +1,4 @@
-const request = require('request');
 const Client = require('../../schemas/clientesSchema/clientesSchema'); // Asegúrate de ajustar la ruta al modelo Client según tu estructura
-const rp = require('request-promise');
 const path = require('path');
 const fs = require('fs');
 const XLSX = require('xlsx');

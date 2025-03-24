@@ -50,7 +50,7 @@ loadSelectOptions(selectOptions);
 
 document.getElementById('btnObtenerFaltantes').addEventListener('click', () => {
     let sucursalOrigen = document.getElementById("sucursalOrigen").value
-    let sucursalDestino = document.getElementById("sucursalOrigen").value
+    let sucursalDestino = document.getElementById("sucursalDestino").value
     fetchFaltantes(sucursalOrigen,sucursalDestino)
 });
 

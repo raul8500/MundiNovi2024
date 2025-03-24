@@ -6,7 +6,6 @@ const CorteFinal = require('../../schemas/cortes/cortesFinalesSchema');
 const Email = require('../../schemas/venta/emailSchema');
 
 const mongoose = require('mongoose');
-const request = require('request');
 const nodemailer = require('nodemailer');
 const http = require('https');
 

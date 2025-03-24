@@ -1,9 +1,9 @@
-const alegra = require('../../.api/apis/alegra-productos');
+//const alegra = require('../../.api/apis/alegra-productos');
 const Product = require('../../schemas/productosSchema/productosSchema');
-
+const alegra = ''
 const xlsx = require('xlsx');
 // Configuración de autenticación
-alegra.auth('facturalimpios@hotmail.com', 'ab4146c42f8d367f052d');
+//alegra.auth('facturalimpios@hotmail.com', 'ab4146c42f8d367f052d');
 
 exports.createProduct = async (req, res) => {
     try {
