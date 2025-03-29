@@ -44,8 +44,7 @@ async function updatePassword(userId) {
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
             }).then(() => {
-                // Cerrar el modal después de la actualización
-                modalPass.hide();
+                location.reload()
             });
         } else if (response.status === 400) {
             Swal.fire({
@@ -54,6 +53,8 @@ async function updatePassword(userId) {
                 icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
+
+
         } else {
             Swal.fire({
                 title: 'Error',
@@ -80,10 +81,13 @@ document.getElementById('btnUpdatePassword').addEventListener('click', () => {
 
 on(document, 'click', '.btnChangePassword', async e => {
     const button = e.target.closest('.btnChangePassword');
-    idUserPass = e.target.id; // Asume que el ID del usuario está en el botón
+    const idUserPass = button.id; // Obtener el id desde el botón
 
-    document.getElementById('newPassword').value = ''
-    document.getElementById('confirmNewPassword').value = ''
+    console.log(idUserPass);
+
+    document.getElementById('newPassword').value = '';
+    document.getElementById('confirmNewPassword').value = '';
 
     modalPass.show();
 });
+

@@ -21,7 +21,6 @@ const linea = require('../controllers/productos/complementos/lineaController')
 const departamento = require('../controllers/productos/complementos/departamentoController')
 const unidad = require('../controllers/productos/complementos/unidadController')
 const impuesto = require('../controllers/productos/complementos/impuestoController')
-const clientes = require('../controllers/clientes/clientesController')
 const kardex = require('../controllers/kardex/kardexController')
 const proveedor = require('../controllers/proveedor/proveedorController')
 const materiasPrimas = require('../controllers/materiaPrima/materiaPrimaController')
@@ -523,14 +522,8 @@ router.post('/api/ventas/crear', venta.createVenta);
 
 
 
-//Clientes 
-router.get('/api/clientes', clientes.getAllClientesFromBD);
-router.post('/api/clientes', clientes.createContact);
-router.get('/api/clientes/:clientDataId', clientes.getClienteByClientDataId);
-router.delete('/api/clientes/:clientDataId', clientes.deleteClienteByClientDataId);
-router.put('/api/clientes/:alegraId', clientes.updateClient);
-router.put('/api/clientesUpdateCompleto/:alegraId', clientes.updateClientComplete);
-router.get('/api/clientesNombre/:id', clientes.getNombreCliente);
+//Clientes  (cambio de rutas)
+
 
 
 //Proveedor

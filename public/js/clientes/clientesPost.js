@@ -9,17 +9,15 @@ document.addEventListener("DOMContentLoaded", function () {
             phonePrimary: document.getElementById("telefonoPrincipal").value || null,
             email: document.getElementById("correoElectronicoContacto").value || null,
             regime: document.getElementById("regimen").value,
-            thirdType: "NATIONAL",
-            status: "active",
             address: {
                 street: document.getElementById("calle").value || null,
-                exteriorNumber: document.getElementById("numeroExterior").value || null,
-                interiorNumber: document.getElementById("numeroInterior").value || null,
-                colony: document.getElementById("colonia").value || null,
-                locality: document.getElementById("localidad").value || null,
+                exterior: document.getElementById("numeroExterior").value || null,
+                interior: document.getElementById("numeroInterior").value || null,
+                neighborhood: document.getElementById("colonia").value || null,
+                city: document.getElementById("localidad").value || null,
                 municipality: document.getElementById("municipioDelegacion").value || null,
                 state: document.getElementById("estado").value || null,
-                zipCode: document.getElementById("codigoPostal").value || null,
+                zip: document.getElementById("codigoPostal").value || null,
                 country: "MEX"
             }
         };
@@ -44,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // JSON que se enviará al backend
         let postData = {
-            alegra: clientData,
+            facturapi: clientData,
             client: databaseClient
         };
 
@@ -81,7 +79,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById("ModalAddCliente").classList.remove("show"); // Cierra el modal
                     document.body.classList.remove("modal-open"); // Elimina la clase modal-open del body
                     document.querySelector(".modal-backdrop").remove(); // Remueve el fondo del modal
-                    location.reload(); // Recargar la tabla
+                    var table = $('#tablaClientes').DataTable(); // Asegúrate de que '#example' sea el ID de tu tabla
+                    table.ajax.reload(); 
                 });
             } else {
                 Swal.fire({

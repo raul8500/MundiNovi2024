@@ -11,7 +11,7 @@
                         </button>
                     </div>
                     <div class="table-responsive pt-3">
-                      <table class="table align-middle mb-0 bg-white">
+                      <table id="usersTable" class="table align-middle mb-0 bg-white">
                           <thead class="bg-light">
                             <tr class="text-center">
                                   <th scope="col">Nombre</th>
@@ -22,8 +22,7 @@
                                   <th scope="col">Acciones</th>
                               </tr>
                           </thead>
-                          <tbody id="usuariosData" class="table-group-divider">
-                              <!-- Aquí se cargarán las sucursales -->
+                          <tbody>
                           </tbody>
                       </table>
                       <div class="d-flex justify-content-center pt-3">
@@ -273,4 +272,6 @@
             <script src="js/users/deleteUsers.js"></script>
             <script src="js/users/updatePasswordUsers.js"></script>
             <script src="js/users/changeStateUsers.js"></script>
+            <script src="js/users/cargarUsuarios.js"></script>
+
       `; %>

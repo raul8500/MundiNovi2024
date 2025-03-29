@@ -5,12 +5,11 @@ $(document).ready(function () {
             dataSrc: 'clientes' // Clave dentro del JSON donde están los clientes
         },
         columns: [
-            { data: 'idAlegra', defaultContent: "N/A" },
             { data: 'clientData.name', defaultContent: "Sin nombre" },
             { data: 'clientData.identification', defaultContent: "N/A" },
             { data: 'clientData.email', defaultContent: "Sin email" },
             { 
-                data: 'clientData.phonePrimary',
+                data: 'clientData.mobile',
                 render: function (data, type, row) {
                     return data || row.clientData.phoneSecondary || "Sin teléfono";
                 }
@@ -51,7 +50,30 @@ $(document).ready(function () {
                 orderable: false,
                 searchable: false
             }
-        ]
+            
+        ],
+        language: {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando 0 a 0 de 0 registros",
+            "sInfoFiltered": "(filtrado de _MAX_ registros totales)",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primera",
+                "sLast": "Última",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": activar para ordenar la columna de manera descendente"
+            }
+        }
     });
 
     // Evento para eliminar cliente
@@ -204,7 +226,6 @@ async function abrirModalEditarCliente(id) {
     }
 }
 
-
 // Función para cargar zonas en el select del modal
 async function cargarZonasEnSelectEdit(selectId) {
     try {
@@ -316,34 +337,32 @@ function loadEditRegimenOptions(rfcValue, selectedRegimen) {
     if (!rfcValue || rfcValue.trim() === '') {
         // Si no hay RFC, solo permitimos "Sin Obligaciones Fiscales"
         const opt = document.createElement('option');
-        opt.value = 'NO_REGIME';
+        opt.value = '616';
         opt.text = 'Sin Obligaciones Fiscales';
         regimenSelect.add(opt);
         return;
     }
 
     const opciones12 = [
-        { value: 'NO_REGIME', text: 'Sin régimen' },
-        { value: 'GENERAL_REGIME_OF_MORAL_PEOPLE_LAW', text: 'Régimen General de Ley Personas Morales' },
-        { value: 'REGIME_OF_MORAL_PEOPLE_NOT_PROFIT', text: 'Personas Morales con Fines no Lucrativos' },
-        { value: 'PRIMARY_SECTOR_REGIME', text: 'Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras (AGAPES)' },
-        { value: 'REGIME_OF_THE_COORDINATED', text: 'Coordinados' },
-        { value: 'REGIME_OF_COOPERATIVE_PRODUCTION_SOCIETIES', text: 'Sociedades Cooperativas de Producción que optan por diferir sus ingresos' },
-        { value: 'REGIME_OF_TRUST', text: 'Regimen simplificado de confianza (RESICO)' },
-        { value: 'SIMPLIFIED_REGIME', text: 'Sin obligaciones fiscales' },
-        { value: 'SOCIETIES_OPTIONAL_REGIME', text: 'Opcional para Grupos de Sociedades' }
+        { value: '616', text: 'Régimen General de Ley Personas Morales' },
+        { value: '616', text: 'Personas Morales con Fines no Lucrativos' },
+        { value: '616', text: 'Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras (AGAPES)' },
+        { value: '624', text: 'Coordinados' },
+        { value: '620', text: 'Sociedades Cooperativas de Producción que optan por diferir sus ingresos' },
+        { value: '620', text: 'Regimen simplificado de confianza (RESICO)' },
+        { value: '616', text: 'Sin obligaciones fiscales' },
+        { value: '623', text: 'Opcional para Grupos de Sociedades' }
     ];
 
     const opciones13 = [
-        { value: 'NO_REGIME', text: 'Sin régimen' },
-        { value: 'BUSINESS_ACTIVITIES_REGIME', text: 'Personas Físicas con Actividades Empresariales y Profesionales' },
-        { value: 'FISCAL_INCORPORATION_REGIME', text: 'Incorporación Fiscal' },
-        { value: 'LEASEHOLD_REGIME', text: 'Arrendamiento' },
-        { value: 'REGIME_OF_THE_TECHNOLOGICAL_PLATFORMS_INCOME_ACTIVITIES', text: 'Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas' },
-        { value: 'SALARIED_REGIME', text: 'Sueldos y Salarios e Ingresos Asimilados a Salarios' },
-        { value: 'REGIME_OF_TRUST', text: 'Regimen simplificado de confianza (RESICO)' },
-        { value: 'SIMPLIFIED_REGIME', text: 'Sin obligaciones fiscales' },
-        { value: 'DIVIDEND_INCOME', text: 'Ingresos por Dividendos (socios y accionistas)' },
+        { value: '612', text: 'Personas Físicas con Actividades Empresariales y Profesionales' },
+        { value: '621', text: 'Incorporación Fiscal' },
+        { value: '606', text: 'Arrendamiento' },
+        { value: '625', text: 'Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas' },
+        { value: '605', text: 'Sueldos y Salarios e Ingresos Asimilados a Salarios' },
+        { value: '626', text: 'Regimen simplificado de confianza (RESICO)' },
+        { value: '616', text: 'Sin obligaciones fiscales' },
+        { value: '611', text: 'Ingresos por Dividendos (socios y accionistas)' },
     ];
 
     let opciones = [];

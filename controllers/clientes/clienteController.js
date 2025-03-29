@@ -1,50 +1,42 @@
 //const alegra = require('../../.api/apis/alegra-clientes');
 const Client = require('../../schemas/clientesSchema/clientesSchema');
-const alegra = ''
-// Configuración de autenticación
-//alegra.auth('facturalimpios@hotmail.com', 'ab4146c42f8d367f052d');
+const Facturapi = require('facturapi').default;
+
+const facturapi = new Facturapi('sk_test_GO8zw0Xo52mM1kgLW3a1Y8OydL9Nel4JBEZabDQ3Yv');
+
+
 
 exports.createClient = async (req, res) => {
     try {
-        const alegraClient = req.body.alegra;
-        const databaseClient = req.body.client;
 
-        // Enviar el cliente a Alegra
-        const alegraResponse = await alegra.postContacts({
-            address: alegraClient.address,
-            thirdType: alegraClient.thirdType || 'NATIONAL',
-            regime: alegraClient.regime || 'NO_REGIME',
-            name: alegraClient.name,
-            identification: alegraClient.identification,
-            regimeObject: [alegraClient.regime] || ['NO_REGIME'],
-            phonePrimary: alegraClient.phonePrimary,
-            mobile: alegraClient.mobile,
-            email: alegraClient.email,
-            status: alegraClient.status || 'active'
+        const databaseClient = req.body.client
+        const facturapiBody = req.body.facturapi 
+    
+        const customer = await facturapi.customers.create({
+            legal_name: facturapiBody.name.toUpperCase(),
+            email: facturapiBody.email,
+            tax_id: facturapiBody.identification,
+            tax_system: facturapiBody.regime,
+            address: facturapiBody.address,
         });
-        
-        // Guardar el cliente en la base de datos (MongoDB)
+
         const newClient = new Client({
-            idAlegra: alegraResponse.data.id,
+            idFacApi: customer.id,
             esfactura: databaseClient.esfactura || false,
             estado: databaseClient.estado || true,
             zonaCliente: databaseClient.zonaCliente || null,
             clientData: {
-                thirdType: alegraResponse.data.thirdType,
-                regime: alegraResponse.data.regime,
-                name: alegraResponse.data.name,
-                identification: alegraResponse.data.identification,
-                regimeObject: alegraResponse.data.regimeObject,
-                phonePrimary: alegraResponse.data.phonePrimary,
-                mobile: alegraResponse.data.phonePrimary,
-                email: alegraResponse.data.email,
-                status: alegraResponse.data.status,
-                address: alegraResponse.data.address
+                regime: facturapiBody.regime,
+                name: facturapiBody.name,
+                identification: facturapiBody.identification,
+                mobile: facturapiBody.phonePrimary,
+                email: facturapiBody.email,
+                address: facturapiBody.address
             },
             monedero: 0, // El monedero inicia en 0
             login: {
-                username: alegraResponse.data.phonePrimary, // El username es el número telefónico
-                pasword: databaseClient.login?.pasword || null // Contraseña opcional
+                username: facturapiBody.email,
+                pasword: databaseClient.login?.pasword || null
             }
         });
 
@@ -52,9 +44,10 @@ exports.createClient = async (req, res) => {
 
         res.status(201).json({
             message: "Cliente creado correctamente",
-            alegraClient: alegraResponse.data,
+            facturapi: customer,
             databaseClient: newClient
         });
+
 
     } catch (err) {
         console.error("Error al crear cliente:", err);
@@ -98,21 +91,17 @@ exports.deleteClient = async (req, res) => {
     try {
         const clientId = req.params.id; // ID del cliente en MongoDB
 
-        // Buscar el cliente en MongoDB
         const client = await Client.findById(clientId);
         if (!client) {
             return res.status(404).json({ message: "Cliente no encontrado en la base de datos" });
         }
 
-        const idAlegra = client.idAlegra;
-        if (!idAlegra) {
-            return res.status(400).json({ message: "El cliente no tiene un ID en Alegra" });
+        const idFacApi = client.idFacApi;
+        if (!idFacApi) {
+            return res.status(400).json({ message: "El cliente no tiene un ID en FacApi" });
         }
 
-        // Eliminar el cliente de Alegra
-        await alegra.deleteContact({ id: idAlegra });
-
-        // Eliminar el cliente de MongoDB
+        const removedCustomer = await facturapi.customers.del(idFacApi);
         await Client.findByIdAndDelete(clientId);
 
         res.status(200).json({ message: "Cliente eliminado correctamente" });
