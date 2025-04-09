@@ -558,7 +558,7 @@ exports.marcarProductoImpreso = async (req, res) => {
         }
 
         // Crear el documento PDF con un margen superior reducido
-        const doc = new PDFDocument({ size: [230, 330], layout: 'landscape', margins: { top: 30, left: 30, right: 30, bottom: 10 } }); // Tamaño de la página y ajuste de márgenes
+        const doc = new PDFDocument({ size: [100, 200], layout: 'landscape', margins: { top: 3, left: 3, right: 1, bottom: 1 } }); // Tamaño de la página y ajuste de márgenes
         const nombreArchivo = path.join(__dirname, `../../public/img/archivos/precios_productos.pdf`);
         const nombreArchivoPublico = '/img/archivos/precios_productos.pdf'; // Ruta pública para el archivo generado
         const writeStream = fs.createWriteStream(nombreArchivo);
@@ -578,19 +578,22 @@ exports.marcarProductoImpreso = async (req, res) => {
                     doc.addPage();
                 }
 
+                doc.moveDown(0.5); // Ajusta el número si deseas más espacio, 1 es el predeterminado
+
                 // Nombre del producto centrado
-                doc.fontSize(14).text(productoDb.name, {
-                    align: 'center'
+                doc.fontSize(8 ).text(productoDb.name, {
+                    align: 'center',
+                    continued: false
                 });
 
                 // Referencia del producto centrado
-                doc.fontSize(10).text(`${productoDb.reference}    `, { align: 'center', continued: true })
-                    .fontSize(10).text(`      $${productoDb.datosFinancieros.precio1.toFixed(2)}`, { continued: false }); // Continuamos con el precio
+                doc.fontSize(8).text(`${productoDb.reference}              `, { align: 'center', continued: true })
+                    .fontSize(8).text(`$${productoDb.datosFinancieros.precio1.toFixed(2)}          `, { continued: false });
 
 
 
                 // Promoción centrada
-                doc.fontSize(18).text(`Promoción x 2:`, {
+                doc.fontSize(8).text(`Promoción x 2:`, {
                     align: 'center',
                 });
 
@@ -622,13 +625,13 @@ exports.marcarProductoImpreso = async (req, res) => {
                 const xPosition = (pageWidth - totalTextWidth) / 2;
 
                 // Dibujar el texto centrándolo manualmente
-                doc.fontSize(10).text('            $ ', xPosition, doc.y, { continued: true })  // Símbolo de dólar más pequeño
-                    .fontSize(34).text(precioEntero, { continued: true })  // Precio en tamaño grande (parte entera)
-                    .fontSize(14).text(`.${precioDecimal}`, { continued: true })  // Decimales más pequeños
-                    .fontSize(14).text(' c/u', { continued: false });  // Texto "c/u" más pequeño
+                doc.fontSize(10).text('        $ ', xPosition, doc.y, { continued: true })  // Símbolo de dólar más pequeño
+                    .fontSize(20).text(precioEntero, { continued: true })  // Precio en tamaño grande (parte entera)
+                    .fontSize(12).text(`.${precioDecimal}`, { continued: true })  // Decimales más pequeños
+                    .fontSize(12).text(' c/u', { continued: false });  // Texto "c/u" más pequeño
 
 
-                doc.moveDown(.5); // Ajusta el número si deseas más espacio, 1 es el predeterminado
+                doc.moveDown(-0.5); // Ajusta el número si deseas más espacio, 1 es el predeterminado
 
 
 
@@ -636,20 +639,20 @@ exports.marcarProductoImpreso = async (req, res) => {
                 const barcodeBuffer = await bwipjs.toBuffer({
                     bcid: 'code128',
                     text: productoDb.reference,
-                    scale: 4,
-                    height: 12,
+                    scale: 3,
+                    height: 10,
                 });
 
                 // Añadir el código de barras centrado en el PDF
                 doc.image(barcodeBuffer, {
-                    fit: [135, 65],
+                    fit: [100, 50],
                     align: 'center', // Centrando el código de barras
                     valign: 'center' // Alineación vertical
                 });
 
                                 
                 // Espacio después del código de barras
-                doc.moveDown(3.5);
+                doc.moveDown(3);
 
                 // Obtener el ancho total del texto del nombre del producto para alinear los rangos con él
                 const textWidthProductName = doc.fontSize(14).widthOfString(productoDb.name);
@@ -658,8 +661,8 @@ exports.marcarProductoImpreso = async (req, res) => {
                 const xPositionRangos = (pageWidth - textWidthProductName) / 2;  // Usamos la misma variable pageWidth previamente declarada
 
                 // Dibujar los 4 rangos en una sola línea con fuente pequeña, alineados con el nombre del producto
-                doc.fontSize(6).text(`                       ${productoDb.datosFinancieros.rangoInicial3}.${productoDb.datosFinancieros.precio3.toFixed(2)} `, { continued: true });
-                doc.fontSize(6).text(`             ${productoDb.datosFinancieros.rangoInicial4}.${productoDb.datosFinancieros.precio4.toFixed(2)} `, { continued: false });
+                doc.fontSize(4).text(`                       ${productoDb.datosFinancieros.rangoInicial3}.${productoDb.datosFinancieros.precio3.toFixed(2)} `, { continued: true });
+                doc.fontSize(4).text(`             ${productoDb.datosFinancieros.rangoInicial4}.${productoDb.datosFinancieros.precio4.toFixed(2)} `, { continued: false });
 
 
             }
@@ -699,6 +702,9 @@ exports.marcarProductoImpreso = async (req, res) => {
         res.status(500).json({ message: 'Error en la generación del PDF de precios.', error });
     }
 };
+
+
+
 
 exports.exportarProductosAExcel = async (req, res) => {
     try {
@@ -800,8 +806,6 @@ exports.exportarProductosAExcel = async (req, res) => {
 };
 
 const Kardex = require('../../schemas/kardexSchema/kardexSchema'); // Modelo de Kardex
-
-
 
 exports.obtenerExistenciaPorProducto = async (req, res) => {
     try {
