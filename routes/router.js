@@ -32,6 +32,11 @@ const asistencia = require('../controllers/asistencia/asistenciaController')
 const produccion = require('../controllers/produccion/produccion')
 const actividades = require('../controllers/actividades/actividadesController')
 const multer = require('../middlewares/multer'); // Configuración de Multer
+const multerProducts = require('../middlewares/multerProducts'); // Configuración de Multer
+
+
+
+
 const capacitacionController = require('../controllers/capacitacion/capacitacionController');
 const stocksController = require('../controllers/stocks/stocksController');
 const codigosBarras = require('../controllers/codigosBarras/codigosBarrasController')
@@ -78,23 +83,11 @@ const reportesCostoInventario = require('../controllers/reportes/costoInventario
 const indicadoresController = require('../controllers/cortes/indicadoresController');
 
 
-const multerw = require('multer');
-const upload = multerw({ dest: 'uploads/' }); // Carpeta temporal para archivos
-const path = require('path');
 
 
-const storage = multerw.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/'); // Carpeta donde se guardan los archivos
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const ext = path.extname(file.originalname); // Obtener extensión del archivo
-        cb(null, uniqueSuffix + ext); // Guardar con la extensión
-    }
-});
 
-const upload2 = multerw({ storage });
+
+//
 
 
 
@@ -616,11 +609,13 @@ router.put('/api/excluirDiaEspecifico/:actividadId', actividades.excluirDiaEspec
 router.post('/api/marcarEstadoPorFecha/:actividadId', actividades.marcarEstadoPorFecha)
 router.post('/api/reagendar/:id', actividades.reagendarActividad )
 
+const multer2  = require('multer')
+const upload = multer2({ dest: 'uploads/' })
 
 
 
 //Capacitacion
-router.post('/api/capacitaciones', multer.single('archivo'), capacitacionController.crearCapacitacion);
+router.post('/api/capacitaciones', upload.single('archivo'), capacitacionController.crearCapacitacion);
 router.post('/api/crearCapacitacionSinArchivo', capacitacionController.crearCapacitacionSinArchivo);
 router.get('/api/obtenerCapacitaciones', capacitacionController.obtenerCapacitaciones);
 router.get('/api/capacitaciones/:id/descargar', capacitacionController.descargarArchivo);
@@ -642,7 +637,7 @@ router.get('/api/exportarProductos', productos.exportarProductosAExcel);
 
 //stocks
 router.get('/api/reporte/:sucursalId',stocksController.generarReporteStocks);
-router.post('/api/actualizar/:sucursalId', upload.single('file'), stocksController.actualizarStocks);
+//router.post('/api/actualizar/:sucursalId', upload.single('file'), stocksController.actualizarStocks);
 
 
 //arqueo efectivo
@@ -693,7 +688,7 @@ router.get('/api/inventarioDescargar/:id', inventario.descargarInventario);
 router.post('/api/inventario/materiaprima', inventarioMateriaPrima.crearOActualizarInventario);
 
 //egresos
-router.post('/api/egresos', upload2.single('archivoComprobatorio'), egresos.crearEgreso);
+//router.post('/api/egresos', upload2.single('archivoComprobatorio'), egresos.crearEgreso);
 router.get('/api/egresos', egresos.getAllEgresos);
 router.get('/api/egresos/:id', egresos.getEgresoById);
 router.delete('/api/egresos/:id', egresos.deleteEgreso);
@@ -778,8 +773,10 @@ router.post('/api/renuncia/', renunciaController.subirPlantillaRenuncia);
 router.get("/api/renuncia/:idColaborador", renunciaController.obtenerRenunciaConDatos);
 
 
-//productos
-router.post('/api/producto/crear', productoTest.createProduct);
+
+
+// Ruta
+router.post('/api/producto/crear', multerProducts.single("imagen"), productoTest.createProduct);
 router.get('/api/producto/test', productoTest.getAllProducts);
 
 

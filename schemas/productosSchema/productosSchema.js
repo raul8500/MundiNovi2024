@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
 
-  idAlegra: {
+  idFacturApi: { //id de factura api
     type: String, required: false
   },
-  type: {
+  type: { // SKU
     type: String, required: false,
   },
-  reference: {
+  reference: { // SKU
     type: String, required: false,
   },
   esActivo: {
@@ -17,20 +17,17 @@ const productSchema = new mongoose.Schema({
   codigoBarra: {
     type: String, required: false, 
   },
-  name: {
+  name: { //unit name
     type: String, required: false, 
   },
-  productKey: {
+  productKey: { //product_key
     type: String, required: false, 
   },
-  description: {
+  description: { //description
     type: String, required: false, 
   },
-  inventory: {
-    unit: {
-      type: String,
-      required: false, 
-    },
+  inventory: { //unit name
+    type: String, required: false, 
   },
   tiempoSurtido: {
     type: Number, required: false, 
@@ -102,7 +99,7 @@ const productSchema = new mongoose.Schema({
     porcentajeMonedero10: { type: Number, required: false }, 
   },
   rutaImagen: {
-    type: Number, required: false, 
+    type: String, required: false, 
   },
   proveedor: { 
     type: mongoose.Schema.Types.ObjectId, ref: 'Proveedor', required: false 
@@ -136,9 +133,6 @@ const productSchema = new mongoose.Schema({
   departamento: { type: mongoose.Schema.Types.ObjectId, ref: 'Departamento', required: false }, 
   unidad: { type: mongoose.Schema.Types.ObjectId, ref: 'Unidad', required: false }, 
   impuesto: { type: mongoose.Schema.Types.ObjectId, ref: 'Impuesto', required: false }, 
-  tax: {
-    type: Number, required: false, 
-  }
 });
 
 module.exports = mongoose.model('Product', productSchema);

@@ -11,7 +11,7 @@ const ModelSucursal = require('./schemas/sucursalSchema/sucursalSchema');
 const jwt = require('jsonwebtoken');
 const path = require('path')
 const expressLayouts = require('express-ejs-layouts');
-const fileUpload = require('express-fileupload')
+//const fileUpload = require('express-fileupload')
 
 //no se 
 // Conectar a la base de datos
@@ -24,7 +24,7 @@ let server = http.createServer(app);
 // Integrar Socket.IO con el servidor HTTP
 const io = socketIo(server);
 
-app.use(fileUpload());
+//app.use(fileUpload());
 // Configurar los encabezados CORS para permitir solicitudes desde un origen específico
 app.use(cors());
 
@@ -34,7 +34,7 @@ app.set('views', __dirname + '/views');
 
 // Seteamos la carpeta public para archivos estáticos
 app.use(express.static('public'));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(expressLayouts);
 app.set('layout', 'layout/base'); // Define el layout base

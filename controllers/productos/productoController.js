@@ -1,40 +1,58 @@
 //const alegra = require('../../.api/apis/alegra-productos');
 const Product = require('../../schemas/productosSchema/productosSchema');
-const alegra = ''
 const xlsx = require('xlsx');
-// Configuración de autenticación
-//alegra.auth('facturalimpios@hotmail.com', 'ab4146c42f8d367f052d');
+
+const Facturapi = require('facturapi').default;
+const facturapi = new Facturapi('sk_test_GO8zw0Xo52mM1kgLW3a1Y8OydL9Nel4JBEZabDQ3Yv');
+
 
 exports.createProduct = async (req, res) => {
     try {
-        const alegraProduct = req.body.alegra;
-        const databaseProduct = req.body.product;
+        console.log(req.body)
 
-        // Enviar el producto a Alegra
-        const alegraResponse = await alegra.postItems({
-            inventory: { unit: alegraProduct.unit || 'H87' },
-            name: alegraProduct.name,
-            description: alegraProduct.description,
-            reference: alegraProduct.reference,
-            price: alegraProduct.price,
-            tax: alegraProduct.tax || '1',
-            type: alegraProduct.type || 'product',
-            productKey: alegraProduct.productKey || '47131700'
+        const productoData = JSON.parse(req.body.producto); // 👈 parsear JSON enviado
+        const facApiProduct = productoData.facApiProduct;
+        const databaseProduct = productoData.product;
+        
+
+        if (req.file) {
+            databaseProduct.rutaImagen = `/uploads/images/${req.file.filename}`;
+        }
+
+        console.log(facApiProduct)
+
+        const product = await facturapi.products.create({
+            description: facApiProduct.description,
+            product_key: facApiProduct.product_key, 
+            price: facApiProduct.price,
+            tax_included: true,//
+            taxability: "02", //
+            taxes: [ //
+              {
+                "type": "IVA",
+                "rate": 0.16
+              }
+            ],
+            unit_key: facApiProduct.unit_key,//
+            unit_name: facApiProduct.unit_name,
+            sku: facApiProduct.sku
         });
 
-        console.log("Producto creado en Alegra:", alegraResponse.data);
+
+        console.log("Producto creado en Fac Api:", product);
+
 
         // Guardar el producto en la base de datos (ejemplo usando Mongoose)
         const newProduct = new Product({
-            idAlegra: alegraResponse.data.id,
+            idFacturApi: product.id,
             type: "product",
-            reference: databaseProduct.reference,
-            esActivo: databaseProduct.esActivo,
+            reference: product.sku,
+            esActivo: databaseProduct.estado,
             codigoBarra: databaseProduct.codigoBarra,
-            name: databaseProduct.name,
-            productKey: databaseProduct.productKey,
-            description: databaseProduct.description,
-            inventory: { unit: databaseProduct.unit || 'H87' },
+            name: product.unit_name,
+            productKey: product.product_key,
+            description: product.description,
+            inventory: product.unit_key,
             tiempoSurtido: databaseProduct.tiempoSurtido,
             volumen: databaseProduct.volumen,
             peso: databaseProduct.peso,
@@ -117,7 +135,7 @@ exports.createProduct = async (req, res) => {
 
         res.status(201).json({
             message: "Producto creado correctamente",
-            alegraProduct: alegraResponse.data,
+            facApi: product,
             databaseProduct: newProduct
         });
 
@@ -126,6 +144,8 @@ exports.createProduct = async (req, res) => {
         res.status(500).json({ message: "Error al crear el producto", error: err });
     }
 };
+
+
 
 exports.getAllProducts = async (req, res) => {
     try {

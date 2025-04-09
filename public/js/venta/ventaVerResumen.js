@@ -25,9 +25,9 @@ function cargarVentas(id) {
 
         let tipoVenta = ''
         if (venta.tipoVenta == 'false'){
-          tipoVenta = 'Sin factura'
+          tipoVenta = 'No facturada'
         }else{
-          tipoVenta = 'Con factura'
+          tipoVenta = 'Facturada'
         }
         let cliente = ''
         if(venta.cliente == null){
@@ -36,18 +36,18 @@ function cargarVentas(id) {
 
         document.getElementById('fecha').innerHTML = '<strong>Fecha:</strong> ' + fechaFormateada;
         document.getElementById('noVenta').innerHTML = '<strong>No. Venta:</strong> ' + venta.noVenta;
-        document.getElementById('sucursal').innerHTML = '<strong>Sucursal:</strong> ' + venta.sucursal.nombre;
         document.getElementById('tipoVenta').innerHTML = '<strong>Tipo de Venta:</strong> ' + tipoVenta;
         document.getElementById('cliente').innerHTML = '<strong>Cliente:</strong> ' + cliente;
         document.getElementById('totalVenta').innerHTML = '<strong>Total de Venta:</strong> ' + venta.totalVenta;
         document.getElementById('totalProductos').innerHTML = '<strong>Total de Productos:</strong> ' + venta.totalProductos;
         mostrarProductos(venta.productos)
-        mostrarFormasDePago(venta.formasDePago);
+        mostrarFormasDePago(venta.pagos);
         venta.formasDePago 
 
       })
       .catch((error) => console.log(error));
 }
+
 const mostrarProductos = (productos) => {
   let resultadosProductos = ''
   let contenedor = document.getElementById('tablaProductos')
@@ -55,31 +55,49 @@ const mostrarProductos = (productos) => {
     resultadosProductos += `
             <tr>
                 <td class="text-center">${item.nombre}</td>
-                <td class="text-center">${item.precio}</td>
+                <td class="text-center">${item.precioConIva}</td>
                 <td class="text-center">${item.cantidad}</td>
-                <td class="text-center">${item.precio * item.cantidad}</td>
+                <td class="text-center">${(item.precioConIva * item.cantidad).toFixed(2)}</td>
                 <td class="text-center">${item.kardexFolio}</td>
             </tr>`;
   });
 
   contenedor.innerHTML = resultadosProductos;
 };
+function mostrarFormasDePago(pagos) {
+  const listaFormasDePago = document.querySelector('.list-group-flush');
+  listaFormasDePago.innerHTML = ''; // Limpiar contenido previo, si lo hubiera
 
-function mostrarFormasDePago(formasDePago) {
-    const listaFormasDePago = document.querySelector('.list-group-flush');
-    listaFormasDePago.innerHTML = ''; // Limpiar contenido previo, si lo hubiera
+  let formasDePago = pagos.formasDePago;
+  let cambio = pagos.cambio;
 
-    formasDePago.forEach(pago => {
-        const listItem = document.createElement('li');
-        listItem.classList.add('list-group-item');
-        
-        // Añade el contenido de la forma de pago
-        listItem.innerHTML = `
-            <strong>Tipo de Pago:</strong> ${pago.tipo}<br>
-            <strong>Importe:</strong> $${pago.importe}
-        `;
+  // Mostrar las formas de pago
+  formasDePago.forEach(pago => {
+      const listItem = document.createElement('li');
+      listItem.classList.add('list-group-item');
+      
+      // Añade el contenido de la forma de pago
+      listItem.innerHTML = `
+          <strong>Tipo de Pago:</strong> ${pago.forma}<br>
+          <strong>Importe:</strong> $${pago.importe}
+      `;
 
-        // Añadir el item a la lista
-        listaFormasDePago.appendChild(listItem);
-    });
+      // Añadir el item a la lista
+      listaFormasDePago.appendChild(listItem);
+  });
+
+  // Mostrar el cambio si existe
+  if (cambio !== undefined && cambio !== null) {
+      const listItemCambio = document.createElement('li');
+      listItemCambio.classList.add('list-group-item');
+      
+      // Añadir el contenido del cambio
+      listItemCambio.innerHTML = `
+          <strong>Cambio:</strong> $${cambio.toFixed(2)}
+      `;
+
+      // Añadir el item de cambio a la lista
+      listaFormasDePago.appendChild(listItemCambio);
+  }
 }
+

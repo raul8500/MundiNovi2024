@@ -1,6 +1,9 @@
+// ✅ Asegúrate de declarar esto en un archivo global o al inicio de tu HTML
+// var selectedProviders = [];
+
 document.addEventListener("DOMContentLoaded", async () => {
     let proveedores = []; // Lista de proveedores obtenidos de la API
-    let proveedoresSeleccionados = []; // Lista de IDs de proveedores seleccionados
+    selectedProviders = []; // ✅ Usamos la variable global en lugar de let local
 
     // 🟢 Obtener la lista de proveedores desde la API
     async function cargarProveedores() {
@@ -23,23 +26,20 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        // Filtrar proveedores cuyo nombre coincida con el texto ingresado
         const proveedoresFiltrados = proveedores.filter(p =>
             p.nombre.toLowerCase().includes(inputTexto)
         );
 
-        // Mostrar sugerencias
         proveedoresFiltrados.forEach(proveedor => {
             const sugerencia = document.createElement("div");
             sugerencia.classList.add("suggestion-item");
             sugerencia.textContent = proveedor.nombre;
             sugerencia.dataset.id = proveedor._id;
 
-            // Agregar evento para seleccionar proveedor al hacer clic
             sugerencia.addEventListener("click", function () {
                 agregarProveedor(proveedor._id, proveedor.nombre);
                 document.getElementById("providerSearch").value = "";
-                sugerenciasDiv.innerHTML = ""; // Limpiar sugerencias
+                sugerenciasDiv.innerHTML = "";
             });
 
             sugerenciasDiv.appendChild(sugerencia);
@@ -48,12 +48,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 🟢 Agregar proveedor a la tabla
     function agregarProveedor(id, nombre) {
-        if (proveedoresSeleccionados.includes(id)) {
+        if (selectedProviders.includes(id)) {
             alert("El proveedor ya ha sido agregado.");
             return;
         }
 
-        proveedoresSeleccionados.push(id);
+        selectedProviders.push(id);
 
         const tableBody = document.querySelector("#providerTable tbody");
         const fila = document.createElement("tr");
@@ -68,7 +68,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             </td>
         `;
 
-        // Agregar evento para eliminar proveedor
         fila.querySelector(".btn-remove-provider").addEventListener("click", function () {
             eliminarProveedor(id, fila);
         });
@@ -78,10 +77,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 🟢 Eliminar proveedor de la tabla
     function eliminarProveedor(id, fila) {
-        proveedoresSeleccionados = proveedoresSeleccionados.filter(provID => provID !== id);
+        selectedProviders = selectedProviders.filter(provID => provID !== id);
         fila.remove();
     }
 
-    // Cargar proveedores al iniciar la página
     await cargarProveedores();
 });

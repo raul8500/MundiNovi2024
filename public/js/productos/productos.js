@@ -17,9 +17,18 @@ $(document).ready(function () {
                 }
             },
             { data: 'name' },
-            { data: 'datosFinancieros.costo' },
-            { data: 'datosFinancieros.precio1' },
-            { data: 'idAlegra' },
+            {
+                data: 'datosFinancieros.costo',
+                render: function (data, type, row) {
+                    return data && data > 0 ? `$${data.toFixed(2)}` : 'Sin registro';
+                }
+            },            
+            {
+                data: 'datosFinancieros.precio1',
+                render: function (data, type, row) {
+                    return data && data > 0 ? `$${data.toFixed(2)}` : 'Sin registro';
+                }
+            },            
             {
                 data: null, // Esta columna es para los botones
                 render: function (data, type, row) {
@@ -164,3 +173,15 @@ $(document).ready(function () {
         $("#ex1-pills-1").addClass("show active"); // Mostrar su contenido
     });
 });
+
+$("#productoImagen").on("change", function () {
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            $("#previewImagen").attr("src", e.target.result).show();
+        };
+        reader.readAsDataURL(file);
+    }
+});
+

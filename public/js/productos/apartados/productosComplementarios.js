@@ -1,6 +1,5 @@
 $(document).ready(async function () {
     let allProducts = []; // Almacena todos los productos obtenidos de la API
-    let selectedComplementProducts = []; // Almacena los productos complementarios seleccionados
 
     // 🔹 Obtener productos de la API
     async function loadProducts() {

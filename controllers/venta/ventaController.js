@@ -41,7 +41,7 @@ exports.getVentasPorSucursalYFechas = async (req, res) => {
 
     const ventas = await Venta.find(query)
       .populate('sucursal', 'nombre')
-      .populate('productos.productoId')
+      .populate('productos.id')
       .sort({ fecha: -1 });
 
     res.status(200).json({ data: ventas });

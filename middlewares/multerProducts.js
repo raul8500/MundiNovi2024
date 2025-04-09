@@ -2,10 +2,10 @@ const fs = require('fs');
 const multer = require('multer');
 const path = require('path');
 
+// Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log('hola')
-    const carpetaDestino = path.join(__dirname, '../uploads/');
+    const carpetaDestino = path.join(__dirname, '../uploads/images/');
     console.log('Destino esperado del archivo:', carpetaDestino);
 
     // Crear carpeta si no existe
@@ -23,21 +23,26 @@ const storage = multer.diskStorage({
   },
 });
 
+// Filtro de archivos: solo imágenes
+const fileFilter = (req, file, cb) => {
+  console.log('Validando archivo:', file.originalname);
+  const allowedExtensions = /jpg|jpeg|png|gif|webp/;
+  const extname = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
+
+  if (extname) {
+    console.log('Archivo de imagen válido.');
+    cb(null, true);
+  } else {
+    console.log('Archivo de imagen no válido.');
+    cb(new Error('Solo se permiten archivos de imagen: JPG, JPEG, PNG, GIF o WEBP.'));
+  }
+};
+
+// Crear instancia de multer
 const upload = multer({
   storage,
-  fileFilter: (req, file, cb) => {
-    console.log('Validando archivo:', file.originalname);
-    const allowedExtensions = /pdf|doc|docx|txt/;
-    const extname = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
-    if (extname) {
-      console.log('Archivo válido.');
-      cb(null, true);
-    } else {
-      console.log('Archivo no válido.');
-      cb(new Error('Solo se permiten archivos PDF, DOC, DOCX o TXT.'));
-    }
-  },
-  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
 });
 
 module.exports = upload;

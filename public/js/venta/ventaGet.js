@@ -1,25 +1,21 @@
 
-
 const contenedorVentas = document.getElementById('ventasData');
 let currentPageVentas = 1;
 const itemsPerPageVentas = 30; // Ajusta según tus necesidades
 const maxPageLinksVentas = 5;
 let ventas = [];
 let ventasShow = [];
-
-
 let nombreCliente = ''
 
-function cargarClienteNombre(id) {
-    return fetch('/api/clientesNombre/' + id)
-        .then((response) => response.json())
-        .then((data) => {
-            return data.cliente; // Asegúrate de que el campo sea 'nombre' en la respuesta
-        })
-        .catch((error) => {
-            console.log(error);
-            return 'Error al cargar nombre';
-        });
+async function cargarClienteNombre(id) {
+    try {
+        const response = await fetch('/api/clientesNombre/' + id);
+        const data = await response.json();
+        return data.cliente;
+    } catch (error) {
+        console.log(error);
+        return 'Error al cargar nombre';
+    }
 }
 
 // Mostrar los datos de ventas
@@ -53,7 +49,7 @@ const mostrarVentas = async (ventas, currentPage, itemsPerPage) => {
                 <td class="text-center">${tipoVentaBadge}</td>
                 <td class="text-center">${nombreCliente}</td>
                 <td class="text-center">$${item.totalVenta}</td>
-                <td class="text-center">${item.formasDePago[0].tipo}</td>
+                <td class="text-center">${item.pagos.formasDePago[0].forma}</td>
                 <td class="text-center">${new Date(item.fecha).toLocaleDateString()}</td>
                 <td class="text-center">
                     <button id="${item._id}" type="button" class="btn btn-primary btn-rounded btnVerVenta" >
@@ -68,7 +64,6 @@ const mostrarVentas = async (ventas, currentPage, itemsPerPage) => {
 
     contenedorVentas.innerHTML = resultadosVentas;
 };
-
 
 // Actualizar los controles de paginación
 function actualizarControlesPaginacionVentas() {
@@ -125,7 +120,6 @@ function cambiarPaginaVentas(page) {
     }
 }
 
-
 document.getElementById('btnCargarVenta').addEventListener('click', cargarVenta);
 
 // Cargar los datos del Kardex
@@ -177,3 +171,14 @@ function convertirFecha(fecha) {
     // Formatear la fecha en mm/dd/aaaa
     return `${mesFormateado}-${diaFormateado}-${anoFormateado}`;
 }
+
+// Función para filtrar ventas por No. de Venta
+function filtrarPorNoVenta() {
+    const noVentaBusqueda = document.getElementById('busquedaProductosMain').value.trim().toLowerCase();
+    ventasShow = ventas.filter(item => item.noVenta.toString().includes(noVentaBusqueda));
+    currentPageVentas = 1; // Reiniciamos la página a la 1 cuando se realiza una búsqueda
+    mostrarVentas(ventasShow, currentPageVentas, itemsPerPageVentas);
+}
+
+// Llamar a la función de filtrado cuando el usuario escribe en el campo de búsqueda
+document.getElementById('busquedaProductosMain').addEventListener('input', filtrarPorNoVenta);
