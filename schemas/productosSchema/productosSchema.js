@@ -132,7 +132,10 @@ const productSchema = new mongoose.Schema({
   linea: { type: mongoose.Schema.Types.ObjectId, ref: 'Linea', required: false }, 
   departamento: { type: mongoose.Schema.Types.ObjectId, ref: 'Departamento', required: false }, 
   unidad: { type: mongoose.Schema.Types.ObjectId, ref: 'Unidad', required: false }, 
-  impuesto: { type: mongoose.Schema.Types.ObjectId, ref: 'Impuesto', required: false }, 
+  impuesto: { type: mongoose.Schema.Types.ObjectId, ref: 'Impuesto', required: false }
+},
+{
+  timestamps: true // 👈 Esto agrega createdAt y updatedAt automáticamente
 });
 
 module.exports = mongoose.model('Product', productSchema);

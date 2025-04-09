@@ -1,6 +1,3 @@
-// ✅ Asegúrate de declarar esto en un archivo global o al inicio de tu HTML
-// var selectedProviders = [];
-
 document.addEventListener("DOMContentLoaded", async () => {
     let proveedores = []; // Lista de proveedores obtenidos de la API
     selectedProviders = []; // ✅ Usamos la variable global en lugar de let local
@@ -8,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 🟢 Obtener la lista de proveedores desde la API
     async function cargarProveedores() {
         try {
-            const response = await fetch("http://localhost:3000/api/proveedor");
+            const response = await fetch("/api/proveedor");
             if (!response.ok) throw new Error("Error al obtener proveedores");
             proveedores = await response.json();
         } catch (error) {
@@ -82,4 +79,82 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     await cargarProveedores();
+
+
+
+
+
+    //Zona de Edit
+
+
+    const tabla = document.getElementById("tablaProveedoresEdit");
+    
+    document.addEventListener('click', e => {
+        if (e.target.matches('.btn-editar')) {
+        tabla.innerHTML = ''; // Limpia la tabla
+        const modal = new bootstrap.Modal(document.getElementById('modalProducto'));
+        modal.show();
+        }
+    });
+  
+    const proveedoresSeleccionados = []; // Aquí guardamos los seleccionados
+
+    // Evento de selección en autoComplete
+    new autoComplete({
+      selector: "#autocompleteProveedor",
+      data: {
+        src: proveedores.map(p => p.nombre)
+      },
+      resultItem: { highlight: true },
+      events: {
+        input: {
+          selection: (event) => {
+            const nombreSeleccionado = event.detail.selection.value;
+            document.querySelector("#autocompleteProveedor").value = "";
+    
+            const proveedor = proveedores.find(p => p.nombre === nombreSeleccionado);
+    
+            // Evita duplicados
+            const yaExiste = proveedoresSeleccionados.some(p => p.nombre === proveedor.nombre);
+            if (yaExiste) return; // No lo agregues de nuevo
+    
+            // Agrega a la variable global
+            proveedoresSeleccionados.push(proveedor);
+    
+            // Agrega visualmente a la tabla
+            const fila = document.createElement("tr");
+            fila.innerHTML = `
+              <td>${proveedor.nombre}</td>
+              <td>
+                <button class="btn btn-danger btn-sm btn-remove-providerEdit" data-nombre="${proveedor.nombre}">
+                  <i class="fas fa-trash-alt"></i> Eliminar
+                </button>
+              </td>
+            `;
+            tabla.appendChild(fila);
+          }
+        }
+      }
+    });
+    
+    document.addEventListener("click", (e) => {
+        if (e.target.closest(".btn-remove-providerEdit")) {
+          const boton = e.target.closest(".btn-remove-providerEdit");
+          const nombre = boton.dataset.nombre;
+      
+          // Elimina de la variable global
+          const index = proveedoresSeleccionados.findIndex(p => p.nombre === nombre);
+          if (index !== -1) {
+            proveedoresSeleccionados.splice(index, 1);
+          }
+      
+          // Elimina la fila visualmente
+          boton.closest("tr").remove();
+        }
+    });
+      
 });
+
+
+
+

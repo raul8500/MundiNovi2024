@@ -584,9 +584,8 @@ exports.marcarProductoImpreso = async (req, res) => {
                 });
 
                 // Referencia del producto centrado
-                doc.fontSize(10).text(`${productoDb.reference}  `, { align: 'center', continued: true })
-                    .fontSize(7).text(`   $   `, { continued: true })  // Agregamos un espacio después del símbolo de dólar
-                    .fontSize(12).text(`${productoDb.datosFinancieros.precio1}`, { continued: false }); // Continuamos con el precio
+                doc.fontSize(10).text(`${productoDb.reference}    `, { align: 'center', continued: true })
+                    .fontSize(10).text(`      $${productoDb.datosFinancieros.precio1.toFixed(2)}`, { continued: false }); // Continuamos con el precio
 
 
 
@@ -659,8 +658,8 @@ exports.marcarProductoImpreso = async (req, res) => {
                 const xPositionRangos = (pageWidth - textWidthProductName) / 2;  // Usamos la misma variable pageWidth previamente declarada
 
                 // Dibujar los 4 rangos en una sola línea con fuente pequeña, alineados con el nombre del producto
-                doc.fontSize(6).text(`                       ${productoDb.datosFinancieros.rangoInicial3}.${productoDb.datosFinancieros.precio3} `, { continued: true });
-                doc.fontSize(6).text(`             ${productoDb.datosFinancieros.rangoInicial4}.${productoDb.datosFinancieros.precio4} `, { continued: false });
+                doc.fontSize(6).text(`                       ${productoDb.datosFinancieros.rangoInicial3}.${productoDb.datosFinancieros.precio3.toFixed(2)} `, { continued: true });
+                doc.fontSize(6).text(`             ${productoDb.datosFinancieros.rangoInicial4}.${productoDb.datosFinancieros.precio4.toFixed(2)} `, { continued: false });
 
 
             }

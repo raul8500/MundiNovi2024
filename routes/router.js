@@ -778,7 +778,7 @@ router.get("/api/renuncia/:idColaborador", renunciaController.obtenerRenunciaCon
 // Ruta
 router.post('/api/producto/crear', multerProducts.single("imagen"), productoTest.createProduct);
 router.get('/api/producto/test', productoTest.getAllProducts);
-
+router.get('/api/producto/test/:id', productoTest.getProductById);
 
 
 //clientes

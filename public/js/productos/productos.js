@@ -33,8 +33,8 @@ $(document).ready(function () {
                 data: null, // Esta columna es para los botones
                 render: function (data, type, row) {
                     return `
-                        <button class="btn btn-primary btn-editar" data-id="${row._id}" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button class="btn btn-danger btn-eliminar" data-id="${row._id}" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                        <button class="btn btn-primary btn-editarProducto" data-id="${row._id}" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="btn btn-danger btn-eliminarProducto" data-id="${row._id}" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
                     `;
                 },
                 orderable: false, // Desactiva el ordenamiento en esta columna
@@ -185,3 +185,50 @@ $("#productoImagen").on("change", function () {
     }
 });
 
+
+document.addEventListener('click', e => {
+    if (e.target.matches('.btn-editarProducto')) {
+        const button = e.target.closest('.btn-editarProducto'); 
+        idEditProducto = button.getAttribute('data-id');
+        console.log('aiuda')
+        cargarProductoEdit(idEditProducto)
+        const modal = new bootstrap.Modal(document.getElementById('editarProductos'));
+        modal.show();
+    }
+});
+
+function cargarProductoEdit(idEditProducto) {
+    fetch('/api/producto/test/'+idEditProducto)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            setEditFormData(data.product);
+        })
+        .catch(error => console.log(error)); // Mover .catch() al final
+}
+
+function setEditFormData(producto) {
+    // Datos generales
+    document.getElementById('claveEdit').value = producto.reference || '';
+    document.getElementById('nombreEdit').value = producto.name || '';
+    document.getElementById('codigoBarrasEdit').value = producto.codigoBarra || '';
+    document.getElementById('claveSATEdit').value = producto.productKey || '';
+    document.getElementById('descripcionEdit').value = producto.description || '';
+    document.getElementById('fechaAltaEdit').value = producto.createdAt?.split('T')[0] || '';
+  
+    // Estado del producto
+    document.getElementById('estadoProductoEdit').value = producto.esActivo === false ? "false" : "true";
+  
+    // Tipo Kit / Grupo
+    document.getElementById('tipoKitEdit').checked = producto.esKit || false;
+    document.getElementById('tipoGrupoEdit').checked = producto.esGrupo || false;
+  
+    // Selects con relaciones (puede ser ID o el objeto populate)
+    document.getElementById('grupoEdit').value = producto.grupo?._id || producto.grupo || '';
+    document.getElementById('marcaEdit').value = producto.marca?._id || producto.marca || '';
+    document.getElementById('lineaEdit').value = producto.linea?._id || producto.linea || '';
+    document.getElementById('departamentoEdit').value = producto.departamento?._id || producto.departamento || '';
+    document.getElementById('impuestoEdtit').value = producto.impuesto?._id || producto.impuesto || '';
+    document.getElementById('unidadEdit').value = producto.unidad?._id || producto.unidad || '';
+}
+  

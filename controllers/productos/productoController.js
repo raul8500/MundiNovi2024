@@ -145,8 +145,6 @@ exports.createProduct = async (req, res) => {
     }
 };
 
-
-
 exports.getAllProducts = async (req, res) => {
     try {
         const products = await Product.find({})
@@ -243,4 +241,38 @@ exports.loadProductsFromExcel = async (req, res) => {
         res.status(500).json({ message: "Error al cargar los productos", error: err });
     }
 };
+
+
+exports.getProductById = async (req, res) => {
+    try {
+      const { id } = req.params;
+  
+      const product = await Product.findById(id)
+        .populate('categoria')
+        .populate('grupo')
+        .populate('marca')
+        .populate('linea')
+        .populate('departamento')
+        .populate('unidad')
+        .populate('impuesto')
+        .populate('proveedor')
+        .populate('productosAdicionales')
+        .populate('productosGrupo')
+        .populate('productosKit')
+        .populate('productosComplementarios');
+  
+      if (!product) {
+        return res.status(404).json({ message: 'Producto no encontrado' });
+      }
+  
+      res.status(200).json({
+        message: 'Producto obtenido exitosamente',
+        product,
+      });
+    } catch (error) {
+      console.error("Error al obtener producto por ID:", error);
+      res.status(500).json({ error: 'Error al obtener el producto de la base de datos' });
+    }
+  };
+  
 
