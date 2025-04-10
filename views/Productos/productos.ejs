@@ -1423,11 +1423,11 @@
         
         <!-- Modal -->
         <div class="modal fade" id="editaComponentes" tabindex="-1" aria-labelledby="modalLabelEdit" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
+            <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="modalLabelEdit">Componentes</h5>
-                <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-mdb-ripple-init data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                 <!-- Pills navs -->
@@ -1444,157 +1444,237 @@
                 <div class="tab-content">
                     <!-- GRUPO -->
                     <div class="tab-pane fade show active" id="grupoCRUD" role="tabpanel">
-                    <div class="mb-3">
-                        <label for="grupoNombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="grupoNombre">
+
+                        <div class="row align-items-end" style="height: 100px;">
+                            <div class="col-md-2">
+                                <label for="grupoClave" class="form-label">Clave</label>
+                                <input type="text" class="form-control" id="grupoClave">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="grupoNombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="grupoNombre">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="grupoDescripcion" class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="grupoDescripcion">
+                            </div>
+
+                            <div class="col-md-3">
+                                <button id="grupoBtnGuardarGrupo" class="btn btn-primary">Agregar</button>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <table class="table table-bordered" id="grupoTabla">
+                            <thead>
+                                <tr>
+                                    <th>Clave</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
-                    <div class="mb-3">
-                        <label for="grupoDescripcion" class="form-label">Descripción</label>
-                        <input type="text" class="form-control" id="grupoDescripcion">
-                    </div>
-                    <button id="grupoBtnAgregar" class="btn btn-primary mb-3">Agregar</button>
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody id="grupoTabla"></tbody>
-                    </table>
-                    </div>
-        
+
                     <!-- MARCA -->
                     <div class="tab-pane fade" id="marcaCRUD" role="tabpanel">
-                    <div class="mb-3">
-                        <label for="marcaNombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="marcaNombre">
-                    </div>
-                    <div class="mb-3">
-                        <label for="marcaDescripcion" class="form-label">Descripción</label>
-                        <input type="text" class="form-control" id="marcaDescripcion">
-                    </div>
-                    <button id="marcaBtnAgregar" class="btn btn-primary mb-3">Agregar</button>
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody id="marcaTabla"></tbody>
-                    </table>
+                        <div class="row align-items-end" style="height: 100px;">
+                            <div class="col-md-3">
+                                <label for="marcaClave" class="form-label">Clave</label>
+                                <input type="text" class="form-control" id="marcaClave">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="marcaNombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="marcaNombre">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="marcaDescripcion" class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="marcaDescripcion">
+                            </div>
+
+                            <div class="col-md-2">
+                                <button id="marcaBtnGuardar" class="btn btn-primary">Agregar</button>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <table class="table table-bordered" id="marcaTabla">
+                            <thead>
+                                <tr>
+                                    <th>Clave</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
         
                     <!-- LÍNEA -->
                     <div class="tab-pane fade" id="lineaCRUD" role="tabpanel">
-                    <div class="mb-3">
-                        <label for="lineaNombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="lineaNombre">
+                        <div class="row align-items-end" style="height: 100px;">
+                            <div class="col-md-3">
+                                <label for="lineaClave" class="form-label">Clave</label>
+                                <input type="text" class="form-control" id="lineaClave">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="lineaNombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="lineaNombre">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="lineaDescripcion" class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="lineaDescripcion">
+                            </div>
+
+                            <div class="col-md-2">
+                                <button id="lineaBtnGuardar" class="btn btn-primary">Agregar</button>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <table class="table table-bordered" id="lineaTabla">
+                            <thead>
+                                <tr>
+                                    <th>Clave</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
-                    <div class="mb-3">
-                        <label for="lineaDescripcion" class="form-label">Descripción</label>
-                        <input type="text" class="form-control" id="lineaDescripcion">
-                    </div>
-                    <button id="lineaBtnAgregar" class="btn btn-primary mb-3">Agregar</button>
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody id="lineaTabla"></tbody>
-                    </table>
-                    </div>
-        
+
                     <!-- DEPARTAMENTO -->
                     <div class="tab-pane fade" id="departamentoCRUD" role="tabpanel">
-                    <div class="mb-3">
-                        <label for="departamentoNombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="departamentoNombre">
+                        <div class="row align-items-end" style="height: 100px;">
+                            <div class="col-md-3">
+                                <label for="departamentoClave" class="form-label">Clave</label>
+                                <input type="text" class="form-control" id="departamentoClave">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="departamentoNombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="departamentoNombre">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="departamentoDescripcion" class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="departamentoDescripcion">
+                            </div>
+
+                            <div class="col-md-2">
+                                <button id="departamentoBtnGuardar" class="btn btn-primary">Agregar</button>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <table class="table table-bordered" id="departamentoTabla">
+                            <thead>
+                                <tr>
+                                    <th>Clave</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
-                    <div class="mb-3">
-                        <label for="departamentoDescripcion" class="form-label">Descripción</label>
-                        <input type="text" class="form-control" id="departamentoDescripcion">
-                    </div>
-                    <button id="departamentoBtnAgregar" class="btn btn-primary mb-3">Agregar</button>
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody id="departamentoTabla"></tbody>
-                    </table>
-                    </div>
-        
+
                     <!-- IMPUESTO -->
                     <div class="tab-pane fade" id="impuestoCRUD" role="tabpanel">
-                    <div class="mb-3">
-                        <label for="impuestoNombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="impuestoNombre">
+                        <div class="row align-items-end" style="height: 100px;">
+                            <div class="col-md-3">
+                                <label for="impuestoClave" class="form-label">Clave</label>
+                                <input type="text" class="form-control" id="impuestoClave">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="impuestoNombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="impuestoNombre">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="impuestoDescripcion" class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="impuestoDescripcion">
+                            </div>
+
+                            <div class="col-md-2">
+                                <button id="impuestoBtnGuardar" class="btn btn-primary">Agregar</button>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <table class="table table-bordered" id="impuestoTabla">
+                            <thead>
+                                <tr>
+                                    <th>Clave</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
-                    <div class="mb-3">
-                        <label for="impuestoDescripcion" class="form-label">Descripción</label>
-                        <input type="text" class="form-control" id="impuestoDescripcion">
-                    </div>
-                    <button id="impuestoBtnAgregar" class="btn btn-primary mb-3">Agregar</button>
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody id="impuestoTabla"></tbody>
-                    </table>
-                    </div>
-        
+
                     <!-- UNIDAD -->
                     <div class="tab-pane fade" id="unidadCRUD" role="tabpanel">
-                    <div class="mb-3">
-                        <label for="unidadNombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="unidadNombre">
+                        <div class="row align-items-end" style="height: 100px;">
+                            <div class="col-md-3">
+                                <label for="unidadClave" class="form-label">Clave</label>
+                                <input type="text" class="form-control" id="unidadClave">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="unidadNombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="unidadNombre">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="unidadDescripcion" class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="unidadDescripcion">
+                            </div>
+
+                            <div class="col-md-2">
+                                <button id="unidadBtnGuardar" class="btn btn-primary">Agregar</button>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <table class="table table-bordered" id="unidadTabla">
+                            <thead>
+                                <tr>
+                                    <th>Clave</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
-                    <div class="mb-3">
-                        <label for="unidadDescripcion" class="form-label">Descripción</label>
-                        <input type="text" class="form-control" id="unidadDescripcion">
-                    </div>
-                    <button id="unidadBtnAgregar" class="btn btn-primary mb-3">Agregar</button>
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody id="unidadTabla"></tbody>
-                    </table>
-                    </div>
-                </div>
-                <!-- Pills content -->
-                </div>
-        
-                <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
-                <button id="btnGuardarProducto" type="button" class="btn btn-primary" data-mdb-ripple-init>Guardar</button>
+
                 </div>
             </div>
             </div>
         </div>
-  
-  
-
-
-
 
     </main>
 

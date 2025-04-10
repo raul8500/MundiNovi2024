@@ -550,130 +550,150 @@ exports.getPreciadorBySucursal = async (req, res) => {
 
 exports.marcarProductoImpreso = async (req, res) => {
     try {
-        const { productos, sucursalId } = req.body; // Productos seleccionados y ID de la sucursal
+        const { productos, sucursalId } = req.body;
 
-        // Validar que se hayan enviado los productos
         if (!productos || productos.length === 0) {
-            return res.status(400).json({ message: 'El campo "productos" es requerido y debe contener al menos un producto.' });
+            return res.status(400).json({ message: 'El campo "productos" es requerido.' });
         }
 
-        // Crear el documento PDF con un margen superior reducido
-        const doc = new PDFDocument({ size: [100, 200], layout: 'landscape', margins: { top: 3, left: 3, right: 1, bottom: 1 } }); // Tamaño de la página y ajuste de márgenes
+        const doc = new PDFDocument({ autoFirstPage: false });
         const nombreArchivo = path.join(__dirname, `../../public/img/archivos/precios_productos.pdf`);
-        const nombreArchivoPublico = '/img/archivos/precios_productos.pdf'; // Ruta pública para el archivo generado
+        const nombreArchivoPublico = '/img/archivos/precios_productos.pdf';
         const writeStream = fs.createWriteStream(nombreArchivo);
         doc.pipe(writeStream);
 
-        // Iterar sobre los productos
         for (const producto of productos) {
-            const productoDb = await Producto.findById(producto._id); // Obtener el producto de la BD por su ID
-
+            const productoDb = await Producto.findById(producto._id);
             if (!productoDb) {
                 return res.status(404).json({ message: `Producto con ID ${producto._id} no encontrado.` });
             }
 
-            // Generar una página por cada cantidad de impresión para cada producto
             for (let i = 0; i < producto.cantidad; i++) {
-                if (i > 0 || productos.indexOf(producto) > 0) {
-                    doc.addPage();
+                doc.addPage({ size: [50, 100], layout: 'portrait', margins: { top: 0, left: 0, right: 0, bottom: 0 } });
+
+                doc.save();
+                doc.rotate(90, { origin: [0, 0] });
+                doc.translate(0, -50);
+
+                const pageWidth = 100;
+                let y = 4;
+
+                // === NOMBRE AUTO-AJUSTADO ===
+                let fontSizeNombre = 6;
+                doc.fontSize(fontSizeNombre);
+                let nameWidth = doc.widthOfString(productoDb.name);
+                while (nameWidth > pageWidth - 6 && fontSizeNombre > 3) {
+                    fontSizeNombre -= 0.5;
+                    doc.fontSize(fontSizeNombre);
+                    nameWidth = doc.widthOfString(productoDb.name);
+                }
+                let x = (pageWidth - nameWidth) / 2;
+                doc.text(productoDb.name, x, y, { lineBreak: false });
+                y += fontSizeNombre;
+
+                // === REFERENCE + PRECIO1 AUTO-AJUSTADO COMO EL NOMBRE ===
+                const ref = productoDb.reference;
+                const precio1 = `$${productoDb.datosFinancieros.precio1.toFixed(2)}`;
+                fontSizeRef = 5;
+                doc.fontSize(fontSizeRef);
+                let refPrecioText = `${ref}  ${precio1}`;
+                let refPrecioWidth = doc.widthOfString(refPrecioText);
+
+                // Reducir fontSize si no cabe
+                while (refPrecioWidth > pageWidth - 6 && fontSizeRef > 3) {
+                    fontSizeRef -= 0.5;
+                    doc.fontSize(fontSizeRef);
+                    refPrecioWidth = doc.widthOfString(refPrecioText);
                 }
 
-                doc.moveDown(0.5); // Ajusta el número si deseas más espacio, 1 es el predeterminado
-
-                // Nombre del producto centrado
-                doc.fontSize(8 ).text(productoDb.name, {
-                    align: 'center',
-                    continued: false
-                });
-
-                // Referencia del producto centrado
-                doc.fontSize(8).text(`${productoDb.reference}              `, { align: 'center', continued: true })
-                    .fontSize(8).text(`$${productoDb.datosFinancieros.precio1.toFixed(2)}          `, { continued: false });
+                // Centrado
+                x = (pageWidth - refPrecioWidth) / 2;
+                doc.text(refPrecioText, x, y, { lineBreak: false });
+                y += fontSizeRef;
 
 
 
-                // Promoción centrada
-                doc.fontSize(8).text(`Promoción x 2:`, {
-                    align: 'center',
-                });
+                // === "Promoción x 2" ajustado ===
+                let fontSizePromo = 3;
+                const promoText = 'Promoción x 2';
+                doc.fontSize(fontSizePromo);
+                let promoWidth = doc.widthOfString(promoText);
+                while (promoWidth > pageWidth - 6 && fontSizePromo > 3) {
+                    fontSizePromo -= 0.5;
+                    doc.fontSize(fontSizePromo);
+                    promoWidth = doc.widthOfString(promoText);
+                }
+                x = (pageWidth - promoWidth) / 2;
+                doc.text(promoText, x, y, { lineBreak: false });
+                y += fontSizePromo;
 
-                            // Comprobamos que los datos financieros existan y sean válidos
-                if (!productoDb.datosFinancieros || !productoDb.datosFinancieros.precio3) {
-                    throw new Error('El precio del producto no está disponible.');
+                // === PRECIO PROMOCIONAL AUTO-AJUSTADO COMO UNA LÍNEA ===
+                const precio2 = parseFloat(productoDb.datosFinancieros.precio2).toFixed(2);
+                const [entero, decimal] = precio2.split('.');
+
+                // Construimos la cadena completa para centrar y medir
+                let fontSizePrecio2 = 7;
+                let precio2Text = `$${entero}.${decimal} c/u`;
+                doc.fontSize(fontSizePrecio2);
+                let precio2Width = doc.widthOfString(precio2Text);
+
+                // Reducir tamaño si no cabe
+                while (precio2Width > pageWidth - 6 && fontSizePrecio2 > 3.5) {
+                    fontSizePrecio2 -= 0.5;
+                    doc.fontSize(fontSizePrecio2);
+                    precio2Width = doc.widthOfString(precio2Text);
                 }
 
-                // Obtenemos el precio2 y nos aseguramos de que tenga siempre dos decimales
-                let precio2 = parseFloat(productoDb.datosFinancieros.precio2).toFixed(2);  // Aseguramos que el precio tiene dos decimales
-                const [precioEntero, precioDecimal] = precio2.split('.');  // Separamos los enteros de los decimales
-
-                // Obtener el ancho del texto para centrar manualmente
-                const textWidthDollar = doc.fontSize(10).widthOfString('$ ');
-                const textWidthPrice = doc.fontSize(32).widthOfString(precioEntero);
-                const textWidthDecimals = doc.fontSize(14).widthOfString(`.${precioDecimal}`);
-                const textWidthCu = doc.fontSize(14).widthOfString(' c/u');
-
-                // Verificamos que ninguno de los anchos sea NaN
-                if (isNaN(textWidthDollar) || isNaN(textWidthPrice) || isNaN(textWidthDecimals) || isNaN(textWidthCu)) {
-                    throw new Error('Error en el cálculo de los anchos del texto.');
-                }
-
-                // Sumar el ancho total del texto
-                const totalTextWidth = textWidthDollar + textWidthPrice + textWidthDecimals + textWidthCu;
-
-                // Comprobamos que la página tiene un ancho definido y realizamos el cálculo de centrado
-                const pageWidth = (doc.page && doc.page.width) ? doc.page.width - doc.page.margins.left - doc.page.margins.right : 230; // Si no existe, usar un valor por defecto
-                const xPosition = (pageWidth - totalTextWidth) / 2;
-
-                // Dibujar el texto centrándolo manualmente
-                doc.fontSize(10).text('        $ ', xPosition, doc.y, { continued: true })  // Símbolo de dólar más pequeño
-                    .fontSize(20).text(precioEntero, { continued: true })  // Precio en tamaño grande (parte entera)
-                    .fontSize(12).text(`.${precioDecimal}`, { continued: true })  // Decimales más pequeños
-                    .fontSize(12).text(' c/u', { continued: false });  // Texto "c/u" más pequeño
-
-
-                doc.moveDown(-0.5); // Ajusta el número si deseas más espacio, 1 es el predeterminado
+                // Centrado
+                x = (pageWidth - precio2Width) / 2;
+                doc.fontSize(fontSizePrecio2).text(precio2Text, x, y, { lineBreak: false });
+                y += fontSizePrecio2;
 
 
 
-                // Generar el código de barras basado en la referencia del producto
+                // === CÓDIGO DE BARRAS ===
                 const barcodeBuffer = await bwipjs.toBuffer({
                     bcid: 'code128',
                     text: productoDb.reference,
-                    scale: 3,
-                    height: 10,
+                    scale: 1.5,
+                    height: 8
                 });
-
-                // Añadir el código de barras centrado en el PDF
-                doc.image(barcodeBuffer, {
-                    fit: [100, 50],
-                    align: 'center', // Centrando el código de barras
-                    valign: 'center' // Alineación vertical
+                doc.image(barcodeBuffer, (pageWidth - 60) / 2, y, {
+                    fit: [60, 22]
                 });
+                y += 15;
 
-                                
-                // Espacio después del código de barras
-                doc.moveDown(3);
+                // === RANGOS EN UNA SOLA LÍNEA CENTRADA ===
+                let fontSizeRangos = 3;
+                const rango1 = `${productoDb.datosFinancieros.rangoInicial3}: ${productoDb.datosFinancieros.precio3.toFixed(2)}`;
+                const rango2 = `${productoDb.datosFinancieros.rangoInicial4}: ${productoDb.datosFinancieros.precio4.toFixed(2)}`;
+                let rangosText = `${rango1}     ${rango2}`; // Espacio separador entre los dos rangos
 
-                // Obtener el ancho total del texto del nombre del producto para alinear los rangos con él
-                const textWidthProductName = doc.fontSize(14).widthOfString(productoDb.name);
+                doc.fontSize(fontSizeRangos);
+                let rangosWidth = doc.widthOfString(rangosText);
 
-                // Calculamos la posición x basada en el centrado del nombre del producto
-                const xPositionRangos = (pageWidth - textWidthProductName) / 2;  // Usamos la misma variable pageWidth previamente declarada
+                // Reducir tamaño si no cabe
+                while (rangosWidth > pageWidth - 6 && fontSizeRangos > 2) {
+                    fontSizeRangos -= 0.5;
+                    doc.fontSize(fontSizeRangos);
+                    rangosWidth = doc.widthOfString(rangosText);
+                }
 
-                // Dibujar los 4 rangos en una sola línea con fuente pequeña, alineados con el nombre del producto
-                doc.fontSize(4).text(`                       ${productoDb.datosFinancieros.rangoInicial3}.${productoDb.datosFinancieros.precio3.toFixed(2)} `, { continued: true });
-                doc.fontSize(4).text(`             ${productoDb.datosFinancieros.rangoInicial4}.${productoDb.datosFinancieros.precio4.toFixed(2)} `, { continued: false });
+                // Centrado horizontal
+                x = (pageWidth - rangosWidth) / 2;
+                doc.text(rangosText, x, y, { lineBreak: false });
+                y += fontSizeRangos + 1;
 
 
+
+
+                doc.restore();
             }
 
-            // Marcar el producto como impreso en el preciador para la sucursal
+            // Marcar como impreso
             const preciador = await Preciador.findOne({ productoId: producto._id });
-
             if (preciador) {
-                preciador.sucursalesPendientes = preciador.sucursalesPendientes.filter(
-                    sucursal => sucursal.toString() !== sucursalId
-                );
+                preciador.sucursalesPendientes = preciador.sucursalesPendientes.filter(id => id.toString() !== sucursalId);
                 if (!preciador.sucursalesPendientes.length) {
                     await Preciador.findByIdAndDelete(preciador._id);
                 } else {
@@ -682,10 +702,8 @@ exports.marcarProductoImpreso = async (req, res) => {
             }
         }
 
-        // Finalizar el documento PDF
         doc.end();
 
-        // Enviar respuesta al frontend
         writeStream.on('finish', () => {
             res.status(200).json({
                 message: 'PDF generado y productos marcados como impresos.',

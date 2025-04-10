@@ -65,6 +65,22 @@ $(document).ready(function () {
             }
         }
     });
+
+    cargarSelects([
+        { id: 'grupoEdit', url: '/api/grupos', placeholder: 'Selecciona Grupo' },
+        { id: 'marcaEdit', url: '/api/marca', placeholder: 'Selecciona Marca' },
+        { id: 'lineaEdit', url: '/api/linea', placeholder: 'Selecciona Línea' },
+        { id: 'departamentoEdit', url: '/api/departamento', placeholder: 'Selecciona Departamento' },
+        { id: 'impuestoEdtit', url: '/api/impuesto', placeholder: 'Selecciona Impuesto' },
+        { id: 'unidadEdit', url: '/api/unidad', placeholder: 'Selecciona Unidad' },
+
+        { id: 'grupo', url: '/api/grupos', placeholder: 'Selecciona Grupo' },
+        { id: 'marca', url: '/api/marca', placeholder: 'Selecciona Marca' },
+        { id: 'linea', url: '/api/linea', placeholder: 'Selecciona Línea' },
+        { id: 'departamento', url: '/api/departamento', placeholder: 'Selecciona Departamento' },
+        { id: 'impuesto', url: '/api/impuesto', placeholder: 'Selecciona Impuesto' },
+        { id: 'unidad', url: '/api/unidad', placeholder: 'Selecciona Unidad' },
+    ]);
 });
 
 const btnCalcularPrecios = document.getElementById('btnCalcularPrecios')
@@ -128,7 +144,7 @@ $(document).ready(function () {
         $("#clave, #nombre, #codigoBarras, #claveSAT, #descripcion, #fechaAlta").val("");
 
         // 🔹 Resetear los select en "Datos Generales"
-        $("#estadoProducto").val("activo");
+        $("#estadoProducto").val("false");
         $("#grupo, #marca, #linea, #departamento, #impuesto, #unidad").val("");
 
         // 🔹 Resetear los checkboxes
@@ -185,6 +201,23 @@ $("#productoImagen").on("change", function () {
     }
 });
 
+function cargarSelects(configs) {
+    configs.forEach(cfg => {
+        $.get(cfg.url, function (data) {
+            const $select = $('#' + cfg.id);
+            $select.empty(); // Limpia el select
+
+            // Agrega la opción por defecto
+            $select.append(`<option value="">${cfg.placeholder || 'Selecciona una opción'}</option>`);
+
+            data.forEach(item => {
+                $select.append(`<option value="${item._id}">${item.nombre}</option>`);
+            });
+        });
+    });
+}
+
+
 
 document.addEventListener('click', e => {
     if (e.target.matches('.btn-editarProducto')) {
@@ -231,4 +264,7 @@ function setEditFormData(producto) {
     document.getElementById('impuestoEdtit').value = producto.impuesto?._id || producto.impuesto || '';
     document.getElementById('unidadEdit').value = producto.unidad?._id || producto.unidad || '';
 }
+
+
+
   
