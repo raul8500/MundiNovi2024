@@ -7,8 +7,7 @@
             <div>
                 <div class="d-flex justify-content-between align-items-center" style="margin-top: 50px;">
                     <div class="d-flex align-items-center">
-                        <button id="btnAddCliente" type="button" class="btn btn-primary btn-rounded me-2"
-                            data-mdb-ripple-color="dark" data-mdb-toggle="modal" data-mdb-target="#ModalAddCliente">
+                        <button id="btnAddCliente" type="button" class="btn btn-primary btn-rounded me-2">
                             Añadir <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
                         </button>
 
@@ -24,7 +23,7 @@
                         </div>
                     </div>
                 </div>
-                
+                <input type="hidden" id="clienteId">
                   
                 <div class="table-responsive pt-3">
                     <table id="tablaClientes" class="table align-middle mb-0 bg-white">
@@ -47,7 +46,7 @@
     </main>
 
                 
-    <div class="modal fade" id="ModalAddCliente" tabindex="-1" aria-labelledby="ModalAddClienteLabel" aria-hidden="true">
+    <div class="modal fade" id="ModalCliente" tabindex="-1" aria-labelledby="ModalAddClienteLabel" aria-hidden="true">
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -67,21 +66,13 @@
                                 <!--Datos generales-->
                                 <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
                                     <div class="row">
-
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="factura" class="col-form-label">¿Factura?</label>
-                                            <div>
-                                            <input type="radio" name="factura" id="factura_si" value="si" /> Sí
-                                            <input type="radio" name="factura" id="factura_no" value="no" checked /> No
-                                            </div>
-                                        </div>
                                     
-                                            <div class="col-md-12">
-                                                <label style="font-weight: 600;" for="nombreCliente" class="col-form-label">
-                                                    Nombre registrado
-                                                </label>
-                                                <input type="text" class="form-control" id="nombreCliente" required />
-                                            </div>
+                                        <div class="col-md-12">
+                                            <label style="font-weight: 600;" for="nombreCliente" class="col-form-label">
+                                                Nombre registrado
+                                            </label>
+                                            <input type="text" class="form-control" id="nombreCliente" required />
+                                        </div>
 
                                         <div class="col-md-6">
                                             <label style="font-weight: 600;" for="rfc" class="col-form-label">RFC</label>
@@ -178,132 +169,6 @@
         </div>
     </div>
 
-    <div class="modal fade" id="ModalEditCliente" tabindex="-1" aria-labelledby="ModalEditClienteLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="fa-regular fa-address-card" style="color: #000000;"></i>
-                        Editar cliente
-                    </h5>
-                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <div class="modal-body">
-                            <!-- Pills navs -->
-                            <ul class="nav nav-pills mb-3" id="ex2" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <a data-mdb-pill-init class="nav-link active" id="ex2-tab-1" href="#ex2-pills-1" role="tab"
-                                        aria-controls="ex2-pills-1" aria-selected="true">Datos generales</a>
-                                </li>
-                            </ul>
-                            <!-- Pills navs -->
-    
-                            <!-- Pills content -->
-                            <div class="tab-content" id="ex2-content">
-                                <!-- Datos generales -->
-                                <div class="tab-pane fade show active" id="ex2-pills-1" role="tabpanel" aria-labelledby="ex2-tab-1">
-                                    <div class="row">
-                                        <h4>Datos generales</h4>
-                                        
-                                        <input type="hidden" id="editClienteId"> <!-- ID oculto para edición -->
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;">¿Factura?</label>
-                                            <div>
-                                                <input type="radio" name="editFactura" id="edit_factura_si" value="si" /> Sí
-                                                <input type="radio" name="editFactura" id="edit_factura_no" value="no" checked /> No
-                                            </div>
-                                        </div>
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editNombreCliente">Nombre Completo:</label>
-                                            <input type="text" class="form-control" id="editNombreCliente" required />
-                                        </div>
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editRfc">Identificación (RFC):</label>
-                                            <input type="text" class="form-control" id="editRfc" />
-                                        </div>
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editRegimen">Régimen:</label>
-                                            <select id="editRegimen" class="form-select"></select>
-                                        </div>
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editTelefonoPrincipal">Número Telefónico:</label>
-                                            <input type="text" class="form-control" id="editTelefonoPrincipal" />
-                                        </div>
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editCorreoElectronicoContacto">Correo Electrónico:</label>
-                                            <input type="text" class="form-control" id="editCorreoElectronicoContacto" />
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editSelectZonaCliente" class="col-form-label">Zona Cliente:</label>
-                                            <select id="editSelectZonaCliente" class="form-select"></select>
-                                          </div>
-    
-                                        <hr style="margin-top: 10px;">
-                                        <h4>Dirección</h4>
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editCalle">Calle:</label>
-                                            <input type="text" class="form-control" id="editCalle" />
-                                        </div>
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editNumeroExterior">Número Exterior:</label>
-                                            <input type="text" class="form-control" id="editNumeroExterior" />
-                                        </div>
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editNumeroInterior">Número Interior:</label>
-                                            <input type="text" class="form-control" id="editNumeroInterior" />
-                                        </div>
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editColonia">Colonia:</label>
-                                            <input type="text" class="form-control" id="editColonia" />
-                                        </div>
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editLocalidad">Localidad:</label>
-                                            <input type="text" class="form-control" id="editLocalidad" />
-                                        </div>
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editMunicipioDelegacion">Municipio/Delegación:</label>
-                                            <input type="text" class="form-control" id="editMunicipioDelegacion" />
-                                        </div>
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editEstado">Estado:</label>
-                                            <input type="text" class="form-control" id="editEstado" />
-                                        </div>
-    
-                                        <div class="col-md-3">
-                                            <label style="font-weight: 600;" for="editCodigoPostal">Código Postal:</label>
-                                            <input type="text" class="form-control" id="editCodigoPostal" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Pills content -->
-    
-                            <div class="modal-footer d-flex justify-content-between align-items-center">
-                                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cerrar</button>
-                                <button type="submit" id="btnGuardarEdicionCliente" class="btn btn-primary">Guardar Cambios</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>  
 
     <!-- Modal -->
     <div class="modal fade" id="modalZonas" tabindex="-1" aria-labelledby="modalZonasLabel" aria-hidden="true">
@@ -346,6 +211,7 @@
     <script src="js/clientes/complementosVisuales.js"></script>
     <script src="js/clientes/clientesPost.js"></script>
     <script src="js/clientes/complementos/zonasClientes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 `; %>

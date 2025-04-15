@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("btnGuardarCliente").addEventListener("click", async function (event) {
         event.preventDefault(); // Evita el envío del formulario por defecto
+        const clienteId = document.getElementById("clienteId").value || null;
+        console.log(clienteId ? '🛠 Editando cliente existente' : '🆕 Creando nuevo cliente');
+
 
         // Obtener valores del formulario
         let clientData = {
@@ -22,36 +25,33 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         };
 
-        // Determinar si factura
-        let esfactura = document.querySelector("input[name='factura']:checked").value === "si";
-
-        //Determinar la zona
-        const select = document.getElementById('selectZonaCliente');
-        const zonaId = select.value; // Obtiene el ID seleccionado
+        // Determinar la zona seleccionada
+        const zonaId = document.getElementById('selectZonaCliente').value;
 
         let databaseClient = {
             zonaCliente: zonaId,
-            esfactura: esfactura,
+            esfactura: true, // ya no se pregunta, se asume que sí o lo decides tú
             estado: true,
-            monedero: 0, // Siempre inicia en 0
+            monedero: 0,
             login: {
-                username: clientData.phonePrimary, // El username es el número de teléfono
-                pasword: null // Opcional, puedes pedirlo en el formulario si es necesario
+                username: clientData.phonePrimary,
+                pasword: null
             }
         };
 
-        // JSON que se enviará al backend
         let postData = {
             facturapi: clientData,
             client: databaseClient
         };
 
-        console.log("Enviando cliente:", postData);
+        const url = clienteId ? `/api/cliente/test/${clienteId}` : `/api/cliente/test`;
+        const method = clienteId ? 'PUT' : 'POST';
+        const mensajeProgreso = clienteId ? 'Actualizando cliente...' : 'Registrando cliente...';
+        const mensajeExito = clienteId ? '¡Cliente actualizado!' : '¡Cliente registrado!';
 
         try {
-            // Mostrar alerta de carga
             Swal.fire({
-                title: "Registrando cliente...",
+                title: mensajeProgreso,
                 text: "Por favor, espera un momento.",
                 allowOutsideClick: false,
                 didOpen: () => {
@@ -59,8 +59,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
-            const response = await fetch("/api/cliente/test", {
-                method: "POST",
+            const response = await fetch(url, {
+                method,
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -71,33 +71,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.ok) {
                 Swal.fire({
-                    title: "¡Cliente registrado!",
-                    text: "El cliente ha sido registrado correctamente.",
+                    title: mensajeExito,
+                    text: "La operación se realizó correctamente.",
                     icon: "success",
                     confirmButtonText: "Aceptar"
                 }).then(() => {
-                    document.getElementById("ModalAddCliente").classList.remove("show"); // Cierra el modal
-                    document.body.classList.remove("modal-open"); // Elimina la clase modal-open del body
-                    document.querySelector(".modal-backdrop").remove(); // Remueve el fondo del modal
-                    var table = $('#tablaClientes').DataTable(); // Asegúrate de que '#example' sea el ID de tu tabla
-                    table.ajax.reload(); 
+                    const modal = bootstrap.Modal.getInstance(document.getElementById("ModalCliente"));
+                    if (modal) modal.hide();
+
+                    $('#tablaClientes').DataTable().ajax.reload();
                 });
             } else {
                 Swal.fire({
                     title: "Error",
-                    text: result.message || "Hubo un problema al registrar el cliente.",
+                    text: result.message || "Hubo un problema con la operación.",
                     icon: "error",
                     confirmButtonText: "Aceptar"
                 });
             }
+
         } catch (error) {
+            console.error("Error en la petición:", error);
             Swal.fire({
                 title: "Error de conexión",
                 text: "No se pudo conectar con el servidor.",
                 icon: "error",
                 confirmButtonText: "Aceptar"
             });
-            console.error("Error en la petición:", error);
         }
     });
 });

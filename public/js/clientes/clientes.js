@@ -82,16 +82,27 @@ $(document).ready(function () {
         eliminarCliente(id);
     });
 
-    // Evento para abrir el modal de edición
-    $('#tablaClientes tbody').on('click', '.btn-editar', function () {
-        const id = $(this).data('id');
-        abrirModalEditarCliente(id);
-    });
-
     // Evento para guardar cambios del cliente editado
-    $('#btnGuardarEdicionCliente').on('click', function () {
-        guardarEdicionCliente();
+    $('#tablaClientes tbody').on('click', '.btn-editar', async function () {
+        const id = $(this).data('id');
+    
+        try {
+            const response = await fetch(`/api/cliente/test/${id}`);
+    
+            if (!response.ok) {
+                throw new Error('Cliente no encontrado');
+            }
+    
+            const cliente = await response.json();
+            abrirModalCliente(cliente);
+    
+        } catch (error) {
+            console.error('Error al cargar datos del cliente:', error);
+            Swal.fire("Error", "No se pudo cargar el cliente.", "error");
+        }
     });
+    
+    
 });
 
 
@@ -155,8 +166,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const btnAddCliente = document.getElementById("btnAddCliente");
 
     btnAddCliente.addEventListener("click", function () {
-        var modal = new bootstrap.Modal(document.getElementById("ModalAddCliente"));
-        modal.show();
+        abrirModalCliente();
     });
 });
 
@@ -182,50 +192,6 @@ async function cargarZonasEnSelect() {
 // Llamar a la función cuando se cargue la página
 document.addEventListener('DOMContentLoaded', cargarZonasEnSelect);
 
-// Función para cargar datos del cliente en el modal de edición
-async function abrirModalEditarCliente(id) {
-    try {
-        const response = await fetch(`/api/cliente/test/${id}`);
-        const cliente = await response.json();
-
-        $('#editClienteId').val(cliente._id);
-        $('#editNombreCliente').val(cliente.clientData.name);
-        $('#editRfc').val(cliente.clientData.identification) || null,
-        $('#editTelefonoPrincipal').val(cliente.clientData.phonePrimary) || null,
-        $('#editCorreoElectronicoContacto').val(cliente.clientData.email) || null,
-        $('#editCodigoPostal').val(cliente.clientData.address?.zipCode || '');
-        $('#editEstado').val(cliente.clientData.address?.state || '');
-        $('#editMunicipioDelegacion').val(cliente.clientData.address?.municipality || '');
-        $('#editLocalidad').val(cliente.clientData.address?.locality || '');
-        $('#editColonia').val(cliente.clientData.address?.colony || '');
-        $('#editCalle').val(cliente.clientData.address?.street || '');
-        $('#editNumeroExterior').val(cliente.clientData.address?.exteriorNumber || '');
-        $('#editNumeroInterior').val(cliente.clientData.address?.interiorNumber || '');
-
-        // Cargar opción de Zona Cliente
-        await cargarZonasEnSelectEdit('#editSelectZonaCliente');
-        $('#editSelectZonaCliente').val(cliente.zonaCliente?._id || '');
-
-        // Cargar opciones del régimen y seleccionar el actual
-        loadEditRegimenOptions(cliente.clientData.identification, cliente.clientData.regime);
-
-        // Seleccionar radio de factura
-        if (cliente.esfactura) {
-            $('#edit_factura_si').prop('checked', true);
-        } else {
-            $('#edit_factura_no').prop('checked', true);
-        }
-
-        // Mostrar el modal
-        var modal = new bootstrap.Modal(document.getElementById("ModalEditCliente"));
-        modal.show();
-
-    } catch (error) {
-        console.error('Error al cargar datos del cliente:', error);
-        alert('Error al cargar los datos del cliente.');
-    }
-}
-
 // Función para cargar zonas en el select del modal
 async function cargarZonasEnSelectEdit(selectId) {
     try {
@@ -245,147 +211,12 @@ async function cargarZonasEnSelectEdit(selectId) {
     }
 }
 
-// Función para guardar los cambios del cliente editado
-async function guardarEdicionCliente() {
-    const id = $('#editClienteId').val();
-    const clienteActualizado = {
-        alegra: {
-            address: {
-                street: $('#editCalle').val(),
-                exteriorNumber: $('#editNumeroExterior').val(),
-                interiorNumber: $('#editNumeroInterior').val(),
-                colony: $('#editColonia').val(),
-                locality: $('#editLocalidad').val(),
-                municipality: $('#editMunicipioDelegacion').val(),
-                state: $('#editEstado').val(),
-                zipCode: $('#editCodigoPostal').val(),
-                country: "MEX"
-            },
-            thirdType: "NATIONAL",
-            regime: $('#editRegimen').val() || "NO_REGIME",
-            name: $('#editNombreCliente').val(),
-            identification: $('#editRfc').val(),
-            phonePrimary: $('#editTelefonoPrincipal').val(),
-            mobile: $('#editTelefonoPrincipal').val(),
-            email: $('#editCorreoElectronicoContacto').val(),
-            status: "active"
-        },
-        client: {
-            esfactura: $('#edit_factura_si').is(':checked'),
-            estado: true,
-            zonaCliente: $('#editSelectZonaCliente').val(),
-            login: {
-                username: $('#editTelefonoPrincipal').val(),
-                pasword: null // Aquí puedes incluir lógica para cambiar la contraseña si es necesario
-            }
-        }
-    };
-
-    try {
-        // Mostrar alerta de carga
-        Swal.fire({
-            title: "Actualizando cliente...",
-            text: "Por favor, espera un momento.",
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
-
-        const response = await fetch(`/api/cliente/test/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(clienteActualizado)
-        });
-
-        if (!response.ok) {
-            throw new Error('Error al actualizar el cliente');
-        }
-
-        Swal.fire({
-            title: "¡Éxito!",
-            text: "El cliente ha sido actualizado correctamente.",
-            icon: "success",
-            confirmButtonText: "Aceptar"
-        }).then(() => {
-            $('#ModalEditCliente').modal('hide');
-            $('#tablaClientes').DataTable().ajax.reload();
-        });
-
-    } catch (error) {
-        console.error("Error al actualizar cliente:", error);
-        Swal.fire({
-            title: "Error",
-            text: "Hubo un problema al actualizar el cliente.",
-            icon: "error",
-            confirmButtonText: "Aceptar"
-        });
-    }
-}
-
 // Función para formatear fechas
 function formatearFecha(fecha) {
     if (!fecha) return "N/A";
     const fechaObj = new Date(fecha);
     return fechaObj.toLocaleDateString("es-MX", { year: 'numeric', month: '2-digit', day: '2-digit' });
 }
-
-function loadEditRegimenOptions(rfcValue, selectedRegimen) {
-    const regimenSelect = document.getElementById('editRegimen');
-    regimenSelect.innerHTML = ''; // Limpiar opciones previas
-
-    if (!rfcValue || rfcValue.trim() === '') {
-        // Si no hay RFC, solo permitimos "Sin Obligaciones Fiscales"
-        const opt = document.createElement('option');
-        opt.value = '616';
-        opt.text = 'Sin Obligaciones Fiscales';
-        regimenSelect.add(opt);
-        return;
-    }
-
-    const opciones12 = [
-        { value: '616', text: 'Régimen General de Ley Personas Morales' },
-        { value: '616', text: 'Personas Morales con Fines no Lucrativos' },
-        { value: '616', text: 'Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras (AGAPES)' },
-        { value: '624', text: 'Coordinados' },
-        { value: '620', text: 'Sociedades Cooperativas de Producción que optan por diferir sus ingresos' },
-        { value: '620', text: 'Regimen simplificado de confianza (RESICO)' },
-        { value: '616', text: 'Sin obligaciones fiscales' },
-        { value: '623', text: 'Opcional para Grupos de Sociedades' }
-    ];
-
-    const opciones13 = [
-        { value: '612', text: 'Personas Físicas con Actividades Empresariales y Profesionales' },
-        { value: '621', text: 'Incorporación Fiscal' },
-        { value: '606', text: 'Arrendamiento' },
-        { value: '625', text: 'Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas' },
-        { value: '605', text: 'Sueldos y Salarios e Ingresos Asimilados a Salarios' },
-        { value: '626', text: 'Regimen simplificado de confianza (RESICO)' },
-        { value: '616', text: 'Sin obligaciones fiscales' },
-        { value: '611', text: 'Ingresos por Dividendos (socios y accionistas)' },
-    ];
-
-    let opciones = [];
-    if (rfcValue.length === 12) {
-        opciones = opciones12;
-    } else if (rfcValue.length === 13) {
-        opciones = opciones13;
-    }
-
-    opciones.forEach(opcion => {
-        const opt = document.createElement('option');
-        opt.value = opcion.value;
-        opt.text = opcion.text;
-        if (opcion.value === selectedRegimen) {
-            opt.selected = true; // Selecciona el régimen actual del cliente
-        }
-        regimenSelect.add(opt);
-    });
-}
-
-document.getElementById('editRfc').addEventListener('input', function () {
-    loadEditRegimenOptions(this.value);
-});
 
 function eliminarCliente(id) {
     Swal.fire({
@@ -441,5 +272,64 @@ function eliminarCliente(id) {
         }
     });
 }
+async function abrirModalCliente(cliente) {
+    // Limpiar todos los campos del formulario
+    document.getElementById("ModalCliente").querySelectorAll("input, select").forEach(el => {
+        el.value = "";
+    });
+
+    // Limpiar el select de régimen al iniciar
+    regimenSelect.innerHTML = '';
+    const defaultOpt = document.createElement('option');
+    defaultOpt.value = '';
+    defaultOpt.text = 'Seleccione un régimen fiscal';
+    regimenSelect.appendChild(defaultOpt);
+
+
+    // Limpiar ID si es creación
+    if (!cliente) {
+        document.getElementById("clienteId").value = "";
+    }
+    
+    // Cargar zonas
+    await cargarZonasEnSelect();
+
+    console.log(cliente);
+
+    // Si hay cliente, es edición
+    if (cliente) {
+        $('#clienteId').val(cliente._id);
+        $('#nombreCliente').val(cliente.clientData.name);
+        $('#rfc').val(cliente.clientData.identification || '');
+        $('#telefonoPrincipal').val(cliente.clientData.mobile || '');
+        $('#correoElectronicoContacto').val(cliente.clientData.email || '');
+        $('#calle').val(cliente.clientData.address?.street || '');
+        $('#numeroExterior').val(cliente.clientData.address?.exterior || '');
+        $('#numeroInterior').val(cliente.clientData.address?.interior || '');
+        $('#colonia').val(cliente.clientData.address?.neighborhood || '');
+        $('#localidad').val(cliente.clientData.address?.city || '');
+        $('#municipioDelegacion').val(cliente.clientData.address?.municipality || '');
+        $('#estado').val(cliente.clientData.address?.state || '');
+        $('#codigoPostal').val(cliente.clientData.address?.zip || '');
+
+        // Seleccionar zona (después de cargar opciones)
+        const zonaId = cliente.zonaCliente?._id || '';
+        $('#selectZonaCliente').val(zonaId);
+        
+        // Cargar regímenes en base al RFC y seleccionar el correspondiente
+        const rfcValue = cliente.clientData.identification || '';
+        const selectedRegimen = cliente.clientData.regime || '';
+        loadRegimenOptionsWithSelection(rfcValue, selectedRegimen);
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById("ModalCliente"));
+    modal.show();
+}
+
+
+
+
+
+
 
 

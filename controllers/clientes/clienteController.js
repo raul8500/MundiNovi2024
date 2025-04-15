@@ -18,6 +18,7 @@ exports.createClient = async (req, res) => {
             tax_id: facturapiBody.identification,
             tax_system: facturapiBody.regime,
             address: facturapiBody.address,
+            phone: facturapiBody.phonePrimary
         });
 
         const newClient = new Client({
@@ -113,68 +114,66 @@ exports.deleteClient = async (req, res) => {
 };
 
 exports.updateClient = async (req, res) => {
-    try {
-        const alegraClient = req.body.alegra;
-        const databaseClient = req.body.client;
-        const clientId = req.params.id; // ID del cliente en MongoDB
+  try {
+    const facturapiData = req.body.facturapi;
+    const databaseClient = req.body.client;
+    const clientId = req.params.id;
 
-        // Buscar el cliente en la base de datos para obtener el idAlegra
-        const existingClient = await Client.findById(clientId);
-        if (!existingClient) {
-            return res.status(404).json({ message: 'Cliente no encontrado en la base de datos' });
-        }
-
-        // Actualizar el cliente en Alegra
-        const alegraResponse = await alegra.editContact({
-            address: alegraClient.address,
-            thirdType: alegraClient.thirdType || 'NATIONAL',
-            regime: alegraClient.regime || 'NO_REGIME',
-            name: alegraClient.name,
-            identification: alegraClient.identification,
-            regimeObject: [alegraClient.regime] || ['NO_REGIME'],
-            phonePrimary: alegraClient.phonePrimary,
-            mobile: alegraClient.mobile,
-            email: alegraClient.email,
-            status: alegraClient.status || 'active'
-        }, { id: existingClient.idAlegra });
-
-        console.log("Cliente actualizado en Alegra:", alegraResponse.data);
-
-        // Actualizar el cliente en MongoDB
-        const updatedClient = await Client.findByIdAndUpdate(clientId, {
-            esfactura: databaseClient.esfactura || false,
-            estado: databaseClient.estado || true,
-            zonaCliente: databaseClient.zonaCliente || null,
-            clientData: {
-                thirdType: alegraResponse.data.thirdType,
-                regime: alegraResponse.data.regime,
-                name: alegraResponse.data.name,
-                identification: alegraResponse.data.identification,
-                regimeObject: alegraResponse.data.regimeObject,
-                phonePrimary: alegraResponse.data.phonePrimary,
-                mobile: alegraResponse.data.phonePrimary,
-                email: alegraResponse.data.email,
-                status: alegraResponse.data.status,
-                address: alegraResponse.data.address
-            },
-            login: {
-                username: alegraResponse.data.phonePrimary,
-                pasword: databaseClient.login?.pasword || existingClient.login.pasword
-            }
-        }, { new: true }).populate('zonaCliente');
-
-        if (!updatedClient) {
-            return res.status(404).json({ message: 'Error actualizando el cliente en la base de datos' });
-        }
-
-        res.status(200).json({
-            message: "Cliente actualizado correctamente",
-            alegraClient: alegraResponse.data,
-            databaseClient: updatedClient
-        });
-
-    } catch (err) {
-        console.error("Error al actualizar cliente:", err);
-        res.status(500).json({ message: "Error al actualizar el cliente", error: err.message });
+    // 1. Buscar cliente en DB
+    const existingClient = await Client.findById(clientId);
+    if (!existingClient) {
+      return res.status(404).json({ message: 'Cliente no encontrado en la base de datos' });
     }
+
+    // 2. Actualizar en Facturapi
+    let facturapiResponse = null;
+    if (existingClient.idFacApi) {
+      facturapiResponse = await facturapi.customers.update(existingClient.idFacApi, {
+        legal_name: facturapiData.name.toUpperCase(),
+        email: facturapiData.email,
+        tax_id: facturapiData.identification,
+        tax_system: facturapiData.regime,
+        address: facturapiData.address,
+        phone: facturapiData.phonePrimary
+      });
+    }
+
+    // 3. Actualizar en MongoDB
+    const updatedClient = await Client.findByIdAndUpdate(
+      clientId,
+      {
+        esfactura: databaseClient.esfactura || false,
+        estado: databaseClient.estado || true,
+        zonaCliente: databaseClient.zonaCliente || null,
+        clientData: {
+          regime: facturapiResponse?.tax_system || facturapiData.regime,
+          name: facturapiResponse?.legal_name || facturapiData.name,
+          identification: facturapiResponse?.tax_id || facturapiData.identification,
+          mobile: facturapiData.phonePrimary,
+          email: facturapiResponse?.email || facturapiData.email,
+          address: facturapiResponse?.address || facturapiData.address
+        },
+        login: {
+          username: facturapiData.email,
+          pasword: databaseClient.login?.pasword || existingClient.login.pasword
+        }
+      },
+      { new: true }
+    ).populate('zonaCliente');
+
+    if (!updatedClient) {
+      return res.status(404).json({ message: 'Error actualizando el cliente en la base de datos' });
+    }
+
+    res.status(200).json({
+      message: "Cliente actualizado correctamente",
+      facturapiClient: facturapiResponse,
+      databaseClient: updatedClient
+    });
+
+  } catch (err) {
+    console.error("Error al actualizar cliente:", err);
+    res.status(500).json({ message: "Error al actualizar el cliente", error: err.message });
+  }
 };
+
