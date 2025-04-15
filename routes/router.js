@@ -779,6 +779,8 @@ router.get("/api/renuncia/:idColaborador", renunciaController.obtenerRenunciaCon
 router.post('/api/producto/crear', multerProducts.single("imagen"), productoTest.createProduct);
 router.get('/api/producto/test', productoTest.getAllProducts);
 router.get('/api/producto/test/:id', productoTest.getProductById);
+router.put('/api/producto/editar/:id', multerProducts.single("imagen"), productoTest.updateProduct);
+router.delete('/api/producto/eliminar/:id', productoTest.deleteProduct);
 
 
 //clientes
@@ -807,8 +809,24 @@ router.post('/api/venta/crear', ventas.createVenta);
 
 
 //Cargar desde excel
+const path = require('path');
+const multer3 = require('multer');
 
-router.post('/api//load-products/excel', productoTest.loadProductsFromExcel);
+const storage = multer3.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // crea esta carpeta si no existe
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+
+const upload3 = multer3({ storage });
+
+
+
+router.post('/api/load-products/excel', upload3.single('file'), productoTest.loadProductsFromExcel);
 
 
 

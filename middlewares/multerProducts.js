@@ -5,7 +5,7 @@ const path = require('path');
 // Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const carpetaDestino = path.join(__dirname, '../uploads/images/');
+    const carpetaDestino = path.join(__dirname, '../public/img/productos/');
     console.log('Destino esperado del archivo:', carpetaDestino);
 
     // Crear carpeta si no existe

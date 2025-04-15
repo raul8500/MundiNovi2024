@@ -1,9 +1,10 @@
 //const alegra = require('../../.api/apis/alegra-productos');
 const Product = require('../../schemas/productosSchema/productosSchema');
 const xlsx = require('xlsx');
-
+const fs = require('fs');
 const Facturapi = require('facturapi').default;
 const facturapi = new Facturapi('sk_test_GO8zw0Xo52mM1kgLW3a1Y8OydL9Nel4JBEZabDQ3Yv');
+const Unidad = require('../../schemas/productosSchema/complementosSchema/unidadSchema'); // o la ruta real
 
 
 exports.createProduct = async (req, res) => {
@@ -15,28 +16,30 @@ exports.createProduct = async (req, res) => {
         const databaseProduct = productoData.product;
         
 
-        if (req.file) {
-            databaseProduct.rutaImagen = `/uploads/images/${req.file.filename}`;
-        }
-
-        console.log(facApiProduct)
-
-        const product = await facturapi.products.create({
-            description: facApiProduct.description,
-            product_key: facApiProduct.product_key, 
-            price: facApiProduct.price,
-            tax_included: true,//
-            taxability: "02", //
-            taxes: [ //
-              {
-                "type": "IVA",
-                "rate": 0.16
-              }
-            ],
-            unit_key: facApiProduct.unit_key,//
-            unit_name: facApiProduct.unit_name,
-            sku: facApiProduct.sku
-        });
+         // Obtener clave de unidad desde la base de datos
+         const unidadDB = await Unidad.findById(databaseProduct.unidad);
+         if (!unidadDB) {
+             return res.status(400).json({ message: "Unidad no encontrada para crear en Facturapi" });
+         }
+ 
+         if (req.file) {
+             databaseProduct.rutaImagen = `/img/productos/${req.file.filename}`;
+         }
+ 
+         // Crear producto en Facturapi
+         const product = await facturapi.products.create({
+             description: facApiProduct.description,
+             product_key: facApiProduct.product_key,
+             price: facApiProduct.price,
+             tax_included: true,
+             taxability: "02",
+             taxes: [
+                 { type: "IVA", rate: 0.16 }
+             ],
+             unit_key: unidadDB.claveUnidad,
+             unit_name: unidadDB.nombre,
+             sku: facApiProduct.sku
+         });
 
 
         console.log("Producto creado en Fac Api:", product);
@@ -53,10 +56,10 @@ exports.createProduct = async (req, res) => {
             productKey: product.product_key,
             description: product.description,
             inventory: product.unit_key,
-            tiempoSurtido: databaseProduct.tiempoSurtido,
-            volumen: databaseProduct.volumen,
-            peso: databaseProduct.peso,
-            presentacion: databaseProduct.presentacion,
+            tiempoSurtido: databaseProduct.datosFinancieros.tiempoSurtido,
+            volumen: databaseProduct.datosFinancieros.volumen,
+            peso: databaseProduct.datosFinancieros.peso,
+            presentacion: databaseProduct.datosFinancieros.presentacion,
             datosFinancieros: {
                 costo: databaseProduct.datosFinancieros.costo,
                 ultimoCosto: databaseProduct.datosFinancieros.ultimoCosto,
@@ -172,25 +175,45 @@ exports.getAllProducts = async (req, res) => {
 
 exports.loadProductsFromExcel = async (req, res) => {
     try {
-        // Leer el archivo Excel
-        const file = req.files.file; // Asegúrate de que el archivo esté siendo enviado en el body
-        const workbook = xlsx.read(file.data, { type: 'buffer' });
+        // Validar que haya un archivo
+        if (!req.file) {
+            return res.status(400).json({ message: "No se envió ningún archivo." });
+        }
 
-        // Obtener la primera hoja del archivo
+        // Log del archivo recibido
+        console.log("Archivo recibido:", req.file.originalname, req.file.mimetype, req.file.size);
+
+        // Validar tipo de archivo (opcional pero recomendable)
+        if (
+            !req.file.mimetype.includes("excel") &&
+            !req.file.mimetype.includes("spreadsheetml")
+        ) {
+            return res.status(400).json({ message: "Tipo de archivo inválido. Se espera un archivo Excel." });
+        }
+
+        // Leer archivo desde disco
+        const fileBuffer = fs.readFileSync(req.file.path);
+        const workbook = xlsx.read(fileBuffer);
+
+        // Verificar que tenga al menos una hoja
+        if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
+            return res.status(400).json({ message: "El archivo Excel no contiene hojas." });
+        }
+
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
-
-        // Convertir la hoja en un array de objetos JSON
         const products = xlsx.utils.sheet_to_json(sheet);
 
-        // Iterar sobre los productos y guardarlos en la base de datos
-        for (let i = 0; i < products.length; i++) {
-            const product = products[i];
+        // Validar contenido
+        if (!products.length) {
+            return res.status(400).json({ message: "El archivo Excel está vacío o mal estructurado." });
+        }
 
-            // Crear un nuevo producto basado en la información del archivo Excel
+        // Guardar productos
+        for (let product of products) {
             const newProduct = new Product({
                 reference: product.reference,
-                name: product.nombre,  // Asegúrate de que el nombre de la columna sea correcto
+                name: product.nombre,
                 datosFinancieros: {
                     precio1: product.precio1,
                     precio2: product.precio2,
@@ -225,23 +248,20 @@ exports.loadProductsFromExcel = async (req, res) => {
                 }
             });
 
-            // Guardar el producto en la base de datos
             await newProduct.save();
-
-            // Log que indica que el producto se ha cargado correctamente
             console.log(`Producto cargado: ${newProduct.name}`);
         }
 
-        res.status(201).json({
-            message: "Productos cargados correctamente"
-        });
+        res.status(201).json({ message: "Productos cargados correctamente" });
 
     } catch (err) {
         console.error("Error al cargar productos desde Excel:", err);
-        res.status(500).json({ message: "Error al cargar los productos", error: err });
+        res.status(500).json({
+            message: "Error al cargar los productos",
+            error: err.message || err
+        });
     }
 };
-
 
 exports.getProductById = async (req, res) => {
     try {
@@ -258,7 +278,7 @@ exports.getProductById = async (req, res) => {
         .populate('proveedor')
         .populate('productosAdicionales')
         .populate('productosGrupo')
-        .populate('productosKit')
+        .populate('productosKit.id')
         .populate('productosComplementarios');
   
       if (!product) {
@@ -273,6 +293,131 @@ exports.getProductById = async (req, res) => {
       console.error("Error al obtener producto por ID:", error);
       res.status(500).json({ error: 'Error al obtener el producto de la base de datos' });
     }
-  };
-  
+};
+
+exports.updateProduct = async (req, res) => {
+    try {
+        const productoData = JSON.parse(req.body.producto);
+        const databaseProduct = productoData.product;
+
+        if (req.file) {
+            databaseProduct.rutaImagen = `/img/productos/${req.file.filename}`;
+        }
+
+        // Buscar producto actual
+        const existingProduct = await Product.findById(req.params.id);
+        if (!existingProduct) {
+            return res.status(404).json({ message: "Producto no encontrado" });
+        }
+
+                // Obtener la unidad desde la base de datos usando su ID
+        const unidadDB = await Unidad.findById(databaseProduct.unidad);
+
+        if (!unidadDB) {
+            return res.status(400).json({ message: "Unidad no encontrada para actualizar en Facturapi" });
+        }
+
+        const claveUnidad = unidadDB.claveUnidad; // Esto es lo que espera Facturapi como unit_key
+
+        // Actualizar producto en Facturapi
+        await facturapi.products.update(existingProduct.idFacturApi, {
+            description: databaseProduct.description,
+            product_key: databaseProduct.product_key,
+            price: databaseProduct.datosFinancieros.precio1 || 0,
+            tax_included: true,
+            taxability: "02",
+            taxes: [
+                {
+                    type: "IVA",
+                    rate: 0.16
+                }
+            ],
+            unit_key: claveUnidad,
+            unit_name: unidadDB.nombre,
+            sku: databaseProduct.sku
+        });
+
+
+        // Actualizar en MongoDB
+        const update = {
+            esActivo: databaseProduct.estado,
+            codigoBarra: databaseProduct.codigoBarra,
+            reference: databaseProduct.sku,
+            name: databaseProduct.unit_name,
+            productKey: databaseProduct.product_key,
+            description: databaseProduct.description,
+            inventory: databaseProduct.unidad,
+            tiempoSurtido: databaseProduct.datosFinancieros.tiempoSurtido,
+            volumen: databaseProduct.datosFinancieros.volumen,
+            peso: databaseProduct.datosFinancieros.peso,
+            presentacion: databaseProduct.datosFinancieros.presentacion,
+            datosFinancieros: {
+                ...databaseProduct.datosFinancieros
+            },
+            rutaImagen: databaseProduct.rutaImagen,
+            proveedor: databaseProduct.proveedor,
+            esKit: databaseProduct.esKit,
+            esGrupo: databaseProduct.esGrupo,
+            productosAdicionales: databaseProduct.productosAdicionales,
+            productosGrupo: databaseProduct.productosGrupo,
+            productosKit: databaseProduct.productosKit,
+            productosComplementarios: databaseProduct.productosComplementarios,
+            categoria: databaseProduct.categoria,
+            grupo: databaseProduct.grupo,
+            marca: databaseProduct.marca,
+            linea: databaseProduct.linea,
+            departamento: databaseProduct.departamento,
+            unidad: databaseProduct.unidad,
+            impuesto: databaseProduct.impuesto,
+        };
+
+        const updatedProduct = await Product.findByIdAndUpdate(
+            req.params.id,
+            update,
+            { new: true }
+        );
+
+        res.status(200).json({
+            message: "Producto actualizado correctamente",
+            databaseProduct: updatedProduct
+        });
+
+    } catch (err) {
+        console.error("Error al actualizar producto:", err);
+        res.status(500).json({ message: "Error al actualizar el producto", error: err });
+    }
+};
+
+exports.deleteProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const producto = await Product.findById(id);
+
+        if (!producto) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+
+        // Eliminar primero en Facturapi si tiene ID
+        if (producto.idFacturApi) {
+            try {
+                await facturapi.products.del(producto.idFacturApi);
+                console.log(`Producto eliminado de Facturapi: ${producto.idFacturApi}`);
+            } catch (factApiErr) {
+                console.warn('Advertencia: No se pudo eliminar de Facturapi', factApiErr.message);
+                // No se lanza error si falla en Facturapi, solo se avisa
+            }
+        }
+
+        // Eliminar en MongoDB
+        await Product.findByIdAndDelete(id);
+
+        res.status(200).json({ message: 'Producto eliminado correctamente' });
+
+    } catch (error) {
+        console.error('Error al eliminar producto:', error);
+        res.status(500).json({ message: 'Error al eliminar el producto', error });
+    }
+};
+
 

@@ -67,13 +67,6 @@ $(document).ready(function () {
     });
 
     cargarSelects([
-        { id: 'grupoEdit', url: '/api/grupos', placeholder: 'Selecciona Grupo' },
-        { id: 'marcaEdit', url: '/api/marca', placeholder: 'Selecciona Marca' },
-        { id: 'lineaEdit', url: '/api/linea', placeholder: 'Selecciona Línea' },
-        { id: 'departamentoEdit', url: '/api/departamento', placeholder: 'Selecciona Departamento' },
-        { id: 'impuestoEdtit', url: '/api/impuesto', placeholder: 'Selecciona Impuesto' },
-        { id: 'unidadEdit', url: '/api/unidad', placeholder: 'Selecciona Unidad' },
-
         { id: 'grupo', url: '/api/grupos', placeholder: 'Selecciona Grupo' },
         { id: 'marca', url: '/api/marca', placeholder: 'Selecciona Marca' },
         { id: 'linea', url: '/api/linea', placeholder: 'Selecciona Línea' },
@@ -187,6 +180,9 @@ $(document).ready(function () {
         $(".tab-pane").removeClass("show active");
         $("#ex1-tab-1").addClass("active"); // Activar la primera pestaña
         $("#ex1-pills-1").addClass("show active"); // Mostrar su contenido
+
+                // Abrir modal
+        $('#crearProducto').modal('show');
     });
 });
 
@@ -217,18 +213,14 @@ function cargarSelects(configs) {
     });
 }
 
-
-
 document.addEventListener('click', e => {
-    if (e.target.matches('.btn-editarProducto')) {
-        const button = e.target.closest('.btn-editarProducto'); 
-        idEditProducto = button.getAttribute('data-id');
-        console.log('aiuda')
-        cargarProductoEdit(idEditProducto)
-        const modal = new bootstrap.Modal(document.getElementById('editarProductos'));
-        modal.show();
+    const button = e.target.closest('.btn-editarProducto');
+    if (button) {
+        const idEditProducto = button.getAttribute('data-id');
+        cargarProductoEdit(idEditProducto);
     }
 });
+
 
 function cargarProductoEdit(idEditProducto) {
     fetch('/api/producto/test/'+idEditProducto)
@@ -241,29 +233,250 @@ function cargarProductoEdit(idEditProducto) {
 }
 
 function setEditFormData(producto) {
-    // Datos generales
-    document.getElementById('claveEdit').value = producto.reference || '';
-    document.getElementById('nombreEdit').value = producto.name || '';
-    document.getElementById('codigoBarrasEdit').value = producto.codigoBarra || '';
-    document.getElementById('claveSATEdit').value = producto.productKey || '';
-    document.getElementById('descripcionEdit').value = producto.description || '';
-    document.getElementById('fechaAltaEdit').value = producto.createdAt?.split('T')[0] || '';
-  
-    // Estado del producto
-    document.getElementById('estadoProductoEdit').value = producto.esActivo === false ? "false" : "true";
-  
-    // Tipo Kit / Grupo
-    document.getElementById('tipoKitEdit').checked = producto.esKit || false;
-    document.getElementById('tipoGrupoEdit').checked = producto.esGrupo || false;
-  
-    // Selects con relaciones (puede ser ID o el objeto populate)
-    document.getElementById('grupoEdit').value = producto.grupo?._id || producto.grupo || '';
-    document.getElementById('marcaEdit').value = producto.marca?._id || producto.marca || '';
-    document.getElementById('lineaEdit').value = producto.linea?._id || producto.linea || '';
-    document.getElementById('departamentoEdit').value = producto.departamento?._id || producto.departamento || '';
-    document.getElementById('impuestoEdtit').value = producto.impuesto?._id || producto.impuesto || '';
-    document.getElementById('unidadEdit').value = producto.unidad?._id || producto.unidad || '';
+    esEdicion = true;
+    productoEditandoId = producto._id; // Guarda ID para PUT
+
+    // Llena todos los campos igual que ya tienes...
+    $("#clave").val(producto.reference || '');
+    $("#nombre").val(producto.name || '');
+    $("#codigoBarras").val(producto.codigoBarra || '');
+    $("#claveSAT").val(producto.productKey || '');
+    $("#descripcion").val(producto.description || '');
+    $("#fechaAlta").val(producto.createdAt?.split('T')[0] || '');
+    $("#estadoProducto").val(producto.esActivo === false ? "false" : "true");
+    $("#tipoKit").prop("checked", producto.esKit || false);
+    $("#tipoGrupo").prop("checked", producto.esGrupo || false);
+
+    $("#grupo").val(producto.grupo?._id || producto.grupo || '');
+    $("#marca").val(producto.marca?._id || producto.marca || '');
+    $("#linea").val(producto.linea?._id || producto.linea || '');
+    $("#departamento").val(producto.departamento?._id || producto.departamento || '');
+    $("#impuesto").val(producto.impuesto?._id || producto.impuesto || '');
+    $("#unidad").val(producto.unidad?._id || producto.unidad || '');
+
+    // Datos Financieros
+    $("#tiempo-surtido").val(producto.tiempoSurtido || 0);
+    $("#volumen").val(producto.volumen || 0);
+    $("#peso").val(producto.peso || 0);
+    $("#costo").val(producto.datosFinancieros?.costo || 0);
+    $("#ultimo-costo").val(producto.datosFinancieros?.ultimoCosto || 0);
+    $("#costo-promedio").val(producto.datosFinancieros?.costoPromedio || 0);
+    $("#num-precio-minimo").val(producto.datosFinancieros?.numeroPrecioMinimo || 0);
+    $("#num-precio-maximo").val(producto.datosFinancieros?.numeroPrecioMaximo || 0);
+    $("#presentacion").val(producto.presentacion || 0);
+
+    for (let i = 1; i <= 10; i++) {
+        $(`#porcentaje-precio-${i}`).val(producto.datosFinancieros?.[`porcentajePrecio${i}`] || 0);
+        $(`#precio-${i}`).val(producto.datosFinancieros?.[`precio${i}`] || 0);
+        $(`#rango-inicial-${i}`).val(producto.datosFinancieros?.[`rangoInicial${i}`] || 0);
+        $(`#rango-final-${i}`).val(producto.datosFinancieros?.[`rangoFinal${i}`] || 0);
+        $(`#porcentaje-monedero-${i}`).val(producto.datosFinancieros?.[`porcentajeMonedero${i}`] || 0);
+    }
+
+    // Imagen
+    const preview = document.getElementById("previewImagen");
+    if (producto.rutaImagen) {
+        preview.src = producto.rutaImagen;
+        preview.style.display = "block";
+    } else {
+        preview.src = "";
+        preview.style.display = "none";
+    }
+
+        // === Poblar tablas de relaciones ===
+
+    // Proveedores
+    if (producto.proveedor) {
+        const proveedor = producto.proveedor;
+        selectedProviders = [proveedor._id.toString()]; // aseguramos string para comparación
+    
+        const fila = `
+            <tr data-id="${proveedor._id}">
+                <td>${proveedor.nombre}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm remove-provider" data-id="${proveedor._id}">
+                        <i class="fas fa-trash-alt"></i> Eliminar
+                    </button>
+                </td>
+            </tr>
+        `;
+    
+        $("#providerTable tbody").html(fila);
+    }
+    
+
+    //Adicionales
+
+    if (producto.productosAdicionales && producto.productosAdicionales.length > 0) {
+        selectedProducts = producto.productosAdicionales;
+        const filas = selectedProducts.map(p => `
+            <tr data-id="${p._id}">
+                <td>${p.reference} - ${p.name}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm remove-product" data-id="${p._id}">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </td>
+            </tr>
+        `).join("");
+        $("#providerTableProductAditional tbody").html(filas);
+    }
+
+    
+    //Grupos
+
+    if (producto.productosGrupo && producto.productosGrupo.length > 0) {
+        selectedGroupProducts = producto.productosGrupo;
+        const filas = selectedGroupProducts.map(p => `
+            <tr data-id="${p._id}">
+                <td>${p.reference} - ${p.name}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm remove-product-group" data-id="${p._id}">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </td>
+            </tr>
+        `).join("");
+        $("#providerTableGroup tbody").html(filas);
+    }
+
+    
+    //Complementarios
+    if (producto.productosComplementarios && producto.productosComplementarios.length > 0) {
+        selectedComplementProducts = producto.productosComplementarios;
+        const filas = selectedComplementProducts.map(p => `
+            <tr data-id="${p._id}">
+                <td>${p.reference} - ${p.name}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm remove-product-complement" data-id="${p._id}">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </td>
+            </tr>
+        `).join("");
+        $("#providerTableComplementProducts tbody").html(filas);
+    }
+
+
+    //kit
+    if (producto.productosKit && producto.productosKit.length > 0) {
+        selectedKitProducts = producto.productosKit.map(pk => {
+            const baseProduct = pk.id || pk; // <-- este cambio asegura compatibilidad
+            const costo = baseProduct?.datosFinancieros?.costo || 0;
+            const cantidad = pk.cantidad || 1;
+            const totalCost = (cantidad * costo).toFixed(2);
+    
+            return {
+                ...baseProduct,
+                amount: cantidad,
+                visible: pk.visible ?? true,
+                sumable: pk.sumable ?? false,
+                totalCost
+            };
+        });
+    
+        const filas = selectedKitProducts.map(p => `
+            <tr data-id="${p._id}">
+                <td>${p.reference}</td>
+                <td>${p.name}</td>
+                <td>
+                    <input type="number" class="form-control product-amount" value="${p.amount}" min="1" data-id="${p._id}">
+                </td>
+                <td>
+                    <input type="checkbox" class="product-visible" data-id="${p._id}" ${p.visible ? "checked" : ""}>
+                </td>
+                <td>
+                    <input type="checkbox" class="product-sumable" data-id="${p._id}" ${p.sumable ? "checked" : ""}>
+                </td>
+                <td>$${(p.datosFinancieros?.costo || 0).toFixed(2)}</td>
+                <td class="total-cost">$${p.totalCost}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm remove-product-kit" data-id="${p._id}">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </td>
+            </tr>
+        `).join("");
+    
+        $("#providerTableKit tbody").html(filas);
+        updateTotalGeneral();
+    }
+    
+    
+
+    function updateTotalGeneral() {
+        let total = selectedKitProducts.reduce((sum, product) => sum + parseFloat(product.totalCost || 0), 0);
+        $("#totalGeneral").text(`$${total.toFixed(2)}`);
+    }
+    
+    
+            // 🔹 Reiniciar el modal en la primera pestaña
+            $(".nav-pills .nav-link").removeClass("active");
+            $(".tab-pane").removeClass("show active");
+            $("#ex1-tab-1").addClass("active"); // Activar la primera pestaña
+            $("#ex1-pills-1").addClass("show active"); // Mostrar su contenido
+
+            
+            // Datos Financieros
+            $("#productsKitAmount").val(1);
+
+    // Abrir modal
+    $('#crearProducto').modal('show');
 }
+
+document.addEventListener('click', async (e) => {
+    if (e.target.closest('.btn-eliminarProducto')) {
+        const btn = e.target.closest('.btn-eliminarProducto');
+        const productoId = btn.getAttribute('data-id');
+
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Esta acción no se puede deshacer",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`/api/producto/eliminar/${productoId}`, {
+                        method: 'DELETE'
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Eliminado',
+                            text: 'El producto fue eliminado correctamente',
+                            confirmButtonColor: '#28a745',
+                        }).then(() => {
+                            location.reload(); // o recargar tabla
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: result.message || 'No se pudo eliminar el producto',
+                        });
+                    }
+                } catch (err) {
+                    console.error('Error al eliminar producto:', err);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de red',
+                        text: 'No se pudo conectar con el servidor',
+                    });
+                }
+            }
+        });
+    }
+});
+
+
 
 
 

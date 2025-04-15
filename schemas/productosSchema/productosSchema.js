@@ -95,7 +95,7 @@ const productSchema = new mongoose.Schema({
     porcentajeMonedero6: { type: Number, required: false }, 
     porcentajeMonedero7: { type: Number, required: false }, 
     porcentajeMonedero8: { type: Number, required: false }, 
-    porcentajeMoneder9: { type: Number, required: false }, 
+    porcentajeMonedero9: { type: Number, required: false }, 
     porcentajeMonedero10: { type: Number, required: false }, 
   },
   rutaImagen: {
