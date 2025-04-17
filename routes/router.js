@@ -112,10 +112,6 @@ router.get('/tiendas', authenticated.isAuthenticated,  verifyToken.verifyToken, 
     res.render('Sucursales/sucursales');
 });
 
-router.get('/puntoDeVenta', authenticated.isAuthenticated,  verifyToken.verifyToken, (req, res) => {    
-    res.render('PuntoDeVenta/puntoDeVenta');
-});
-
 router.get('/productos', authenticated.isAuthenticated,  verifyToken.verifyToken, (req, res) => {    
     res.render('Productos/productos');
 });

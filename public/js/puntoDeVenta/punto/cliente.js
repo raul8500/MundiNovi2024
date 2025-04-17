@@ -97,23 +97,71 @@ function updateActiveClienteSuggestion() {
 function seleccionarCliente(cliente) {
   clienteSeleccionado = cliente; // Se guarda el cliente seleccionado
 
-  document.getElementById("nombreCliente").value = cliente.clientData.name || "gola";
-  document.getElementById("rfcCliente").value = cliente.clientData.identification || "";
-  document.getElementById("numeroTelefonoCliente").value = cliente.clientData.phonePrimary || "";
-  document.getElementById("regimenFiscalCliente").value = cliente.clientData.regime || "";
-  
-  // Información de dirección
+  const rfc = cliente.clientData.identification || "";
+  const regimenCliente = cliente.clientData.regime || "";
+
+  // Rellenar campos
+  document.getElementById("nombreCliente").value = cliente.clientData.name || "";
+  document.getElementById("rfcCliente").value = rfc;
+  document.getElementById("numeroTelefonoCliente").value = cliente.clientData.mobile || "";
+  document.getElementById("correoCliente").value = cliente.clientData.email || "";
+
+  // Dirección
   document.getElementById("calleCliente").value = cliente.clientData.address.street || "";
-  document.getElementById("localidadCliente").value = cliente.clientData.address.locality || "";
-  document.getElementById("exteriorCliente").value = cliente.clientData.address.exteriorNumber || "";
-  document.getElementById("interiorCliente").value = cliente.clientData.address.interiorNumber || "";
-  document.getElementById("coloniaCliente").value = cliente.clientData.address.colony || "";
+  document.getElementById("localidadCliente").value = cliente.clientData.address.city || "";
+  document.getElementById("exteriorCliente").value = cliente.clientData.address.exterior || "";
+  document.getElementById("interiorCliente").value = cliente.clientData.address.interior || "";
+  document.getElementById("coloniaCliente").value = cliente.clientData.address.neighborhood || "";
   document.getElementById("municipioCliente").value = cliente.clientData.address.municipality || "";
   document.getElementById("estadoCiente").value = cliente.clientData.address.state || "";
-  document.getElementById("codigoPostalCliente").value = cliente.clientData.address.zipCode || "";
-  
-  document.getElementById("correoCliente").value = cliente.clientData.email || "";
+  document.getElementById("codigoPostalCliente").value = cliente.clientData.address.zip || "";
+
+  // Siempre establecer la venta como NO facturable por defecto
+  clienteSeleccionado.esfactura = false;
+
+  // Actualizar interfaz visual
+  document.getElementById("facturaCliente").textContent = "NO";
+  document.getElementById("usoCFDIContainer").style.display = "none";
+
+  // Cargar regímenes fiscales al select según RFC
+  const selectRegimen = document.getElementById("regimenFiscalCliente");
+  selectRegimen.innerHTML = ""; // Limpiar opciones anteriores
+
+  const regimenesFisica = [
+    { value: '612', text: 'Personas Físicas con Actividades Empresariales y Profesionales' },
+    { value: '621', text: 'Incorporación Fiscal' },
+    { value: '606', text: 'Arrendamiento' },
+    { value: '625', text: 'Actividades Empresariales en Plataformas Tecnológicas' },
+    { value: '605', text: 'Sueldos y Salarios e Ingresos Asimilados' },
+    { value: '626', text: 'RESICO (Simplificado de Confianza)' },
+    { value: '616', text: 'Sin obligaciones fiscales' },
+    { value: '611', text: 'Ingresos por Dividendos (socios y accionistas)' },
+  ];
+
+  const regimenesMoral = [
+    { value: '616', text: 'Régimen General de Ley Personas Morales' },
+    { value: '620', text: 'Sociedades Cooperativas con diferimiento de ingresos' },
+    { value: '616', text: 'Personas Morales sin fines de lucro' },
+    { value: '624', text: 'Coordinados' },
+    { value: '616', text: 'Sin obligaciones fiscales' },
+    { value: '620', text: 'RESICO (Simplificado de Confianza)' },
+    { value: '623', text: 'Opcional para Grupos de Sociedades' },
+    { value: '616', text: 'AGAPES (Actividades Agrícolas, Ganaderas, etc.)' }
+  ];
+
+  const listaRegimenes = rfc.length === 12 ? regimenesMoral : regimenesFisica;
+
+  listaRegimenes.forEach((regimen) => {
+    const option = document.createElement("option");
+    option.value = regimen.value;
+    option.textContent = regimen.text;
+    if (regimen.value === regimenCliente) {
+      option.selected = true;
+    }
+    selectRegimen.appendChild(option);
+  });
 }
+
 
 // Al hacer clic en "btnSeleccionarUsuario" se abre el modal y se hace focus en el input
 document.getElementById("btnSeleccionarUsuario").addEventListener("click", function () {
@@ -158,35 +206,28 @@ document.getElementById("btnFacturar").addEventListener("click", function() {
     Swal.fire('Error', 'Por favor, seleccione un cliente primero.', 'error');
     return;
   }
-  
-  // Determinar si la venta es facturable
-  let facturable = clienteSeleccionado.esfactura;
-  // Actualizar el panel del cliente para mostrar si factura o no
-  document.getElementById("facturaCliente").textContent = facturable ? "SI" : "NO";
-  
-  // Mostrar u ocultar el contenedor de Uso de CFDI según corresponda
-  if (facturable) {
-    document.getElementById("usoCFDIContainer").style.display = "block";
-    Swal.fire({
-      icon: 'success',
-      title: 'Venta con Factura',
-      text: 'La venta va a emitir factura.',
-      showConfirmButton: false,
-      timer: 1500
-    });
-  } else {
-    document.getElementById("usoCFDIContainer").style.display = "none";
-    Swal.fire({
-      icon: 'info',
-      title: 'Venta sin Factura',
-      text: 'La venta no podrá emitir factura.',
-      showConfirmButton: false,
-      timer: 1500
-    });
+
+  // Inicializar si no existe
+  if (typeof clienteSeleccionado.esfactura !== 'boolean') {
+    clienteSeleccionado.esfactura = false;
   }
+
+  // Alternar estado
+  clienteSeleccionado.esfactura = !clienteSeleccionado.esfactura;
+
+  // Reflejar estado en pantalla
+  document.getElementById("facturaCliente").textContent = clienteSeleccionado.esfactura ? "SI" : "NO";
+  document.getElementById("usoCFDIContainer").style.display = clienteSeleccionado.esfactura ? "block" : "none";
+
+  Swal.fire({
+    icon: clienteSeleccionado.esfactura ? 'success' : 'info',
+    title: clienteSeleccionado.esfactura ? 'Factura activada' : 'Factura desactivada',
+    text: clienteSeleccionado.esfactura 
+      ? 'La venta va a emitir factura.'
+      : 'La venta ya no emitirá factura.',
+    showConfirmButton: false,
+    timer: 1500
+  });
 });
 
-
-  
-  
 
