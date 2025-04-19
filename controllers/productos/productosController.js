@@ -522,6 +522,7 @@ exports.getProductById = async (req, res) => {
     }
 };
 
+
 exports.getPreciadorBySucursal = async (req, res) => {
     try {
         const { sucursalId } = req.params;

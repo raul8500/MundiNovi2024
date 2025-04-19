@@ -5,6 +5,8 @@ const fs = require('fs');
 const Facturapi = require('facturapi').default;
 const facturapi = new Facturapi('sk_test_GO8zw0Xo52mM1kgLW3a1Y8OydL9Nel4JBEZabDQ3Yv');
 const Unidad = require('../../schemas/productosSchema/complementosSchema/unidadSchema'); // o la ruta real
+const Preciador = require('../../schemas/preciador/preciadorSchema');
+const Sucursal = require('../../schemas/sucursalSchema/sucursalSchema');
 
 
 exports.createProduct = async (req, res) => {
@@ -375,6 +377,15 @@ exports.updateProduct = async (req, res) => {
             req.params.id,
             update,
             { new: true }
+        );
+
+        const sucursales = await Sucursal.find(); // Asumimos que tienes una colección de sucursales
+
+        // Crear o actualizar el registro en Preciador para este producto
+        await Preciador.findOneAndUpdate(
+            { productoId: updatedProduct._id }, // Usamos el ID del producto actualizado
+            { sucursalesPendientes: sucursales.map(sucursal => sucursal._id) }, // Todas las sucursales deben imprimir
+            { upsert: true, new: true } // Si no existe el registro, lo crea
         );
 
         res.status(200).json({
