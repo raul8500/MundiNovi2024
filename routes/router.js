@@ -338,7 +338,6 @@ router.get('/recepcionFaltantesProductos', (req, res) => {
     res.render('Traspaso/recepcionFaltantesProductos');
 });
 
-
 //Recepcion de productos de las sucursales 
 router.get('/recepcionFaltantesSucursal', (req, res) => {    
     res.render('Traspaso/recepcionFaltantesSucursal');

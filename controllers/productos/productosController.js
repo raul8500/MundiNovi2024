@@ -593,10 +593,9 @@ exports.marcarProductoImpreso = async (req, res) => {
 
                 // === REFERENCE + PRECIO1 AUTO-AJUSTADO COMO EL NOMBRE ===
                 const ref = productoDb.reference;
-                const precio1 = `$${productoDb.datosFinancieros.precio1.toFixed(2)}`;
                 fontSizeRef = 5;
                 doc.fontSize(fontSizeRef);
-                let refPrecioText = `${ref}  ${precio1}`;
+                let refPrecioText = `${ref}`;
                 let refPrecioWidth = doc.widthOfString(refPrecioText);
 
                 // Reducir fontSize si no cabe
@@ -609,64 +608,72 @@ exports.marcarProductoImpreso = async (req, res) => {
                 // Centrado
                 x = (pageWidth - refPrecioWidth) / 2;
                 doc.text(refPrecioText, x, y, { lineBreak: false });
-                y += fontSizeRef;
+                y += fontSizeRef + 2;
 
 
+// === Precio unitario en una línea con $ y c/u más pequeños ===
+const precio1 = productoDb.datosFinancieros.precio1 || 0;
 
-                // === "Promoción x 2" ajustado ===
-                let fontSizePromo = 3;
-                const promoText = 'Promoción x 2';
+const simbolo = '$';
+const cantidad = precio1.toFixed(2);
+const unidad = ' c/u';
+
+const fontSizeSimbolo = 9;
+const fontSizeCantidad = 15;
+const fontSizeUnidad = 9;
+
+doc.fontSize(fontSizeSimbolo);
+const wSimbolo = doc.widthOfString(simbolo);
+
+doc.fontSize(fontSizeCantidad);
+const wCantidad = doc.widthOfString(cantidad);
+
+doc.fontSize(fontSizeUnidad);
+const wUnidad = doc.widthOfString(unidad);
+
+const totalWidth = wSimbolo + wCantidad + wUnidad;
+ x = (pageWidth - totalWidth) / 2;
+
+// Dibujar cada parte por separado en posiciones exactas
+let xActual = x;
+const yAlign = y; // o ajustar con +delta si quieres centrar verticalmente
+
+doc.fontSize(fontSizeSimbolo).text(simbolo, xActual, yAlign, { lineBreak: false });
+xActual += wSimbolo;
+
+doc.fontSize(fontSizeCantidad).text(cantidad, xActual, yAlign, { lineBreak: false });
+xActual += wCantidad;
+
+doc.fontSize(fontSizeUnidad).text(unidad, xActual, yAlign, { lineBreak: false });
+
+y += fontSizeCantidad + 1;
+
+                
+
+
+                // === Promoción x2 con precio ===
+                let fontSizePromo = 8;
+                const precio2 = productoDb.datosFinancieros.precio2 || 0;
+                const promoText = `2x $${parseFloat(precio2).toFixed(2)}`;
+
                 doc.fontSize(fontSizePromo);
                 let promoWidth = doc.widthOfString(promoText);
                 while (promoWidth > pageWidth - 6 && fontSizePromo > 3) {
-                    fontSizePromo -= 0.5;
-                    doc.fontSize(fontSizePromo);
-                    promoWidth = doc.widthOfString(promoText);
+                fontSizePromo -= 0.5;
+                doc.fontSize(fontSizePromo);
+                promoWidth = doc.widthOfString(promoText);
                 }
+
                 x = (pageWidth - promoWidth) / 2;
                 doc.text(promoText, x, y, { lineBreak: false });
                 y += fontSizePromo;
+                            
 
-                // === PRECIO PROMOCIONAL AUTO-AJUSTADO COMO UNA LÍNEA ===
-                const precio2 = parseFloat(productoDb.datosFinancieros.precio2).toFixed(2);
-                const [entero, decimal] = precio2.split('.');
-
-                // Construimos la cadena completa para centrar y medir
-                let fontSizePrecio2 = 7;
-                let precio2Text = `$${entero}.${decimal} c/u`;
-                doc.fontSize(fontSizePrecio2);
-                let precio2Width = doc.widthOfString(precio2Text);
-
-                // Reducir tamaño si no cabe
-                while (precio2Width > pageWidth - 6 && fontSizePrecio2 > 3.5) {
-                    fontSizePrecio2 -= 0.5;
-                    doc.fontSize(fontSizePrecio2);
-                    precio2Width = doc.widthOfString(precio2Text);
-                }
-
-                // Centrado
-                x = (pageWidth - precio2Width) / 2;
-                doc.fontSize(fontSizePrecio2).text(precio2Text, x, y, { lineBreak: false });
-                y += fontSizePrecio2;
-
-
-
-                // === CÓDIGO DE BARRAS ===
-                const barcodeBuffer = await bwipjs.toBuffer({
-                    bcid: 'code128',
-                    text: productoDb.reference,
-                    scale: 1.5,
-                    height: 8
-                });
-                doc.image(barcodeBuffer, (pageWidth - 60) / 2, y, {
-                    fit: [60, 22]
-                });
-                y += 15;
 
                 // === RANGOS EN UNA SOLA LÍNEA CENTRADA ===
                 let fontSizeRangos = 3;
-                const rango1 = `${productoDb.datosFinancieros.rangoInicial3}: ${productoDb.datosFinancieros.precio3.toFixed(2)}`;
-                const rango2 = `${productoDb.datosFinancieros.rangoInicial4}: ${productoDb.datosFinancieros.precio4.toFixed(2)}`;
+                const rango1 = `${productoDb.datosFinancieros.rangoInicial3}. ${productoDb.datosFinancieros.precio3.toFixed(2)}`;
+                const rango2 = `${productoDb.datosFinancieros.rangoInicial4}. ${productoDb.datosFinancieros.precio4.toFixed(2)}`;
                 let rangosText = `${rango1}     ${rango2}`; // Espacio separador entre los dos rangos
 
                 doc.fontSize(fontSizeRangos);
@@ -721,7 +728,7 @@ exports.marcarProductoImpreso = async (req, res) => {
     }
 };
 
-
+ 
 
 
 exports.exportarProductosAExcel = async (req, res) => {
@@ -824,6 +831,8 @@ exports.exportarProductosAExcel = async (req, res) => {
 };
 
 const Kardex = require('../../schemas/kardexSchema/kardexSchema'); // Modelo de Kardex
+
+
 
 exports.obtenerExistenciaPorProducto = async (req, res) => {
     try {
