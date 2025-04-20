@@ -5,10 +5,14 @@ const Venta = require('../../schemas/venta/ventaSchema');
 const Cliente = require('../../schemas/clientesSchema/clientesSchema');
 
 const moment = require('moment-timezone');
-//const alegra = require('../../.api/apis/alegra-factura');
+
+const Facturapi = require('facturapi').default;
+const facturapi = new Facturapi('sk_test_GO8zw0Xo52mM1kgLW3a1Y8OydL9Nel4JBEZabDQ3Yv');
+
 
 exports.createVenta = async (req, res) => { 
-    try {        
+    try {
+
         //Verificar si existe un corte creado
         const cortePendiente = await checkCorteIniciadoONoFinalizado(req.body.cajero.id);
         let corteFolio = cortePendiente ? cortePendiente : await crearCorteFinal(req.body.cajero.id, req.body.sucursal.id);
@@ -38,7 +42,7 @@ exports.createVenta = async (req, res) => {
             });
 
             productosConKardex.push({
-                id,nombre,reference,precioSinIva, precioConIva, precio1, cantidad,
+                id,nombre,reference, precioConIva, precio1, cantidad,
                 kardexId: nuevoKardex._id,
                 kardexFolio: folio,
             });
@@ -51,14 +55,14 @@ exports.createVenta = async (req, res) => {
 
         if (factura) {
             // Si se factura, llamar a la función crearFactura y almacenar su respuesta en la variable
-            facturaMensaje = await crearFactura(req.body);
+            facturaMensaje = await crearFacturaAPI(req.body);
 
             if(facturaMensaje.statusCode == 200){
                 facturaBody =
                     {
                         codigoFacturacion: Math.floor(100000 + Math.random() * 900000),
                         estado: 1,
-                        idAlegraFacura : facturaMensaje.id,
+                        idAlegraFacura : facturaMensaje.invoice.id,
                         pdfUrl : '',
                         xmlUrl: '',
                     }
@@ -87,7 +91,8 @@ exports.createVenta = async (req, res) => {
                 xmlUrl: '',
             }
         }
-        
+    
+        req.body.cliente
 
         //Registrar Venta
         const nuevaVenta = new Venta({
@@ -147,7 +152,6 @@ exports.createVenta = async (req, res) => {
         if(req.body.cliente.id != ''){
             cliente = await Cliente.findOne({ _id: req.body.cliente.id });
             monedero = await calcularMonedero(req.body.productos)
-            console.log('total monedero: '+monedero)
             cliente.monedero += monedero
 
             let importeMonedero = 0;
@@ -173,6 +177,7 @@ exports.createVenta = async (req, res) => {
             .populate('cliente')  
             .populate('sucursal.idFranquicia');
 
+        console.log(ventaDatos)
         res.status(201).json(ventaDatos);
 
     }catch(err){
@@ -226,96 +231,66 @@ async function crearCorteFinal(usuario, sucursal) {
     }
 }
 
-async function crearFactura(body) {
+async function crearFacturaAPI(body) {
     try {   
+
         const cliente = await Cliente.findById(body.cliente.id);
-        
-        let payments = [];
-
-        for (let i = 0; i < body.formasDePago.length; i++) {
-            const forma = body.formasDePago[i];
-
-            // Si encontramos un método de pago "monedero", detenemos el proceso y asignamos null a payments
-            if (forma.forma === 'electronic-wallet') {
-                payments = null;
-                break; // Sale del ciclo
-            }
-
-            // Si el tipo de pago es 'cash', realiza la operación con el cambio
-            if (forma.forma === 'cash') {
-                payments.push({
-                    account: { id: 2 },
-                    date: moment.tz("America/Mexico_City").format(),
-                    amount: forma.importe - body.cambio, // Asegúrate de que body.cambio esté definido y tenga el valor correcto
-                    paymentMethod: forma.forma
-                });
-            } else {
-                // Si el tipo de pago no es 'cash', solo se agrega el importe
-                payments.push({
-                    account: { id: 2 },
-                    date: moment.tz("America/Mexico_City").format(),
-                    amount: forma.importe, // Asegúrate de que forma.importe esté bien asignado
-                    paymentMethod: forma.forma
-                });
-            }
-        }
 
         let singlePaymentMethod = null;
 
         if (body.formasDePago.length === 1 && body.formasDePago[0].forma !== 'electronic-wallet') {
             // Si hay solo una forma de pago y no es monedero, asigna la forma a singlePaymentMethod
-            singlePaymentMethod = body.formasDePago[0].forma;
+            if(body.formasDePago[0].forma == 'cash'){
+                singlePaymentMethod = '01';
+            }
+            if(body.formasDePago[0].forma == 'transfer'){
+                singlePaymentMethod = '03';
+            }
+            if(body.formasDePago[0].forma == 'credit-card'){
+                singlePaymentMethod = '04';
+            }
+            if(body.formasDePago[0].forma == 'debit-card'){
+                singlePaymentMethod = '28';
+            }
         } else {
             // Si hay más de una forma de pago o es monedero, asigna null
-            singlePaymentMethod = body.formasDePago[0].forma;
+            singlePaymentMethod == '99';
         }
 
         let items = body.productos;
 
-        const transformedItems = items.map(item => ({
-            id: item.idAlegra,      
-            tax: [{ id: '1' }],         
-            price: item.precioSinIva,        
-            quantity: item.cantidad 
+        const transformedItems = items.map(item => ({   
+            quantity: item.cantidad,
+            product: {
+                description: item.nombre,
+                product_key : item.product_key,
+                price: item.precioConIva,
+                tax_included: true,
+                sku: item.reference
+            }
         }));
 
-        // Autenticación con las credenciales de Alegra
-        alegra.auth('facturalimpios@hotmail.com', 'ab4146c42f8d367f052d');
-        
-        // Solicitar la creación de la factura
-        const { data } = await alegra.postInvoices({
-            client: { id: cliente.idAlegra || null },
-            stamp: { generateStamp: true },
-            paymentMethod: singlePaymentMethod,
-            cfdiUse: body.usoCFDI,
-            paymentType: 'PUE',
-            regimeClient: cliente.clientData.regime,
-            items: transformedItems,
-            date: moment.tz("America/Mexico_City").format(),
-            dueDate: moment.tz("America/Mexico_City").format(),
-            payments: payments
+        const invoice = await facturapi.invoices.create({
+        //customer_id : cliente.facturapi,
+        customer : cliente.idFacApi,
+        items: transformedItems,
+        payment_form: singlePaymentMethod,
+        use: body.usoCFDI,
+        payment_method: 'PUE',
         });
 
+        console.log(invoice)
+
         // Si todo sale bien, devolver status 200 y los datos de la factura
-        return { statusCode: 200, data };
+        return { statusCode: 200, invoice };
+
 
     } catch (err) {
-        // Manejo del error, devolviendo status 400 y el mensaje de error
-        if (err.status == 400) {
-            // Si el error proviene de la API de Alegra, devuelve el mensaje de error
-            return {
-                statusCode: err.status,
-                message: err.data.message
-            };
-        } else {
-            // Si el error es genérico
-            return {
-                statusCode: 500,
-                message: 'Error al crear la factura'
-            };
-        }
+        console.log(err)
     }
 }
+
+
 
 
 

@@ -38,7 +38,7 @@ function updatePagos() {
     // Actualizamos el campo global de cambio
     document.getElementById("globalCambio").textContent = globalCambio;
 }
-  
+
 // Función para asignar eventos a una fila de forma de pago
 function attachPaymentRowEvents(row) {
     let select = row.querySelector(".formaPago");
@@ -92,6 +92,8 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
+
+
 function armarVenta() {
     // Sucursal: se incluye id y nombre
     const sucursal = {
@@ -125,20 +127,25 @@ function armarVenta() {
 
     // Productos agregados
     let totalProductosCantidad = 0;
+
     const productosVenta = productosSeleccionados.map(item => {
-        const cantidad = parseFloat(item.inputCantidad.value) || 0;
-        totalProductosCantidad += cantidad;
-        return {
-            id: item.producto._id,
-            idAlegra: item.producto.idAlegra,
-            nombre: item.producto.name,
-            reference: item.producto.reference,
-            precioSinIva: parseFloat(item.inputPrecio.value) || 0,
-            precioConIva: parseFloat(item.inputPrecioIva.value) || 0,
-            precio1: item.producto.datosFinancieros.precio1,
-            cantidad: cantidad  // Aquí se incluye la cantidad del producto
-        };
+    const cantidad = parseFloat(item.inputCantidad.value) || 0;
+    const precioConIva = parseFloat(item.inputPrecioConIVA.value) || 0;
+
+    totalProductosCantidad += cantidad;
+
+    return {
+        id: item.producto._id,
+        facturapi: item.producto.idFacturApi,
+        nombre: item.producto.name,
+        reference: item.producto.reference,
+        precioConIva: precioConIva,
+        precio1: item.producto.datosFinancieros.precio1 || 0,
+        cantidad: cantidad,
+        product_key: item.producto.productKey || 47131700
+    };
     });
+
 
     // Formas de pago
     const paymentRows = document.querySelectorAll("#formasDePago .formaDePago");
@@ -522,7 +529,7 @@ function imprimirTicket(data) {
             <p style="margin: 2px 0;">Cajero: ${data.vendedor.name}</p>
             <p style="margin: 2px 0;">Expedido en: ${data.sucursal.datosTicket.direccion}</p>
             <p style="margin: 2px 0;">        ${data.sucursal.datosTicket.colonia} CP:${data.sucursal.datosTicket.codigoPostal} </p>
-            <p style="margin: 2px 0;">Cliente: ${data.cliente?.name|| 'PUBLICO EN GENERAL'}</p>
+            <p style="margin: 2px 0;">Cliente: ${data.cliente.clientData?.name|| 'PUBLICO EN GENERAL'}</p>
             <hr style="border: 1px solid black;">
             ${formatProductos(data.productos)}
             <hr style="border: 1px solid black;">

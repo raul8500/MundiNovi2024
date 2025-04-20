@@ -101,6 +101,7 @@ function actualizarResumenVenta() {
   document.getElementById("totalVenta").textContent = totalVenta.toFixed(2);
 }
 
+
 // Función para agregar el producto a la tabla y al arreglo de productosSeleccionados
 function agregarProductoTabla(producto, cantidad) {
   let itemExistente = productosSeleccionados.find(
@@ -208,8 +209,8 @@ function agregarProductoTabla(producto, cantidad) {
   tdAcciones.appendChild(btnEliminar);
   tr.appendChild(tdAcciones);
 
-  // Agregar a DOM
-  tbody.appendChild(tr);
+  // Insertar al principio de la tabla
+  tbody.insertBefore(tr, tbody.firstChild);
 
   // Guardar producto
   const productoSeleccionado = {
@@ -236,9 +237,9 @@ function agregarProductoTabla(producto, cantidad) {
   });
 
   actualizarResumenVenta();
+  document.getElementById("cantidad").value = 1;
 }
 
-  
 
 function updateActiveSuggestion() {
     const lista = document.getElementById("listaProductos");
@@ -254,7 +255,6 @@ function updateActiveSuggestion() {
     }
 }
   
-
 // Evento para el input de búsqueda (filtrado por reference)
 document.getElementById("producto").addEventListener("input", function () {
   const searchTerm = this.value.toLowerCase().trim();
