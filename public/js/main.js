@@ -96,9 +96,10 @@ function mostrarFunciones(data) {
         .catch(error => console.log(error));
 }
 
-function funciones(data) {
+async function funciones(data) {
     let resultados = '';
-    data.forEach(item => {
+
+    const fetches = data.map(async item => {
         if (item.subFunctions && item.subFunctions.length > 0) {
             // Si hay subfunciones, crea un menú desplegable
             resultados += `
@@ -113,36 +114,57 @@ function funciones(data) {
                     </ul>
                 </li>
             `;
-        } else {
-            // Si no hay subfunciones, verificar si es "Preciador" y mostrar la cantidad de productos
-            if (item.name === 'Preciador') {
-                fetch(`/api/preciador/${infoUser.sucursalId}`)
-                    .then(response => response.json())
-                    .then(preciadorData => {
-                        const cantidadProductos = preciadorData?.productos?.length || 0; // Verificar si 'productos' existe
-                        resultados += `
-                            <li class="nav-item">
-                                <a class="nav-link" href="${item.path}">
-                                    ${item.name} 
-                                    ${cantidadProductos > 0 ? `<span class="text-danger">(${cantidadProductos})</span> <i class="fas fa-exclamation-circle text-danger"></i>` : ''}
-                                </a>
-                            </li>
-                        `;
-                        document.getElementById('options').innerHTML = resultados; // Actualizar el HTML después de obtener la cantidad
-                    })
-                    .catch(error => console.log(error));
-            } else {
-                // Mostrar el enlace normalmente
+        } else if (item.name === 'Preciador') {
+            try {
+                const response = await fetch(`/api/preciador/${infoUser.sucursalId}`);
+                const preciadorData = await response.json();
+                const cantidadProductos = preciadorData?.productos?.length || 0;
+
                 resultados += `
                     <li class="nav-item">
-                        <a class="nav-link" href="${item.path}">${item.name}</a>
+                        <a class="nav-link" href="${item.path}">
+                            ${item.name}
+                            ${cantidadProductos > 0 ? `<span class="text-danger">(${cantidadProductos})</span> <i class="fas fa-exclamation-circle text-danger"></i>` : ''}
+                        </a>
                     </li>
                 `;
+            } catch (error) {
+                console.error('Error al cargar preciador:', error);
             }
+        } else if (item.name === 'Actividades') {
+            try {
+                const response = await fetch(`/api/obtenerActividadesNoPorUsuario/${infoUser._id}`);
+                const data = await response.json();
+                const totalPendientes = data.totalPendientes || 0;
+                console.log(data)
+                resultados += `
+                    <li class="nav-item">
+                        <a class="nav-link" href="${item.path}">
+                            ${item.name}
+                            ${totalPendientes > 0 ? `<span class="text-danger">(${totalPendientes})</span> <i class="fas fa-exclamation-circle text-danger"></i>` : ''}
+                        </a>
+                    </li>
+                `;
+            } catch (error) {
+                console.error('Error al cargar actividades:', error);
+            }
+        } else {
+            // Elemento simple sin notificación
+            resultados += `
+                <li class="nav-item">
+                    <a class="nav-link" href="${item.path}">${item.name}</a>
+                </li>
+            `;
         }
     });
+
+    // Esperar todos los fetches
+    await Promise.all(fetches);
+
+    // Una sola vez se actualiza el DOM
     document.getElementById('options').innerHTML = resultados;
 }
+
 
 function mostrarInfoPanel() {
     fetch('/api/ventasMainInfo')

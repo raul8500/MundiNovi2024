@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         try {
             const response = await fetch('/api/verifySesion');
             const data = await response.json();
-            console.log('Usuario cargado:', data);
             usuarioInfo = data;
         } catch (error) {
             console.error('Error al cargar el usuario:', error);
@@ -153,32 +152,30 @@ document.addEventListener('DOMContentLoaded', async function () {
             actividadSeleccionadaId = info.event.id;
             actividadSeleccionadaFecha = info.event.start.toISOString().split('T')[0];
             actividadSeleccionadaEsPeriodica = info.event.extendedProps.esPeriodica || false;
-
+        
             console.log('Actividad seleccionada ID:', actividadSeleccionadaId);
             console.log('Actividad seleccionada Fecha:', actividadSeleccionadaFecha);
             console.log('Actividad es periódica:', actividadSeleccionadaEsPeriodica);
-
+        
             document.getElementById('titulo').textContent = info.event.title;
             document.getElementById('descripcion').textContent = info.event.extendedProps.description;
             document.getElementById('horaInicio').textContent = new Date(info.event.start).toLocaleTimeString('es');
             document.getElementById('horaFinal').textContent = new Date(info.event.end).toLocaleTimeString('es');
             document.getElementById('estado').textContent = info.event.extendedProps.estado ? 'Finalizada' : 'Pendiente';
-
-            // Obtener botones
+        
             const btnFinalizarActividad = document.getElementById('btnFinalizarActividad');
             const btnReagendar = document.getElementById('btnReagendar');
-
-            // Verificar si la actividad está finalizada o si ya pasó
-            const hoy = new Date().toISOString().split('T')[0]; // Fecha actual en formato ISO
+        
+            // ✅ Obtener la fecha actual en zona horaria de CDMX (formato YYYY-MM-DD)
+            const hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Mexico_City' });
+        
             const esPasada = actividadSeleccionadaFecha < hoy;
             const estaFinalizada = info.event.extendedProps.estado;
-
-            // Lógica para desactivar/activar botones
+        
+            // ✅ Lógica actualizada
             btnFinalizarActividad.disabled = estaFinalizada || esPasada;
             btnReagendar.disabled = estaFinalizada;
-
-
-            // Cargar la tabla de usuarios asignados
+        
             const usuariosTabla = document.getElementById('usuariosTabla');
             usuariosTabla.innerHTML = '';
             const usuarios = info.event.extendedProps.usuarios;
@@ -195,9 +192,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             } else {
                 usuariosTabla.innerHTML = '<tr><td colspan="2" class="text-center">No hay usuarios asignados</td></tr>';
             }
-
+        
             ModalActividades.show();
         }
+        
+        
     });
 
     calendar.render();
@@ -313,6 +312,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     title: 'Éxito',
                     text: 'La actividad se ha actualizado.',
                 }).then(() => {
+                    this.location.reload()
                     ModalActividades.hide()
                     // Recargar el calendario para reflejar los cambios
                     const calendarStart = calendar.view.activeStart;

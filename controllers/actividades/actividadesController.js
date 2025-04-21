@@ -1,5 +1,6 @@
 const Actividad = require('../../schemas/actividadesSchema/actividadesSchema');
 const mongoose = require('mongoose');
+const { DateTime } = require('luxon');
 
 exports.crearActividad = async (req, res) => {
   try {
@@ -16,9 +17,14 @@ exports.crearActividad = async (req, res) => {
       usuariosAsignados
     } = req.body;
 
-    // Validaciones adicionales si es necesario
     if (esPeriodica && !periodicidad) {
       return res.status(400).json({ message: 'Debe especificar la periodicidad si la actividad es periódica.' });
+    }
+
+    // Convertir fechaDesignada a zona horaria de CDMX, pero guardar como UTC (como lo hace Mongo)
+    let fechaFinal = null;
+    if (fechaDesignada) {
+      fechaFinal = DateTime.fromISO(fechaDesignada, { zone: 'America/Mexico_City' }).toJSDate();
     }
 
     const nuevaActividad = new Actividad({
@@ -28,7 +34,7 @@ exports.crearActividad = async (req, res) => {
       periodicidad,
       diasSemana,
       diaMes,
-      fechaDesignada,
+      fechaDesignada: fechaFinal,
       horaInicio,
       horaFinal,
       usuariosAsignados,
@@ -42,6 +48,7 @@ exports.crearActividad = async (req, res) => {
     res.status(500).json({ message: 'Error al crear actividad.', error });
   }
 };
+
 
 exports.obtenerActividadesPorUsuario = async (req, res) => {
   try {
@@ -202,40 +209,44 @@ exports.excluirDiaEspecifico = async (req, res) => {
 };
 
 exports.marcarEstadoPorFecha = async (req, res) => {
-    try {
-        const { actividadId } = req.params;
-        const { fecha, estado } = req.body; // Fecha: YYYY-MM-DD, Estado: true/false
+  try {
+    const { actividadId } = req.params;
+    const { estado } = req.body; // Solo se usará el estado, no la fecha del frontend
 
-        if (!mongoose.Types.ObjectId.isValid(actividadId)) {
-            return res.status(400).json({ message: 'ID de actividad inválido.' });
-        }
-
-        if (!fecha || typeof estado !== 'boolean') {
-            return res.status(400).json({ message: 'Fecha y estado son requeridos.' });
-        }
-
-        const actividad = await Actividad.findById(actividadId);
-
-        if (!actividad) {
-            return res.status(404).json({ message: 'Actividad no encontrada.' });
-        }
-
-        // Si la fecha ya está marcada como finalizada y se intenta finalizar nuevamente, eliminarla
-        if (actividad.estadosPorFecha.get(fecha) === true && estado === true) {
-            actividad.estadosPorFecha.delete(fecha); // Eliminar la fecha del estado
-        } else {
-            // De lo contrario, actualizar o agregar el estado para la fecha específica
-            actividad.estadosPorFecha.set(fecha, estado);
-        }
-
-        await actividad.save();
-
-        res.status(200).json({ message: 'Estado actualizado con éxito.', actividad });
-    } catch (error) {
-        console.error('Error al actualizar el estado:', error);
-        res.status(500).json({ message: 'Error al actualizar el estado.', error });
+    if (!mongoose.Types.ObjectId.isValid(actividadId)) {
+      return res.status(400).json({ message: 'ID de actividad inválido.' });
     }
+
+    if (typeof estado !== 'boolean') {
+      return res.status(400).json({ message: 'El estado es requerido y debe ser booleano.' });
+    }
+
+    // Obtener la fecha actual en la zona horaria de Ciudad de México
+    const fechaCDMX = DateTime.now().setZone('America/Mexico_City').toFormat('yyyy-MM-dd');
+    console.log(`📅 Fecha actual CDMX usada para marcar: ${fechaCDMX}`);
+
+    const actividad = await Actividad.findById(actividadId);
+    if (!actividad) {
+      return res.status(404).json({ message: 'Actividad no encontrada.' });
+    }
+
+    // Marcar o desmarcar la actividad
+    if (actividad.estadosPorFecha.get(fechaCDMX) === true && estado === true) {
+      actividad.estadosPorFecha.delete(fechaCDMX);
+    } else {
+      actividad.estadosPorFecha.set(fechaCDMX, estado);
+    }
+
+    await actividad.save();
+
+    res.status(200).json({ message: 'Estado actualizado con éxito.', actividad });
+  } catch (error) {
+    console.error('Error al actualizar el estado:', error);
+    res.status(500).json({ message: 'Error al actualizar el estado.', error });
+  }
 };
+
+
 
 exports.reagendarActividad = async (req, res) => {
     const { id } = req.params;
@@ -259,7 +270,7 @@ exports.reagendarActividad = async (req, res) => {
         // Crear una copia de la actividad
         const nuevaActividad = new Actividad({
             titulo: `${actividadOriginal.titulo} (Reagendada)`,
-            descripcion: `${actividadOriginal.descripcion || ''} (Reagendada desde: ${fechaOriginal})`,
+            descripcion: `${actividadOriginal.descripcion || ''} (Reagendada)`,
             esPeriodica: false, // Siempre será no periódica
             periodicidad: null, // Sin periodicidad
             diasSemana: [], // No aplica
@@ -287,6 +298,7 @@ exports.reagendarActividad = async (req, res) => {
     }
 };
 
+
 exports.obtenerNumeroActividadesPorUsuario = async (req, res) => {
   try {
     const { usuarioId } = req.params;
@@ -297,42 +309,40 @@ exports.obtenerNumeroActividadesPorUsuario = async (req, res) => {
 
     const actividades = await Actividad.find({ usuariosAsignados: usuarioId });
 
-    const hoy = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-    const diaSemanaHoy = new Date().toLocaleString('es-MX', { weekday: 'long' }).toLowerCase();
-    const diaMesHoy = new Date().getDate();
+    // Obtener la fecha de hoy en zona horaria de Ciudad de México
+    const hoy = DateTime.now().setZone('America/Mexico_City').toFormat('yyyy-MM-dd');
+    const diaSemanaHoy = DateTime.now().setZone('America/Mexico_City').setLocale('es').toFormat('cccc').toLowerCase();
+    const diaMesHoy = parseInt(DateTime.now().setZone('America/Mexico_City').toFormat('d'));
 
     let actividadesPendientes = [];
 
     for (const act of actividades) {
       const estadosRaw = act.estadosPorFecha || {};
 
-      // 🔍 Convertir a objeto plano en caso de ser Map (Mongoose)
-      const estados = estadosRaw instanceof Map 
-        ? Object.fromEntries(estadosRaw.entries()) 
+      // Convertir a objeto plano en caso de ser Map
+      const estados = estadosRaw instanceof Map
+        ? Object.fromEntries(estadosRaw.entries())
         : estadosRaw;
 
       const tieneEstadoFinalizado = Object.values(estados).some(v => v === true);
 
-      // 🪵 LOGS DE DEPURACIÓN
-      console.log(`📅 Hoy: ${hoy}`);
-      console.log(`📅 FechaDesignada: ${act.fechaDesignada?.toISOString().split('T')[0]}`);
-      console.log(`🔁 Es periódica: ${act.esPeriodica}`);
-      console.log(`✅ Marcada como finalizada: ${act.finalizada}`);
-      console.log(`📊 Estados por fecha:`, estados);
-      console.log(`🟡 No es periódica. ¿Tiene fecha finalizada en estadosPorFecha? ${tieneEstadoFinalizado}`);
+      const fechaDesignada = act.fechaDesignada
+        ? DateTime.fromJSDate(act.fechaDesignada, { zone: 'utc' }).setZone('America/Mexico_City').toFormat('yyyy-MM-dd')
+        : null;
 
+      // NO periódicas ya finalizadas, no se cuentan
       if (!act.esPeriodica && (act.finalizada || tieneEstadoFinalizado)) {
-        console.log("✅ Actividad no periódica ya finalizada por estado o manual -> ignorada");
         continue;
       }
 
       if (!act.esPeriodica) {
-        const esParaHoy = act.fechaDesignada?.toISOString().split('T')[0] === hoy;
+        const esParaHoy = fechaDesignada === hoy;
         if (esParaHoy && !tieneEstadoFinalizado && !act.finalizada) {
           actividadesPendientes.push({ id: act._id, motivo: 'no periódica activa con fecha hoy' });
+          console.log("🆗 Agregando como pendiente (no periódica activa con fecha hoy)");
         }
       } else {
-        // ⏳ Actividades periódicas
+        // Periódicas
         const marcadaHoy = estados[hoy] === true;
 
         if (act.periodicidad === 'diaria' && !marcadaHoy) {
@@ -355,7 +365,7 @@ exports.obtenerNumeroActividadesPorUsuario = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error al obtener actividades por usuario:', error);
+    console.error('❌ Error al obtener actividades por usuario:', error);
     res.status(500).json({ message: 'Error al obtener actividades.', error });
   }
 };
