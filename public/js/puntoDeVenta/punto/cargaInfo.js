@@ -451,3 +451,180 @@ function mostrarPreciosEnTabla(producto) {
 }
 
 
+
+
+
+//Guardar Venta
+
+
+// Guarda venta en localStorage (puedes hacer POST a una ruta si prefieres DB)
+document.getElementById("btnGuardarVenta").addEventListener("click", () => {
+  const venta = armarVenta();
+  const guardadas = JSON.parse(localStorage.getItem("ventasGuardadas") || "[]");
+
+  guardadas.push({
+      id: Date.now(),
+      timestamp: new Date().toLocaleString(),
+      venta
+  });
+
+  localStorage.setItem("ventasGuardadas", JSON.stringify(guardadas));
+
+  Swal.fire("Guardado", "La venta fue guardada exitosamente.", "success");
+});
+
+// Mostrar lista de ventas guardadas
+document.getElementById("btnRecuperarVenta").addEventListener("click", () => {
+  const lista = document.getElementById("listaVentasGuardadas");
+  lista.innerHTML = "";
+
+  const guardadas = JSON.parse(localStorage.getItem("ventasGuardadas") || "[]");
+
+  if (guardadas.length === 0) {
+      lista.innerHTML = "<li class='list-group-item'>No hay ventas guardadas.</li>";
+      return;
+  }
+
+  guardadas.forEach((v) => {
+      const li = document.createElement("li");
+      li.className = "list-group-item d-flex justify-content-between align-items-center";
+
+      li.innerHTML = `
+          <div>
+              <strong>${v.venta.cliente.nombre}</strong><br>
+              <small>${v.timestamp}</small><br>
+              <small>Total: $${v.venta.totalVenta.toFixed(2)}</small>
+          </div>
+          <div class="btn-group">
+              <button class="btn btn-sm btn-success cargarVenta" data-id="${v.id}">
+                  <i class="fa-solid fa-upload"></i>
+              </button>
+              <button class="btn btn-sm btn-danger eliminarVenta" data-id="${v.id}">
+                  <i class="fa-solid fa-trash"></i>
+              </button>
+          </div>
+      `;
+
+      lista.appendChild(li);
+  });
+
+  document.querySelectorAll(".cargarVenta").forEach((btn) => {
+      btn.addEventListener("click", () => {
+          const id = parseInt(btn.getAttribute("data-id"));
+          cargarVentaGuardada(id);
+          bootstrap.Modal.getInstance(document.getElementById("modalRecuperarVenta")).hide();
+      });
+  });
+
+  document.querySelectorAll(".eliminarVenta").forEach((btn) => {
+      btn.addEventListener("click", () => {
+          const id = parseInt(btn.getAttribute("data-id"));
+          eliminarVentaGuardada(id);
+      });
+  });
+});
+
+
+// Cargar venta guardada
+function cargarVentaGuardada(id) {
+  const guardadas = JSON.parse(localStorage.getItem("ventasGuardadas") || "[]");
+  const venta = guardadas.find(v => v.id === id)?.venta;
+  if (!venta) return;
+
+  // Limpiar venta actual
+  productosSeleccionados.forEach(p => p.row.remove());
+  productosSeleccionados = [];
+  actualizarResumenVenta();
+
+  clienteSeleccionado = null;
+  document.getElementById("nombreClienteVenta").textContent = "PUBLICO EN GENERAL";
+  document.getElementById("monederoCliente").textContent = "$0.00";
+  document.getElementById("facturaCliente").textContent = "NO";
+  document.getElementById("usoCFDIContainer").style.display = "none";
+
+  // Cargar cliente
+  if (venta.cliente?.id) {
+      const cliente = clientes.find(c => c._id === venta.cliente.id);
+      if (cliente) seleccionarCliente(cliente);
+  }
+
+  // Cargar productos
+  venta.productos.forEach(p => {
+      const producto = productos.find(prod => prod._id === p.id);
+      if (producto) agregarProductoTabla(producto, p.cantidad);
+  });
+
+  // Factura y CFDI
+  if (venta.factura) {
+      clienteSeleccionado.esfactura = true;
+      document.getElementById("facturaCliente").textContent = "SI";
+      document.getElementById("usoCFDIContainer").style.display = "block";
+      document.getElementById("usoCFDI").value = venta.usoCFDI || "G03";
+  }
+
+  // Formas de pago
+  const contenedor = document.getElementById("formasDePago");
+  contenedor.innerHTML = "";
+
+  venta.formasDePago.forEach(fp => {
+      const row = document.createElement("div");
+      row.className = "row mb-3 formaDePago";
+
+      row.innerHTML = `
+          <div class="col-md-5">
+              <label class="form-label">Forma de Pago</label>
+              <select class="form-select formaPago">
+                  <option value="">Selecciona un metodo de pago</option>
+                  <option value="cash">Efectivo</option>
+                  <option value="credit-card">Tarjeta crédito</option>
+                  <option value="debit-card">Tarjeta débito</option>
+                  <option value="transfer">Transferencia</option>
+                  <option value="electronic-money">Monedero</option>
+              </select>
+          </div>
+
+          <div class="col-md-4">
+              <label class="form-label text-bold">Importe <i class="fas fa-money-bill-wave text-success"></i></label>
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text bg-success text-white">
+                          <i class="fas fa-dollar-sign"></i>
+                      </span>
+                  </div>
+                  <input type="number" class="form-control importePago custom-input" placeholder="0.00" />
+              </div>
+          </div>
+
+          <div class="col-md-1 d-flex text-center" style="height: 30px; margin-top: 27pt;">
+              <button type="button" class="btn btn-danger btn-sm eliminarFormaPago">
+                  <i class="fa-solid fa-trash"></i>
+              </button>
+          </div>
+      `;
+
+      contenedor.appendChild(row);
+
+      const select = row.querySelector(".formaPago");
+      const input = row.querySelector(".importePago");
+
+      select.value = fp.forma;
+      input.value = ''
+      input.disabled = !fp.forma;
+
+      attachPaymentRowEvents(row);
+  });
+
+  updatePagos();
+  actualizarResumenVenta();
+
+  Swal.fire("Venta cargada", "Se han restaurado los datos de la venta guardada.", "success");
+}
+
+
+function eliminarVentaGuardada(id) {
+  let guardadas = JSON.parse(localStorage.getItem("ventasGuardadas") || "[]");
+  guardadas = guardadas.filter(v => v.id !== id);
+  localStorage.setItem("ventasGuardadas", JSON.stringify(guardadas));
+  Swal.fire("Eliminada", "La venta guardada fue eliminada.", "success");
+  document.getElementById("btnRecuperarVenta").click(); // Recargar modal
+}

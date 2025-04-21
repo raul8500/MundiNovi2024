@@ -77,6 +77,15 @@
                         <button id="btnPrecios" type="button" class="btn btn-info" data-mdb-ripple-init>Precios <i
                                 class="fa-solid fa-tag"></i></button>
                     </div>
+
+                    <button id="btnGuardarVenta" type="button" class="btn btn-warning">
+                        Guardar <i class="fa-solid fa-floppy-disk"></i>
+                    </button>
+
+                    <button id="btnRecuperarVenta" type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalRecuperarVenta">
+                        Recuperar <i class="fa-solid fa-folder-open"></i>
+                    </button>
+                    
                 </div>
                 <div class="col-md-4">
                     <div class="row mb-3">
@@ -568,6 +577,24 @@
       </div>
     </div>
   </div>
+  
+  <div class="modal fade" id="modalRecuperarVenta" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Ventas guardadas</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <ul id="listaVentasGuardadas" class="list-group">
+            <!-- Ventas cargadas dinámicamente -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
   
       
 
