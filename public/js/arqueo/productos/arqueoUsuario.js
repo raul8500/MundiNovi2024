@@ -227,11 +227,12 @@ document.getElementById('enviarArqueo').addEventListener('click', async () => {
             icon: 'success',
             title: 'Éxito',
             text: 'El arqueo fue enviado exitosamente.',
+        }).then((result) => {
+            location.reload()
         });
 
-        // Limpiar el formulario después de enviar
-        document.getElementById('arqueoForm').reset();
-        document.getElementById('tablaProductos').innerHTML = '';
+
+
     } catch (error) {
         console.error('Error al enviar el arqueo:', error);
         Swal.fire({

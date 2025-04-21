@@ -13,163 +13,116 @@ const getNextFolio = async () => {
 
 exports.crearOActualizarInventario = async (req, res) => {
     try {
-        const { sucursal, productos, encargado, tipo } = req.body;
-
-        if (!sucursal) {
-            return res.status(400).send({ message: 'La sucursal es requerida.' });
+      const { sucursal, productos, encargado, tipo } = req.body;
+  
+      if (!sucursal || !encargado || !tipo || !Array.isArray(productos) || productos.length === 0) {
+        return res.status(400).send({ message: 'Sucursal, encargado, tipo y productos son requeridos.' });
+      }
+  
+      const sucursalId = mongoose.isValidObjectId(sucursal)
+        ? new mongoose.Types.ObjectId(sucursal)
+        : sucursal;
+  
+      let inventario = await Inventario.findOne({ sucursal: sucursalId, estado: false });
+  
+      if (inventario && inventario.encargado.toString() !== encargado) {
+        inventario = null; // Forzar la creación de uno nuevo si el encargado cambió
+      }
+  
+      const todosLosProductos = await Product.find({ esActivo: true });
+      if (!todosLosProductos.length) {
+        return res.status(404).send({ message: 'No hay productos activos para generar el inventario.' });
+      }
+  
+      const mapaCostos = todosLosProductos.reduce((map, producto) => {
+        map[producto.reference] = producto.datosFinancieros?.costo || 0;
+        return map;
+      }, {});
+  
+      const movimientosKardex = await Kardex.aggregate([
+        { $match: { sucursal: sucursalId } },
+        { $sort: { reference: 1, fecha: -1 } },
+        {
+          $group: {
+            _id: '$reference',
+            descripcion: { $first: '$nombre' },
+            ultimaExistencia: { $first: '$existencia' }
+          }
         }
-
-        if (!encargado) {
-            return res.status(400).send({ message: 'El encargado es requerido.' });
-        }
-
-        if (!Array.isArray(productos) || productos.length === 0) {
-            return res.status(400).send({ message: 'Debe proporcionar productos para el inventario.' });
-        }
-
-        if (!tipo || typeof tipo !== 'string') {
-            return res.status(400).send({ message: 'El tipo es requerido y debe ser un string.' });
-        }
-
-        const sucursalId = mongoose.isValidObjectId(sucursal)
-            ? new mongoose.Types.ObjectId(sucursal)
-            : sucursal;
-
-        // Buscar inventario abierto
-        let inventario = await Inventario.findOne({ sucursal: sucursalId, estado: false });
-
-        // Si existe un inventario abierto pero el encargado es diferente, crear un nuevo inventario
-        if (inventario && inventario.encargado.toString() !== encargado) {
-            inventario = null; // Forzar la creación de un nuevo inventario
-        }
-
-        const todosLosProductos = await Product.find({ esActivo: true });
-
-        if (!todosLosProductos.length) {
-            return res.status(404).send({ message: 'No hay productos activos para generar el inventario.' });
-        }
-
-        const mapaCostos = todosLosProductos.reduce((map, producto) => {
-            map[producto.reference] = producto.datosFinancieros?.costo || 0;
-            return map;
-        }, {});
-
-        const movimientosKardex = await Kardex.aggregate([
-            { $match: { sucursal: sucursalId } },
-            { $sort: { reference: 1, fecha: -1 } },
-            {
-                $group: {
-                    _id: '$reference',
-                    descripcion: { $first: '$nombre' },
-                    ultimaExistencia: { $first: '$existencia' }
-                }
-            }
-        ]);
-
-        const mapaExistencias = movimientosKardex.reduce((map, item) => {
-            map[item._id] = item.ultimaExistencia || 0;
-            return map;
-        }, {});
-
-        const nuevosProductosConMovimiento = productos.map(producto => {
-            const existenciaContable = mapaExistencias[producto.referencia] || 0;
-            const diferencia = producto.existenciaFisica - existenciaContable;
-            const costo = mapaCostos[producto.referencia] || 0;
-            const importe = diferencia * costo;
-
-            return {
-                referencia: producto.referencia,
-                descripcion: producto.descripcion,
-                existenciaFisica: producto.existenciaFisica,
-                existenciaContable,
-                diferencia,
-                costo,
-                importe
-            };
+      ]);
+  
+      const mapaExistencias = movimientosKardex.reduce((map, item) => {
+        map[item._id] = item.ultimaExistencia || 0;
+        return map;
+      }, {});
+  
+      // Generar mapa para existencia física de los productos recibidos
+      const mapaFisica = productos.reduce((map, prod) => {
+        map[prod.referencia] = prod.existenciaFisica;
+        return map;
+      }, {});
+  
+      const productosFinales = todosLosProductos.map(producto => {
+        const referencia = producto.reference;
+        const existenciaFisica = mapaFisica[referencia] || 0;
+        const existenciaContable = mapaExistencias[referencia] || 0;
+        const costo = mapaCostos[referencia] || 0;
+  
+        let diferencia = existenciaContable < 0
+          ? existenciaFisica + existenciaContable
+          : existenciaFisica - existenciaContable;
+  
+        const importe = diferencia * costo;
+  
+        return {
+          referencia,
+          descripcion: producto.name || producto.description,
+          existenciaFisica,
+          existenciaContable,
+          diferencia,
+          costo,
+          importe
+        };
+      });
+  
+      const productosConMovimiento = productosFinales.filter(p => p.diferencia !== 0);
+  
+      if (inventario) {
+        inventario.productos = productosFinales;
+        inventario.productosConMovimiento = productosConMovimiento;
+        inventario.tipo = tipo;
+        await inventario.save();
+  
+        return res.status(200).send({
+          message: 'Inventario actualizado exitosamente.',
+          inventario
         });
-
-        if (inventario) {
-            const referenciasExistentes = new Set(inventario.productos.map(p => p.referencia));
-
-            productos.forEach((producto) => {
-                const index = inventario.productos.findIndex(p => p.referencia === producto.referencia);
-                if (index !== -1) {
-                    // Actualizar producto existente
-                    inventario.productos[index].existenciaFisica = producto.existenciaFisica;
-                    inventario.productos[index].existenciaContable = mapaExistencias[producto.referencia] || 0;
-                } else {
-                    // Solo agregar si no existe (nuevo producto)
-                    inventario.productos.push({
-                        referencia: producto.referencia,
-                        descripcion: producto.descripcion,
-                        existenciaFisica: producto.existenciaFisica || 0,
-                        existenciaContable: mapaExistencias[producto.referencia] || 0
-                    });
-                }
-            });
-
-            nuevosProductosConMovimiento.forEach((productoMov) => {
-                const index = inventario.productosConMovimiento.findIndex(p => p.referencia === productoMov.referencia);
-
-                if (index !== -1) {
-                    // Actualizar producto con movimiento existente
-                    inventario.productosConMovimiento[index] = productoMov;
-                } else {
-                    // Agregar nuevo producto con movimiento
-                    inventario.productosConMovimiento.push(productoMov);
-                }
-            });
-
-            inventario.tipo = tipo; // Actualizar el tipo en caso de ser necesario
-            await inventario.save();
-
-            return res.status(200).send({
-                message: 'Inventario actualizado exitosamente.',
-                inventario
-            });
-        } else {
-            const productosFinales = todosLosProductos.map((producto) => {
-                const existenciaContable = mapaExistencias[producto.reference] || 0;
-                const diferencia = productos.find(p => p.referencia === producto.reference)?.existenciaFisica - existenciaContable || 0;
-                const costo = mapaCostos[producto.reference] || 0;
-                const importe = diferencia * costo;
-
-                return {
-                    referencia: producto.reference,
-                    descripcion: producto.name || producto.description,
-                    existenciaFisica: productos.find(p => p.referencia === producto.reference)?.existenciaFisica || 0,
-                    existenciaContable,
-                    diferencia,
-                    costo,
-                    importe
-                };
-            });
-
-            const folio = await getNextFolio();
-
-            inventario = new Inventario({
-                folio,
-                sucursal: sucursalId,
-                encargado: new mongoose.Types.ObjectId(encargado),
-                estado: false,
-                tipo, // Guardar el tipo en el nuevo inventario
-                productos: productosFinales,
-                productosConMovimiento: nuevosProductosConMovimiento
-            });
-
-            await inventario.save();
-
-            return res.status(201).send({
-                message: 'Inventario creado exitosamente.',
-                inventario
-            });
-        }
+      } else {
+        const folio = await getNextFolio();
+  
+        inventario = new Inventario({
+          folio,
+          sucursal: sucursalId,
+          encargado: new mongoose.Types.ObjectId(encargado),
+          estado: false,
+          tipo,
+          productos: productosFinales,
+          productosConMovimiento
+        });
+  
+        await inventario.save();
+  
+        return res.status(201).send({
+          message: 'Inventario creado exitosamente.',
+          inventario
+        });
+      }
     } catch (error) {
-        console.error('Error al crear o actualizar el inventario:', error);
-        res.status(500).send({ message: 'Error interno del servidor.' });
+      console.error('Error al crear o actualizar el inventario:', error);
+      res.status(500).send({ message: 'Error interno del servidor.' });
     }
-};
-
+  };
+  
 
 exports.getAllInventarios = async (req, res) => {
     try {
@@ -255,66 +208,76 @@ exports.cambiarEstadoInventario = async (req, res) => {
 
 exports.descargarInventario = async (req, res) => {
     try {
-        const { id } = req.params;
-
-        const inventario = await Inventario.findById(id)
-            .populate('sucursal')
-            .populate('encargado');
-        if (!inventario) {
-            return res.status(404).send({ message: 'Inventario no encontrado.' });
-        }
-
-        // Crear un nuevo workbook y hoja
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Inventario Movimiento');
-
-        // Agregar encabezados del inventario
-        worksheet.addRow(['Sucursal:', inventario.sucursal?.nombre || 'N/A']);
-        worksheet.addRow(['Encargado:', inventario.encargado?.name || 'N/A']);
-        worksheet.addRow(['Fecha de Finalización:', inventario.updatedAt.toLocaleString()]);
-        worksheet.addRow([]);
+      const { id } = req.params;
+  
+      const inventario = await Inventario.findById(id)
+        .populate('sucursal')
+        .populate('encargado');
+  
+      if (!inventario) {
+        return res.status(404).send({ message: 'Inventario no encontrado.' });
+      }
+  
+      // Crear un nuevo workbook y hoja
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Inventario Movimiento');
+  
+      // Agregar encabezados del inventario
+      worksheet.addRow(['Sucursal:', inventario.sucursal?.nombre || 'N/A']);
+      worksheet.addRow(['Encargado:', inventario.encargado?.name || 'N/A']);
+      worksheet.addRow(['Fecha de Finalización:', inventario.updatedAt.toLocaleString()]);
+      worksheet.addRow([]);
+      worksheet.addRow([
+        'Referencia',
+        'Descripción',
+        'Existencia Física',
+        'Existencia Contable',
+        'Diferencia',
+        'Costo',
+        'Importe',
+      ]);
+  
+      // Agregar los productos con movimiento
+      inventario.productosConMovimiento.forEach((producto) => {
+        const contable = producto.existenciaContable || 0;
+        const fisica = producto.existenciaFisica || 0;
+        const costo = producto.costo || 0;
+  
+        // Calcular diferencia con la nueva lógica
+        const diferencia = contable < 0
+          ? fisica + contable
+          : fisica - contable;
+  
+        const importe = diferencia * costo;
+  
         worksheet.addRow([
-            'Referencia',
-            'Descripción',
-            'Existencia Física',
-            'Existencia Contable',
-            'Diferencia',
-            'Costo',
-            'Importe',
+          producto.referencia,
+          producto.descripcion,
+          fisica,
+          contable,
+          diferencia,
+          costo,
+          importe,
         ]);
-
-        // Agregar los productos con movimiento
-        inventario.productosConMovimiento.forEach((producto) => {
-            const diferencia = producto.existenciaFisica - producto.existenciaContable;
-            const importe = diferencia * producto.costo;
-            worksheet.addRow([
-                producto.referencia,
-                producto.descripcion,
-                producto.existenciaFisica,
-                producto.existenciaContable,
-                diferencia,
-                producto.costo,
-                importe,
-            ]);
-        });
-
-        // Estilo para la hoja
-        worksheet.columns.forEach((column) => {
-            column.width = 20; // Ajustar ancho de las columnas
-        });
-        worksheet.getRow(1).font = { bold: true }; // Encabezados en negrita
-
-        // Enviar el archivo al cliente
-        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader('Content-Disposition', `attachment; filename=Inventario_${inventario.folio}.xlsx`);
-
-        await workbook.xlsx.write(res);
-        res.end();
+      });
+  
+      // Estilo para la hoja
+      worksheet.columns.forEach((column) => {
+        column.width = 20;
+      });
+      worksheet.getRow(1).font = { bold: true };
+  
+      // Enviar el archivo al cliente
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename=Inventario_${inventario.folio}.xlsx`);
+  
+      await workbook.xlsx.write(res);
+      res.end();
     } catch (error) {
-        console.error('Error al generar el Excel:', error);
-        res.status(500).send({ message: 'Error interno del servidor.' });
+      console.error('Error al generar el Excel:', error);
+      res.status(500).send({ message: 'Error interno del servidor.' });
     }
-};
-
+  };
+  
 
 

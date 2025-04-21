@@ -1,10 +1,8 @@
 const Kardex = require('../../schemas/kardexSchema/kardexSchema');
 const Sucursal = require('../../schemas/sucursalSchema/sucursalSchema');
 const Producto = require('../../schemas/productosSchema/productosSchema');
-const { v4: uuidv4 } = require('uuid'); // Utiliza UUID para generar un folio único
+const { v4: uuidv4 } = require('uuid');
 const MateriaPrima = require('../../schemas/materiasPrimasSchema/materiaPrimaSchema');
-
-
 const mongoose = require('mongoose');
 
 exports.createKardexSinCosto = async (req, res) => {
@@ -117,7 +115,10 @@ exports.createKardex = async (req, res) => {
     }
 
     // Buscar el último registro del Kardex para el producto especificado
-    const ultimoKardex = await Kardex.findOne({ reference }).sort({ fecha: -1 });
+    const ultimoKardex = await Kardex.findOne({ reference, sucursal }).sort({ fecha: -1 });
+
+    console.log(ultimoKardex)
+
 
     // Calcular la nueva existencia
     let nuevaExistencia;
@@ -126,6 +127,11 @@ exports.createKardex = async (req, res) => {
     } else {
       nuevaExistencia = cantidadNumerica;
     }
+
+    console.log('cantidad' + cantidadNumerica)
+    console.log('nueva'+ nuevaExistencia)
+
+
 
     // Verificar si `sucursalDestino` tiene un ID válido de MongoDB, si no, poner null
     const sucursalDestinoValida = mongoose.isValidObjectId(sucursalDestino) ? sucursalDestino : null;
@@ -244,4 +250,3 @@ exports.deleteKardexById = async (req, res) => {
       res.status(500).json({ error: 'Error al eliminar el registro del Kardex' });
   }
 };
-

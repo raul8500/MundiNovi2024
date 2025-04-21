@@ -40,6 +40,21 @@ const inventarioSchema = new mongoose.Schema({
                 type: Number,
                 required: true,
                 default: 0
+            },
+            diferencia: {
+                type: Number,
+                required: false,
+                default: 0
+            },
+            costo: {
+                type: Number,
+                required: false,
+                default: 0
+            },
+            importe: {
+                type: Number,
+                required: false,
+                default: 0
             }
         }
     ],
