@@ -14,6 +14,10 @@ const actividadSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
+    esReagendada: {
+        type: Boolean,
+        required: false
+    },
     periodicidad: {
         type: String,
         enum: ['diaria', 'semanal', 'mensual', null], // Null si no es periódica

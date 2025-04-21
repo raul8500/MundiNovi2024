@@ -604,10 +604,15 @@ router.put('/api/excluirDiaEspecifico/:actividadId', actividades.excluirDiaEspec
 router.post('/api/marcarEstadoPorFecha/:actividadId', actividades.marcarEstadoPorFecha)
 router.post('/api/reagendar/:id', actividades.reagendarActividad )
 
+router.get('/api/obtenerActividadesNoPorUsuario/:usuarioId', actividades.obtenerNumeroActividadesPorUsuario)
+
+
+
+
+
+
 const multer2  = require('multer')
 const upload = multer2({ dest: 'uploads/' })
-
-
 
 //Capacitacion
 router.post('/api/capacitaciones', upload.single('archivo'), capacitacionController.crearCapacitacion);
@@ -683,7 +688,7 @@ router.get('/api/inventarioDescargar/:id', inventario.descargarInventario);
 router.post('/api/inventario/materiaprima', inventarioMateriaPrima.crearOActualizarInventario);
 
 //egresos
-//router.post('/api/egresos', upload2.single('archivoComprobatorio'), egresos.crearEgreso);
+router.post('/api/egresos', upload.single('archivoComprobatorio'), egresos.crearEgreso);
 router.get('/api/egresos', egresos.getAllEgresos);
 router.get('/api/egresos/:id', egresos.getEgresoById);
 router.delete('/api/egresos/:id', egresos.deleteEgreso);

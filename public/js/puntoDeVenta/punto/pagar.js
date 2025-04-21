@@ -182,7 +182,6 @@ function armarVenta() {
     console.log("Venta armada:", venta);
     return venta;
 }
-
   
   
 // Agregar nueva forma de pago al hacer clic en "btnAgregarFormaPago"
@@ -529,7 +528,7 @@ function imprimirTicket(data) {
             <p style="margin: 2px 0;">Cajero: ${data.vendedor.name}</p>
             <p style="margin: 2px 0;">Expedido en: ${data.sucursal.datosTicket.direccion}</p>
             <p style="margin: 2px 0;">        ${data.sucursal.datosTicket.colonia} CP:${data.sucursal.datosTicket.codigoPostal} </p>
-            <p style="margin: 2px 0;">Cliente: ${data.cliente.clientData?.name|| 'PUBLICO EN GENERAL'}</p>
+            <p style="margin: 2px 0;">Cliente: ${data.cliente?.clientData?.name|| 'PUBLICO EN GENERAL'}</p>
             <hr style="border: 1px solid black;">
             ${formatProductos(data.productos)}
             <hr style="border: 1px solid black;">

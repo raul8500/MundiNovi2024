@@ -174,14 +174,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             const estaFinalizada = info.event.extendedProps.estado;
 
             // Lógica para desactivar/activar botones
-            if (estaFinalizada || esPasada) {
-                btnFinalizarActividad.disabled = true; // No se puede finalizar
-            } else {
-                btnFinalizarActividad.disabled = false; // Se puede finalizar
-            }
+            btnFinalizarActividad.disabled = estaFinalizada || esPasada;
+            btnReagendar.disabled = estaFinalizada;
 
-            // El botón de reagendar siempre está habilitado si es una actividad pasada
-            btnReagendar.disabled = !esPasada;
 
             // Cargar la tabla de usuarios asignados
             const usuariosTabla = document.getElementById('usuariosTabla');
@@ -233,7 +228,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         try {
-            const response = await fetch(`http://localhost:3000/api/reagendar/${actividadSeleccionadaId}`, {
+            const response = await fetch(`/api/reagendar/${actividadSeleccionadaId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

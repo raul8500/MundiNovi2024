@@ -85,9 +85,9 @@ exports.crearEgreso = async (req, res) => {
 
             let egreso = 0;
             // Actualizar total de tarjetas y transferencias
-            corteFinal.egresos = (corteFinal.egresos || 0) + importe;
+            corteFinal.egresos = (Number(corteFinal.egresos) || 0) + Number(importe);
 
-            corteFinal.totalVentasEfectivoCortes = (corteFinal.totalVentasEfectivoCortes || 0) - importe;
+            corteFinal.totalVentasEfectivoSinCortes = (corteFinal.totalVentasEfectivoSinCortes || 0) - importe;
 
             await corteFinal.save();
 

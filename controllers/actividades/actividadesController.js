@@ -253,6 +253,9 @@ exports.reagendarActividad = async (req, res) => {
             return res.status(404).json({ error: 'Actividad original no encontrada.' });
         }
 
+        actividadOriginal.finalizada = true
+        actividadOriginal.save()
+
         // Crear una copia de la actividad
         const nuevaActividad = new Actividad({
             titulo: `${actividadOriginal.titulo} (Reagendada)`,
@@ -263,6 +266,7 @@ exports.reagendarActividad = async (req, res) => {
             diaMes: null, // No aplica
             fechaDesignada: new Date(nuevaFecha),
             horaInicio,
+            esReagendada: true,
             horaFinal,
             usuariosAsignados: actividadOriginal.usuariosAsignados,
             finalizada: false, // Nueva actividad siempre inicia sin finalizar
@@ -283,9 +287,75 @@ exports.reagendarActividad = async (req, res) => {
     }
 };
 
+exports.obtenerNumeroActividadesPorUsuario = async (req, res) => {
+  try {
+    const { usuarioId } = req.params;
 
+    if (!mongoose.Types.ObjectId.isValid(usuarioId)) {
+      return res.status(400).json({ message: 'ID de usuario inválido.' });
+    }
 
+    const actividades = await Actividad.find({ usuariosAsignados: usuarioId });
 
+    const hoy = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const diaSemanaHoy = new Date().toLocaleString('es-MX', { weekday: 'long' }).toLowerCase();
+    const diaMesHoy = new Date().getDate();
 
+    let actividadesPendientes = [];
 
+    for (const act of actividades) {
+      const estadosRaw = act.estadosPorFecha || {};
 
+      // 🔍 Convertir a objeto plano en caso de ser Map (Mongoose)
+      const estados = estadosRaw instanceof Map 
+        ? Object.fromEntries(estadosRaw.entries()) 
+        : estadosRaw;
+
+      const tieneEstadoFinalizado = Object.values(estados).some(v => v === true);
+
+      // 🪵 LOGS DE DEPURACIÓN
+      console.log(`📅 Hoy: ${hoy}`);
+      console.log(`📅 FechaDesignada: ${act.fechaDesignada?.toISOString().split('T')[0]}`);
+      console.log(`🔁 Es periódica: ${act.esPeriodica}`);
+      console.log(`✅ Marcada como finalizada: ${act.finalizada}`);
+      console.log(`📊 Estados por fecha:`, estados);
+      console.log(`🟡 No es periódica. ¿Tiene fecha finalizada en estadosPorFecha? ${tieneEstadoFinalizado}`);
+
+      if (!act.esPeriodica && (act.finalizada || tieneEstadoFinalizado)) {
+        console.log("✅ Actividad no periódica ya finalizada por estado o manual -> ignorada");
+        continue;
+      }
+
+      if (!act.esPeriodica) {
+        const esParaHoy = act.fechaDesignada?.toISOString().split('T')[0] === hoy;
+        if (esParaHoy && !tieneEstadoFinalizado && !act.finalizada) {
+          actividadesPendientes.push({ id: act._id, motivo: 'no periódica activa con fecha hoy' });
+        }
+      } else {
+        // ⏳ Actividades periódicas
+        const marcadaHoy = estados[hoy] === true;
+
+        if (act.periodicidad === 'diaria' && !marcadaHoy) {
+          actividadesPendientes.push({ id: act._id, motivo: 'diaria sin marca hoy' });
+        }
+
+        if (act.periodicidad === 'semanal' && act.diasSemana.includes(diaSemanaHoy) && !marcadaHoy) {
+          actividadesPendientes.push({ id: act._id, motivo: 'semanal sin marca hoy' });
+        }
+
+        if (act.periodicidad === 'mensual' && act.diaMes === diaMesHoy && !marcadaHoy) {
+          actividadesPendientes.push({ id: act._id, motivo: 'mensual sin marca hoy' });
+        }
+      }
+    }
+
+    res.status(200).json({
+      totalPendientes: actividadesPendientes.length,
+      actividadesPendientes
+    });
+
+  } catch (error) {
+    console.error('Error al obtener actividades por usuario:', error);
+    res.status(500).json({ message: 'Error al obtener actividades.', error });
+  }
+};
