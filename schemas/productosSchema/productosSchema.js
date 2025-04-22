@@ -41,6 +41,9 @@ const productSchema = new mongoose.Schema({
   presentacion: {
     type: Number, required: false, 
   },
+  claveAlmacen: {
+    type: Number, required: false, 
+  },
   datosFinancieros: {
     costo: { type: Number, required: false }, 
     ultimoCosto: { type: Number, required: false }, 

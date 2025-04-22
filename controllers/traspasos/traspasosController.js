@@ -36,7 +36,7 @@ exports.obtenerVentasPorSucursalYFechas = async (req, res) => {
         fechaFinalISO.setUTCHours(23, 59, 59, 999); // Último milisegundo UTC del día final
 
         // 4️⃣ **Obtener todos los productos**
-        const productosPromise = Producto.find({}, 'reference name presentacion volumen peso');
+        const productosPromise = Producto.find({}, 'reference name presentacion volumen peso claveAlmacen');
 
         // 5️⃣ **Buscar ventas por sucursal origen y destino en paralelo**
         const ventasOrigenPromise = Venta.find({
@@ -165,6 +165,7 @@ exports.obtenerVentasPorSucursalYFechas = async (req, res) => {
                 presentacion: producto.presentacion,
                 volumen: producto.volumen,
                 peso: producto.peso,
+                claveAlmacen: producto.claveAlmacen || 0,
                 cantidadVendidaOrigen: mapaCantidadesOrigen[productoId] || 0,
                 cantidadVendidaDestino: mapaCantidadesDestino[productoId] || 0,
                 stockMinimoOrigen: mapaStockOrigen[producto.reference]?.stockMinimo || 0,
@@ -498,6 +499,124 @@ exports.recibirProductosBodega = async (req, res) => {
     } catch (err) {
         console.log(err);
         return res.status(500).json({ message: 'Error al procesar la solicitud', error: err.message });
+    }
+};
+
+
+//recibir del reparto
+exports.obtenerTodosLosTraspasosSuc = async (req, res) => {
+    try {
+        const { sucursalId } = req.params;
+
+        // ✅ Validar que se reciba el ID de la sucursal
+        if (!sucursalId) {
+            return res.status(400).json({ message: 'El ID de la sucursal es obligatorio.' });
+        }
+
+        // 🔍 Buscar todos los traspasos donde la sucursal sea origen o destino
+        const traspasos = await Traspaso.find({
+            $or: [
+                { sucursalOrigen: sucursalId },
+                { sucursalDestino: sucursalId }
+            ]
+        })
+            .populate('sucursalOrigen', 'nombre')
+            .populate('sucursalDestino', 'nombre')
+            .populate('usuarioOrigen', 'name username')
+            .populate('usuarioDestino', 'name username')
+            .sort({ fecha: -1 }); // Ordenar de más reciente a más antiguo
+
+        // ✅ Enviar respuesta con los traspasos
+        res.status(200).json({
+            message: '✅ Traspasos obtenidos correctamente',
+            traspasos
+        });
+    } catch (error) {
+        console.error('❌ Error al obtener traspasos por sucursal:', error);
+        res.status(500).json({ message: 'Error interno del servidor', error });
+    }
+};
+
+exports.recibirProductosDestino = async (req, res) => {
+    try {
+        const traspasoId = req.params.id;
+        const { productosRecibidos, usuarioDestinoId } = req.body;
+
+        // Validaciones básicas
+        if (!productosRecibidos || productosRecibidos.length === 0) {
+            return res.status(400).json({ message: 'No se enviaron productos para recibir.' });
+        }
+
+        if (!usuarioDestinoId) {
+            return res.status(400).json({ message: 'El ID del usuario destino es obligatorio.' });
+        }
+
+        // Buscar traspaso
+        const traspaso = await Traspaso.findById(traspasoId);
+
+        if (!traspaso) {
+            return res.status(404).json({ message: 'Traspaso no encontrado' });
+        }
+
+        // Cambiar estado a 2 (recibido en sucursal destino)
+        traspaso.estado = 2;
+
+        // Asignar usuario que recibe en destino
+        traspaso.usuarioDestino = usuarioDestinoId;
+
+        // Agregar productos recibidos a productosDestino
+        productosRecibidos.forEach(producto => {
+            traspaso.productosDestino.push({
+                reference: producto.reference,
+                name: producto.name,
+                cantidad: producto.cantidad
+            });
+        });
+
+        // Guardar traspaso actualizado
+        await traspaso.save();
+
+        return res.status(200).json({
+            message: '✅ Productos recibidos correctamente en destino',
+            traspaso
+        });
+    } catch (error) {
+        console.error('❌ Error al confirmar productos en destino:', error);
+        return res.status(500).json({
+            message: 'Error al procesar la recepción en destino',
+            error: error.message
+        });
+    }
+};
+
+
+//Finalizar
+exports.finalizarTraspaso = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Buscar el traspaso
+        const traspaso = await Traspaso.findById(id);
+
+        if (!traspaso) {
+            return res.status(404).json({ message: 'Traspaso no encontrado' });
+        }
+
+        // Marcar como finalizado
+        traspaso.esFinalizado = true;
+
+        await traspaso.save();
+
+        return res.status(200).json({
+            message: '✅ Traspaso finalizado correctamente',
+            traspaso
+        });
+    } catch (error) {
+        console.error('❌ Error al finalizar traspaso:', error);
+        return res.status(500).json({
+            message: 'Error al finalizar el traspaso',
+            error: error.message
+        });
     }
 };
 

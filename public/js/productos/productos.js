@@ -247,6 +247,7 @@ function setEditFormData(producto) {
     $("#tipoKit").prop("checked", producto.esKit || false);
     $("#tipoGrupo").prop("checked", producto.esGrupo || false);
 
+    
     $("#grupo").val(producto.grupo?._id || producto.grupo || '');
     $("#marca").val(producto.marca?._id || producto.marca || '');
     $("#linea").val(producto.linea?._id || producto.linea || '');
@@ -264,6 +265,7 @@ function setEditFormData(producto) {
     $("#num-precio-minimo").val(producto.datosFinancieros?.numeroPrecioMinimo || 0);
     $("#num-precio-maximo").val(producto.datosFinancieros?.numeroPrecioMaximo || 0);
     $("#presentacion").val(producto.presentacion || 0);
+    $("#claveAlmacen").val(producto.claveAlmacen || 0);
 
     for (let i = 1; i <= 10; i++) {
         $(`#porcentaje-precio-${i}`).val(producto.datosFinancieros?.[`porcentajePrecio${i}`] || 0);

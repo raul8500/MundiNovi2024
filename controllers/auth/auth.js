@@ -121,31 +121,10 @@ exports.getUserById = async (req, res) => {
     }
 };
 
-// Función para actualizar la contraseña del usuario
-exports.updatePassword = async (req, res) => {
-    try {
-        const { newPassword } = req.body; // Obtener solo newPassword desde el cuerpo de la solicitud
-        const { id } = req.params; // Obtener el ID del usuario desde los parámetros de la URL
-
-        const hashedPassword = await bcryptjs.hash(newPassword, 10); // Hashear la nueva contraseña
-
-        // Actualizar la contraseña del usuario
-        const user = await ModelUser.findByIdAndUpdate(id, { password: hashedPassword }, { new: true });
-
-        if (!user) {
-            return res.status(404).send('Usuario no encontrado');
-        }
-
-        res.send('Contraseña actualizada correctamente');
-    } catch (error) {
-        console.log(error);
-        res.status(500).send('Error interno del servidor');
-    }
-};
-
 // Actualizar un usuario por _id
 exports.updateUserById = async (req, res) => {
     try {
+        console.log(req.body)
         const { id } = req.params; // Extraer el ID directamente
         const { name, username, rol, img, sucursalId } = req.body;
 
@@ -171,6 +150,28 @@ exports.updateUserById = async (req, res) => {
         }
 
         res.send(updatedUser);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error interno del servidor');
+    }
+};
+
+// Función para actualizar la contraseña del usuario
+exports.updatePassword = async (req, res) => {
+    try {
+        const { newPassword } = req.body; // Obtener solo newPassword desde el cuerpo de la solicitud
+        const { id } = req.params; // Obtener el ID del usuario desde los parámetros de la URL
+
+        const hashedPassword = await bcryptjs.hash(newPassword, 10); // Hashear la nueva contraseña
+
+        // Actualizar la contraseña del usuario
+        const user = await ModelUser.findByIdAndUpdate(id, { password: hashedPassword }, { new: true });
+
+        if (!user) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        res.send('Contraseña actualizada correctamente');
     } catch (error) {
         console.log(error);
         res.status(500).send('Error interno del servidor');

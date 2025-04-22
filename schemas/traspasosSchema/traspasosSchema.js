@@ -35,9 +35,10 @@ const TraspasoSchema = new mongoose.Schema({
     observaciones: { type: String, default: '' },
     productos: [ProductoTraspasoSchema],
     productosReparto: [ProductoRecepcionReparto],
-    productosReparto: [ProductoRecepcionDestino],
+    productosDestino: [ProductoRecepcionDestino],
     usuarioReparto: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: false },
-    estado: {type: Number, required: false}
+    estado: {type: Number, required: false},
+    esFinalizado: {type: Boolean, required: false}
 });
 
 

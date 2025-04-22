@@ -62,6 +62,7 @@ exports.createProduct = async (req, res) => {
             volumen: databaseProduct.datosFinancieros.volumen,
             peso: databaseProduct.datosFinancieros.peso,
             presentacion: databaseProduct.datosFinancieros.presentacion,
+            claveAlmacen: databaseProduct.datosFinancieros.claveAlmacen,
             datosFinancieros: {
                 costo: databaseProduct.datosFinancieros.costo,
                 ultimoCosto: databaseProduct.datosFinancieros.ultimoCosto,
@@ -353,6 +354,7 @@ exports.updateProduct = async (req, res) => {
             volumen: databaseProduct.datosFinancieros.volumen,
             peso: databaseProduct.datosFinancieros.peso,
             presentacion: databaseProduct.datosFinancieros.presentacion,
+            claveAlmacen: databaseProduct.datosFinancieros.claveAlmacen,
             datosFinancieros: {
                 ...databaseProduct.datosFinancieros
             },

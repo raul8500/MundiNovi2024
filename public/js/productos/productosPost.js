@@ -58,6 +58,8 @@ $(document).ready(function () {
                 numeroPrecioMinimo: parseInt($("#num-precio-minimo").val()) || 0,
                 numeroPrecioMaximo: parseInt($("#num-precio-maximo").val()) || 0,
                 presentacion: parseInt($("#presentacion").val()) || 0,
+                claveAlmacen: parseInt($("#claveAlmacen").val()) || 0,
+
             };
     
             for (let i = 1; i <= 10; i++) {

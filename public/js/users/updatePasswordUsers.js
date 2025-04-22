@@ -29,7 +29,7 @@ async function updatePassword(userId) {
     }
 
     try {
-        const response = await fetch(`/api/auth/users/password/${userId}`, {
+        const response = await fetch(`/api/auth/users/passwords/${userId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

@@ -144,6 +144,8 @@ function llenarTablaProductosTraspaso(productos) {
     });
 
     productos.forEach((producto) => {
+        console.log(producto)
+
         const cantidadVendidaOrigen = producto.cantidadVendidaOrigen;
         const cantidadVendida = producto.cantidadVendidaOrigen + producto.cantidadVendidaDestino;
         const volumen = parseFloat(producto.volumen) || 0;
@@ -176,6 +178,7 @@ function llenarTablaProductosTraspaso(productos) {
                 </td>
                 <td>${volumen}</td>
                 <td>${peso}</td>
+                <td>${producto.claveAlmacen || 'S/N'}</td>
                 <td class="participacionVenta">${participacion}%</td>
                 <td>0</td>
                 <td>
@@ -484,6 +487,7 @@ function agregarProductoATabla(producto, cantidad = 1) {
             </td>
             <td>${volumen}</td>
             <td>${peso}</td>
+            <td>${producto.claveAlmacen}</td>
             <td class="participacionVenta">${participacion}%</td>
             <td>0</td>
             <td>
@@ -692,6 +696,7 @@ async function realizarTraspaso() {
 document.getElementById('btnRealizarTraspaso').addEventListener('click', realizarTraspaso);
 
 function imprimirTraspaso(data) {
+    console.log(data)
     const ventanaImpresion = window.open('', '_blank');
 
     const contenido = `
@@ -725,17 +730,26 @@ function imprimirTraspaso(data) {
         <table>
             <thead>
                 <tr>
+                    <th>Origen</th>
+                    <th>Destino</th>
+                    <th>Cantidad</th>
                     <th>Referencia</th>
                     <th>Nombre</th>
-                    <th>Cantidad</th>
+                    <th>Observaciones</th>
+                    <th>Clave Almacen</th>
+
                 </tr>
             </thead>
             <tbody>
                 ${data.productos.map(p => `
                     <tr>
+                        <td></td>
+                        <td></td>
+                        <td>${p.cantidad}</td>
                         <td>${p.reference}</td>
                         <td>${p.name}</td>
-                        <td>${p.cantidad}</td>
+                        <td></td>
+                        <td>${p.claveAlmacen}</td>
                     </tr>
                 `).join('')}
             </tbody>

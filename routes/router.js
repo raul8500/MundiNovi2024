@@ -344,6 +344,12 @@ router.get('/recepcionFaltantesSucursal', (req, res) => {
 });
 
 
+//Recepcion de productos de las sucursales 
+router.get('/finalizarTraspaso', (req, res) => {    
+    res.render('Traspaso/finalizarTraspaso');
+});
+
+
 
 
 
@@ -405,12 +411,11 @@ router.get('/reporteCostoInventario',authenticated.isAuthenticated, verifyToken.
 router.post('/api/auth/register', auth.registerUser)
 router.post('/api/auth/login', auth.login)
 //Auth
-
+router.put('/api/auth/users/passwords/:id', auth.updatePassword)
 router.get('/api/auth/users', auth.getAllUsers)
 router.get('/api/auth/users/:id', auth.getUserById)
 router.get('/api/auth/users/:id', auth.getUserById)
 router.put('/api/auth/users/:id', auth.updateUserById)
-router.put('/api/auth/users/password/:id', auth.updatePassword)
 router.delete('/api/auth/users/:id', auth.deleteUserById);
 router.put('/api/auth/users/status/:id', auth.updateUserStatus)
 router.get('/logout', logout.logout)
@@ -727,6 +732,14 @@ router.post('/api/traspasos/:traspasoId', traspasos.generarPDFTraspaso);
 router.get('/api/traspasos', traspasos.obtenerTodosLosTraspasos);
 
 router.put('/api/traspasos/recibirReparto/:id', traspasos.recibirProductosBodega);
+
+router.get('/api/traspasosSuc/:sucursalId', traspasos.obtenerTodosLosTraspasosSuc);
+
+
+router.put('/api/traspasos/recibirReparto/:id', traspasos.recibirProductosBodega);
+router.post('/api/traspasos/:id/recepcion-destino', traspasos.recibirProductosDestino);
+
+router.post('/api/traspasos/:id/finalizar', traspasos.finalizarTraspaso);
 
 
 
