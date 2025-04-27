@@ -26,6 +26,18 @@
             background-color: #f1f1f1;
             }
 
+            .resaltado {
+                animation: parpadeo 1.5s ease-in-out;
+                background-color: #fff3cd !important;
+            }
+
+            @keyframes parpadeo {
+                0% { background-color: #fff3cd; }
+                50% { background-color: #ffeeba; }
+                100% { background-color: #fff3cd; }
+            }
+
+
     </style>
 
     `; %>
@@ -101,10 +113,6 @@
                                     </div>
                                 </div>
                                 <div class="row mb-2">
-                                    <div class="col-md-6">
-                                        <label for="telefonoContactoCliente" class="form-label">Teléfono de contacto:</label>
-                                        <input type="text" id="telefonoContactoCliente" class="form-control">
-                                    </div>
                                     <div class="col-md-6">
                                         <label for="correoCliente" class="form-label">Correo electrónico de contacto:</label>
                                         <input type="email" id="correoCliente" class="form-control">

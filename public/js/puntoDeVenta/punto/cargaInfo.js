@@ -238,6 +238,25 @@ function agregarProductoTabla(producto, cantidad) {
 
   actualizarResumenVenta();
   document.getElementById("cantidad").value = 1;
+
+  // 👉 Hacer focus al inputCantidad recién creado, seleccionar contenido y vibrar visualmente
+  setTimeout(() => {
+    inputCantidad.focus();
+    inputCantidad.select();
+    inputCantidad.classList.add('highlight-focus');
+
+    setTimeout(() => {
+      inputCantidad.classList.remove('highlight-focus');
+    }, 500); // Duración breve para quitar el efecto
+  }, 100);
+
+  // 👉 Evento: Enter en cantidad -> regresar focus al input de búsqueda
+  inputCantidad.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      document.getElementById("producto").focus();
+    }
+  });
 }
 
 

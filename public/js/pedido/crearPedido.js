@@ -93,21 +93,23 @@ function rellenarFormularioCliente(cliente) {
     const clientData = cliente?.id?.clientData || {};
     const address = clientData?.address || {};
 
+    console.log(clientData)
+
     // Información básica
-    document.getElementById('nombreCliente').value = cliente.nombre || '';
+    document.getElementById('nombreCliente').value = clientData.name || '';
     document.getElementById('identificacionCliente').value = clientData.identification || '';
-    document.getElementById('telefonoPrincipalCliente').value = cliente.telefono || '';
-    document.getElementById('correoCliente').value = cliente.correo || '';
+    document.getElementById('telefonoPrincipalCliente').value = clientData.mobile || '';
+    document.getElementById('correoCliente').value = clientData.email || '';
 
     // Dirección
     document.getElementById('calleCliente').value = address.street || '';
-    document.getElementById('numeroExteriorCliente').value = address.exteriorNumber || '';
-    document.getElementById('numeroInteriorCliente').value = address.interiorNumber || '';
-    document.getElementById('coloniaCliente').value = address.colony || '';
-    document.getElementById('localidadCliente').value = address.locality || '';
+    document.getElementById('numeroExteriorCliente').value = address.exterior || '';
+    document.getElementById('numeroInteriorCliente').value = address.interior || '';
+    document.getElementById('coloniaCliente').value = address.neighborhood || '';
+    document.getElementById('localidadCliente').value = address.city || '';
     document.getElementById('municipioCliente').value = address.municipality || '';
     document.getElementById('estadoCliente').value = address.state || '';
-    document.getElementById('codigoPostalCliente').value = address.zipCode || '';
+    document.getElementById('codigoPostalCliente').value = address.zip || '';
 
     actualizarOpcionesRegimen(clientData.identification, clientData.regime);
 }
@@ -150,7 +152,6 @@ function guardarInformacionCliente() {
         identificacion: document.getElementById('identificacionCliente').value.trim(),
         regimen: document.getElementById('regimenCliente').value,
         telefonoPrincipal: document.getElementById('telefonoPrincipalCliente').value.trim(),
-        telefonoContacto: document.getElementById('telefonoContactoCliente').value.trim(),
         correo: document.getElementById('correoCliente').value.trim(),
         direccion: {
             calle: document.getElementById('calleCliente').value.trim(),
@@ -179,28 +180,28 @@ function actualizarOpcionesRegimen(rfc, regimenActual = '') {
     let opciones = [];
 
     if (!rfc) {
-        opciones = [{ value: 'NO_REGIME', text: 'Sin régimen' }];
+        opciones = [{ value: '616', text: 'Sin obligaciones fiscales' },];
     } else if (rfc.length === 13) {
         opciones = [
-            { value: 'NO_REGIME', text: 'Sin régimen' },
-            { value: 'BUSINESS_ACTIVITIES_REGIME', text: 'Actividades Empresariales y Profesionales' },
-            { value: 'FISCAL_INCORPORATION_REGIME', text: 'Incorporación Fiscal' },
-            { value: 'LEASEHOLD_REGIME', text: 'Arrendamiento' },
-            { value: 'REGIME_OF_THE_TECHNOLOGICAL_PLATFORMS_INCOME_ACTIVITIES', text: 'Plataformas Tecnológicas' },
-            { value: 'SALARIED_REGIME', text: 'Sueldos y Salarios' },
-            { value: 'REGIME_OF_TRUST', text: 'Régimen simplificado de confianza (RESICO)' },
-            { value: 'SIMPLIFIED_REGIME', text: 'Sin obligaciones fiscales' },
-            { value: 'DIVIDEND_INCOME', text: 'Ingresos por Dividendos' }
+            { value: '612', text: 'Personas Físicas con Actividades Empresariales y Profesionales' },
+            { value: '621', text: 'Incorporación Fiscal' },
+            { value: '606', text: 'Arrendamiento' },
+            { value: '625', text: 'Actividades Empresariales en Plataformas Tecnológicas' },
+            { value: '605', text: 'Sueldos y Salarios e Ingresos Asimilados' },
+            { value: '626', text: 'RESICO (Simplificado de Confianza)' },
+            { value: '616', text: 'Sin obligaciones fiscales' },
+            { value: '611', text: 'Ingresos por Dividendos (socios y accionistas)' },
         ];
     } else {
         opciones = [
-            { value: 'NO_REGIME', text: 'Sin régimen' },
-            { value: 'GENERAL_REGIME_OF_MORAL_PEOPLE_LAW', text: 'General de Ley Personas Morales' },
-            { value: 'REGIME_OF_MORAL_PEOPLE_NOT_PROFIT', text: 'Personas Morales sin Fines de Lucro' },
-            { value: 'PRIMARY_SECTOR_REGIME', text: 'Agrícolas, Ganaderas, Silvícolas y Pesqueras' },
-            { value: 'REGIME_OF_THE_COORDINATED', text: 'Coordinados' },
-            { value: 'REGIME_OF_TRUST', text: 'Régimen simplificado de confianza (RESICO)' },
-            { value: 'SOCIETIES_OPTIONAL_REGIME', text: 'Grupos de Sociedades' }
+            { value: '616', text: 'Régimen General de Ley Personas Morales' },
+            { value: '620', text: 'Sociedades Cooperativas con diferimiento de ingresos' },
+            { value: '616', text: 'Personas Morales sin fines de lucro' },
+            { value: '624', text: 'Coordinados' },
+            { value: '616', text: 'Sin obligaciones fiscales' },
+            { value: '620', text: 'RESICO (Simplificado de Confianza)' },
+            { value: '623', text: 'Opcional para Grupos de Sociedades' },
+            { value: '616', text: 'AGAPES (Actividades Agrícolas, Ganaderas, etc.)' }
         ];
     }
 
@@ -459,14 +460,15 @@ function agregarProductoATabla(id) {
             existente.total = existente.cantidad * existente.precio;
         } else {
             const precio = obtenerPrecioPorCantidad(producto.datosFinancieros, cantidad);
-            productosSeleccionados.push({
+            productosSeleccionados.unshift({
                 id: producto._id,
                 reference: producto.reference,
                 nombre: producto.name,
                 cantidad: cantidad,
                 precio: precio,
                 total: cantidad * precio,
-                datosFinancieros: producto.datosFinancieros || {}
+                datosFinancieros: producto.datosFinancieros || {},
+                nuevo: true // Flag para resaltar en el renderizado
             });
         }
 
@@ -481,6 +483,7 @@ function agregarProductoATabla(id) {
 }
 
 
+
 /**
  * Actualiza la tabla de productos seleccionados.
  */
@@ -489,8 +492,15 @@ function actualizarTablaProductos() {
     tbody.innerHTML = productosSeleccionados
         .map(p => {
             const descripcionRangos = construirDescripcionRangos(p.datosFinancieros);
+            const claseResaltado = p.nuevo ? 'resaltado' : '';
+
+            // Eliminamos el flag para que solo se aplique una vez
+            if (p.nuevo) {
+                setTimeout(() => delete p.nuevo, 1500);
+            }
+
             return `
-                <tr>
+                <tr class="${claseResaltado}">
                     <td>${p.reference}</td>
                     <td>
                         <input type="text" value="${p.nombre}" 
@@ -515,6 +525,7 @@ function actualizarTablaProductos() {
         })
         .join('');
 }
+
 
 
 
@@ -667,7 +678,7 @@ function construirDescripcionRangos(datosFinancieros) {
 
         // Usamos el último precio válido si el actual es nulo
         if (rangoInicial !== undefined && rangoFinal !== undefined) {
-            lineaActual += `De ${rangoInicial} a ${rangoFinal} = $${ultimoPrecioValido || 0} | `;
+            lineaActual += `De ${rangoInicial.toFixed(2)} a ${rangoFinal.toFixed(2)} = $${ultimoPrecioValido.toFixed(2) || 0} | `;
         }
 
         // Dividir en dos líneas después de cada dos rangos

@@ -5,12 +5,14 @@ const clientesSeleccionados = []; // Arreglo para guardar los clientes seleccion
 // Función para recuperar clientes desde la API
 async function fetchClientes() {
     try {
-        const response = await fetch('/api/clientes');
+        const response = await fetch('/api/cliente/test');
         if (!response.ok) {
             throw new Error('Error al recuperar los clientes');
         }
         const data = await response.json();
-        clientes.push(...data); // Guardar los clientes en el arreglo global
+
+
+        clientes.push(...data.clientes);
     } catch (error) {
         console.error('Error:', error);
     }
@@ -50,16 +52,17 @@ let clienteSeleccionado;
 function seleccionarCliente(cliente) {
     clienteSeleccionado = cliente
     document.getElementById('nombreCliente').value = cliente.clientData.name || '';
-    document.getElementById('telefonoCliente').value = cliente.clientData.phonePrimary || '';
+    document.getElementById('telefonoCliente').value = cliente.clientData.mobile || '';
     document.getElementById('correoCliente').value = cliente.clientData.email || '';
 
     document.getElementById('streetCliente').value = cliente.clientData.address.street || '';
-    document.getElementById('exteriorNumberCliente').value = cliente.clientData.address.exteriorNumber || '';
-    document.getElementById('interiorNumberCliente').value = cliente.clientData.address.interiorNumber || '';
-    document.getElementById('colonyCliente').value = cliente.clientData.address.colony || '';
-    document.getElementById('localityCliente').value = cliente.clientData.address.locality || '';
+
+    document.getElementById('exteriorNumberCliente').value = cliente.clientData.address.exterior || '';
+    document.getElementById('interiorNumberCliente').value = cliente.clientData.address.interior || '';
+    document.getElementById('colonyCliente').value = cliente.clientData.address.neighborhood || '';
+    document.getElementById('localityCliente').value = cliente.clientData.address.city || '';
     document.getElementById('municipalityCliente').value = cliente.clientData.address.municipality || '';
-    document.getElementById('zipCodeCliente').value = cliente.clientData.address.zipCode || '';
+    document.getElementById('zipCodeCliente').value = cliente.clientData.address.zip || '';
     document.getElementById('stateCliente').value = cliente.clientData.address.state || '';
     document.getElementById('countryCliente').value = cliente.clientData.address.country || '';
 
@@ -309,7 +312,7 @@ function construirDescripcionRangos(datosFinancieros) {
 
         // Usamos el último precio válido si el actual es nulo
         if (rangoInicial !== undefined && rangoFinal !== undefined) {
-            lineaActual += `Más de ${rangoInicial} = ${ultimoPrecioValido || 0} | `;
+            lineaActual += `Más de ${rangoInicial.toFixed(2)} = ${ultimoPrecioValido.toFixed(2) || 0} | `;
         }
 
         // Dividir en dos líneas después de cada dos rangos
