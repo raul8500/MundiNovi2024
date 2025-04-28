@@ -647,3 +647,5 @@ function eliminarVentaGuardada(id) {
   Swal.fire("Eliminada", "La venta guardada fue eliminada.", "success");
   document.getElementById("btnRecuperarVenta").click(); // Recargar modal
 }
+
+ 
