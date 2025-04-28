@@ -350,12 +350,6 @@ router.get('/finalizarTraspaso', (req, res) => {
 });
 
 
-
-
-
-
-
-
 router.get('/ingresos', (req, res) => {    
     res.render('Ingresos/Ingresos.ejs');
 });
