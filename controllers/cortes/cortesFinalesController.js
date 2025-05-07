@@ -1,6 +1,7 @@
 const CorteParcial = require('../../schemas/cortes/cortesParcialesSchema')
 const CorteFinal = require('../../schemas/cortes/cortesFinalesSchema');
 const Indicadores = require('../../schemas/cortes/indicadoresSchema');
+const FlujoEfectivo = require('../../schemas/flujoEfectivoSchema/flujoEfectivoSchema');
 
 const bwipjs = require('bwip-js');
 const path = require('path');
@@ -16,38 +17,74 @@ exports.addCorteFinal = async (req, res) => {
         // Verificar si el usuario ya tiene un corte iniciado o no finalizado
         const corteAbierto = await checkCorteUsuarioIniciadoONoFinalizado(userId);
 
-        if (corteAbierto) {
-            const corteActualizado = await CorteFinal.findOneAndUpdate(
-                { folio: corteAbierto },
-                {
-                    $set: {
-                        'corteFinal': {
-                            corte_total: body,
-                            observaciones: observaciones
-                        },
-                        'fecha_final': new Date()
-                    },
-                    $inc: {
-                        'totalVentasEfectivoSinCortes': -body,
-                        'totalVentaCorte': body
-                    }
-                },
-                { new: true, upsert: true }
-            );
-
-            // Generar el código de barras
-            const codigoBarras = await generarCodigoDeBarras(corteAbierto);
-
-            return res.status(200).json({
-                message: 'Corte final actualizado exitosamente.',
-                corte: corteActualizado,
-                codigoBarras // Incluir el código de barras en la respuesta
-            });
-        } else {
+        if (!corteAbierto) {
             return res.status(409).json({
                 error: 'No se puede hacer un corte final porque no existe un corte abierto.'
             });
         }
+
+        // Actualizar el corte final
+        const corteActualizado = await CorteFinal.findOneAndUpdate(
+            { folio: corteAbierto },
+            {
+                $set: {
+                    'corteFinal': {
+                        corte_total: body,
+                        observaciones: observaciones
+                    },
+                    'fecha_final': new Date()
+                },
+                $inc: {
+                    'totalVentasEfectivoSinCortes': -body,
+                    'totalVentaCorte': body
+                }
+            },
+            { new: true, upsert: true }
+        );
+
+        // Obtener datos completos del corte con sucursal
+        const corteCompleto = await CorteFinal.findById(corteActualizado._id).populate('sucursal');
+
+        // Buscar último flujo registrado para esa sucursal
+        const ultimoFlujo = await FlujoEfectivo.findOne({ sucursal: corteCompleto.sucursal._id })
+            .sort({ createdAt: -1 });
+
+        const efectivoInicial = ultimoFlujo ? ultimoFlujo.efectivoFinal : 0;
+
+        // Extraer totales del corte
+        const finanzas = corteCompleto.finanzasTotales || {};
+        const ingresosEfectivo = finanzas.T_efectivo || 0;
+        const ingresosBanco = 
+            (finanzas.T_transferencias || 0) +
+            (finanzas.T_tarjetas || 0); // Solo estas dos
+
+        const egresosEfectivo = corteCompleto.egresos || 0;
+        const egresosBanco = 0; // Lógica futura si se separan
+
+        const efectivoFinal = efectivoInicial + ingresosEfectivo - egresosEfectivo;
+
+        // Crear nuevo registro en flujo de efectivo
+        await FlujoEfectivo.create({
+            sucursal: corteCompleto.sucursal._id,
+            fecha: new Date(),
+            efectivoInicial,
+            ingresosEfectivo,
+            ingresosBanco,
+            egresosEfectivo,
+            egresosBanco,
+            efectivoFinal,
+            tipo: 'Corte Final',
+            observaciones: corteCompleto.corteFinal?.observaciones || ''
+        });
+
+        // Generar el código de barras
+        const codigoBarras = await generarCodigoDeBarras(corteAbierto);
+
+        return res.status(200).json({
+            message: 'Corte final actualizado y flujo registrado exitosamente.',
+            corte: corteActualizado,
+            codigoBarras
+        });
     } catch (error) {
         console.error('Error al crear o actualizar el corte final:', error);
         return res.status(500).send('Error interno del servidor');
@@ -221,7 +258,7 @@ async function checkCorteUsuarioIniciadoONoFinalizado(userId) {
 
         // Si no hay corte iniciado ni pendiente, retorna null
         return null;
-    } catch (error) {
+    } catch (error) {ß
         console.log('Error al buscar corte:', error);
         throw new Error('Error interno del servidor');
     }

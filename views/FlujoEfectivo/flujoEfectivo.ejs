@@ -1,0 +1,82 @@
+<% extraStyles=`
+
+`; %>
+
+<main>
+    <div class="container-fluid pt-4" style="width: 100%;">
+        <h3 class="text-center">
+            <i class="fa-solid fa-money-bill"></i> Flujo de Efectivo
+        </h3>
+
+
+        <div class="row mb-3" style="margin-top: 50px;">
+            <div class="col-md-3">
+                <label for="tienda">Tienda:</label>
+                <select id="tienda" class="form-control">
+                    <!-- Puedes agregar más opciones -->
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="fechaInicio">Fecha Inicio:</label>
+                <input type="date" id="fechaInicio" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label for="fechaFin">Fecha Fin:</label>
+                <input type="date" id="fechaFin" class="form-control">
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button id="crearReporte" class="btn btn-primary mr-2">Crear Reporte</button>
+                <button id="imprimir" class="btn btn-success">Imprimir</button>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <!-- Fila de totales -->
+                    <tr class="table-secondary">
+                        <th colspan="1"></th>
+                        <th>Total</th>
+                        <th id="totalIngresosEf">0.00</th>
+                        <th id="totalBancos">0.00</th>
+                        <th id="totalEgresos">0.00</th>
+                        <th colspan="4"></th>
+                    </tr>
+                    <!-- Encabezados principales -->
+                    <tr>
+                        <th>Sucursal</th>
+                        <th>Efectivo Ini</th>
+                        <th>Ingresos Ef</th>
+                        <th>Bancos</th>
+                        <th>Egresos</th>
+                        <th>Efectivo Fin</th>
+                        <th>Tipo</th>
+                        <th>Observaciones</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aquí se llenarán las filas dinámicamente -->
+                    <tr>
+                        <td>Tienda 1</td>
+                        <td>1000.00</td>
+                        <td>200.00</td>
+                        <td>500.00</td>
+                        <td>300.00</td>
+                        <td>1000.00</td>
+                        <td>Normal</td>
+                        <td>Sin observaciones</td>
+                        <td>2025-05-05</td>
+                    </tr>
+                    <!-- Puedes eliminar la fila de ejemplo -->
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</main>
+
+
+<% extraScripts=` 
+    <script src="js/flujoEfectivo/flujoEfectivo.js"></script>
+`; %>

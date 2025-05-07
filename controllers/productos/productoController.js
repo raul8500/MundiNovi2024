@@ -216,7 +216,7 @@ exports.loadProductsFromExcel = async (req, res) => {
         for (let product of products) {
             const newProduct = new Product({
                 reference: product.reference,
-                name: product.nombre,
+                name: product.name,
                 datosFinancieros: {
                     precio1: product.precio1,
                     precio2: product.precio2,

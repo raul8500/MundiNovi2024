@@ -83,6 +83,8 @@ const reportesCostoInventario = require('../controllers/reportes/costoInventario
 const indicadoresController = require('../controllers/cortes/indicadoresController');
 
 
+//flujoEfectivo
+const flujoEfectivoController = require('../controllers/flujoEfectivo/flujoEfectivoController');
 
 
 
@@ -389,6 +391,12 @@ router.get('/reporteCostoInventario',authenticated.isAuthenticated, verifyToken.
 });
 
 
+
+//flujo de efectivo
+
+router.get('/reporteFlujoEfectivo',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
+    res.render('FlujoEfectivo/flujoEfectivo');
+});
 
 
 
@@ -862,6 +870,12 @@ router.put('/api/indicadores/:id', indicadoresController.updateIndicador);
 router.delete('/api/indicadores/:id', indicadoresController.deleteIndicador);
 
 router.post('/api/indicadores/update', indicadoresController.updateOrCreateIndicador);
+
+
+
+//flujoEfectivo
+router.get('/api/flujoEfectivo', flujoEfectivoController.getAllFlujos);
+
 
 
 router.use((req, res, next) => {
