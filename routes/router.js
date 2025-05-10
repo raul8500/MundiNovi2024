@@ -345,11 +345,15 @@ router.get('/recepcionFaltantesSucursal', (req, res) => {
     res.render('Traspaso/recepcionFaltantesSucursal');
 });
 
-
-//Recepcion de productos de las sucursales 
+//Recepcion de productos de las sucursales
 router.get('/finalizarTraspaso', (req, res) => {    
     res.render('Traspaso/finalizarTraspaso');
 });
+
+
+
+
+
 
 
 router.get('/ingresos', (req, res) => {    
@@ -384,6 +388,11 @@ router.get('/nominas',authenticated.isAuthenticated, verifyToken.verifyToken, (r
 router.get('/controlBancos',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
     res.render('Bancos/bancos');
 });
+
+
+
+
+
 
 
 router.get('/reporteCostoInventario',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    

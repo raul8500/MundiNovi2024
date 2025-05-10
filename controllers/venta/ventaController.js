@@ -728,7 +728,7 @@ exports.getReporteVentaProducto = async (req, res) => {
       { $unwind: '$productos' },
       {
         $group: {
-          _id: '$productos.productoId',
+          _id: '$productos.id',
           cantidadVendida: { $sum: '$productos.cantidad' },
         },
       },
