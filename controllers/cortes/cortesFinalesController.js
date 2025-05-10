@@ -7,7 +7,6 @@ const bwipjs = require('bwip-js');
 const path = require('path');
 const fs = require('fs');
 
-// Crear o actualizar el reporte de corte final con código de barras
 exports.addCorteFinal = async (req, res) => {
     try {
         const userId = req.body.userId;
@@ -61,7 +60,8 @@ exports.addCorteFinal = async (req, res) => {
         const egresosEfectivo = corteCompleto.egresos || 0;
         const egresosBanco = 0; // Lógica futura si se separan
 
-        const efectivoFinal = efectivoInicial + ingresosEfectivo - egresosEfectivo;
+        // Nuevo cálculo ajustado: incluye ingresosBanco
+        const efectivoFinal = efectivoInicial + ingresosEfectivo + ingresosBanco - egresosEfectivo;
 
         // Crear nuevo registro en flujo de efectivo
         await FlujoEfectivo.create({

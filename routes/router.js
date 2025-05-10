@@ -391,7 +391,6 @@ router.get('/reporteCostoInventario',authenticated.isAuthenticated, verifyToken.
 });
 
 
-
 //flujo de efectivo
 
 router.get('/reporteFlujoEfectivo',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
