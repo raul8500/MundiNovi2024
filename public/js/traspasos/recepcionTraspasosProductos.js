@@ -17,24 +17,40 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('usuarioDestino').innerText = `${traspasoSeleccionado.usuarioDestino.name} (@${traspasoSeleccionado.usuarioDestino.username})` || 'N/A';
 
         // ✅ Cargar productos en la tabla
-        traspasoSeleccionado.productos.forEach(producto => {
-            const cantidad = producto.cantidad;
-            const presentacion = parseInt(producto.presentacion, 10) || 1; // Evita valores NaN
+traspasoSeleccionado.productos.forEach(producto => {
+    const cantidad = producto.cantidad;
+    const presentacion = parseInt(producto.presentacion, 10) || 1;
 
-            const unidades = Math.floor(cantidad / presentacion); // Número de filas a agregar
+    const unidadesCompletas = Math.floor(cantidad / presentacion);
+    const restante = cantidad % presentacion;
 
-            for (let i = 0; i < unidades; i++) {
-                const fila = `
-                    <tr data-reference="${producto.reference}">
-                        <td>${producto.reference}</td>
-                        <td>${producto.name}</td>
-                        <td>1</td>
-                        <td class="text-center correcto">❌</td>
-                    </tr>
-                `;
-                tbodyProductos.insertAdjacentHTML('beforeend', fila);
-            }
-        });
+    // Agrega filas completas
+    for (let i = 0; i < unidadesCompletas; i++) {
+        const fila = `
+            <tr data-reference="${producto.reference}">
+                <td>${producto.reference}</td>
+                <td>${producto.name}</td>
+                <td>${presentacion}</td>
+                <td class="text-center correcto">❌</td>
+            </tr>
+        `;
+        tbodyProductos.insertAdjacentHTML('beforeend', fila);
+    }
+
+    // Agrega una fila para el sobrante si existe
+    if (restante > 0) {
+        const filaRestante = `
+            <tr data-reference="${producto.reference}">
+                <td>${producto.reference}</td>
+                <td>${producto.name}</td>
+                <td>${restante}</td>
+                <td class="text-center correcto">❌</td>
+            </tr>
+        `;
+        tbodyProductos.insertAdjacentHTML('beforeend', filaRestante);
+    }
+});
+
     } else {
         Swal.fire('⚠️ Error', 'No hay datos del traspaso seleccionados.', 'warning');
     }
@@ -102,7 +118,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(data.message || 'Error al actualizar el traspaso');
                 }
 
-                Swal.fire('✅', 'El traspaso ha sido actualizado exitosamente', 'success');
+                Swal.fire('✅', 'El traspaso ha sido actualizado exitosamente', 'success')
+                    .then(() => {
+                        window.location.href = '/recepcionFaltantes';
+                    }
+                );
 
             } catch (error) {
                 console.error('❌ Error al recibir los productos:', error);

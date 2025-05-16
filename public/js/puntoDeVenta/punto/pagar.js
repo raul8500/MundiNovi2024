@@ -136,6 +136,7 @@ function armarVenta() {
 
     return {
         id: item.producto._id,
+        costo: item.producto.datosFinancieros.costo || 0,
         facturapi: item.producto.idFacturApi,
         nombre: item.producto.name,
         reference: item.producto.reference,

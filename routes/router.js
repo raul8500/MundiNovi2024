@@ -407,10 +407,27 @@ router.get('/reporteFlujoEfectivo',authenticated.isAuthenticated, verifyToken.ve
 });
 
 
+//Factura Global
+
+router.get('/fraccionarVentas',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
+    res.render('Global/fraccionarVentas');
+});
 
 
 
 
+
+
+
+
+
+
+
+
+//funciones para factura global
+const ventasHelper = require('../controllers/facturaGlobal/VentasHelper');
+
+router.get('/api/ventasHelper', ventasHelper.getVentasDelDia)
 
 
 

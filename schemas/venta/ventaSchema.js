@@ -12,6 +12,7 @@ const ventaSchema = new mongoose.Schema({
         {
             id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
             nombre: { type: String, required: true },
+            costo: { type: Number, required: true },
             reference: { type: String, required: true },
             precioConIva: { type: Number, required: true },
             precio1: { type: Number, required: true },

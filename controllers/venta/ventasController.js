@@ -22,7 +22,7 @@ exports.createVenta = async (req, res) => {
         const productosConKardex = [];
 
         for (const producto of productos) {
-            const { id,nombre,reference,precioSinIva, precioConIva, precio1, cantidad } = producto;
+            const { id,nombre,reference, precioSinIva, precioConIva, precio1, cantidad, costo } = producto;
 
             const ultimoKardex = await Kardex.findOne({ reference: reference }).sort({ fecha: -1 });
             const nuevaExistencia = ultimoKardex ? ultimoKardex.existencia - cantidad : -cantidad;
@@ -37,12 +37,12 @@ exports.createVenta = async (req, res) => {
                 reference,
                 nombre,
                 cantidad: -cantidad,
-                costoUnitario : precioConIva, 
+                costoUnitario : costo, 
                 existencia: nuevaExistencia,
             });
 
             productosConKardex.push({
-                id,nombre,reference, precioConIva, precio1, cantidad,
+                id,nombre,reference, precioConIva, precio1, cantidad, costo,
                 kardexId: nuevoKardex._id,
                 kardexFolio: folio,
             });

@@ -55,19 +55,29 @@ document.getElementById('btnObtenerFaltantes').addEventListener('click', () => {
 });
 
 async function fetchFaltantes(sucursalOrigen, sucursalDestino) {
-    try {
-        const response = await fetch('/api/faltantes/'+sucursalOrigen+"/"+sucursalDestino);
-        if (!response.ok) {
-            throw new Error('Error al recuperar los clientes');
-        }
-        const data = await response.json();
-        
-        cargarDatosTabla(data.data)
+    const spinner = document.getElementById('spinnerContainer');
+    const tabla = document.querySelector('table');
 
+    try {
+        spinner.style.display = 'block';   // Mostrar spinner
+        tabla.style.display = 'none';      // Ocultar tabla
+
+        const response = await fetch('/api/faltantes/' + sucursalOrigen + "/" + sucursalDestino);
+        if (!response.ok) {
+            throw new Error('Error al recuperar los faltantes');
+        }
+
+        const data = await response.json();
+        cargarDatosTabla(data.data);
     } catch (error) {
         console.error('Error:', error);
+        Swal.fire('⚠️ Error', 'No se pudieron cargar los faltantes.', 'error');
+    } finally {
+        spinner.style.display = 'none';   // Ocultar spinner
+        tabla.style.display = 'table';    // Mostrar tabla
     }
 }
+
 
 const cargarDatosTabla = (data) => {
     let contenedorFaltantes = document.getElementById('contenedorFaltantes')

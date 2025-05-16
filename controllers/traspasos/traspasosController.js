@@ -317,14 +317,11 @@ exports.generarPDFTraspaso = async (req, res) => {
     try {
         const { traspasoId } = req.params;
 
-        // 1️⃣ **Validar parámetros**
         if (!traspasoId || !mongoose.isValidObjectId(traspasoId)) {
             return res.status(400).json({ message: 'El ID del traspaso es obligatorio y debe ser válido.' });
         }
 
         const traspasoObjId = new mongoose.Types.ObjectId(traspasoId);
-
-        // 2️⃣ **Buscar traspaso en la base de datos con nombres de sucursales**
         const traspaso = await Traspaso.findById(traspasoObjId)
             .populate('sucursalOrigen', 'nombre')
             .populate('sucursalDestino', 'nombre');
@@ -336,26 +333,21 @@ exports.generarPDFTraspaso = async (req, res) => {
         const nombreSucursalOrigen = traspaso.sucursalOrigen?.nombre || 'Sucursal Origen';
         const nombreSucursalDestino = traspaso.sucursalDestino?.nombre || 'Sucursal Destino';
 
-        // 3️⃣ **Crear PDF Temporal**
         const tempFilePath = path.join(os.tmpdir(), `traspaso_${traspasoId}.pdf`);
         const doc = new PDFDocument({ size: 'A4', layout: 'landscape', margin: 50 });
-
         const writeStream = fs.createWriteStream(tempFilePath);
         doc.pipe(writeStream);
 
         let primeraPagina = true;
 
-        // 4️⃣ **Generar etiquetas por producto y cantidad**
         for (const producto of traspaso.productos) {
-            const { reference, cantidad } = producto;
+            const { reference, cantidad, presentacion } = producto;
+            const unidades = Math.ceil(cantidad / (parseInt(presentacion) || 1));
 
-            for (let i = 0; i < cantidad; i++) {
-                if (!primeraPagina || i > 0) {
-                    doc.addPage();
-                }
+            for (let i = 0; i < unidades; i++) {
+                if (!primeraPagina || i > 0) doc.addPage();
                 primeraPagina = false;
 
-                // 🖨️ **Generar Código de Barras**
                 const barcodeBuffer = await new Promise((resolve, reject) => {
                     bwipjs.toBuffer({
                         bcid: 'code128',
@@ -370,11 +362,7 @@ exports.generarPDFTraspaso = async (req, res) => {
                     });
                 });
 
-                // 📌 **Distribución en la Hoja**
-                const pageWidth = 842; // Ancho de A4 horizontal
-                const pageHeight = 595; // Alto de A4 horizontal
-
-                // 📍 **Código de Barras (Centrado)**
+                const pageWidth = 842;
                 const barcodeWidth = 400;
                 const barcodeHeight = 100;
                 const barcodeX = (pageWidth - barcodeWidth) / 2;
@@ -383,14 +371,11 @@ exports.generarPDFTraspaso = async (req, res) => {
                 doc.fontSize(40).text(` ${reference}`, { align: 'center', lineGap: 8 });
                 doc.fontSize(40).text(`Sucursal Origen: ${nombreSucursalOrigen}`, { align: 'center' });
                 doc.fontSize(40).text(`Sucursal Destino: ${nombreSucursalDestino}`, { align: 'center', lineGap: 8 });
-                doc.fontSize(40).text(`${traspaso.folio} - : ${new Date(traspaso.fecha).toLocaleDateString()}`, {
+                doc.fontSize(40).text(`${traspaso.folio} - ${new Date(traspaso.fecha).toLocaleDateString()}`, {
                     align: 'center',
                     lineGap: 8,
                 });
 
-                doc.moveDown(1);
-
-                // 📦 **Insertar Código de Barras**
                 doc.image(barcodeBuffer, barcodeX, barcodeY + 100, {
                     width: barcodeWidth,
                     height: barcodeHeight,
@@ -400,17 +385,16 @@ exports.generarPDFTraspaso = async (req, res) => {
             }
         }
 
-        // 5️⃣ **Finalizar y Enviar PDF**
         doc.end();
 
         writeStream.on('finish', () => {
             res.download(tempFilePath, `traspaso_${traspasoId}.pdf`, (err) => {
                 if (err) {
                     console.error('❌ Error al enviar el PDF:', err);
-                    res.status(500).json({ message: 'Error al enviar el PDF.', error: err });
+                    return res.status(500).json({ message: 'Error al enviar el PDF.' });
                 }
 
-                // 🗑️ **Eliminar archivo temporal**
+                // 🔥 Eliminar archivo temporal después de enviar
                 fs.unlink(tempFilePath, (unlinkErr) => {
                     if (unlinkErr) {
                         console.error('❌ Error al eliminar el archivo temporal:', unlinkErr);
@@ -516,7 +500,6 @@ exports.obtenerTodosLosTraspasosSuc = async (req, res) => {
         // 🔍 Buscar todos los traspasos donde la sucursal sea origen o destino
         const traspasos = await Traspaso.find({
             $or: [
-                { sucursalOrigen: sucursalId },
                 { sucursalDestino: sucursalId }
             ]
         })
