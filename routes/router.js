@@ -94,218 +94,218 @@ const flujoEfectivoController = require('../controllers/flujoEfectivo/flujoEfect
 
 
 //Vistas
-router.get('/login', (req, res) => {    
-        res.render('login', { hideHeader: true });
+router.get('/login', (req, res) => { 
+        res.render('login', { hideHeader: true, omitScript: true });
 });
 
 router.get('/main', authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
-    res.render('main');
+    res.render('main', { hideHeader: false, omitScript: false });
 });
 
 router.get('/usuarios', authenticated.isAuthenticated, verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
-    res.render('Users/usuarios');
+    res.render('Users/usuarios', { hideHeader: false, omitScript: false });
 });
 
 router.get('/franquicias', authenticated.isAuthenticated, verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
-    res.render('Franquicias/franquicias');
+    res.render('Franquicias/franquicias', { hideHeader: false, omitScript: false });
 });
 
 router.get('/tiendas', authenticated.isAuthenticated,  verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
-    res.render('Sucursales/sucursales');
+    res.render('Sucursales/sucursales', { hideHeader: false, omitScript: false });
 });
 
 router.get('/productos', authenticated.isAuthenticated,  verifyToken.verifyToken, (req, res) => {    
-    res.render('Productos/productos');
+    res.render('Productos/productos', { hideHeader: false, omitScript: false });
 });
 
 router.get('/ventasGenerales', authenticated.isAuthenticated,  verifyToken.verifyToken, adminValidate.isAdmin, (req, res) => {    
-    res.render('Reportes/ventasGenerales');
+    res.render('Reportes/ventasGenerales', { hideHeader: false, omitScript: false });
 });
 
 router.get('/clientes', (req, res) => {    
-    res.render('Clientes/clientes');
+    res.render('Clientes/clientes', { hideHeader: false, omitScript: false });
 });
 
 router.get('/kardex', (req, res) => {    
-    res.render('Kardex/kardex');
+    res.render('Kardex/kardex', { hideHeader: false, omitScript: false });
 });
 
 router.get('/kardexMateriasPrimas', (req, res) => {    
-    res.render('Kardex/kardexMeteriaPrima.ejs');
+    res.render('Kardex/kardexMeteriaPrima.ejs', { hideHeader: false, omitScript: false });
 });
 
 router.get('/ventas', (req, res) => {    
-    res.render('Ventas/ventas');
+    res.render('Ventas/ventas', { hideHeader: false, omitScript: false });
 });
 
 router.get('/proveedor', (req, res) => {    
-    res.render('Proveedor/proveedor');
+    res.render('Proveedor/proveedor', { hideHeader: false, omitScript: false });
 });
 
 router.get('/materiasPrimas', (req, res) => {    
-    res.render('MateriasPrimas/materiasPrimas');
+    res.render('MateriasPrimas/materiasPrimas', { hideHeader: false, omitScript: false });
 });
 
 router.get('/formulas', (req, res) => {    
-    res.render('Formulas/formulasProduccion');
+    res.render('Formulas/formulasProduccion', { hideHeader: false, omitScript: false });
 });
 
 router.get('/corteparcial', (req, res) => {    
-    res.render('Cortes/cortesParciales');
+    res.render('Cortes/cortesParciales', { hideHeader: false, omitScript: false });
 });
 
 router.get('/corteVenta', (req, res) => {    
-    res.render('Cortes/cortesVenta');
+    res.render('Cortes/cortesVenta', { hideHeader: false, omitScript: false });
 });
 
 router.get('/cortesRecoleccion', (req, res) => {    
-    res.render('Cortes/cortesRecoleccion');
+    res.render('Cortes/cortesRecoleccion', { hideHeader: false, omitScript: false });
 });
 
 router.get('/listadoCortesVenta', (req, res) => {    
-    res.render('Cortes/listadoCortesVenta');
+    res.render('Cortes/listadoCortesVenta', { hideHeader: false, omitScript: false });
 });
 
 router.get('/factura', (req, res) => {    
-    res.render('Facturar/factura');
+    res.render('Facturar/factura', { hideHeader: false, omitScript: false });
 });
 
 router.get('/monedero', (req, res) => {    
-    res.render('Monedero/monedero');
+    res.render('Monedero/monedero', { hideHeader: false, omitScript: false });
 });
 
 router.get('/preciador', (req, res) => {    
-    res.render('Preciador/preciador');
+    res.render('Preciador/preciador', { hideHeader: false, omitScript: false });
 });
 
 router.get('/codigosBarras', (req, res) => {    
-    res.render('CodigosBarras/codigosBarras');
+    res.render('CodigosBarras/codigosBarras', { hideHeader: false, omitScript: false });
 });
 
 router.get('/asistencias', (req, res) => {    
-    res.render('Asistencias/asistenciaAdmin');
+    res.render('Asistencias/asistenciaAdmin', { hideHeader: false, omitScript: false });
 });
 
 router.get('/asistenciaUsuario', (req, res) => {    
-    res.render('Asistencias/asistencia');
+    res.render('Asistencias/asistencia', { hideHeader: false, omitScript: false });
 });
 
 router.get('/fabricarFormula', (req, res) => {    
-    res.render('Produccion/fabricarFormulas');
+    res.render('Produccion/fabricarFormulas', { hideHeader: false, omitScript: false });
 });
 
 router.get('/producciones', (req, res) => {    
-    res.render('Produccion/produccionAdmin');
+    res.render('Produccion/produccionAdmin', { hideHeader: false, omitScript: false });
 });
 
 router.get('/actividadesAdmin', (req, res) => {    
-    res.render('Actividades/actividadesAdmin');
+    res.render('Actividades/actividadesAdmin', { hideHeader: false, omitScript: false });
 });
 
 router.get('/actividades', (req, res) => {    
-    res.render('Actividades/actividadesUser');
+    res.render('Actividades/actividadesUser', { hideHeader: false, omitScript: false });
 });
 
 router.get('/capacitacionesAdmin', (req, res) => {    
-    res.render('Capacitaciones/capacitacionesAdmin');
+    res.render('Capacitaciones/capacitacionesAdmin', { hideHeader: false, omitScript: false });
 });
 
 router.get('/capacitaciones', (req, res) => {    
-    res.render('Capacitaciones/capacitacionesUser');
+    res.render('Capacitaciones/capacitacionesUser', { hideHeader: false, omitScript: false });
 });
 
 router.get('/examenesAdmin', (req, res) => {    
-    res.render('Capacitaciones/Admin/examenesAdmin');
+    res.render('Capacitaciones/Admin/examenesAdmin', { hideHeader: false, omitScript: false });
 });
 
 router.get('/examenes', (req, res) => {    
-    res.render('Capacitaciones/User/examenes');
+    res.render('Capacitaciones/User/examenes', { hideHeader: false, omitScript: false });
 });
 
 router.get('/documentosAdmin', (req, res) => {    
-    res.render('Capacitaciones/Admin/documentosAdmin');
+    res.render('Capacitaciones/Admin/documentosAdmin', { hideHeader: false, omitScript: false });
 });
 router.get('/documentos', (req, res) => {    
-    res.render('Capacitaciones/User/documentos');
+    res.render('Capacitaciones/User/documentos', { hideHeader: false, omitScript: false });
 });
 
 router.get('/paginasAdmin', (req, res) => {    
-    res.render('Capacitaciones/Admin/paginasAdmin');
+    res.render('Capacitaciones/Admin/paginasAdmin', { hideHeader: false, omitScript: false });
 });
 router.get('/paginas', (req, res) => {    
-    res.render('Capacitaciones/User/paginas');
+    res.render('Capacitaciones/User/paginas', { hideHeader: false, omitScript: false });
 });
 
 router.get('/videosAdmin', (req, res) => {    
-    res.render('Capacitaciones/Admin/videosAdmin');
+    res.render('Capacitaciones/Admin/videosAdmin', { hideHeader: false, omitScript: false });
 });
 router.get('/videos', (req, res) => {    
-    res.render('Capacitaciones/User/videos');
+    res.render('Capacitaciones/User/videos', { hideHeader: false, omitScript: false });
 });
 
 router.get('/arqueoEfectivo', (req, res) => {    
-    res.render('Arqueos/efectivo/arqueoEfectivo');
+    res.render('Arqueos/efectivo/arqueoEfectivo', { hideHeader: false, omitScript: false });
 });
 
 router.get('/arqueosEfectivo', (req, res) => {    
-    res.render('Arqueos/efectivo/arqueoEfectivoAdmin');
+    res.render('Arqueos/efectivo/arqueoEfectivoAdmin', { hideHeader: false, omitScript: false });
 });
 
 router.get('/evaluacionSucursal', (req, res) => {    
-    res.render('Evaluaciones/evaluacionesSucursal');
+    res.render('Evaluaciones/evaluacionesSucursal', { hideHeader: false, omitScript: false });
 });
 
 router.get('/evaluacionAdmin', (req, res) => {    
-    res.render('Evaluaciones/evaluacionesAdmin');
+    res.render('Evaluaciones/evaluacionesAdmin', { hideHeader: false, omitScript: false });
 });
 
 router.get('/actasAdministrativas', (req, res) => {    
-    res.render('Actas/actasAdministrativas');
+    res.render('Actas/actasAdministrativas', { hideHeader: false, omitScript: false });
 });
 
 router.get('/importaciones', (req, res) => {    
-    res.render('Importaciones/importaciones');
+    res.render('Importaciones/importaciones', { hideHeader: false, omitScript: false });
 });
 
 router.get('/importacionesStock', (req, res) => {    
-    res.render('Importaciones/stoc/stoc');
+    res.render('Importaciones/stoc/stoc', { hideHeader: false, omitScript: false });
 });
 
 router.get('/listadoInventarios', (req, res) => {    
-    res.render('Inventarios/inventariosAdmin');
+    res.render('Inventarios/inventariosAdmin', { hideHeader: false, omitScript: false });
 });
 
 router.get('/arqueoSupervisor', (req, res) => {    
-    res.render('Arqueos/productos/arqueoSupervisor');
+    res.render('Arqueos/productos/arqueoSupervisor', { hideHeader: false, omitScript: false });
 });
 
 router.get('/arqueoProductos', (req, res) => {    
-    res.render('Arqueos/productos/arqueosUsuario');
+    res.render('Arqueos/productos/arqueosUsuario', { hideHeader: false, omitScript: false });
 });
 
 router.get('/arqueoMatPrima', (req, res) => {    
-    res.render('Arqueos/materiaPrima/arqueoMatPrima');
+    res.render('Arqueos/materiaPrima/arqueoMatPrima', { hideHeader: false, omitScript: false });
 });
 
 router.get('/egresosAdmin', (req, res) => {    
-    res.render('Egresos/egresosAdmin');
+    res.render('Egresos/egresosAdmin', { hideHeader: false, omitScript: false });
 });
 
 router.get('/egresos', (req, res) => {    
-    res.render('Egresos/egresosUser');
+    res.render('Egresos/egresosUser', { hideHeader: false, omitScript: false });
 });
 
 router.get('/cotizacionAdmin', (req, res) => {    
-    res.render('Cotizaciones/cotizacionesAdmin');
+    res.render('Cotizaciones/cotizacionesAdmin', { hideHeader: false, omitScript: false });
 });
 
 router.get('/crearPedido', (req, res) => {
     const { id } = req.params;
-    res.render('Pedido/crearPedido', { cotizacionId: id });
+    res.render('Pedido/crearPedido', { cotizacionId: id, hideHeader: false, omitScript: false } );
 });
 
 router.get('/pedidosPorEntregar', (req, res) => {    
-    res.render('Pedido/pedidosPorEntregar');
+    res.render('Pedido/pedidosPorEntregar' , { hideHeader: false, omitScript: false });
 });
 
 
@@ -314,40 +314,40 @@ router.get('/pedidosPorEntregar', (req, res) => {
 
 //Inico de traspaso
 router.get('/reporteFaltantes', (req, res) => {    
-    res.render('Faltantes/reporteFaltantes');
+    res.render('Faltantes/reporteFaltantes' , { hideHeader: false, omitScript: false });
 });
 
 router.get('/traspasoProductos', (req, res) => {    
-    res.render('Traspaso/traspasoProductos');
+    res.render('Traspaso/traspasoProductos' , { hideHeader: false, omitScript: false });
 });
 
 //Listado de traspasos para almacen e impresion de los codigos para los productos
 router.get('/listadoTraspasos', (req, res) => {    
-    res.render('Traspaso/listadoTraspasos');
+    res.render('Traspaso/listadoTraspasos' , { hideHeader: false, omitScript: false });
 });
 
 router.get('/codigosTraspasos', (req, res) => {    
-    res.render('Traspaso/codigosTraspasos');
+    res.render('Traspaso/codigosTraspasos' , { hideHeader: false, omitScript: false });
 });
 
 //recepcion del reparto
 
 router.get('/recepcionFaltantes', (req, res) => {    
-    res.render('Traspaso/recepcionFaltantes');
+    res.render('Traspaso/recepcionFaltantes' , { hideHeader: false, omitScript: false });
 });
 
 router.get('/recepcionFaltantesProductos', (req, res) => {    
-    res.render('Traspaso/recepcionFaltantesProductos');
+    res.render('Traspaso/recepcionFaltantesProductos' , { hideHeader: false, omitScript: false });
 });
 
 //Recepcion de productos de las sucursales 
 router.get('/recepcionFaltantesSucursal', (req, res) => {    
-    res.render('Traspaso/recepcionFaltantesSucursal');
+    res.render('Traspaso/recepcionFaltantesSucursal' , { hideHeader: false, omitScript: false });
 });
 
 //Recepcion de productos de las sucursales
 router.get('/finalizarTraspaso', (req, res) => {    
-    res.render('Traspaso/finalizarTraspaso');
+    res.render('Traspaso/finalizarTraspaso' , { hideHeader: false, omitScript: false });
 });
 
 
@@ -357,24 +357,24 @@ router.get('/finalizarTraspaso', (req, res) => {
 
 
 router.get('/ingresos', (req, res) => {    
-    res.render('Ingresos/Ingresos.ejs');
+    res.render('Ingresos/Ingresos.ejs' , { hideHeader: false, omitScript: false });
 });
 
 
 router.get('/reportesVentaProductos', (req, res) => {    
-    res.render('Reportes/reportesVentaProductos');
+    res.render('Reportes/reportesVentaProductos' , { hideHeader: false, omitScript: false });
 });
 
 router.get('/existenciasSucursales', (req, res) => {    
-    res.render('Existencias/existenciasSucursales');
+    res.render('Existencias/existenciasSucursales' , { hideHeader: false, omitScript: false });
 });
 
 router.get('/colaboradores', (req, res) => {    
-    res.render('Colaboradores/colaboradores');
+    res.render('Colaboradores/colaboradores' , { hideHeader: false, omitScript: false });
 });
 
 router.get('/puntoVenta',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
-    res.render('PuntoDeVenta/puntoVenta');
+    res.render('PuntoDeVenta/puntoVenta', { hideHeader: false, omitScript: false });
 });
 
 
@@ -382,11 +382,11 @@ router.get('/puntoVenta',authenticated.isAuthenticated, verifyToken.verifyToken,
 //
 
 router.get('/nominas',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
-    res.render('Nominas/listadoNomina');
+    res.render('Nominas/listadoNomina' , { hideHeader: false, omitScript: false });
 });
 
 router.get('/controlBancos',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
-    res.render('Bancos/bancos');
+    res.render('Bancos/bancos' , { hideHeader: false, omitScript: false });
 });
 
 
@@ -396,26 +396,41 @@ router.get('/controlBancos',authenticated.isAuthenticated, verifyToken.verifyTok
 
 
 router.get('/reporteCostoInventario',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
-    res.render('Reportes/reporteCostoInventario');
+    res.render('Reportes/reporteCostoInventario' , { hideHeader: false, omitScript: false });
 });
 
 
 //flujo de efectivo
 
 router.get('/reporteFlujoEfectivo',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
-    res.render('FlujoEfectivo/flujoEfectivo');
+    res.render('FlujoEfectivo/flujoEfectivo' , { hideHeader: false, omitScript: false });
 });
-
 
 //Factura Global
 
 router.get('/fraccionarVentas',authenticated.isAuthenticated, verifyToken.verifyToken, (req, res) => {    
-    res.render('Global/fraccionarVentas');
+    res.render('Global/fraccionarVentas', { hideHeader: false, omitScript: false });
 });
 
 
 
 
+
+
+
+//Pagina Web Principal :
+
+router.get('/', (req, res) => {    
+    res.render('PaginaWeb/Main/index', { hideHeader: true, omitScript: true });
+});
+
+router.get('/sucursales', (req, res) => {    
+    res.render('PaginaWeb/Main/sucursales', { hideHeader: true, omitScript: true });
+});
+
+router.get('/facturacion', (req, res) => {    
+    res.render('PaginaWeb/Main/facturacion', { hideHeader: true, omitScript: true });
+});
 
 
 
@@ -428,8 +443,6 @@ router.get('/fraccionarVentas',authenticated.isAuthenticated, verifyToken.verify
 const ventasHelper = require('../controllers/facturaGlobal/VentasHelper');
 
 router.get('/api/ventasHelper', ventasHelper.getVentasDelDia)
-
-
 
 
 
