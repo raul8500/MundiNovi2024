@@ -291,45 +291,95 @@
   </header>
 
 
-  <main style="margin-bottom: 200px; margin-top: 200px;">
-  <div class="container-fluid" style="width: 75%;">
+  <main style="margin-bottom: 100px; margin-top: 100px;">
+  <div class="container-fluid" style="width: 60%;">
 
-    <div class="card mt-5 shadow-lg border-0 overflow-hidden" style="height: 600px;">
+    <div class="card mt-5 shadow-lg border-0 overflow-hidden" style="height: 700px; border-radius: 50px;">
       <div class="row g-0 h-100">
         <!-- Login -->
-        <div class="col-md-6 d-flex align-items-center justify-content-center p-5" style="background-color: #b8dfef;">
-        <div class="text-center" style="width: 100%; max-width: 350px;">
-            <i class="fas fa-user-circle mb-3" style="font-size: 120px; color: #171717;"></i>
-            <h3 class="fw-bold mb-4" style="color: #0D81C4;">Iniciar Sesión</h3>
-            <form>
-                
-            <div class="mb-3 text-start">
-                <label class="form-label">Telefono</label>
-                <input type="email" class="form-control" placeholder="ejemplo@correo.com">
+        <div class="col-md-6 d-flex align-items-center justify-content-center p-5" style="background-color: #ffffff;">
+          <div style="width: 100%; max-width: 350px;">
+            
+            <!-- Ícono centrado -->
+            <div class="text-center mb-3" style="margin-top: -50px;">
+              <img src="img/logoColor.png">
             </div>
-            <div class="mb-3 text-start">
-                <label class="form-label">Contraseña</label>
-                <input type="password" class="form-control" placeholder="********">
-            </div>
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Entrar</button>
-            </div>
-            <div class="mt-2 text-end">
-                <a href="#" style="color: #0D81C4;">¿Olvidaste tu contraseña?</a>
-            </div>
+            
+            <!-- Textos alineados a la izquierda -->
+            <h3 class="fw-bold mb-2 text-center" style="color: #000099; font-family:Arial, Helvetica, sans-serif; margin-top: 20px;">INICIAR SESÍON</h3>
+            <h5 class="fw-bold mb-4 text-center" style="color: #000099; font-size: 16px;">Favor de llenar los campos para continuar.</h5>
+
+            <!-- Formulario -->
+            <form style="margin-top: 40px;">
+              <div style="position: relative;" class="mb-3">
+                <i class="fa-solid fa-phone" style="position: absolute; top: 50%; left: 16px; transform: translateY(-50%); color: #888; font-size: 20px;"></i>
+                <input 
+                  type="text" 
+                  class="form-control ps-5"
+                  placeholder="Teléfono"
+                  autocomplete="off" 
+                  autocapitalize="off"
+                  style="height: 55px; font-size: 18px; border-radius: 12px;"
+                >
+              </div>
+              <div style="position: relative;" class="mb-3 text-start">
+                <i class="fa-solid fa-lock" style="position: absolute; top: 50%; left: 16px; transform: translateY(-50%); color: #888; font-size: 20px;"></i>
+                <input 
+                  type="password" 
+                  class="form-control ps-5" 
+                  placeholder="Contraseña" 
+                  autocomplete="new-password" 
+                  autocapitalize="off"
+                  style="height: 55px; font-size: 18px; border-radius: 12px;"
+                >
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <a href="#" class="d-block w-100 text-center fw-bold" style="color: #000099; font-size: 15px;">¿Olvidaste tu contraseña?</a>
+                </div>
+                <div class="col-md-6">
+                  <button type="submit" class="btn btn-primary w-100" style="font-size: 20px; border-radius: 50px; background-color: #000099;">
+                    Entrar
+                  </button>
+                </div>
+              </div>
             </form>
-        </div>
-        </div>
-
-
-
-        <!-- Register with full height image -->
-        <div class="col-md-6 position-relative" style="background-image: url('img/PaginaWeb/fondoBurbujas.jpg'); background-size: cover; background-position: center; height: 100%;">
-          <div class="position-absolute bottom-0 start-0 p-4">
-            <h4 class="text-white fw-bold mb-3">Usuarios nuevos</h4>
-            <a href="#" class="btn btn-light fw-bold">Registrarse</a>
           </div>
         </div>
+
+
+
+        <div class="col-md-6 position-relative" style="height: 100%;">
+          <!-- Imagen de fondo -->
+          <div style="
+            background-image: url('img/PaginaWeb/fondoBurbujas.jpg');
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1;">
+          </div>
+
+          <!-- Filtro morado translúcido -->
+          <div style="
+            background-color: rgba(84, 53, 238, 0.5); /* morado con 50% de opacidad */
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 2;">
+          </div>
+
+          <!-- Contenido visible -->
+          <div class="position-absolute bottom-0 start-0 p-4" style="z-index: 3;">
+            <h1 class="text-white fw-bold mb-3" style="font-family: Arial, Helvetica, sans-serif;">USUARIOS NUEVOS</h1>
+            <a data-bs-toggle="modal" data-bs-target="#modalRegistro"
+              class="btn btn-light fw-bold d-flex justify-content-center align-items-center"
+              style="border-radius: 20px; font-size: 20px; color: #2833A7; width: 200px; height: 60px;">
+              REGÍSTRATE
+            </a>
+
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -386,8 +436,46 @@
       <h4>Mundi Novi, Todos los derechos reservados.</h4>
     </div>
   </footer>
+
+  <!-- Modal de Registro -->
+<div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius: 20px;">
+      <div class="modal-header" style="border-top-left-radius: 20px; border-top-right-radius: 20px;">
+        <h5 class="modal-title" id="modalRegistroLabel">Registro de Nuevo Usuario</h5>
+        <button type="button" class="btn-close data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form id="formRegistro">
+          <div class="mb-3">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" class="form-control" name="correo" placeholder="ejemplo@correo.com" required autocomplete="off">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Teléfono</label>
+            <input type="tel" class="form-control" name="telefono" placeholder="Tu número de contacto" required autocomplete="off" autocapitalize="off">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input type="password" class="form-control" name="password" placeholder="********" required autocomplete="new-password">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Confirmar Contraseña</label>
+            <input type="password" class="form-control" name="confirmar" placeholder="********" required autocomplete="new-password">
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary" style="background-color: #000099; border-radius: 50px;">Registrarse</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 
+
+
 <% extraScripts=` 
-  <script src="js/PaginaWeb/sucursales.js"></script>
+  <script src="js/PaginaWeb/facturacion.js"></script>
 `; %>

@@ -170,9 +170,7 @@ router.get('/factura', (req, res) => {
     res.render('Facturar/factura', { hideHeader: false, omitScript: false });
 });
 
-router.get('/monedero', (req, res) => {    
-    res.render('Monedero/monedero', { hideHeader: false, omitScript: false });
-});
+
 
 router.get('/preciador', (req, res) => {    
     res.render('Preciador/preciador', { hideHeader: false, omitScript: false });
@@ -431,6 +429,21 @@ router.get('/sucursales', (req, res) => {
 router.get('/facturacion', (req, res) => {    
     res.render('PaginaWeb/Main/facturacion', { hideHeader: true, omitScript: true });
 });
+
+//user side
+
+router.get('/compras', (req, res) => {    
+    res.render('PaginaWeb/usuarios/compras', { hideHeader: true, omitScript: true });
+});
+
+router.get('/datosPersonales', (req, res) => {    
+    res.render('PaginaWeb/usuarios/datosPersonales', { hideHeader: true, omitScript: true });
+});
+
+router.get('/catalogoProductos', (req, res) => {    
+    res.render('PaginaWeb/usuarios/catalogoProductos', { hideHeader: true, omitScript: true });
+});
+
 
 
 
@@ -842,6 +855,18 @@ router.get('/api/cliente/test', clienteController.getClients);
 router.get('/api/cliente/test/:id', clienteController.getClientById);
 router.delete('/api/cliente/delete/:id', clienteController.deleteClient);
 router.put('/api/cliente/test/:id', clienteController.updateClient);
+
+//Zoana login Clientes
+router.post('/api/clientes/registro', clienteController.completarRegistro);
+router.post('/api/clientes/login', clienteController.loginCustomer);
+router.get('/api/clientes/verificar', clienteController.verifyClienteToken);
+router.get('/api/clientes/ventas', clienteController.getVentasPorCliente);
+router.put('/api/clientes/update/:id', clienteController.updateClienteDatosPersonales);
+
+
+
+
+
 
 //Zona clientes
 // Configuración de rutas
